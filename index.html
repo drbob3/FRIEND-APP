@@ -36,7 +36,6 @@
     overflow: hidden;
   }
   [hidden] { display: none !important; }
-  /* ---- classic bevels ---- */
   .raised {
     background: var(--face);
     border: 2px solid;
@@ -48,7 +47,6 @@
     border-color: var(--shadow) var(--light) var(--light) var(--shadow);
     box-shadow: inset 1px 1px var(--dark);
   }
-  /* ---- windows ---- */
   .window { display: flex; flex-direction: column; padding: 3px; }
   #main { width: 100%; height: calc(100dvh - 24px); }
   .titlebar {
@@ -94,37 +92,45 @@
   }
   button:disabled { color: var(--shadow); text-shadow: 1px 1px var(--light); cursor: default; }
   button:focus-visible, a.btn:focus-visible { outline: 1px dotted #000; outline-offset: -5px; }
+  button.danger { color: var(--err); font-weight: bold; }
   input[type=text], input[type=password] {
     font: inherit; color: var(--text); background: #fff; padding: 4px 6px; border-radius: 0; width: 100%;
   }
   textarea:focus, input:focus { outline: none; }
 
+  /* ---- avatars / icons ---- */
+  .av {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; flex-shrink: 0;
+    background: #fff;
+    border: 1px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+    font-size: 13px; line-height: 1;
+    overflow: hidden;
+    vertical-align: middle;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  }
+  .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .av.big { width: 72px; height: 72px; font-size: 44px; border-width: 2px; }
+  .av.mid { width: 44px; height: 44px; font-size: 26px; border-width: 2px; }
+  .line .av { margin-right: 5px; position: relative; top: -1px; }
+
   /* ---- split layout ---- */
   .split { flex: 1; display: flex; gap: 4px; min-height: 0; padding-top: 4px; }
   .side {
-    width: 270px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    overflow-y: auto;
-    padding: 2px 2px 6px;
+    width: 280px; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 6px;
+    overflow-y: auto; padding: 2px 2px 6px;
   }
   .chatpane { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .toolbar { display: flex; gap: 4px; padding: 2px 2px 5px; flex-wrap: wrap; align-items: center; }
-  .toolbar .chatname { font-weight: bold; font-size: 14px; margin-right: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .toolbar .chatname { font-weight: bold; font-size: 14px; margin-right: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-flex; align-items: center; gap: 6px; }
   .toolbar .spacer { flex: 1; }
   #menuBtn { display: none; min-width: 0; }
 
   fieldset { border: 2px groove var(--light); margin: 0; padding: 4px 6px 6px; min-width: 0; }
   legend { padding: 0 4px; font-weight: bold; }
   .list { background: #fff; max-height: 220px; overflow-y: auto; padding: 2px; }
-  .list .item {
-    display: flex; align-items: center; gap: 4px;
-    padding: 2px 4px;
-    cursor: default;
-    white-space: nowrap;
-  }
+  .list .item { display: flex; align-items: center; gap: 5px; padding: 2px 4px; cursor: default; white-space: nowrap; }
   .list .item .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .list .item.click { cursor: pointer; }
   .list .item.click:hover { outline: 1px dotted #000; outline-offset: -1px; }
@@ -132,6 +138,7 @@
   .list .item .badge { font-weight: bold; }
   .list .item .dim { color: var(--shadow); font-size: 11px; }
   .list .item.sel .dim { color: #ddd; }
+  .list .item.req { background: #ffffe1; flex-wrap: wrap; white-space: normal; }
   .list .empty-row { color: var(--shadow); padding: 2px 4px; font-style: italic; }
   .dot-on { color: #00a000; }
   .dot-off { color: var(--shadow); }
@@ -144,78 +151,67 @@
   .kv td:last-child { overflow-wrap: anywhere; }
   .log { background: #fff; font: 11px/1.35 "Lucida Console", "Courier New", monospace; max-height: 140px; overflow-y: auto; padding: 3px; white-space: pre-wrap; overflow-wrap: anywhere; }
   label.check { display: flex; align-items: center; gap: 6px; }
+  .redbadge { background: #c00000; color: #fff; font-weight: bold; padding: 0 5px; margin-left: 4px; }
 
   .banner { display: none; color: var(--err); font-weight: bold; padding: 2px 4px 6px; }
   .banner.show { display: block; }
   /* ---- chat log ---- */
   #messages {
-    flex: 1;
-    overflow-y: auto;
+    flex: 1; overflow-y: auto;
     background: var(--log-bg);
     padding: 8px 10px;
     font: 14px/1.5 "Lucida Console", "Courier New", monospace;
+    -webkit-touch-callout: none;
   }
   .empty { color: var(--shadow); }
-  .line { white-space: pre-wrap; overflow-wrap: anywhere; position: relative; }
+  .line { white-space: pre-wrap; overflow-wrap: anywhere; position: relative; padding: 1px 2px; }
+  .line:hover { background: #f0f0f0; }
+  .line.flash { background: #ffff80; }
   .line .time { color: var(--shadow); }
-  .line .who { font-weight: bold; }
+  .line .who { font-weight: bold; cursor: pointer; }
   .line .tag { font-weight: bold; color: var(--shadow); }
   .line a { color: var(--link); }
   .line a.vid::before { content: "▶ "; }
-  .line .del { display: none; margin-left: 6px; vertical-align: middle; font-family: Tahoma, sans-serif; }
-  .line:hover .del { display: inline-block; }
-  .attach { display: block; margin: 4px 0 4px 2ch; }
+  .line.deleted { color: var(--shadow); font-style: italic; text-decoration: line-through; text-decoration-color: #c00000; }
+  .line.deleted .who { color: var(--shadow) !important; }
+  .line .delnote { text-decoration: none; display: inline-block; color: #c00000; font-size: 11px; font-family: Tahoma, sans-serif; margin-left: 6px; }
+  .attach { display: block; margin: 4px 0 4px 4ch; }
   .attach img {
-    display: block;
-    max-width: min(260px, 100%);
-    max-height: 200px;
-    cursor: pointer;
-    background: #eee;
+    display: block; max-width: min(260px, 100%); max-height: 200px; cursor: pointer; background: #eee;
     border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow);
   }
   .attach .ph { color: var(--shadow); font-style: italic; }
   .attach button { font-family: Tahoma, sans-serif; font-size: 13px; }
   .sep {
-    color: var(--sep);
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    font-size: 20px;
-    line-height: 1;
-    letter-spacing: 3px;
-    margin: 10px 0;
-    user-select: none;
+    color: var(--sep); font-weight: bold; white-space: nowrap; overflow: hidden;
+    font-size: 20px; line-height: 1; letter-spacing: 3px; margin: 10px 0; user-select: none;
   }
-  .sysline { color: var(--shadow); font-style: italic; }
   /* ---- composer ---- */
   form.composer { display: flex; gap: 6px; padding: 6px 2px 4px; align-items: stretch; }
   form.composer button { min-width: 0; }
   textarea {
-    flex: 1;
-    min-width: 0;
-    resize: none;
+    flex: 1; min-width: 0; resize: none;
     font: 14px/1.4 "Lucida Console", "Courier New", monospace;
-    color: var(--text);
-    background: #fff;
-    padding: 4px 6px;
-    max-height: 110px;
-    border-radius: 0;
+    color: var(--text); background: #fff;
+    padding: 4px 6px; max-height: 110px; border-radius: 0;
   }
   .statusbar { display: flex; gap: 3px; padding-top: 3px; flex-shrink: 0; }
   .statusbar > div {
-    padding: 2px 6px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 2px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     border: 1px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow);
   }
   .statusbar .grow { flex: 1; }
+  /* ---- context menu ---- */
+  .ctxmenu { position: fixed; z-index: 3000; min-width: 190px; padding: 2px; display: flex; flex-direction: column; }
+  .ctxmenu .mi { padding: 4px 22px 4px 8px; cursor: pointer; white-space: nowrap; user-select: none; }
+  .ctxmenu .mi:hover, .ctxmenu .mi:focus { background: var(--select); color: #fff; outline: none; }
+  .ctxmenu .mi.danger { color: var(--err); }
+  .ctxmenu .mi.danger:hover, .ctxmenu .mi.danger:focus { color: #fff; }
+  .ctxmenu .mhead { padding: 3px 8px; font-weight: bold; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--shadow); margin-bottom: 2px; }
+  .ctxmenu hr { border: 0; border-top: 1px solid var(--shadow); border-bottom: 1px solid var(--light); margin: 3px 2px; }
   /* ---- floating windows ---- */
-  .float {
-    position: fixed;
-    width: 560px;
-    max-width: calc(100vw - 16px);
-    max-height: calc(100dvh - 16px);
-    z-index: 10;
-  }
+  .float { position: fixed; width: 560px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); z-index: 10; }
+  .float.narrow { width: 400px; }
   .float.max { left: 0 !important; top: 0 !important; width: 100vw; max-width: none; height: 100dvh; max-height: none; }
   .float .content { padding: 6px 4px 4px; display: flex; flex-direction: column; gap: 8px; overflow: auto; min-height: 0; flex: 1; }
   .player { background: #000; display: flex; align-items: center; justify-content: center; }
@@ -229,21 +225,23 @@
   .info td:last-child { overflow-wrap: anywhere; }
   .info a { color: var(--link); }
   .wbuttons { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+  .prof-head { display: flex; gap: 12px; align-items: center; }
+  .prof-head .pn { font-size: 16px; font-weight: bold; overflow-wrap: anywhere; }
+  .bio { background: #fff; padding: 6px; min-height: 40px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .icongrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 3px; background: #fff; padding: 4px; max-height: 160px; overflow-y: auto; }
+  .icongrid button { min-width: 0; padding: 2px; font-size: 20px; line-height: 1.2; font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif; }
+  .swatches { display: flex; gap: 4px; flex-wrap: wrap; }
+  .swatches button { min-width: 0; width: 26px; height: 22px; padding: 0; }
+  .settings textarea { width: 100%; min-height: 60px; font: 13px/1.35 Tahoma, sans-serif; }
+  .report { border-bottom: 1px solid var(--shadow); padding: 6px 2px; display: flex; flex-direction: column; gap: 4px; }
+  .report .rmsg { background: #fff; padding: 4px 6px; font-family: "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .report.closed { opacity: .6; }
   /* ---- dialogs ---- */
-  .overlay {
-    position: fixed; inset: 0;
-    display: none;
-    align-items: center; justify-content: center;
-    padding: 16px;
-    background: rgba(0, 0, 0, .25);
-    z-index: 1000;
-  }
+  .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .25); z-index: 1000; }
   .overlay.show { display: flex; }
   .overlay.solid { background: var(--desktop); }
   .dialog { width: 100%; max-width: 360px; padding: 3px; max-height: calc(100dvh - 32px); overflow: auto; }
   .dialog .body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .dialog .row { display: flex; gap: 10px; align-items: flex-start; }
-  .dialog .icon { font-size: 28px; line-height: 1; }
   .dialog .buttons { display: flex; justify-content: flex-end; gap: 6px; }
   .dialog label.f { display: flex; flex-direction: column; gap: 3px; }
   .dialog .hint { font-size: 11px; color: #333; }
@@ -256,12 +254,7 @@
   .meter span { flex: 1; background: #fff; border: 1px solid var(--shadow); }
   .meter span.f1 { background: #c00000; } .meter span.f2 { background: #e08000; } .meter span.f3 { background: #a0a000; } .meter span.f4 { background: #008000; }
   .radio { display: flex; gap: 14px; }
-  .tip {
-    position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%);
-    background: #ffffe1; color: #000; border: 1px solid #000;
-    padding: 4px 8px; font-size: 12px;
-    display: none; z-index: 2000;
-  }
+  .tip { position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); background: #ffffe1; color: #000; border: 1px solid #000; padding: 4px 8px; font-size: 12px; display: none; z-index: 4000; }
   .tip.show { display: block; }
   .backdrop { display: none; }
   @media (max-width: 760px) {
@@ -270,18 +263,13 @@
     #messages { font-size: 13px; }
     #menuBtn { display: inline-block; }
     .side {
-      position: fixed; left: 0; top: 0; bottom: 0;
-      width: min(300px, 86vw);
-      z-index: 500;
-      background: var(--face);
-      border-right: 2px solid var(--dark);
-      padding: 8px;
-      transform: translateX(-105%);
-      transition: transform .15s;
+      position: fixed; left: 0; top: 0; bottom: 0; width: min(300px, 86vw); z-index: 500;
+      background: var(--face); border-right: 2px solid var(--dark); padding: 8px;
+      transform: translateX(-105%); transition: transform .15s;
     }
     .side.open { transform: none; }
     .backdrop.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 499; }
-    .float { width: calc(100vw - 16px); }
+    .float, .float.narrow { width: calc(100vw - 16px); }
     .toolbar button { min-width: 0; }
   }
 </style>
@@ -296,14 +284,23 @@
     <span class="ctl raised" aria-hidden="true">×</span>
   </div>
   <div class="split">
-    <!-- LEFT PANEL -->
     <aside class="side" id="side">
       <fieldset>
         <legend>You</legend>
         <div class="me-box">
-          <span class="n" id="meName" title="Account info"></span>
+          <span id="meIcon"></span>
+          <span class="n" id="meName" title="View my profile"></span>
+          <button class="small" id="settingsBtn" title="Settings">⚙</button>
           <button class="small" id="logoutBtn">Log out</button>
         </div>
+      </fieldset>
+      <fieldset id="friendsBox">
+        <legend id="friendsTitle">Friends</legend>
+        <div class="list sunken" id="friendsList"></div>
+      </fieldset>
+      <fieldset id="dmBox">
+        <legend>Direct messages</legend>
+        <div class="list sunken" id="dmList"></div>
       </fieldset>
       <fieldset>
         <legend>My chats</legend>
@@ -324,12 +321,15 @@
       </fieldset>
       <fieldset id="adminBox" hidden>
         <legend>🔧 Admin</legend>
+        <div class="row-btns" style="margin:0 0 6px"><button id="reportsBtn">🚩 Reports<span id="reportsBadge" class="redbadge" hidden></span></button></div>
         <label class="check"><input type="checkbox" id="guestToggle"> Guests can join</label>
+        <label class="check"><input type="checkbox" id="deletedToggle"> Show deleted messages</label>
         <table class="kv" id="debugTable"></table>
         <div class="row-btns">
           <button class="small" id="pingBtn">Ping</button>
           <button class="small" id="scanBtn">Scan database</button>
           <button class="small" id="archiveBtn">Archive...</button>
+          <button class="small" id="cleanBtn">Clean guests</button>
         </div>
         <div style="margin-top:6px;font-weight:bold">Error log</div>
         <div class="log sunken" id="errLog">(empty)</div>
@@ -337,12 +337,12 @@
     </aside>
     <div class="backdrop" id="backdrop"></div>
 
-    <!-- CHAT -->
     <section class="chatpane">
       <div class="toolbar">
         <button id="menuBtn" title="Menu">☰</button>
         <span class="chatname" id="chatName">...</span>
         <span class="spacer"></span>
+        <button id="profileBtn" class="small" hidden>Profile</button>
         <button id="inviteBtn" class="small">Invite...</button>
         <button id="leaveBtn" class="small">Leave chat</button>
         <button id="renameBtn" class="small" hidden>Rename</button>
@@ -383,7 +383,7 @@
           <label class="f">Username<input type="text" id="liUser" class="sunken" autocomplete="username" maxlength="20" required></label>
           <label class="f">Password<input type="password" id="liPass" class="sunken" autocomplete="current-password" required></label>
           <div class="err" id="liErr"></div>
-          <div class="buttons" style="display:flex;justify-content:flex-end"><button type="submit">Log in</button></div>
+          <div style="display:flex;justify-content:flex-end"><button type="submit">Log in</button></div>
         </form>
         <form class="tabpanel" id="regForm" data-panel="register" hidden>
           <label class="f">Choose a username<input type="text" id="rgUser" class="sunken" autocomplete="username" maxlength="20" required>
@@ -396,8 +396,8 @@
           <div style="display:flex;justify-content:flex-end"><button type="submit">Create account</button></div>
         </form>
         <form class="tabpanel" id="guestForm" data-panel="guest" hidden>
-          <div class="row" style="display:flex;gap:10px"><div style="font-size:28px">👤</div>
-            <div>Join without an account. Your name will show a <b>[GUEST]</b> tag, and if you log out you lose your guest identity.</div></div>
+          <div style="display:flex;gap:10px"><div style="font-size:28px">👤</div>
+            <div>Join without an account. Your name shows a <b>[GUEST]</b> tag. Guests can't send images, links, create chats or add friends. When you log out or close the tab, your guest identity is <b>deleted forever</b>.</div></div>
           <label class="f">Your name<input type="text" id="gsName" class="sunken" maxlength="24" autocomplete="nickname" required></label>
           <div class="err" id="gsErr"></div>
           <div style="display:flex;justify-content:flex-end"><button type="submit">Join as guest</button></div>
@@ -407,7 +407,6 @@
   </div>
 </div>
 
-<!-- GENERIC DIALOG -->
 <div class="overlay" id="dlgOverlay">
   <form class="dialog raised" id="dlgForm">
     <div class="titlebar"><span class="t" id="dlgTitle"></span></div>
@@ -429,16 +428,42 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "3.0.1";
+const APP_VERSION = "4.0";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-const COLORS = ["#000080", "#800000", "#008000", "#800080", "#008080", "#c00000", "#0000c0", "#806000"];
+const COLORS = ["#000080", "#800000", "#008000", "#800080", "#008080", "#c00000", "#0000c0", "#806000", "#404040", "#b03060"];
+const ICONS = ["😀","😎","🤓","😈","🤖","👽","👾","💀","👻","🤡","🐱","🐶","🦊","🐸","🐼","🐧","🦉","🐙","🦈","🐉","🦄","🐺","🐢","🦖","🍕","🍔","🌮","🍩","⚽","🏀","🎮","🕹️","🎧","🎸","🚀","🛸","⭐","🔥","⚡","❄️","🌈","🌙","💎","🧠","👑","🎩","🍄","🌵","🗿","💾"];
 const MAX_LEN = 500;
 const MAX_VIDEO = 15 * 1000 * 1000;
 const MAX_IMAGE = 5 * 1000 * 1000;
 const CHUNK = 522240;
+const LINK_RE = /(https?:|www\.|\.(com|net|org|fr|io|gg|be|ly|co|me|tv|xyz|app|dev|link|info|ru|de|uk)($|[\/\s?#:]))/i;   // same as the database rules
+const REASONS = { spam: "Spam", insult: "Insult / harassment", inappropriate: "Inappropriate content", other: "Other" };
+
+/* ===== FRIEND's special icon: an eye drawn with text characters, old terminal style, turned 90° ===== */
+const OWNER_EYE = (() => {
+  const art = [
+    "    .-''''-.    ",
+    "  .' .-''-. '.  ",
+    " /  / .--. \\  \\ ",
+    "|  | ( @@ ) |  |",
+    " \\  \\ '--' /  / ",
+    "  '. '-..-' .'  ",
+    "    '-....-'    ",
+  ];
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+  const lines = art.map((l, i) => `<text x="50" y="${14 + i * 13}" text-anchor="middle" xml:space="preserve">${esc(l)}</text>`).join("");
+  let scan = "";
+  for (let y = 0; y < 100; y += 3) scan += `<rect x="0" y="${y}" width="100" height="1" fill="#000" opacity=".3"/>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">` +
+    `<defs><filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` +
+    `<radialGradient id="bg" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#062b06"/><stop offset="1" stop-color="#000"/></radialGradient></defs>` +
+    `<rect width="100" height="100" fill="url(#bg)"/>` +
+    `<g transform="rotate(90 50 50)" font-family="Courier New,Courier,monospace" font-size="10.4" font-weight="bold" fill="#39ff39" stroke="#39ff39" stroke-width=".35" filter="url(#glow)">${lines}</g>${scan}</svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+})();
 
 /* ========================= ERROR LOG ========================= */
 const errLog = [];
@@ -458,7 +483,7 @@ function toast(text) {
   t.textContent = text;
   t.classList.add("show");
   clearTimeout(toast.h);
-  toast.h = setTimeout(() => t.classList.remove("show"), 2400);
+  toast.h = setTimeout(() => t.classList.remove("show"), 2600);
 }
 function showBanner(text) { const b = $("banner"); b.textContent = "⚠ " + text; b.classList.add("show"); logError(text); }
 function hideBanner() { $("banner").classList.remove("show"); }
@@ -469,6 +494,7 @@ function fmtTime(ms) {
   return d.toDateString() === new Date().toDateString() ? t : d.toLocaleDateString([], { day: "2-digit", month: "2-digit" }) + " " + t;
 }
 function fmtFull(ms) { return ms ? new Date(ms).toLocaleString() : "just now"; }
+function fmtDate(ms) { return ms ? new Date(ms).toLocaleDateString() : "?"; }
 function fmtAgo(ms) {
   if (!ms) return "never";
   const s = (Date.now() - ms) / 1000;
@@ -483,20 +509,15 @@ function fmtSize(n) {
   if (n < 1024 * 1024) return (n / 1024).toFixed(0) + " KB";
   return (n / 1024 / 1024).toFixed(1) + " MB";
 }
-function fmtDur(s) {
-  if (!isFinite(s)) return "?";
-  s = Math.round(s);
-  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
-}
+function fmtDur(s) { if (!isFinite(s)) return "?"; s = Math.round(s); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
 function randomCode(len) {
   const abc = "abcdefghijkmnpqrstuvwxyz23456789";
   const a = crypto.getRandomValues(new Uint8Array(len));
   return [...a].map((x) => abc[x % abc.length]).join("");
 }
-function displayName(u) { return u ? u.name + (u.guest ? " [GUEST]" : "") : "?"; }
 
 /* ========================= GENERIC DIALOG ========================= */
-function dialog({ title, message, input, inputValue = "", placeholder = "", okText = "OK", cancelText = "Cancel", extra }) {
+function dialog({ title, message, input, inputValue = "", placeholder = "", okText = "OK", cancelText = "Cancel", extra, password }) {
   return new Promise((resolve) => {
     const body = $("dlgBody");
     body.replaceChildren();
@@ -504,7 +525,7 @@ function dialog({ title, message, input, inputValue = "", placeholder = "", okTe
     if (message) body.append(el("div", null, message));
     let inp = null;
     if (input) {
-      inp = el("input"); inp.type = "text"; inp.className = "sunken"; inp.value = inputValue; inp.placeholder = placeholder; inp.maxLength = 30;
+      inp = el("input"); inp.type = password ? "password" : "text"; inp.className = "sunken"; inp.value = inputValue; inp.placeholder = placeholder; inp.maxLength = password ? 200 : 30;
       body.append(inp);
     }
     if (extra) body.append(extra.node);
@@ -520,12 +541,13 @@ function dialog({ title, message, input, inputValue = "", placeholder = "", okTe
     const done = (v) => { ov.classList.remove("show"); $("dlgForm").onsubmit = null; resolve(v); };
     $("dlgForm").onsubmit = (e) => {
       e.preventDefault();
-      if (inp) { const v = inp.value.trim(); if (!v) return; done(extra ? { value: v, ...extra.get() } : v); }
+      if (inp) { const v = password ? inp.value : inp.value.trim(); if (!v) return; done(extra ? { value: v, ...extra.get() } : v); }
       else done(extra ? extra.get() : true);
     };
     if (cancel) cancel.onclick = () => done(null);
   });
 }
+$("dlgBody").style.whiteSpace = "pre-line";
 
 /* ========================= LINKS & VIDEO WINDOWS ========================= */
 const URL_RE = /https?:\/\/[^\s<>"]+/g;
@@ -582,8 +604,16 @@ function focusWindow(w) {
   w.style.zIndex = ++zTop;
   document.querySelectorAll(".float").forEach((x) => x.classList.toggle("inactive", x !== w));
 }
-function openWindow(title, icon) {
-  const w = el("div", "window raised float");
+const openWins = new Map();   // key -> window (to avoid duplicates)
+function openWindow(title, icon, { key, narrow } = {}) {
+  if (key && openWins.has(key) && document.body.contains(openWins.get(key).w)) {
+    const ex = openWins.get(key);
+    focusWindow(ex.w);
+    ex.content.replaceChildren();
+    ex.setTitle(title);
+    return ex;
+  }
+  const w = el("div", "window raised float" + (narrow ? " narrow" : ""));
   const bar = el("div", "titlebar");
   const t = el("span", "t", title);
   const bMax = el("button", "ctl", "□"); bMax.title = "Maximize"; bMax.type = "button";
@@ -598,8 +628,10 @@ function openWindow(title, icon) {
   cascade = (cascade + 1) % 6;
   w.style.left = x + "px"; w.style.top = y + "px";
   focusWindow(w);
+  const api = { w, content, setTitle: (s) => { t.textContent = s; }, close: () => { w.remove(); if (key) openWins.delete(key); } };
+  if (key) openWins.set(key, api);
   w.addEventListener("pointerdown", () => focusWindow(w));
-  bClose.addEventListener("click", () => w.remove());
+  bClose.addEventListener("click", () => api.close());
   bMax.addEventListener("click", () => { w.classList.toggle("max"); bMax.textContent = w.classList.contains("max") ? "❐" : "□"; });
   bar.addEventListener("dblclick", (e) => { if (e.target === bar || e.target === t) bMax.click(); });
   bar.addEventListener("pointerdown", (e) => {
@@ -616,7 +648,7 @@ function openWindow(title, icon) {
     bar.addEventListener("pointerup", up);
     bar.addEventListener("pointercancel", up);
   });
-  return { w, content, setTitle: (s) => { t.textContent = s; } };
+  return api;
 }
 function infoTable(rows) {
   const tbl = el("table", "info");
@@ -636,7 +668,7 @@ function sharedBy(msg) { return msg ? (msg.name + (msg.guest ? " [GUEST]" : ""))
 const SITE_NAMES = { youtube: "YouTube", vimeo: "Vimeo", dailymotion: "Dailymotion", file: "Video file" };
 
 function openVideoLink(v, msg) {
-  const { w, content, setTitle } = openWindow("Video Player - loading...", "▶");
+  const { content, setTitle, close } = openWindow("Video Player - loading...", "▶");
   const player = el("div", "player");
   const rows = [["Title", "loading...", "title"], ["Channel", "...", "author"], ["Site", SITE_NAMES[v.kind]]];
   if (v.kind === "file") rows.splice(1, 1, ["Resolution", "...", "res"], ["Duration", "...", "dur"]);
@@ -661,8 +693,8 @@ function openVideoLink(v, msg) {
   const fs = el("fieldset"); fs.append(el("legend", null, "Video information"), tbl);
   const btns = el("div", "wbuttons");
   const open = el("a", "btn", "Open original"); open.href = v.url; open.target = "_blank"; open.rel = "noopener noreferrer";
-  const close = el("button", null, "Close"); close.addEventListener("click", () => w.remove());
-  btns.append(open, close);
+  const cl = el("button", null, "Close"); cl.addEventListener("click", close);
+  btns.append(open, cl);
   content.append(player, fs, btns);
   if (v.kind === "file") { refs.title.textContent = v.fname || "video"; setTitle(v.fname + " - Video Player"); return; }
   fetch("https://noembed.com/embed?url=" + encodeURIComponent(v.url))
@@ -677,7 +709,7 @@ function openVideoLink(v, msg) {
     .catch(() => { refs.title.textContent = "(info not available)"; refs.author.textContent = "?"; setTitle(SITE_NAMES[v.kind] + " - Video Player"); });
 }
 function openImageWindow({ src, title, msg, info = [], external, download }) {
-  const { w, content } = openWindow(title + " - Image Viewer", "🖼");
+  const { content, close } = openWindow(title + " - Image Viewer", "🖼");
   const player = el("div", "player");
   const img = el("img"); img.alt = title; img.src = src;
   player.append(img);
@@ -688,12 +720,12 @@ function openImageWindow({ src, title, msg, info = [], external, download }) {
   const btns = el("div", "wbuttons");
   if (external) { const a = el("a", "btn", "Open original"); a.href = external; a.target = "_blank"; a.rel = "noopener noreferrer"; btns.append(a); }
   if (download) { const a = el("a", "btn", "Save..."); a.href = src; a.download = download; btns.append(a); }
-  const close = el("button", null, "Close"); close.addEventListener("click", () => w.remove());
-  btns.append(close);
+  const cl = el("button", null, "Close"); cl.addEventListener("click", close);
+  btns.append(cl);
   content.append(player, fs, btns);
 }
 function openUploadedVideo(room, media, msg) {
-  const { w, content } = openWindow((media.fname || "video") + " - Video Player", "▶");
+  const { content, close } = openWindow((media.fname || "video") + " - Video Player", "▶");
   const player = el("div", "player");
   player.append(el("div", "ph", "Loading video... (" + fmtSize(media.size) + ")"));
   const { tbl, refs } = infoTable([
@@ -703,8 +735,8 @@ function openUploadedVideo(room, media, msg) {
   const fs = el("fieldset"); fs.append(el("legend", null, "Video information"), tbl);
   const btns = el("div", "wbuttons");
   const save = el("a", "btn", "Save..."); save.style.display = "none";
-  const close = el("button", null, "Close"); close.addEventListener("click", () => w.remove());
-  btns.append(save, close);
+  const cl = el("button", null, "Close"); cl.addEventListener("click", close);
+  btns.append(save, cl);
   content.append(player, fs, btns);
   loadMedia(room, media).then((url) => {
     const video = el("video");
@@ -723,34 +755,53 @@ const A = await import(SDK + "firebase-auth.js");
 const fbApp = initializeApp(firebaseConfig);
 const db = D.getDatabase(fbApp);
 const auth = A.getAuth(fbApp);
-if (window.__afterInit) window.__afterInit({ D, A, db, auth });   // hook used only for local testing
 const R = (path) => D.ref(db, path);
 const now = () => D.serverTimestamp();
 
 /* ========================= STATE ========================= */
 const S = {
-  me: null,              // { uid, name, guest, color }
-  isAdmin: false,
-  banned: false,
-  users: {}, status: {}, chats: {}, myChats: {}, members: {}, settings: {}, admins: {}, bans: {},
-  room: null,            // current room id
-  readOnly: false,
-  messages: [],
-  unread: {},
-  connected: false,
-  serverOffset: 0,
+  me: null, isAdmin: false, banned: false,
+  users: {}, status: {}, chats: {}, myChats: {}, myDMs: {}, members: {}, settings: {}, admins: {}, bans: {},
+  friends: {}, reqIn: {}, reqOut: {}, loc: {}, reports: {},
+  room: null, readOnly: false, legacyView: false,
+  messages: [], deleted: {}, showDeleted: false,
+  unread: {}, connected: false, serverOffset: 0,
 };
 const unsubs = [];
 let roomUnsubs = [];
+let deletedUnsub = null;
 const unreadSubs = new Map();
+const locSubs = new Map();
 let chatsReadyResolve; const chatsReady = new Promise((r) => (chatsReadyResolve = r));
+let usersReadyResolve; const usersReady = new Promise((r) => (usersReadyResolve = r));
+
+const isDM = (room) => !!room && room.startsWith("dm-");
+const dmIdWith = (uid) => "dm-" + [S.me.uid, uid].sort().join("-");
+const dmOther = (room) => room.slice(3).split("-").find((u) => u !== S.me.uid) || S.me.uid;
+const isAdminUid = (uid) => uid === OWNER_UID || S.admins[uid] === true;
+const isAccount = (uid) => { const u = S.users[uid]; return !!u && !u.guest && !u.deleted; };
+function displayName(u) { return u ? u.name + (u.guest ? " [GUEST]" : "") + (u.deleted ? " (deleted account)" : "") : "?"; }
+
+/* ========================= ICONS ========================= */
+function iconNode(uid, fallback = {}, size = "") {
+  const u = uid ? S.users[uid] : null;
+  const box = el("span", "av" + (size ? " " + size : ""));
+  const avatar = u && !u.deleted ? u.avatar : null;
+  if (avatar && /^data:image\//.test(avatar)) {
+    const img = el("img"); img.alt = ""; img.src = avatar; box.append(img);
+  } else if (uid === OWNER_UID && !(u && u.icon)) {
+    const img = el("img"); img.alt = ""; img.src = OWNER_EYE; box.append(img);
+  } else {
+    box.textContent = (u && !u.deleted && u.icon) || fallback.icon || (fallback.guest || (u && u.guest) ? "👤" : "🙂");
+  }
+  return box;
+}
 
 /* ========================= LOGIN UI ========================= */
 document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
   document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
   document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
 }));
-
 const COMMON = ["password", "123456", "qwerty", "azerty", "motdepasse", "iloveyou", "admin", "welcome", "letmein", "football", "soleil", "bonjour", "dragon", "monkey", "abc123", "111111", "000000", "sunshine", "princess", "master", "shadow", "superman", "batman", "pokemon", "minecraft", "fortnite", "roblox", "chocolat", "loulou", "doudou", "marseille", "paris", "hangout", "friend"];
 function passwordScore(pw, user) {
   const p = pw.toLowerCase();
@@ -766,8 +817,7 @@ function passwordScore(pw, user) {
   let score = 2;
   if (pw.length >= 12 && kinds >= 2 && unique >= 7) score = 3;
   if ((pw.length >= 16 && kinds >= 2 && unique >= 9) || (pw.length >= 12 && kinds >= 3 && unique >= 9)) score = 4;
-  const msg = ["", "", "OK. Longer = stronger (add a word or two).", "Strong.", "Very strong!"][score];
-  return { score, msg };
+  return { score, msg: ["", "", "OK. Longer = stronger (add a word or two).", "Strong.", "Very strong!"][score] };
 }
 function updateMeter() {
   const { score, msg } = passwordScore($("rgPass").value, $("rgUser").value);
@@ -786,21 +836,23 @@ function authError(e) {
   if (c.includes("too-many-requests")) return "Too many tries. Wait a few minutes and try again.";
   if (c.includes("operation-not-allowed") || c.includes("admin-restricted")) return "This login method isn't turned on in Firebase yet.";
   if (c.includes("network")) return "No connection. Check your internet.";
-  if (c.includes("weak-password")) return "Password too weak.";
-  if (c.includes("PERMISSION_DENIED") || /permission/i.test(e?.message || "")) return "Not allowed (guests may be turned off).";
+  if (c.includes("weak-password") || c.includes("password-does-not-meet")) return "Password too weak (at least 10 characters).";
+  if (c.includes("requires-recent-login")) return "Please log out and log in again, then retry.";
+  if (c.includes("PERMISSION_DENIED") || /permission/i.test(e?.message || "")) return "Not allowed.";
   return e?.message || String(e);
 }
 
-let pendingName = null;   // name typed at sign-up / guest join
+let pendingName = null;
 const USER_RE = /^[A-Za-z0-9_]{3,20}$/;
-
 $("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("liErr").textContent = "";
   const u = $("liUser").value.trim();
   if (!USER_RE.test(u)) { $("liErr").textContent = "Wrong username or password."; return; }
-  try { await A.signInWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, $("liPass").value); }
-  catch (err) { $("liErr").textContent = authError(err); }
+  try {
+    await A.setPersistence(auth, A.browserLocalPersistence);
+    await A.signInWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, $("liPass").value);
+  } catch (err) { $("liErr").textContent = authError(err); }
 });
 $("regForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -812,8 +864,10 @@ $("regForm").addEventListener("submit", async (e) => {
   if (score < 2) { $("rgErr").textContent = msg; return; }
   if (p !== $("rgPass2").value) { $("rgErr").textContent = "The two passwords are different."; return; }
   pendingName = u;
-  try { await A.createUserWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, p); }
-  catch (err) { pendingName = null; $("rgErr").textContent = authError(err); }
+  try {
+    await A.setPersistence(auth, A.browserLocalPersistence);
+    await A.createUserWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, p);
+  } catch (err) { pendingName = null; $("rgErr").textContent = authError(err); }
 });
 $("guestForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -821,8 +875,10 @@ $("guestForm").addEventListener("submit", async (e) => {
   const n = $("gsName").value.trim().slice(0, 24);
   if (!n) return;
   pendingName = n;
-  try { await A.signInAnonymously(auth); }
-  catch (err) { pendingName = null; $("gsErr").textContent = authError(err); }
+  try {
+    await A.setPersistence(auth, A.browserSessionPersistence);   // closing the tab ends the guest forever
+    await A.signInAnonymously(auth);
+  } catch (err) { pendingName = null; $("gsErr").textContent = authError(err); }
 });
 
 /* ========================= AUTH FLOW ========================= */
@@ -837,16 +893,15 @@ A.onAuthStateChanged(auth, async (user) => {
   if (started) return;
   try {
     const isGuest = user.isAnonymous;
-    let snap = await D.get(R("users/" + user.uid));
-    let profile = snap.val();
-    if (!profile) {
+    let profile = (await D.get(R("users/" + user.uid))).val();
+    if (!profile || profile.deleted) {
       let name = pendingName;
       if (!isGuest && !name) name = (user.email || "user").split("@")[0];
       if (!name) { await A.signOut(auth); $("loginOverlay").classList.add("show"); return; }
-      profile = { name, guest: isGuest, color: COLORS[Math.floor(Math.random() * COLORS.length)], created: Date.now() };
+      profile = { name, guest: isGuest, color: COLORS[Math.floor(Math.random() * 8)], created: Date.now() };
+      profile.icon = isGuest ? "👤" : ICONS[Math.floor(Math.random() * 24)];
+      if (user.uid === OWNER_UID) delete profile.icon;
       await D.set(R("users/" + user.uid), profile);
-    } else if (!isGuest && pendingName && pendingName !== profile.name && pendingName.toLowerCase() === profile.name.toLowerCase()) {
-      // nothing: keep original spelling
     }
     pendingName = null;
     S.me = { uid: user.uid, ...profile };
@@ -856,8 +911,7 @@ A.onAuthStateChanged(auth, async (user) => {
     startApp();
   } catch (err) {
     const msg = authError(err);
-    const target = user.isAnonymous ? "gsErr" : "rgErr";
-    $(target).textContent = msg;
+    $(user.isAnonymous ? "gsErr" : "rgErr").textContent = user.isAnonymous && /allowed/i.test(msg) ? "Guests are turned off right now." : msg;
     $("liErr").textContent = msg;
     logError("Login: " + (err?.message || err));
     if (user.isAnonymous) { try { await user.delete(); } catch {} }
@@ -868,31 +922,47 @@ A.onAuthStateChanged(auth, async (user) => {
 
 /* ========================= APP START ========================= */
 function sub(query, cb, onErr) {
-  const u = D.onValue(query, cb, (err) => { logError("Read " + (query._path || "") + ": " + err.message); onErr && onErr(err); });
+  const u = D.onValue(query, cb, (err) => { logError("Read " + (query._path || query.path || "") + ": " + err.message); onErr && onErr(err); });
   unsubs.push(u);
   return u;
+}
+function setLoc() {
+  if (!S.me) return;
+  let v = { kind: "none" };
+  if (S.room && isDM(S.room)) v = { kind: "dm" };
+  else if (S.room && S.chats[S.room]) v = S.chats[S.room].type === "private" ? { kind: "private" } : { kind: "public", room: S.room };
+  D.set(R("loc/" + S.me.uid), v).catch((e) => logError("Location: " + e.message));
 }
 
 function startApp() {
   renderMe();
-  // presence
+  $("friendsBox").hidden = S.me.guest;
   sub(R(".info/connected"), async (s) => {
     S.connected = !!s.val();
     renderStatus();
     if (!S.connected) return;
     const st = R("status/" + S.me.uid);
     try {
-      await D.onDisconnect(st).set({ online: false, lastSeen: now(), room: S.room || "" });
-      await D.set(st, { online: true, lastSeen: now(), room: S.room || "" });
+      await D.onDisconnect(st).set({ online: false, lastSeen: now() });
+      await D.onDisconnect(R("loc/" + S.me.uid)).remove();
+      await D.set(st, { online: true, lastSeen: now() });
+      setLoc();
     } catch (e) { logError("Presence: " + e.message); }
   });
   sub(R(".info/serverTimeOffset"), (s) => { S.serverOffset = s.val() || 0; });
-  sub(R("users"), (s) => { S.users = s.val() || {}; renderSide(); render(); });
+  sub(R("users"), (s) => {
+    S.users = s.val() || {};
+    if (S.users[S.me.uid]) S.me = { uid: S.me.uid, ...S.users[S.me.uid] };
+    usersReadyResolve();
+    renderMe(); renderSide(); render(); renderToolbar();
+  });
   sub(R("status"), (s) => { S.status = s.val() || {}; renderSide(); });
   sub(R("admins"), (s) => {
     S.admins = { ...(s.val() || {}), [OWNER_UID]: true };
+    const was = S.isAdmin;
     S.isAdmin = S.admins[S.me.uid] === true;
     $("adminBox").hidden = !S.isAdmin;
+    if (S.isAdmin && !was) startAdmin();
     renderMe(); renderToolbar(); renderSide(); render();
   });
   sub(R("settings"), (s) => { S.settings = s.val() || {}; $("guestToggle").checked = S.settings.guestsAllowed !== false; renderSide(); });
@@ -901,25 +971,49 @@ function startApp() {
     const was = S.banned;
     S.banned = !!S.bans[S.me.uid];
     if (S.banned && !was) showBanned();
-    renderSide();
+    renderSide(); renderToolbar();
   });
   sub(R("chats"), (s) => {
     S.chats = s.val() || {};
     chatsReadyResolve();
     renderSide(); renderToolbar();
-    if (S.room && !S.chats[S.room] && !S.legacyView) { toast("This chat was deleted."); goDefault(); }
+    if (S.room && !isDM(S.room) && !S.chats[S.room] && !S.legacyView) { toast("This chat was deleted."); goDefault(); }
   });
-  sub(R("userChats/" + S.me.uid), (s) => {
-    S.myChats = s.val() || {};
-    syncUnreadSubs();
-    renderSide();
+  sub(R("userChats/" + S.me.uid), (s) => { S.myChats = s.val() || {}; syncUnreadSubs(); renderSide(); });
+  let firstDM = true;
+  sub(R("userDMs/" + S.me.uid), (s) => {
+    const before = S.myDMs;
+    S.myDMs = s.val() || {};
+    if (!firstDM) for (const [dm, v] of Object.entries(S.myDMs)) {
+      if (dm !== S.room && v.lastTs && v.lastTs !== before[dm]?.lastTs && v.lastTs > (v.lastRead || 0) && v.with) toast("✉ New message from " + displayName(S.users[v.with]));
+    }
+    firstDM = false;
+    syncUnreadSubs(); renderSide(); renderToolbar();
   });
+  if (!S.me.guest) {
+    sub(R("friends/" + S.me.uid), (s) => { S.friends = s.val() || {}; syncLocSubs(); renderSide(); });
+    let firstReq = true;
+    sub(R("friendReqs/" + S.me.uid), (s) => {
+      const before = S.reqIn;
+      S.reqIn = s.val() || {};
+      if (!firstReq) for (const uid of Object.keys(S.reqIn)) if (!before[uid]) toast("➕ " + displayName(S.users[uid]) + " sent you a friend request!");
+      firstReq = false;
+      renderSide();
+    });
+  }
   boot();
+}
+
+function syncLocSubs() {
+  for (const [uid, u] of locSubs) if (!S.friends[uid]) { u(); locSubs.delete(uid); delete S.loc[uid]; }
+  for (const uid of Object.keys(S.friends)) {
+    if (locSubs.has(uid)) continue;
+    locSubs.set(uid, D.onValue(R("loc/" + uid), (s) => { S.loc[uid] = s.val(); renderSide(); }, () => {}));
+  }
 }
 
 async function boot() {
   await chatsReady;
-  // first registered user creates the "general" chat
   if (!S.chats.general && !S.me.guest) {
     try { await D.set(R("chats/general"), { name: "general", type: "public", createdBy: S.me.uid, createdAt: now() }); }
     catch (e) { logError("Create general: " + e.message); }
@@ -928,75 +1022,82 @@ async function boot() {
   if (h.room) await openRoom(h.room, h.code);
   else await goDefault();
 }
-
 function parseHash() {
-  const room = (location.hash.match(/room=([a-z0-9-]{3,40})/i) || [])[1];
+  const room = (location.hash.match(/room=(dm-[A-Za-z0-9]+-[A-Za-z0-9]+|[a-z0-9-]{3,40})/i) || [])[1];
   const code = (location.hash.match(/code=([a-z0-9]{16,40})/i) || [])[1];
-  return { room: room ? room.toLowerCase() : null, code: code || null };
+  return { room: room ? (room.startsWith("dm-") ? room : room.toLowerCase()) : null, code: code || null };
 }
 window.addEventListener("hashchange", () => {
   if (!started) return;
   const h = parseHash();
   if (h.room && h.room !== S.room) openRoom(h.room, h.code);
 });
-
 async function goDefault() {
   const last = store("chat-last-room");
   const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].archived);
-  const pick = (last && mine.includes(last)) ? last : (mine[0] || (S.chats.general ? "general" : Object.keys(S.chats).find((r) => S.chats[r].type === "public" && !S.chats[r].archived)));
+  const pick = (last && (mine.includes(last) || (isDM(last) && S.myDMs[last]))) ? last
+    : (mine[0] || (S.chats.general ? "general" : Object.keys(S.chats).find((r) => S.chats[r].type === "public" && !S.chats[r].archived)));
   if (pick) await openRoom(pick);
-  else { S.room = null; S.messages = []; renderToolbar(); render(); }
+  else { S.room = null; S.messages = []; renderToolbar(); render(); setLoc(); }
 }
 
 /* ========================= ROOMS ========================= */
 async function openRoom(room, code) {
   hideBanner();
   closeSide();
-  const chat = S.chats[room];
+  closeMenu();
   let readOnly = false;
   S.legacyView = false;
-  if (!chat) {
-    if (S.isAdmin) { readOnly = true; S.legacyView = true; }
-    else { showBanner("This chat doesn't exist (or was deleted)."); if (room !== S.room) await goDefault(); return; }
+  if (isDM(room)) {
+    const parts = room.slice(3).split("-");
+    const mine = parts.includes(S.me.uid);
+    if (!mine && !S.isAdmin) { showBanner("You can't open this conversation."); return; }
+    readOnly = !mine;
+    if (mine && !S.myDMs[room]) {
+      try { await D.update(R("userDMs/" + S.me.uid + "/" + room), { with: dmOther(room), lastRead: 0 }); } catch (e) { logError("DM: " + e.message); }
+    }
   } else {
-    let isMember = false;
-    try { isMember = (await D.get(R("members/" + room + "/" + S.me.uid))).exists(); } catch (e) { logError(e.message); }
-    if (!isMember) {
-      if (chat.archived) {
-        if (S.isAdmin) readOnly = true;
-        else { showBanner("This chat is archived."); return; }
-      } else if (S.banned) {
-        readOnly = true;
-      } else {
-        const upd = {};
-        if (chat.type === "public") {
-          upd["members/" + room + "/" + S.me.uid] = { joined: now() };
-          upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0 };
+    const chat = S.chats[room];
+    if (!chat) {
+      if (S.isAdmin) { readOnly = true; S.legacyView = true; }
+      else { showBanner("This chat doesn't exist (or was deleted)."); if (room !== S.room) await goDefault(); return; }
+    } else {
+      let isMember = false;
+      try { isMember = (await D.get(R("members/" + room + "/" + S.me.uid))).exists(); } catch (e) { logError(e.message); }
+      if (!isMember) {
+        if (chat.archived) {
+          if (S.isAdmin) readOnly = true;
+          else { showBanner("This chat is archived."); return; }
+        } else if (S.banned) {
+          readOnly = true;
         } else {
-          let c = code || S.myChats[room]?.code;
-          if (!c && S.isAdmin) { try { c = (await D.get(R("chatInvites/" + room))).val(); } catch {} }
-          if (!c) { showBanner("This chat is private. You need an invite link from someone inside."); return; }
-          upd["members/" + room + "/" + S.me.uid] = { joined: now(), code: c };
-          upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0, code: c };
+          const upd = {};
+          if (chat.type === "public") {
+            upd["members/" + room + "/" + S.me.uid] = { joined: now() };
+            upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0 };
+          } else {
+            let c = code || S.myChats[room]?.code;
+            if (!c && S.isAdmin) { try { c = (await D.get(R("chatInvites/" + room))).val(); } catch {} }
+            if (!c) { showBanner("This chat is private. You need an invite link from someone inside."); return; }
+            upd["members/" + room + "/" + S.me.uid] = { joined: now(), code: c };
+            upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0, code: c };
+          }
+          try { await D.update(R("/"), upd); toast("You joined " + (chat.type === "private" ? "🔒 " : "# ") + chat.name); }
+          catch (e) { showBanner(chat.type === "private" ? "This invite link is not valid anymore." : "Can't join this chat: " + authError(e)); return; }
         }
-        try { await D.update(R("/"), upd); toast("You joined " + (chat.type === "private" ? "🔒 " : "# ") + chat.name); }
-        catch (e) {
-          showBanner(chat.type === "private" ? "This invite link is not valid anymore." : "Can't join this chat: " + authError(e));
-          return;
-        }
-      }
-    } else if (chat.archived) readOnly = true;
+      } else if (chat.archived) readOnly = true;
+    }
   }
-  // switch
   roomUnsubs.forEach((u) => u());
   roomUnsubs = [];
   S.room = room;
   S.readOnly = readOnly;
   S.messages = [];
   S.members = {};
+  S.deleted = {};
   store("chat-last-room", room);
   if (location.hash !== "#room=" + room) history.replaceState(null, "", "#room=" + room);
-  try { D.update(R("status/" + S.me.uid), { room: S.room }).catch(() => {}); } catch {}
+  setLoc();
   renderToolbar();
   render();
   const q = D.query(R("rooms/" + room), D.orderByChild("ts"), D.limitToLast(200));
@@ -1004,7 +1105,7 @@ async function openRoom(room, code) {
     const list = [];
     snap.forEach((c) => {
       const x = c.val() || {};
-      list.push({ key: c.key, uid: x.uid || null, name: x.name || "?", guest: !!x.guest, color: x.color, text: x.text || "", ts: x.ts || 0, media: x.media || null });
+      list.push({ key: c.key, uid: x.uid || null, name: x.name || "?", guest: !!x.guest, color: x.color, icon: x.icon || null, text: x.text || "", ts: x.ts || 0, media: x.media || null });
     });
     if (room !== S.room) return;
     S.messages = list;
@@ -1012,28 +1113,45 @@ async function openRoom(room, code) {
     markRead();
   }, (err) => {
     logError("Read messages: " + err.message);
-    if (room === S.room) { showBanner("You can't read this chat anymore (you may have been removed)."); }
+    if (room === S.room) showBanner("You can't read this chat anymore (you may have been removed).");
   }));
-  roomUnsubs.push(D.onValue(R("members/" + room), (s) => {
-    if (room !== S.room) return;
-    const was = S.members[S.me.uid];
-    S.members = s.val() || {};
-    if (was && !S.members[S.me.uid] && !S.readOnly) { toast("You were removed from this chat."); goDefault(); return; }
-    renderSide();
-    renderStatus();
-  }));
+  if (isDM(room)) {
+    S.members = Object.fromEntries(room.slice(3).split("-").map((u) => [u, { joined: 0 }]));
+    renderSide(); renderStatus();
+  } else {
+    roomUnsubs.push(D.onValue(R("members/" + room), (s) => {
+      if (room !== S.room) return;
+      const was = S.members[S.me.uid];
+      S.members = s.val() || {};
+      if (was && !S.members[S.me.uid] && !S.readOnly) { toast("You were removed from this chat."); goDefault(); return; }
+      renderSide(); renderStatus();
+    }));
+  }
+  syncDeletedSub();
+}
+
+function syncDeletedSub() {
+  if (deletedUnsub) { deletedUnsub(); deletedUnsub = null; }
+  S.deleted = {};
+  if (!S.isAdmin || !S.showDeleted || !S.room) { render(); return; }
+  const room = S.room;
+  deletedUnsub = D.onValue(R("deletedMsgs/" + room), (s) => { if (room === S.room) { S.deleted = s.val() || {}; render(); } }, (e) => logError("Deleted msgs: " + e.message));
 }
 
 let markTimer = null;
 function markRead() {
-  if (!S.room || S.readOnly || document.hidden || !S.myChats[S.room]) return;
+  if (!S.room || S.readOnly || document.hidden) return;
+  const dm = isDM(S.room);
+  const entry = dm ? S.myDMs[S.room] : S.myChats[S.room];
+  if (!entry) return;
   const last = S.messages.reduce((m, x) => Math.max(m, x.ts || 0), 0);
-  if (!last || last <= (S.myChats[S.room].lastRead || 0)) return;
+  if (!last || last <= (entry.lastRead || 0)) return;
   clearTimeout(markTimer);
   const room = S.room;
   markTimer = setTimeout(() => {
-    if (!S.myChats[room]) return;
-    D.update(R("userChats/" + S.me.uid + "/" + room), { lastRead: last }).catch((e) => logError("Mark read: " + e.message));
+    const path = (dm ? "userDMs/" : "userChats/") + S.me.uid + "/" + room;
+    if (dm ? !S.myDMs[room] : !S.myChats[room]) return;
+    D.update(R(path), { lastRead: last }).catch((e) => logError("Mark read: " + e.message));
   }, 800);
 }
 document.addEventListener("visibilitychange", markRead);
@@ -1041,6 +1159,7 @@ document.addEventListener("visibilitychange", markRead);
 function syncUnreadSubs() {
   const want = new Map();
   for (const [room, v] of Object.entries(S.myChats)) want.set(room, v.lastRead || 0);
+  for (const [room, v] of Object.entries(S.myDMs)) want.set(room, v.lastRead || 0);
   for (const [room, s] of unreadSubs) {
     if (!want.has(room) || want.get(room) !== s.lastRead) { s.unsub(); unreadSubs.delete(room); }
   }
@@ -1068,7 +1187,8 @@ async function createChat() {
   if (!res) return;
   const name = res.value.slice(0, 30);
   const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 28) || "chat";
-  const id = (slug + "-" + randomCode(5)).replace(/^-/, "");
+  let id = (slug + "-" + randomCode(5)).replace(/^-/, "");
+  if (id.startsWith("dm-")) id = "c" + id;
   const upd = {};
   upd["chats/" + id] = { name, type: res.type, createdBy: S.me.uid, createdAt: now() };
   if (res.type === "private") {
@@ -1107,6 +1227,13 @@ async function leaveChat() {
     await goDefault();
   } catch (e) { showBanner("Can't leave: " + authError(e)); }
 }
+async function closeDM() {
+  const room = S.room;
+  const ok = await dialog({ title: "Close conversation", message: "Hide this conversation from your list? It comes back if they write to you again.", okText: "Close it" });
+  if (!ok) return;
+  try { roomUnsubs.forEach((u) => u()); roomUnsubs = []; await D.set(R("userDMs/" + S.me.uid + "/" + room), null); S.room = null; await goDefault(); }
+  catch (e) { showBanner(authError(e)); }
+}
 
 async function inviteLink() {
   const room = S.room, chat = S.chats[room];
@@ -1125,17 +1252,375 @@ async function inviteLink() {
   catch { await dialog({ title: "Invite link", message: "Copy this link and send it to your friends:", input: true, inputValue: link, cancelText: null }); }
 }
 
-/* ========================= ADMIN ACTIONS ========================= */
-async function adminDeleteMessage(m) {
-  const ok = await dialog({ title: "Delete message", message: "Delete this message from " + m.name + "?", okText: "Delete" });
+/* ========================= FRIENDS & DMs ========================= */
+function canDM(uid) {
+  if (!uid || uid === S.me.uid || !S.users[uid] || S.users[uid].deleted) return false;
+  if (S.isAdmin) return true;
+  if (S.me.guest) return false;
+  return !!S.friends[uid] || isAdminUid(uid);
+}
+async function startDM(uid) {
+  if (!canDM(uid)) { toast("You can only send DMs to your friends."); return; }
+  await openRoom(dmIdWith(uid));
+  $("input").focus();
+}
+async function sendFriendRequest(uid) {
+  if (S.me.guest) { toast("Guests can't add friends. Create an account!"); return; }
+  if (!isAccount(uid)) { toast("You can only add accounts as friends (not guests)."); return; }
+  if (S.reqIn[uid]) return acceptFriend(uid);
+  try {
+    await D.set(R("friendReqs/" + uid + "/" + S.me.uid), { ts: now() });
+    S.reqOut[uid] = true;
+    toast("Friend request sent to " + S.users[uid].name + ".");
+  } catch (e) { showBanner("Can't send request: " + authError(e)); }
+}
+async function acceptFriend(uid) {
+  const upd = {};
+  upd["friends/" + S.me.uid + "/" + uid] = { since: now() };
+  upd["friends/" + uid + "/" + S.me.uid] = { since: now() };
+  upd["friendReqs/" + S.me.uid + "/" + uid] = null;
+  try { await D.update(R("/"), upd); toast("You and " + (S.users[uid]?.name || "?") + " are now friends!"); }
+  catch (e) { showBanner("Can't accept: " + authError(e)); }
+}
+async function declineFriend(uid) {
+  try { await D.set(R("friendReqs/" + S.me.uid + "/" + uid), null); } catch (e) { showBanner(authError(e)); }
+}
+async function cancelRequest(uid) {
+  try { await D.set(R("friendReqs/" + uid + "/" + S.me.uid), null); S.reqOut[uid] = false; toast("Request cancelled."); } catch (e) { showBanner(authError(e)); }
+}
+async function removeFriend(uid) {
+  const ok = await dialog({ title: "Remove friend", message: "Remove " + displayName(S.users[uid]) + " from your friends?", okText: "Remove" });
   if (!ok) return;
-  const upd = { ["rooms/" + S.room + "/" + m.key]: null };
-  if (m.media) upd["media/" + S.room + "/" + m.media.id] = null;
-  D.update(R("/"), upd).then(() => toast("Message deleted.")).catch((e) => showBanner("Delete failed: " + e.message));
+  try { await D.update(R("/"), { ["friends/" + S.me.uid + "/" + uid]: null, ["friends/" + uid + "/" + S.me.uid]: null }); toast("Friend removed."); }
+  catch (e) { showBanner(authError(e)); }
+}
+async function checkOutgoing(uid) {
+  try { S.reqOut[uid] = (await D.get(R("friendReqs/" + uid + "/" + S.me.uid))).exists(); } catch { S.reqOut[uid] = false; }
+  return S.reqOut[uid];
+}
+function locText(uid) {
+  const l = S.loc[uid];
+  if (!isOnline(uid)) return "last seen " + fmtAgo(S.status[uid]?.lastSeen);
+  if (!l || l.kind === "none") return "online";
+  if (l.kind === "dm") return "in DMs";
+  if (l.kind === "private") return "in a private chat";
+  return "in # " + (S.chats[l.room]?.name || l.room || "?");
+}
+
+/* ========================= MESSAGE ACTIONS ========================= */
+function archiveCopy(m) {
+  const copy = { uid: m.uid, name: m.name, guest: !!m.guest, color: m.color || "#000", text: m.text, ts: m.ts, deletedAt: now(), deletedBy: S.me.uid };
+  if (m.icon) copy.icon = m.icon;
+  if (m.media) copy.media = m.media;
+  return copy;
+}
+async function deleteOwnMessage(m) {
+  const ok = await dialog({ title: "Delete message", message: "Delete your message? It will disappear for everyone.", okText: "Delete" });
+  if (!ok) return;
+  const upd = { ["deletedMsgs/" + S.room + "/" + m.key]: archiveCopy(m), ["rooms/" + S.room + "/" + m.key]: null };
+  D.update(R("/"), upd).then(() => toast("Message deleted.")).catch((e) => showBanner("Delete failed: " + authError(e)));
+}
+async function adminDeleteMessage(m, room = S.room) {
+  const ok = await dialog({ title: "Delete message (admin)", message: "Delete this message from " + m.name + "?", okText: "Delete" });
+  if (!ok) return false;
+  const upd = { ["rooms/" + room + "/" + m.key]: null };
+  if (m.uid && m.ts) upd["deletedMsgs/" + room + "/" + m.key] = archiveCopy(m);
+  try { await D.update(R("/"), upd); toast("Message deleted."); return true; }
+  catch (e) {
+    // old messages (before accounts) can't be archived: delete directly
+    try { await D.set(R("rooms/" + room + "/" + m.key), null); toast("Message deleted."); return true; }
+    catch (e2) { showBanner("Delete failed: " + e2.message); return false; }
+  }
+}
+async function reportMessage(m) {
+  if (S.me.guest) { toast("Guests can't report. Create an account!"); return; }
+  const box = el("div");
+  box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "4px";
+  const quote = el("div", "sunken", m.name + ": " + (m.text || (m.media ? "[" + m.media.kind + "]" : "")));
+  quote.style.background = "#fff"; quote.style.padding = "4px 6px"; quote.style.maxHeight = "80px"; quote.style.overflow = "auto";
+  box.append(quote, el("div", null, "Why are you reporting this message?"));
+  let first = true;
+  for (const [k, label] of Object.entries(REASONS)) {
+    const l = el("label", "check"); const r = el("input"); r.type = "radio"; r.name = "reason"; r.value = k; r.checked = first; first = false;
+    l.append(r, label); box.append(l);
+  }
+  const cm = el("textarea", "sunken"); cm.maxLength = 300; cm.placeholder = "Comment (optional)"; cm.style.minHeight = "50px"; cm.style.font = "13px Tahoma, sans-serif";
+  box.append(cm);
+  const res = await dialog({ title: "🚩 Report message", okText: "Send report", extra: { node: box, get: () => ({ reason: box.querySelector("input[name=reason]:checked").value, comment: cm.value.trim() }) } });
+  if (!res) return;
+  const msg = { uid: m.uid, name: m.name, guest: !!m.guest, text: m.text, ts: m.ts };
+  if (m.media) msg.media = m.media;
+  const rep = { by: S.me.uid, room: S.room, msgId: m.key, reason: res.reason, ts: now(), msg, status: "open" };
+  if (res.comment) rep.comment = res.comment.slice(0, 300);
+  try { await D.push(R("reports"), rep); toast("Thanks, the report was sent to the admins."); }
+  catch (e) { showBanner("Report failed: " + authError(e)); }
+}
+
+/* ========================= RIGHT-CLICK MENU ========================= */
+let menuEl = null;
+function closeMenu() { if (menuEl) { menuEl.remove(); menuEl = null; } }
+document.addEventListener("pointerdown", (e) => { if (menuEl && !menuEl.contains(e.target)) closeMenu(); }, true);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+window.addEventListener("resize", closeMenu);
+function showMenu(x, y, head, items) {
+  closeMenu();
+  if (!items.length) return;
+  menuEl = el("div", "ctxmenu raised");
+  if (head) menuEl.append(head);
+  for (const it of items) {
+    if (it === "-") { menuEl.append(el("hr")); continue; }
+    const mi = el("div", "mi" + (it.danger ? " danger" : ""), it.label);
+    mi.tabIndex = 0;
+    mi.addEventListener("click", () => { closeMenu(); it.run(); });
+    mi.addEventListener("keydown", (e) => { if (e.key === "Enter") mi.click(); });
+    menuEl.append(mi);
+  }
+  document.body.append(menuEl);
+  const r = menuEl.getBoundingClientRect();
+  menuEl.style.left = Math.max(4, Math.min(x, innerWidth - r.width - 4)) + "px";
+  menuEl.style.top = Math.max(4, Math.min(y, innerHeight - r.height - 4)) + "px";
+  menuEl.querySelector(".mi")?.focus();
+}
+function cleanItems(items) {
+  const out = [];
+  for (const it of items) { if (!it) continue; if (it === "-" && (!out.length || out.at(-1) === "-")) continue; out.push(it); }
+  while (out.at(-1) === "-") out.pop();
+  return out;
+}
+function personItems(uid) {
+  if (!uid) return [];
+  const u = S.users[uid];
+  const me = uid === S.me.uid;
+  const items = [];
+  if (u) items.push({ label: "👤 View profile", run: () => openProfile(uid) });
+  if (!me && !S.me.guest && isAccount(uid)) {
+    if (S.friends[uid]) items.push({ label: "✖ Remove friend", run: () => removeFriend(uid) });
+    else if (S.reqIn[uid]) items.push({ label: "✔ Accept friend request", run: () => acceptFriend(uid) });
+    else if (S.reqOut[uid]) items.push({ label: "↩ Cancel friend request", run: () => cancelRequest(uid) });
+    else items.push({ label: "➕ Add friend", run: () => sendFriendRequest(uid) });
+  }
+  if (!me && canDM(uid)) items.push({ label: "✉ Send DM", run: () => startDM(uid) });
+  return items;
+}
+function adminPersonItems(uid) {
+  if (!S.isAdmin || !uid || uid === S.me.uid || !S.users[uid]) return [];
+  const items = ["-"];
+  if (S.room && !isDM(S.room) && S.members[uid]) items.push({ label: "🔧 Kick from this chat", run: () => adminKick(uid) });
+  if (uid !== OWNER_UID) items.push({ label: S.bans[uid] ? "🔧 Unban" : "🔧 Ban", danger: !S.bans[uid], run: () => adminBan(uid) });
+  return items;
+}
+function menuHead(uid, fallback) {
+  const h = el("div", "mhead");
+  h.append(iconNode(uid, fallback || {}), el("span", null, uid && S.users[uid] ? displayName(S.users[uid]) : (fallback?.name || "?")));
+  return h;
+}
+async function messageMenu(x, y, m) {
+  if (!S.me) return;
+  if (!S.me.guest && m.uid && m.uid !== S.me.uid && S.reqOut[m.uid] === undefined && isAccount(m.uid) && !S.friends[m.uid]) await checkOutgoing(m.uid);
+  const own = m.uid === S.me.uid;
+  const items = [...personItems(m.uid)];
+  items.push("-");
+  if (own && !S.readOnly && !m.deletedView) items.push({ label: "🗑 Delete my message", run: () => deleteOwnMessage(m) });
+  if (!own && !S.me.guest && !m.deletedView && m.uid) items.push({ label: "🚩 Report...", run: () => reportMessage(m) });
+  if (S.isAdmin && !m.deletedView) items.push("-", { label: "🔧 Delete (admin)", danger: true, run: () => adminDeleteMessage(m) });
+  items.push(...adminPersonItems(m.uid));
+  showMenu(x, y, menuHead(m.uid, m), cleanItems(items));
+}
+async function personMenu(x, y, uid) {
+  if (!S.me.guest && uid !== S.me.uid && S.reqOut[uid] === undefined && isAccount(uid) && !S.friends[uid]) await checkOutgoing(uid);
+  showMenu(x, y, menuHead(uid), cleanItems([...personItems(uid), ...adminPersonItems(uid)]));
+}
+// right click + long press (phones)
+function bindMenu(node, open) {
+  node.addEventListener("contextmenu", (e) => { e.preventDefault(); e.stopPropagation(); open(e.clientX, e.clientY); });
+  let t = null, sx = 0, sy = 0;
+  node.addEventListener("touchstart", (e) => {
+    const p = e.touches[0]; sx = p.clientX; sy = p.clientY;
+    t = setTimeout(() => { t = null; open(sx, sy); }, 550);
+  }, { passive: true });
+  const cancel = () => { if (t) { clearTimeout(t); t = null; } };
+  node.addEventListener("touchmove", (e) => { const p = e.touches[0]; if (Math.abs(p.clientX - sx) + Math.abs(p.clientY - sy) > 10) cancel(); }, { passive: true });
+  node.addEventListener("touchend", cancel);
+}
+
+/* ========================= PROFILE & SETTINGS ========================= */
+async function openProfile(uid) {
+  const u = S.users[uid];
+  if (!u) { toast("This user doesn't exist anymore."); return; }
+  if (!S.me.guest && uid !== S.me.uid && !S.friends[uid] && isAccount(uid)) await checkOutgoing(uid);
+  const win = openWindow(u.name + " - Profile", "👤", { key: "profile-" + uid, narrow: true });
+  const { content, close } = win;
+  const head = el("div", "prof-head");
+  const info = el("div");
+  const nameLine = el("div", "pn", displayName(u) + (isAdminUid(uid) ? " ⭐" : ""));
+  nameLine.style.color = u.color || "#000";
+  const on = isOnline(uid);
+  const me = uid === S.me.uid;
+  const st = el("div", null, (on ? "● " : "○ ") + (me ? "online" : S.friends[uid] ? locText(uid) : (on ? "online" : "last seen " + fmtAgo(S.status[uid]?.lastSeen))));
+  st.style.color = on ? "#008000" : "#606060";
+  info.append(nameLine, st);
+  head.append(iconNode(uid, {}, "big"), info);
+  const rows = [
+    ["Type", u.deleted ? "Deleted account" : u.guest ? "Guest" : (isAdminUid(uid) ? "Account (admin)" : "Account")],
+    ["Member since", fmtDate(u.created)],
+  ];
+  if (S.friends[uid]) rows.push(["Friends since", fmtDate(S.friends[uid].since)]);
+  if (S.isAdmin && S.bans[uid]) rows.push(["Status", "⛔ Banned"]);
+  const { tbl } = infoTable(rows);
+  const bioBox = el("fieldset"); bioBox.append(el("legend", null, "Bio"));
+  const bio = el("div", "bio sunken", u.bio || (u.guest ? "(guests have no bio)" : "(no bio yet)"));
+  if (!u.bio) bio.style.color = "#808080";
+  bioBox.append(bio);
+  const btns = el("div", "wbuttons");
+  if (me) { const b = el("button", null, "⚙ Settings..."); b.addEventListener("click", () => { close(); openSettings(); }); btns.append(b); }
+  if (!me && !S.me.guest && isAccount(uid)) {
+    let b;
+    if (S.friends[uid]) { b = el("button", null, "✖ Remove friend"); b.onclick = async () => { await removeFriend(uid); openProfile(uid); }; }
+    else if (S.reqIn[uid]) { b = el("button", null, "✔ Accept request"); b.onclick = async () => { await acceptFriend(uid); openProfile(uid); }; }
+    else if (S.reqOut[uid]) { b = el("button", null, "↩ Cancel request"); b.onclick = async () => { await cancelRequest(uid); openProfile(uid); }; }
+    else { b = el("button", null, "➕ Add friend"); b.onclick = async () => { await sendFriendRequest(uid); openProfile(uid); }; }
+    btns.append(b);
+  }
+  if (!me && canDM(uid)) { const b = el("button", null, "✉ Send DM"); b.onclick = () => { close(); startDM(uid); }; btns.append(b); }
+  const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
+  content.append(head, tbl, bioBox, btns);
+  bindMenu(head, (x, y) => personMenu(x, y, uid));
+}
+
+async function makeAvatar(file) {
+  const bmp = await createImageBitmap(file);
+  const side = Math.min(bmp.width, bmp.height);
+  const c = document.createElement("canvas");
+  c.width = c.height = 96;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 96, 96);
+  ctx.drawImage(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side, 0, 0, 96, 96);
+  for (const q of [0.85, 0.7, 0.5]) { const d = c.toDataURL("image/jpeg", q); if (d.length <= 29000) return d; }
+  throw new Error("picture too complex");
+}
+function openSettings() {
+  const win = openWindow("Settings", "⚙", { key: "settings", narrow: true });
+  const { content, close } = win;
+  content.classList.add("settings");
+  const u = S.users[S.me.uid] || S.me;
+  if (S.me.guest) {
+    const head = el("div", "prof-head"); head.append(iconNode(S.me.uid, {}, "big"), el("div", "pn", displayName(u)));
+    const txt = el("div", null, "Guests can't change their icon or write a bio.\nCreate an account to get your own icon, a bio, friends and DMs!");
+    txt.style.whiteSpace = "pre-line";
+    const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
+    content.append(head, txt, btns);
+    return;
+  }
+  let icon = u.icon || null, avatar = u.avatar || null, color = u.color || COLORS[0];
+  const isOwner = S.me.uid === OWNER_UID;
+  const fsI = el("fieldset"); fsI.append(el("legend", null, "Icon"));
+  const top = el("div", "prof-head");
+  const preview = el("span");
+  const upBtn = el("button", null, "Upload picture...");
+  const rmBtn = el("button", null, "Remove picture");
+  const fileIn = el("input"); fileIn.type = "file"; fileIn.accept = "image/*"; fileIn.hidden = true;
+  const col = el("div"); col.style.display = "flex"; col.style.flexDirection = "column"; col.style.gap = "4px";
+  col.append(upBtn, rmBtn, fileIn);
+  top.append(preview, col);
+  const grid = el("div", "icongrid sunken");
+  const refresh = () => {
+    const saved = S.users[S.me.uid];
+    S.users[S.me.uid] = { ...u, icon, avatar };
+    preview.replaceChildren(iconNode(S.me.uid, {}, "big"));
+    S.users[S.me.uid] = saved;
+    rmBtn.hidden = !avatar;
+    grid.querySelectorAll("button").forEach((b) => b.classList.toggle("on", !avatar && b.dataset.icon === (icon || "")));
+  };
+  if (isOwner) {
+    const b = el("button"); b.type = "button"; b.dataset.icon = ""; b.title = "Special eye icon";
+    const im = el("img"); im.src = OWNER_EYE; im.style.width = "24px"; im.style.height = "24px"; im.style.display = "block"; im.style.margin = "auto";
+    b.append(im); b.onclick = () => { icon = null; avatar = null; refresh(); }; grid.append(b);
+  }
+  for (const ic of ICONS) { const b = el("button", null, ic); b.type = "button"; b.dataset.icon = ic; b.onclick = () => { icon = ic; avatar = null; refresh(); }; grid.append(b); }
+  upBtn.onclick = () => fileIn.click();
+  fileIn.onchange = async () => {
+    const f = fileIn.files[0]; fileIn.value = "";
+    if (!f) return;
+    try { avatar = await makeAvatar(f); refresh(); } catch (e) { toast("Can't use this picture: " + e.message); }
+  };
+  rmBtn.onclick = () => { avatar = null; refresh(); };
+  fsI.append(top, el("div", "hint", "Pick an icon, or upload your own picture (it becomes a small square)."), grid);
+  const fsB = el("fieldset"); fsB.append(el("legend", null, "Bio"));
+  const bio = el("textarea", "sunken"); bio.maxLength = 200; bio.value = u.bio || ""; bio.placeholder = "Say something about you...";
+  const cnt = el("div", "hint"); const upd = () => (cnt.textContent = bio.value.length + "/200"); bio.oninput = upd; upd();
+  fsB.append(bio, cnt);
+  const fsC = el("fieldset"); fsC.append(el("legend", null, "Name color"));
+  const sw = el("div", "swatches");
+  const nameDemo = el("div", null, u.name); nameDemo.style.fontWeight = "bold"; nameDemo.style.marginTop = "4px";
+  const paint = () => { nameDemo.style.color = color; sw.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.c === color)); };
+  for (const c of COLORS) { const b = el("button"); b.type = "button"; b.dataset.c = c; b.style.background = c; b.title = c; b.onclick = () => { color = c; paint(); }; sw.append(b); }
+  fsC.append(sw, nameDemo); paint();
+  const btns = el("div", "wbuttons");
+  const save = el("button", null, "Save");
+  const cl = el("button", null, "Cancel"); cl.onclick = close;
+  save.onclick = async () => {
+    const data = { name: u.name, guest: false, color, created: u.created || Date.now() };
+    if (icon) data.icon = icon;
+    if (avatar) data.avatar = avatar;
+    if (bio.value.trim()) data.bio = bio.value.trim().slice(0, 200);
+    try { await D.set(R("users/" + S.me.uid), data); toast("Profile saved!"); close(); }
+    catch (e) { showBanner("Can't save: " + authError(e)); }
+  };
+  btns.append(save, cl);
+  const fsX = el("fieldset"); fsX.append(el("legend", null, "Danger zone"));
+  const delBtn = el("button", "danger", "Delete my account...");
+  delBtn.onclick = () => deleteMyAccount(close);
+  fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
+  content.append(fsI, fsB, fsC, btns, fsX);
+  refresh();
+}
+
+async function deleteMyAccount(closeWin) {
+  if (S.me.uid === OWNER_UID) { toast("The owner account (admin) can't be deleted from here."); return; }
+  const pw = await dialog({ title: "Delete my account", message: "⚠ This can't be undone.\nType your password to confirm:", input: true, password: true, okText: "Delete forever" });
+  if (!pw) return;
+  const user = auth.currentUser;
+  try { await A.reauthenticateWithCredential(user, A.EmailAuthProvider.credential(user.email, pw)); }
+  catch (e) { showBanner("Wrong password."); return; }
+  try {
+    const uid = S.me.uid;
+    const upd = {};
+    for (const f of Object.keys(S.friends)) { upd["friends/" + uid + "/" + f] = null; upd["friends/" + f + "/" + uid] = null; }
+    for (const r of Object.keys(S.reqIn)) upd["friendReqs/" + uid + "/" + r] = null;
+    for (const r of Object.keys(S.myChats)) upd["members/" + r + "/" + uid] = null;
+    upd["userChats/" + uid] = null;
+    upd["userDMs/" + uid] = null;
+    upd["loc/" + uid] = null;
+    upd["status/" + uid] = null;
+    upd["users/" + uid] = { name: S.me.name, guest: false, color: S.me.color || "#000", created: S.me.created || Date.now(), deleted: true };
+    await D.onDisconnect(R("status/" + uid)).cancel().catch(() => {});
+    await D.onDisconnect(R("loc/" + uid)).cancel().catch(() => {});
+    await D.update(R("/"), upd);
+    await A.deleteUser(user);
+    closeWin && closeWin();
+    await dialog({ title: "Account deleted", message: "Your account was deleted. Bye!", cancelText: null });
+    location.reload();
+  } catch (e) { showBanner("Delete failed: " + authError(e)); }
+}
+
+/* ========================= ADMIN ========================= */
+function startAdmin() {
+  let first = true;
+  sub(D.query(R("reports"), D.orderByChild("ts"), D.limitToLast(200)), (s) => {
+    const before = S.reports;
+    S.reports = s.val() || {};
+    const open = Object.values(S.reports).filter((r) => r.status === "open").length;
+    $("reportsBadge").hidden = !open;
+    $("reportsBadge").textContent = open;
+    if (!first) for (const [k, r] of Object.entries(S.reports)) if (!before[k] && r.status === "open") toast("🚩 New report: " + (REASONS[r.reason] || r.reason));
+    first = false;
+    if (openWins.has("reports")) renderReports();
+    renderDebug();
+  });
+  usersReady.then(() => setTimeout(() => cleanGuests(true), 3000));
 }
 async function adminKick(uid) {
-  const u = S.users[uid];
-  const ok = await dialog({ title: "Kick", message: "Remove " + displayName(u) + " from this chat?", okText: "Kick" });
+  const ok = await dialog({ title: "Kick", message: "Remove " + displayName(S.users[uid]) + " from this chat?", okText: "Kick" });
   if (!ok) return;
   D.update(R("/"), { ["members/" + S.room + "/" + uid]: null, ["userChats/" + uid + "/" + S.room]: null })
     .then(() => toast("Kicked.")).catch((e) => showBanner("Kick failed: " + e.message));
@@ -1147,7 +1632,7 @@ async function adminBan(uid) {
     if (ok) D.set(R("bans/" + uid), null).then(() => toast("Unbanned.")).catch((e) => showBanner(e.message));
     return;
   }
-  const ok = await dialog({ title: "Ban", message: "Ban " + displayName(u) + "? They won't be able to send messages or join chats anymore.", okText: "Ban" });
+  const ok = await dialog({ title: "Ban", message: "Ban " + displayName(u) + "? They won't be able to send messages or join chats anymore." + (u?.guest ? "\n(Guests can come back with a new guest name: turn guests off if needed.)" : ""), okText: "Ban" });
   if (!ok) return;
   D.set(R("bans/" + uid), { ts: now(), by: S.me.uid }).then(() => toast("Banned.")).catch((e) => showBanner("Ban failed: " + e.message));
 }
@@ -1163,13 +1648,15 @@ async function adminClear() {
 }
 async function adminDeleteChat() {
   const room = S.room;
-  const name = S.chats[room]?.name || room;
-  const ok = await dialog({ title: "Delete chat", message: "Delete the chat \"" + name + "\" completely (messages, members, files)? This can't be undone.", okText: "Delete" });
+  const name = isDM(room) ? "this DM" : "\"" + (S.chats[room]?.name || room) + "\"";
+  const ok = await dialog({ title: "Delete chat", message: "Delete " + name + " completely (messages, members, files)? This can't be undone.", okText: "Delete" });
   if (!ok) return;
   roomUnsubs.forEach((u) => u()); roomUnsubs = [];
-  const upd = { ["rooms/" + room]: null, ["media/" + room]: null, ["members/" + room]: null };
+  const upd = { ["rooms/" + room]: null, ["media/" + room]: null };
+  if (!isDM(room)) upd["members/" + room] = null;
   if (S.chats[room]) { upd["chats/" + room] = null; upd["chatInvites/" + room] = null; }
   if (S.myChats[room]) upd["userChats/" + S.me.uid + "/" + room] = null;
+  if (S.myDMs[room]) upd["userDMs/" + S.me.uid + "/" + room] = null;
   try { await D.update(R("/"), upd); toast("Chat deleted."); S.room = null; await goDefault(); }
   catch (e) { showBanner("Delete failed: " + e.message); }
 }
@@ -1178,86 +1665,195 @@ async function adminUnarchive() {
 }
 async function ping() {
   const t0 = performance.now();
-  try {
-    await D.update(R("status/" + S.me.uid), { lastSeen: now() });
-    S.ping = Math.round(performance.now() - t0);
-  } catch (e) { S.ping = "error"; logError("Ping: " + e.message); }
+  try { await D.update(R("status/" + S.me.uid), { lastSeen: now() }); S.ping = Math.round(performance.now() - t0); }
+  catch (e) { S.ping = "error"; logError("Ping: " + e.message); }
   renderDebug();
 }
 async function scanDatabase() {
-  $("scanBtn").disabled = true;
-  $("scanBtn").textContent = "Scanning...";
+  $("scanBtn").disabled = true; $("scanBtn").textContent = "Scanning...";
   try {
     const all = (await D.get(R("rooms"))).val() || {};
-    let msgs = 0, mediaBytes = 0, textBytes = 0, legacy = [];
+    let msgs = 0, mediaBytes = 0, textBytes = 0, dms = 0;
+    const legacy = [];
     for (const [room, list] of Object.entries(all)) {
-      if (!S.chats[room]) legacy.push(room);
+      if (isDM(room)) dms++;
+      else if (!S.chats[room]) legacy.push(room);
       for (const m of Object.values(list || {})) {
         msgs++;
         textBytes += JSON.stringify(m).length;
         if (m.media) mediaBytes += Math.ceil(m.media.size * 4 / 3);
       }
     }
-    S.scan = { msgs, rooms: Object.keys(all).length, mediaBytes, textBytes, legacy, at: Date.now() };
+    const avatars = Object.values(S.users).reduce((n, u) => n + (u.avatar ? u.avatar.length : 0), 0);
+    S.scan = { msgs, rooms: Object.keys(all).length, dms, mediaBytes, textBytes: textBytes + avatars, legacy };
   } catch (e) { logError("Scan: " + e.message); S.scan = { error: e.message }; }
-  $("scanBtn").disabled = false;
-  $("scanBtn").textContent = "Scan database";
+  $("scanBtn").disabled = false; $("scanBtn").textContent = "Scan database";
   renderDebug();
 }
+async function cleanGuests(auto) {
+  const limit = Date.now() - 24 * 3600 * 1000;
+  const old = Object.entries(S.users).filter(([uid, u]) => u.guest && !S.bans[uid] && !isOnline(uid) && (S.status[uid]?.lastSeen || u.created || 0) < limit).slice(0, 50);
+  if (!old.length) { if (!auto) toast("No old guests to clean."); return; }
+  let n = 0;
+  for (const [uid] of old) {
+    try {
+      const chats = (await D.get(R("userChats/" + uid))).val() || {};
+      const upd = { ["users/" + uid]: null, ["status/" + uid]: null, ["loc/" + uid]: null, ["userChats/" + uid]: null };
+      for (const r of Object.keys(chats)) upd["members/" + r + "/" + uid] = null;
+      await D.update(R("/"), upd);
+      n++;
+    } catch (e) { logError("Clean guest: " + e.message); }
+  }
+  if (n) { logError("Cleaned " + n + " old guest(s)"); if (!auto) toast("Cleaned " + n + " old guest(s)."); }
+}
 async function openArchive() {
-  const { w, content } = openWindow("Archive - old & archived chats", "🗄");
+  const { content, close } = openWindow("Archive - old & archived chats", "🗄", { key: "archive" });
   const list = el("div", "list sunken"); list.style.maxHeight = "50dvh";
-  content.append(el("div", null, "Archived chats (everyone left) and old chats from before accounts existed. Click one to read it."), list);
+  content.append(el("div", null, "Archived chats (everyone left), old chats from before accounts, and DMs. Click one to read it."), list);
+  list.append(el("div", "empty-row", "Loading..."));
   const rows = [];
   for (const [id, c] of Object.entries(S.chats)) if (c.archived) rows.push({ id, label: (c.type === "private" ? "🔒 " : "# ") + c.name, note: "archived" });
-  list.append(el("div", "empty-row", "Loading old chats..."));
-  let legacy = [];
-  try { legacy = Object.keys((await D.get(R("rooms"))).val() || {}).filter((r) => !S.chats[r]); } catch (e) { logError(e.message); }
-  for (const id of legacy) rows.push({ id, label: "# " + id, note: "old" });
+  let keys = [];
+  try { keys = Object.keys((await D.get(R("rooms"))).val() || {}); } catch (e) { logError(e.message); }
+  for (const id of keys.filter((r) => !isDM(r) && !S.chats[r])) rows.push({ id, label: "# " + id, note: "old" });
+  for (const id of keys.filter(isDM)) {
+    const [a, b] = id.slice(3).split("-");
+    rows.push({ id, label: "✉ " + (S.users[a]?.name || "?") + " ↔ " + (S.users[b]?.name || "?"), note: "DM" });
+  }
   list.replaceChildren();
   if (!rows.length) list.append(el("div", "empty-row", "Nothing in the archive."));
   for (const r of rows) {
     const it = el("div", "item click");
     it.append(el("span", "n", r.label), el("span", "dim", r.note));
-    it.addEventListener("click", () => { w.remove(); openRoom(r.id); });
+    it.addEventListener("click", () => { close(); openRoom(r.id); });
     list.append(it);
   }
-  const btns = el("div", "wbuttons");
-  const close = el("button", null, "Close"); close.addEventListener("click", () => w.remove());
-  btns.append(close);
+  const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
   content.append(btns);
+}
+let showClosedReports = false;
+function openReports() {
+  openWindow("Reports", "🚩", { key: "reports" });
+  renderReports();
+}
+function renderReports() {
+  const win = openWins.get("reports");
+  if (!win) return;
+  const { content, close } = win;
+  content.replaceChildren();
+  const all = Object.entries(S.reports).sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0));
+  const openOnes = all.filter(([, r]) => r.status === "open");
+  const top = el("div", "wbuttons"); top.style.justifyContent = "space-between";
+  top.append(el("b", null, openOnes.length + " open report(s)"));
+  const tog = el("label", "check"); const cb = el("input"); cb.type = "checkbox"; cb.checked = showClosedReports; cb.onchange = () => { showClosedReports = cb.checked; renderReports(); };
+  tog.append(cb, "Show closed"); top.append(tog);
+  const list = el("div", "sunken"); list.style.background = "#fff"; list.style.maxHeight = "60dvh"; list.style.overflowY = "auto"; list.style.padding = "4px";
+  const shown = showClosedReports ? all : openOnes;
+  if (!shown.length) list.append(el("div", "empty", "No reports. 🎉"));
+  for (const [id, r] of shown) {
+    const box = el("div", "report" + (r.status !== "open" ? " closed" : ""));
+    const who = S.users[r.by];
+    const where = isDM(r.room) ? "a DM" : "# " + (S.chats[r.room]?.name || r.room);
+    box.append(el("div", null, "🚩 " + (REASONS[r.reason] || r.reason) + " · by " + (who ? who.name : "?") + " · " + fmtFull(r.ts) + " · in " + where + (r.status !== "open" ? " · CLOSED" : "")));
+    const mline = el("div", "rmsg sunken");
+    mline.append(iconNode(r.msg?.uid, r.msg || {}), " " + (r.msg?.name || "?") + (r.msg?.guest ? " [GUEST]" : "") + ": " + (r.msg?.text || (r.msg?.media ? "[" + r.msg.media.kind + "] " + r.msg.media.fname : "")));
+    box.append(mline);
+    if (r.comment) box.append(el("div", null, "Comment: " + r.comment));
+    const b = el("div", "wbuttons"); b.style.justifyContent = "flex-start";
+    const go = el("button", "small", "Go to message"); go.onclick = () => goToMessage(r.room, r.msgId);
+    const del = el("button", "small", "Delete message");
+    del.onclick = async () => {
+      let live = null;
+      try { live = (await D.get(R("rooms/" + r.room + "/" + r.msgId))).val(); } catch {}
+      if (!live) { toast("This message is already deleted."); return; }
+      if (await adminDeleteMessage({ key: r.msgId, ...live }, r.room)) D.update(R("reports/" + id), { status: "closed" }).catch(() => {});
+    };
+    const ban = el("button", "small", S.bans[r.msg?.uid] ? "Unban author" : "Ban author"); ban.onclick = () => r.msg?.uid && adminBan(r.msg.uid);
+    if (r.msg?.uid === OWNER_UID) ban.disabled = true;
+    const cls = el("button", "small", r.status === "open" ? "Close report" : "Reopen");
+    cls.onclick = () => D.update(R("reports/" + id), { status: r.status === "open" ? "closed" : "open" }).catch((e) => showBanner(e.message));
+    const rm = el("button", "small", "Delete report"); rm.onclick = () => D.set(R("reports/" + id), null).catch((e) => showBanner(e.message));
+    b.append(go, del, ban, cls, rm);
+    box.append(b);
+    list.append(box);
+  }
+  const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
+  content.append(top, list, btns);
+}
+async function goToMessage(room, key) {
+  if (S.room !== room) await openRoom(room);
+  const tryFind = (n) => {
+    const line = document.querySelector('.line[data-key="' + CSS.escape(key) + '"]');
+    if (line) { line.scrollIntoView({ block: "center" }); line.classList.add("flash"); setTimeout(() => line.classList.remove("flash"), 2500); }
+    else if (n > 0) setTimeout(() => tryFind(n - 1), 300);
+    else toast("Message not found (maybe deleted). Turn on \"Show deleted messages\".");
+  };
+  tryFind(8);
 }
 
 /* ========================= RENDER: SIDEBAR ========================= */
 function renderMe() {
   if (!S.me) return;
-  $("meName").textContent = "👤 " + S.me.name + (S.me.guest ? " [GUEST]" : "") + (S.isAdmin ? " ⭐" : "");
+  $("meIcon").replaceChildren(iconNode(S.me.uid));
+  $("meName").textContent = S.me.name + (S.me.guest ? " [GUEST]" : "") + (S.isAdmin ? " ⭐" : "");
   $("newChatBtn").hidden = S.me.guest;
 }
 function isOnline(uid) { return !!S.status[uid]?.online; }
-function personRow(uid, { admin } = {}) {
+function personRow(uid, extraText) {
   const u = S.users[uid] || { name: "?", guest: false };
-  const it = el("div", "item");
+  const it = el("div", "item click");
   const on = isOnline(uid);
-  it.append(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"));
-  const n = el("span", "n", displayName(u) + (S.admins[uid] ? " ⭐" : "") + (S.isAdmin && S.bans[uid] ? " ⛔" : ""));
+  it.append(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"), iconNode(uid));
+  const n = el("span", "n", displayName(u) + (isAdminUid(uid) ? " ⭐" : "") + (S.isAdmin && S.bans[uid] ? " ⛔" : ""));
   n.title = displayName(u);
   it.append(n);
-  if (!on) it.append(el("span", "dim", fmtAgo(S.status[uid]?.lastSeen)));
-  if (admin && S.isAdmin && uid !== S.me.uid) {
-    if (S.room && S.members[uid]) {
-      const k = el("button", "small", "Kick"); k.title = "Remove from this chat"; k.addEventListener("click", () => adminKick(uid)); it.append(k);
-    }
-    const b = el("button", "small", S.bans[uid] ? "Unban" : "Ban"); b.addEventListener("click", () => adminBan(uid)); it.append(b);
-  }
+  if (extraText) it.append(el("span", "dim", extraText));
+  else if (!on) it.append(el("span", "dim", fmtAgo(S.status[uid]?.lastSeen)));
+  it.addEventListener("click", () => openProfile(uid));
+  bindMenu(it, (x, y) => personMenu(x, y, uid));
   return it;
 }
-function sortPeople(ids) {
-  return ids.sort((a, b) => (isOnline(b) - isOnline(a)) || (S.users[a]?.name || "").localeCompare(S.users[b]?.name || ""));
-}
+function sortPeople(ids) { return ids.sort((a, b) => (isOnline(b) - isOnline(a)) || (S.users[a]?.name || "").localeCompare(S.users[b]?.name || "")); }
 function renderSide() {
   if (!S.me) return;
-  // my chats
+  if (!S.me.guest) {
+    const fl = $("friendsList");
+    fl.replaceChildren();
+    const reqs = Object.keys(S.reqIn).filter((u) => S.users[u]);
+    for (const uid of reqs) {
+      const it = el("div", "item req");
+      it.append(iconNode(uid), el("span", "n", S.users[uid].name + " wants to be your friend"));
+      const ok = el("button", "small", "Accept"); ok.onclick = () => acceptFriend(uid);
+      const no = el("button", "small", "Decline"); no.onclick = () => declineFriend(uid);
+      it.append(ok, no);
+      fl.append(it);
+    }
+    const fr = sortPeople(Object.keys(S.friends).filter((u) => S.users[u]));
+    $("friendsTitle").textContent = "Friends (" + fr.filter(isOnline).length + "/" + fr.length + ")" + (reqs.length ? "  +" + reqs.length + " new" : "");
+    if (!fr.length && !reqs.length) fl.append(el("div", "empty-row", "Right-click a message → Add friend"));
+    for (const uid of fr) {
+      const row = personRow(uid, locText(uid));
+      row.title = "Click: profile · Double-click: send DM";
+      row.addEventListener("dblclick", () => startDM(uid));
+      fl.append(row);
+    }
+  }
+  const dl = $("dmList");
+  dl.replaceChildren();
+  const dms = Object.entries(S.myDMs).sort((a, b) => (b[1].lastTs || 0) - (a[1].lastTs || 0));
+  $("dmBox").hidden = S.me.guest && !dms.length;
+  if (!dms.length) dl.append(el("div", "empty-row", "Double-click a friend to chat"));
+  for (const [dm, v] of dms) {
+    const uid = v.with;
+    const it = el("div", "item click" + (dm === S.room ? " sel" : ""));
+    const on = isOnline(uid);
+    it.append(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"), iconNode(uid), el("span", "n", displayName(S.users[uid])));
+    const n = dm === S.room ? 0 : (S.unread[dm] || 0);
+    if (n) it.append(el("span", "badge", "(" + (n > 98 ? "99+" : n) + ")"));
+    it.addEventListener("click", () => openRoom(dm));
+    bindMenu(it, (x, y) => personMenu(x, y, uid));
+    dl.append(it);
+  }
   const my = $("myChatsList");
   my.replaceChildren();
   const mine = Object.keys(S.myChats).filter((r) => S.chats[r]).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
@@ -1271,7 +1867,6 @@ function renderSide() {
     it.addEventListener("click", () => openRoom(r));
     my.append(it);
   }
-  // public chats not joined
   const pub = $("publicList");
   pub.replaceChildren();
   const pubs = Object.entries(S.chats).filter(([r, c]) => c.type === "public" && !c.archived && !S.myChats[r]).sort((a, b) => a[1].name.localeCompare(b[1].name));
@@ -1282,20 +1877,18 @@ function renderSide() {
     it.addEventListener("click", () => openRoom(r));
     pub.append(it);
   }
-  // members of current chat
   const mem = $("membersList");
   mem.replaceChildren();
-  const ids = sortPeople(Object.keys(S.members));
-  $("membersTitle").textContent = "In this chat (" + ids.length + ")";
+  const ids = sortPeople(Object.keys(S.members).filter((u) => S.users[u]));
+  $("membersTitle").textContent = (isDM(S.room) ? "In this conversation" : "In this chat") + " (" + ids.length + ")";
   if (!ids.length) mem.append(el("div", "empty-row", S.room ? "Nobody" : "No chat open"));
-  for (const uid of ids) mem.append(personRow(uid, { admin: true }));
-  // online now
+  for (const uid of ids) mem.append(personRow(uid));
   const onl = $("onlineList");
   onl.replaceChildren();
   const online = sortPeople(Object.keys(S.status).filter((u) => isOnline(u) && S.users[u]));
   $("onlineTitle").textContent = "Online now (" + online.length + ")";
   if (!online.length) onl.append(el("div", "empty-row", "Nobody"));
-  for (const uid of online) onl.append(personRow(uid, { admin: true }));
+  for (const uid of online) onl.append(personRow(uid));
   if (S.isAdmin) renderDebug();
 }
 function renderDebug() {
@@ -1306,17 +1899,18 @@ function renderDebug() {
     ["Connection", S.connected ? "online" : "OFFLINE"],
     ["Ping", S.ping == null ? "(click Ping)" : S.ping + (typeof S.ping === "number" ? " ms" : "")],
     ["Clock offset", Math.round(S.serverOffset) + " ms"],
-    ["Users", users.length + " (" + users.filter((u) => u.guest).length + " guests)"],
+    ["Users", users.filter((u) => !u.deleted).length + " (" + users.filter((u) => u.guest).length + " guests)"],
     ["Online", Object.values(S.status).filter((s) => s.online).length],
     ["Banned", Object.keys(S.bans).length],
     ["Chats", chats.length + " (" + chats.filter((c) => c.type === "private").length + " private, " + chats.filter((c) => c.archived).length + " archived)"],
-    ["This chat", S.room ? S.room + " - " + S.messages.length + " msg" : "-"],
+    ["Reports", Object.values(S.reports).filter((r) => r.status === "open").length + " open"],
+    ["This chat", S.room ? (isDM(S.room) ? "DM" : S.room) + " - " + S.messages.length + " msg" : "-"],
   ];
   if (S.scan) {
     if (S.scan.error) rows.push(["Scan", "error: " + S.scan.error]);
     else {
       const used = S.scan.mediaBytes + S.scan.textBytes;
-      rows.push(["Messages", S.scan.msgs + " in " + S.scan.rooms + " chats"]);
+      rows.push(["Messages", S.scan.msgs + " in " + S.scan.rooms + " rooms (" + S.scan.dms + " DMs)"]);
       rows.push(["Files", fmtSize(S.scan.mediaBytes)]);
       rows.push(["DB usage", "~" + fmtSize(used) + " of 1 GB (" + (used / 1e9 * 100).toFixed(2) + "%)"]);
       rows.push(["Old chats", S.scan.legacy.length ? S.scan.legacy.join(", ") : "none"]);
@@ -1328,18 +1922,25 @@ function renderDebug() {
   for (const [k, v] of rows) { const tr = el("tr"); tr.append(el("td", null, k + ":"), el("td", null, String(v))); t.append(tr); }
 }
 function renderToolbar() {
-  const chat = S.chats[S.room];
-  if (!S.room) {
-    $("chatName").textContent = "No chat open";
-  } else if (!chat) {
-    $("chatName").textContent = "# " + S.room + " (old chat, read-only)";
-  } else {
-    $("chatName").textContent = (chat.type === "private" ? "🔒 " : "# ") + chat.name + (chat.archived ? " (archived)" : "");
+  if (!S.me) return;
+  const dm = isDM(S.room);
+  const chat = dm ? null : S.chats[S.room];
+  const cn = $("chatName");
+  cn.replaceChildren();
+  if (!S.room) cn.textContent = "No chat open";
+  else if (dm) {
+    const parts = S.room.slice(3).split("-");
+    if (parts.includes(S.me.uid)) { const o = dmOther(S.room); cn.append(iconNode(o), "✉ " + displayName(S.users[o])); }
+    else cn.append("✉ " + parts.map((u) => S.users[u]?.name || "?").join(" ↔ ") + " (admin view)");
   }
-  $("titleText").textContent = "Hangout Chat" + (S.room ? " - " + (chat ? chat.name : S.room) : "");
+  else if (!chat) cn.textContent = "# " + S.room + " (old chat, read-only)";
+  else cn.textContent = (chat.type === "private" ? "🔒 " : "# ") + chat.name + (chat.archived ? " (archived)" : "");
+  $("titleText").textContent = "Hangout Chat" + (S.room ? " - " + (dm ? "DM" : (chat ? chat.name : S.room)) : "");
   const member = !!(S.room && S.myChats[S.room]);
-  $("inviteBtn").hidden = !chat || chat.archived || (chat.type === "private" && !member && !S.isAdmin);
-  $("leaveBtn").hidden = !member;
+  $("profileBtn").hidden = !(dm && S.room.slice(3).split("-").includes(S.me.uid));
+  $("inviteBtn").hidden = dm || !chat || chat.archived || (chat.type === "private" && !member && !S.isAdmin);
+  $("leaveBtn").hidden = !(member || (dm && S.myDMs[S.room]));
+  $("leaveBtn").textContent = dm ? "Close DM" : "Leave chat";
   $("renameBtn").hidden = !(S.isAdmin && chat);
   $("clearBtn").hidden = !(S.isAdmin && S.room);
   $("deleteBtn").hidden = !(S.isAdmin && S.room);
@@ -1348,12 +1949,13 @@ function renderToolbar() {
   $("input").disabled = !canWrite;
   $("sendBtn").disabled = !canWrite;
   $("attachBtn").disabled = !canWrite;
-  $("input").placeholder = S.banned ? "You are banned." : (S.readOnly ? "Read-only (archived or old chat)" : "Type a message...");
+  $("attachBtn").hidden = !!S.me.guest;
+  $("input").placeholder = S.banned ? "You are banned." : (S.readOnly ? "Read-only" : (S.me.guest ? "Type a message... (guests can't send links or images)" : "Type a message..."));
   renderStatus();
 }
 function renderStatus() {
   $("statusConn").textContent = S.connected ? "● Online" : "○ Offline";
-  $("statusRoom").textContent = S.room ? "Chat: " + (S.chats[S.room]?.name || S.room) : "";
+  $("statusRoom").textContent = S.room ? (isDM(S.room) ? "Direct message" : "Chat: " + (S.chats[S.room]?.name || S.room)) : "";
   const ids = Object.keys(S.members);
   $("statusPeople").textContent = ids.filter(isOnline).length + "/" + ids.length + " here";
   $("statusCount").textContent = S.messages.length + " msg";
@@ -1389,37 +1991,46 @@ function renderAttachment(m, room) {
 }
 function render() {
   const box = $("messages");
+  if (!S.me) return;
   const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 120;
   box.replaceChildren();
   renderStatus();
-  if (!S.room) { box.append(el("div", "empty", "*** Pick a chat on the left" + (S.me && !S.me.guest ? ", or create one with \"+ New chat...\"" : "") + ".")); return; }
-  if (!S.messages.length) {
-    box.append(el("div", "empty", '*** No messages yet. Say hi, then click "Invite..." and send the link.'));
+  if (!S.room) { box.append(el("div", "empty", "*** Pick a chat on the left" + (!S.me.guest ? ", or create one with \"+ New chat...\"" : "") + ".")); return; }
+  let list = S.messages;
+  if (S.isAdmin && S.showDeleted) {
+    const live = new Set(list.map((m) => m.key));
+    const dels = Object.entries(S.deleted).filter(([k]) => !live.has(k)).map(([k, x]) => ({ key: k, uid: x.uid, name: x.name, guest: !!x.guest, color: x.color, icon: x.icon, text: x.text || "", ts: x.ts || 0, media: x.media || null, deletedView: { at: x.deletedAt, by: x.deletedBy } }));
+    list = [...list, ...dels].sort((a, b) => a.ts - b.ts);
+  }
+  if (!list.length) {
+    box.append(el("div", "empty", isDM(S.room) ? "*** This is the start of your private conversation." : '*** No messages yet. Say hi, then click "Invite..." and send the link.'));
     return;
   }
   let prevKey = null;
-  for (const m of S.messages) {
+  for (const m of list) {
     const key = (m.uid || m.name) + "|" + m.guest;
     if (prevKey !== null && key !== prevKey) box.append(el("div", "sep", SEP));
-    const line = el("div", "line");
+    const line = el("div", "line" + (m.deletedView ? " deleted" : ""));
+    line.dataset.key = m.key;
     const u = m.uid ? S.users[m.uid] : null;
     const who = el("span", "who", m.name);
-    who.style.color = (u && u.color) || m.color || "#000";
-    const parts = [el("span", "time", "[" + fmtTime(m.ts) + "] "), who];
+    who.style.color = (u && !u.deleted && u.color) || m.color || "#000";
+    if (m.uid && S.users[m.uid]) who.addEventListener("click", () => openProfile(m.uid));
+    const parts = [el("span", "time", "[" + fmtTime(m.ts) + "] "), iconNode(m.uid, m), who];
     if (m.guest) parts.push(el("span", "tag", " [GUEST]"));
-    if (m.uid && S.admins[m.uid]) parts.push(el("span", null, " ⭐"));
+    if (u && u.deleted) parts.push(el("span", "tag", " (deleted account)"));
+    if (m.uid && isAdminUid(m.uid)) parts.push(el("span", null, " ⭐"));
     parts.push(el("span", "who", ": "));
     const text = el("span");
     appendRichText(text, m.text || "", m);
     parts.push(text);
     line.append(...parts);
-    if (S.isAdmin) {
-      const d = el("button", "small del", "🗑");
-      d.title = "Delete message (admin)";
-      d.addEventListener("click", () => adminDeleteMessage(m));
-      line.append(d);
+    if (m.deletedView) {
+      const by = m.deletedView.by === m.uid ? "by author" : "by admin " + (S.users[m.deletedView.by]?.name || "");
+      line.append(el("span", "delnote", "(deleted " + by + ", " + fmtFull(m.deletedView.at) + ")"));
     }
     if (m.media) line.append(renderAttachment(m, S.room));
+    bindMenu(line, (x, y) => messageMenu(x, y, m));
     box.append(line);
     prevKey = key;
   }
@@ -1468,6 +2079,7 @@ async function compressImage(file) {
 }
 async function sendFile(file) {
   if (!S.room || S.readOnly || S.banned) return;
+  if (S.me.guest) { toast("Guests can't send images or videos. Create an account!"); return; }
   const room = S.room;
   const isImg = file.type.startsWith("image/"), isVid = file.type.startsWith("video/");
   if (!isImg && !isVid) { showBanner("Only images and videos can be sent."); return; }
@@ -1500,9 +2112,22 @@ async function sendFile(file) {
   }
 }
 function sendMessage(text, media, room = S.room) {
-  const msg = { uid: S.me.uid, name: S.me.name, guest: !!S.me.guest, color: S.me.color || "#000", text, ts: now() };
+  const u = S.users[S.me.uid] || S.me;
+  const msg = { uid: S.me.uid, name: S.me.name, guest: !!S.me.guest, color: u.color || "#000", text, ts: now() };
+  if (u.icon) msg.icon = u.icon;
   if (media) msg.media = media;
-  return D.push(R("rooms/" + room), msg);
+  const key = D.push(R("rooms/" + room)).key;
+  const upd = { ["rooms/" + room + "/" + key]: msg };
+  if (isDM(room)) {
+    const other = dmOther(room);
+    upd["userDMs/" + S.me.uid + "/" + room + "/with"] = other;
+    upd["userDMs/" + S.me.uid + "/" + room + "/lastTs"] = now();
+    if (other !== S.me.uid) {
+      upd["userDMs/" + other + "/" + room + "/with"] = S.me.uid;
+      upd["userDMs/" + other + "/" + room + "/lastTs"] = now();
+    }
+  }
+  return D.update(R("/"), upd);
 }
 
 /* ========================= BANNED ========================= */
@@ -1511,10 +2136,35 @@ function showBanned() {
   dialog({ title: "Banned", message: "⛔ You have been banned by an admin. You can still read public chats but you can't send messages.", okText: "OK", cancelText: null });
 }
 
+/* ========================= LOG OUT ========================= */
+async function logout() {
+  const guest = S.me.guest;
+  const ok = await dialog({ title: "Log out", message: guest ? "Log out?\nYour guest identity will be DELETED forever (your messages stay)." : "Log out?", okText: "Log out" });
+  if (!ok) return;
+  const uid = S.me.uid;
+  try { await D.onDisconnect(R("status/" + uid)).cancel(); await D.onDisconnect(R("loc/" + uid)).cancel(); } catch {}
+  if (guest) {
+    const upd = {};
+    for (const r of Object.keys(S.myChats)) upd["members/" + r + "/" + uid] = null;
+    upd["userChats/" + uid] = null;
+    upd["userDMs/" + uid] = null;
+    upd["loc/" + uid] = null;
+    upd["status/" + uid] = null;
+    upd["users/" + uid] = null;
+    try { await D.update(R("/"), upd); } catch (e) { logError("Guest cleanup: " + e.message); try { await D.set(R("users/" + uid), null); } catch {} }
+    try { await A.deleteUser(auth.currentUser); } catch (e) { logError("Delete guest: " + e.message); }
+    await A.signOut(auth).catch(() => {});
+  } else {
+    try { await D.set(R("status/" + uid), { online: false, lastSeen: now() }); await D.set(R("loc/" + uid), null); } catch {}
+    await A.signOut(auth);
+  }
+}
+
 /* ========================= UI WIRING ========================= */
 $("newChatBtn").addEventListener("click", createChat);
-$("leaveBtn").addEventListener("click", leaveChat);
+$("leaveBtn").addEventListener("click", () => (isDM(S.room) ? closeDM() : leaveChat()));
 $("inviteBtn").addEventListener("click", inviteLink);
+$("profileBtn").addEventListener("click", () => S.room && isDM(S.room) && openProfile(dmOther(S.room)));
 $("renameBtn").addEventListener("click", adminRename);
 $("clearBtn").addEventListener("click", adminClear);
 $("deleteBtn").addEventListener("click", adminDeleteChat);
@@ -1522,22 +2172,19 @@ $("unarchiveBtn").addEventListener("click", adminUnarchive);
 $("pingBtn").addEventListener("click", ping);
 $("scanBtn").addEventListener("click", scanDatabase);
 $("archiveBtn").addEventListener("click", openArchive);
+$("cleanBtn").addEventListener("click", () => cleanGuests(false));
+$("reportsBtn").addEventListener("click", openReports);
 $("guestToggle").addEventListener("change", (e) => {
   D.set(R("settings/guestsAllowed"), e.target.checked).then(() => toast(e.target.checked ? "Guests allowed." : "Guests blocked.")).catch((err) => { showBanner(err.message); e.target.checked = !e.target.checked; });
 });
-$("logoutBtn").addEventListener("click", async () => {
-  const ok = await dialog({ title: "Log out", message: S.me.guest ? "Log out? As a guest, you'll get a new identity next time." : "Log out?", okText: "Log out" });
-  if (!ok) return;
-  try { await D.set(R("status/" + S.me.uid), { online: false, lastSeen: now(), room: "" }); await D.onDisconnect(R("status/" + S.me.uid)).cancel(); } catch {}
-  await A.signOut(auth);
-});
-$("meName").addEventListener("click", () => {
-  dialog({ title: "My account", message: "Name: " + S.me.name + "\nType: " + (S.me.guest ? "Guest" : "Account") + (S.isAdmin ? " (admin)" : "") + "\nID: " + S.me.uid, okText: "OK", cancelText: null });
-});
-$("dlgBody").style.whiteSpace = "pre-line";
+$("deletedToggle").addEventListener("change", (e) => { S.showDeleted = e.target.checked; syncDeletedSub(); });
+$("logoutBtn").addEventListener("click", logout);
+$("settingsBtn").addEventListener("click", openSettings);
+$("meName").addEventListener("click", () => openProfile(S.me.uid));
 function closeSide() { $("side").classList.remove("open"); $("backdrop").classList.remove("show"); }
 $("menuBtn").addEventListener("click", () => { $("side").classList.add("open"); $("backdrop").classList.add("show"); });
 $("backdrop").addEventListener("click", closeSide);
+$("messages").addEventListener("scroll", closeMenu);
 
 $("attachBtn").addEventListener("click", () => $("fileInput").click());
 $("fileInput").addEventListener("change", (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) sendFile(f); });
@@ -1557,15 +2204,17 @@ $("composer").addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = input.value.trim().slice(0, MAX_LEN);
   if (!text || !S.room || S.readOnly) return;
-  if (Date.now() - lastSend < 700) return;
-  lastSend = Date.now();
+  if (S.me.guest && LINK_RE.test(text)) { showBanner("Guests can't send links. Create an account to share links!"); return; }
+  const wait = 700 - (Date.now() - lastSend);
   input.value = "";
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));   // small anti-spam: wait instead of dropping
+  lastSend = Date.now();
   input.style.height = "auto";
   sentJustNow = true;
-  try { await sendMessage(text, null); }
+  try { await sendMessage(text, null); hideBanner(); }
   catch (err) { input.value = text; showBanner("Message not sent: " + authError(err)); }
 });
-setInterval(() => { if (started) renderSide(); }, 60000);   // refresh "x min ago"
+setInterval(() => { if (started) renderSide(); }, 60000);
 </script>
 </body>
 </html>
