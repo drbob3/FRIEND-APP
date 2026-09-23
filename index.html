@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hangout Chat</title>
+<meta name="description" content="A small chat room to talk with friends.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --panel: #ffffff;
+    --text: #1c1e22;
+    --muted: #6b7280;
+    --border: #e3e5e9;
+    --accent: #5b5bd6;
+    --accent-text: #ffffff;
+    --mine: #5b5bd6;
+    --mine-text: #ffffff;
+    --theirs: #ffffff;
+    --banner: #fff4d6;
+    --banner-text: #6b4e00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111216;
+      --panel: #1a1c21;
+      --text: #eceef2;
+      --muted: #9aa0ab;
+      --border: #2a2d34;
+      --accent: #7c7cf0;
+      --accent-text: #0e0e14;
+      --mine: #5b5bd6;
+      --mine-text: #ffffff;
+      --theirs: #23262c;
+      --banner: #3a300f;
+      --banner-text: #f5dc93;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  .app {
+    width: 100%;
+    max-width: 760px;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  header .title { flex: 1; min-width: 0; }
+  header h1 { font-size: 17px; margin: 0; }
+  header .room { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  button {
+    font: inherit;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+  button:disabled { opacity: .5; cursor: default; }
+  .banner {
+    background: var(--banner);
+    color: var(--banner-text);
+    font-size: 14px;
+    padding: 8px 16px;
+    display: none;
+  }
+  .banner.show { display: block; }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .empty { margin: auto; text-align: center; color: var(--muted); max-width: 320px; }
+  .msg { max-width: 80%; display: flex; flex-direction: column; align-self: flex-start; }
+  .msg.mine { align-self: flex-end; align-items: flex-end; }
+  .msg .who { font-size: 12px; font-weight: 600; margin: 6px 4px 2px; }
+  .msg .bubble {
+    background: var(--theirs);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 16px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .msg.mine .bubble { background: var(--mine); color: var(--mine-text); border-color: var(--mine); }
+  .msg .time { font-size: 11px; color: var(--muted); margin: 2px 6px 0; }
+  form.composer {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+  }
+  textarea {
+    flex: 1;
+    resize: none;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    max-height: 120px;
+  }
+  textarea:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .overlay.show { display: flex; }
+  .card {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 360px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .card h2 { margin: 0; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+  .card input {
+    font: inherit; color: var(--text); background: var(--bg);
+    border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+  }
+  .toast {
+    position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%);
+    background: var(--text); color: var(--panel);
+    padding: 8px 14px; border-radius: 999px; font-size: 14px;
+    opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  @media (max-width: 480px) {
+    .app { border: none; }
+    .msg { max-width: 90%; }
+    #inviteBtn .long { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title">
+      <h1>💬 Hangout Chat</h1>
+      <div class="room" id="roomLabel"></div>
+    </div>
+    <button id="nameBtn" title="Change your name">✏️</button>
+    <button id="inviteBtn" class="primary">🔗 <span class="long">Invite friends</span></button>
+  </header>
+  <div class="banner" id="banner"></div>
+  <div id="messages"><div class="empty" id="empty">No messages yet. Say hi, then press "Invite" and send the link to your friends.</div></div>
+  <form class="composer" id="composer">
+    <textarea id="input" rows="1" maxlength="500" placeholder="Write a message…"></textarea>
+    <button class="primary" id="sendBtn" type="submit">Send</button>
+  </form>
+</div>
+
+<div class="overlay" id="nameOverlay">
+  <form class="card" id="nameForm">
+    <h2>What's your name?</h2>
+    <p>Your friends will see this name next to your messages.</p>
+    <input id="nameInput" maxlength="24" placeholder="Your name" autocomplete="nickname" required>
+    <button class="primary" type="submit">Join the chat</button>
+  </form>
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* =========================================================
+   1) PASTE YOUR FIREBASE CONFIG HERE (see the guide).
+   While it still says "PASTE_HERE", the page runs in
+   "test mode": messages only go between tabs on this PC.
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE",
+  projectId: "PASTE_HERE",
+  storageBucket: "PASTE_HERE",
+  messagingSenderId: "PASTE_HERE",
+  appId: "PASTE_HERE"
+};
+
+const $ = (id) => document.getElementById(id);
+const COLORS = ["#e5484d", "#f76b15", "#ca8a04", "#30a46c", "#12a594", "#0090ff", "#8e4ec6", "#d6409f"];
+const MAX_LEN = 500;
+
+// ---------- room (from the link) ----------
+function getRoom() {
+  const m = location.hash.match(/room=([a-z0-9-]{3,40})/i);
+  if (m) return m[1].toLowerCase();
+  const id = Math.random().toString(36).slice(2, 8) + "-" + Math.random().toString(36).slice(2, 6);
+  history.replaceState(null, "", "#room=" + id);
+  return id;
+}
+let room = getRoom();
+$("roomLabel").textContent = "Room: " + room;
+window.addEventListener("hashchange", () => location.reload());
+
+// ---------- name ----------
+function store(key, val) { try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch { return null; } }
+let myName = store("chat-name") || "";
+let myColor = store("chat-color") || COLORS[Math.floor(Math.random() * COLORS.length)];
+store("chat-color", myColor);
+
+function askName() {
+  $("nameInput").value = myName;
+  $("nameOverlay").classList.add("show");
+  setTimeout(() => $("nameInput").focus(), 50);
+}
+$("nameForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const n = $("nameInput").value.trim().slice(0, 24);
+  if (!n) return;
+  myName = n;
+  store("chat-name", n);
+  $("nameOverlay").classList.remove("show");
+  $("input").focus();
+  render();
+});
+$("nameBtn").addEventListener("click", askName);
+if (!myName) askName();
+
+// ---------- invite ----------
+function toast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+$("inviteBtn").addEventListener("click", async () => {
+  const link = location.href;
+  if (navigator.share) {
+    try { await navigator.share({ title: "Join my chat", url: link }); return; } catch {}
+  }
+  try { await navigator.clipboard.writeText(link); toast("Link copied! Send it to your friends."); }
+  catch { prompt("Copy this link and send it to your friends:", link); }
+});
+
+// ---------- rendering ----------
+let messages = [];
+function fmtTime(ms) {
+  if (!ms) return "sending…";
+  const d = new Date(ms);
+  const sameDay = d.toDateString() === new Date().toDateString();
+  return (sameDay ? "" : d.toLocaleDateString() + " ") + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+function render() {
+  const box = $("messages");
+  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  box.replaceChildren();
+  if (!messages.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = 'No messages yet. Say hi, then press "Invite" and send the link to your friends.';
+    box.append(e);
+    return;
+  }
+  let prevName = null;
+  for (const m of messages) {
+    const mine = m.name === myName && m.color === myColor;
+    const wrap = document.createElement("div");
+    wrap.className = "msg" + (mine ? " mine" : "");
+    if (m.name !== prevName) {
+      const who = document.createElement("div");
+      who.className = "who";
+      who.style.color = mine ? "var(--muted)" : (m.color || "var(--muted)");
+      who.textContent = mine ? "You" : m.name;
+      wrap.append(who);
+    }
+    const b = document.createElement("div");
+    b.className = "bubble";
+    b.textContent = m.text;          // textContent = safe, no HTML injection
+    const t = document.createElement("div");
+    t.className = "time";
+    t.textContent = fmtTime(m.ts);
+    wrap.append(b, t);
+    box.append(wrap);
+    prevName = m.name;
+  }
+  if (nearBottom || messages.at(-1)?.pending) box.scrollTop = box.scrollHeight;
+}
+
+// ---------- backend ----------
+const configured = !Object.values(firebaseConfig).includes("PASTE_HERE");
+let sendMessage;
+
+if (configured) {
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  const fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+  const db = fs.getFirestore(initializeApp(firebaseConfig));
+  const col = fs.collection(db, "rooms", room, "messages");
+  const q = fs.query(col, fs.orderBy("ts", "asc"), fs.limitToLast(200));
+  fs.onSnapshot(q, (snap) => {
+    messages = snap.docs.map((d) => {
+      const x = d.data({ serverTimestamps: "estimate" });
+      return { name: x.name, color: x.color, text: x.text, ts: x.ts?.toMillis?.() || 0, pending: d.metadata.hasPendingWrites };
+    });
+    render();
+  }, (err) => {
+    showBanner("Can't load messages: " + err.message);
+  });
+  sendMessage = (text) => fs.addDoc(col, { name: myName, color: myColor, text, ts: fs.serverTimestamp() });
+} else {
+  showBanner("Test mode: Firebase isn't set up yet, so messages only reach other tabs on this computer. Follow the guide to go online.");
+  const key = "chat-local-" + room;
+  let ch = null;
+  try { ch = new BroadcastChannel(key); } catch {}
+  try { messages = JSON.parse(store(key) || "[]"); } catch { messages = []; }
+  render();
+  if (ch) ch.onmessage = (e) => { messages = e.data; render(); };
+  sendMessage = async (text) => {
+    messages = [...messages, { name: myName, color: myColor, text, ts: Date.now() }].slice(-200);
+    store(key, JSON.stringify(messages));
+    ch?.postMessage(messages);
+    render();
+  };
+}
+
+function showBanner(text) { const b = $("banner"); b.textContent = text; b.classList.add("show"); }
+
+// ---------- composer ----------
+const input = $("input");
+input.addEventListener("input", () => { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 120) + "px"; });
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("composer").requestSubmit(); }
+});
+let lastSend = 0;
+$("composer").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const text = input.value.trim().slice(0, MAX_LEN);
+  if (!text) return;
+  if (!myName) { askName(); return; }
+  if (Date.now() - lastSend < 700) return;   // small anti-spam
+  lastSend = Date.now();
+  input.value = "";
+  input.style.height = "auto";
+  try { await sendMessage(text); }
+  catch (err) { input.value = text; showBanner("Message not sent: " + err.message); }
+});
+</script>
+</body>
+</html>
