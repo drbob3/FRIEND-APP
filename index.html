@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-iO71vZ9TpeFMIPjc9vKFBB/kT8TyimpJt7lDJDmLrdM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-As8wCdIkUbCgHJdvvStNAKA4tkaj2Z8hFAQ0xdnbUgM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -516,6 +516,7 @@
   .pvpres { font-size: 18px; font-weight: bold; text-align: center; padding: 4px 12px; background: #ffe0e0; border: 2px solid #800000; }
   .pvpres.good { background: #fff4b8; border-color: #806000; }
   .lcd.hearts-lcd { color: #ff6090; }
+  .mcimg { width: 72%; height: 72%; image-rendering: pixelated; pointer-events: none; display: block; }
   .float.tdwin { width: min(1000px, calc(100vw - 16px)); }
   .tdwin .content { gap: 4px; }
   .tdtop { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -789,7 +790,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "9.4";
+const APP_VERSION = "9.6";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -3544,6 +3545,8 @@ function applyBoard(F, b) {
   F.opened = 0; F.booms = 0;
   F.cells.forEach((c, i) => { const ch = (b || "")[i] || "."; c.open = ch === "o" || ch === "x"; c.boom = ch === "x"; c.flag = ch === "f"; if (c.open && !c.mine) F.opened++; if (c.boom) F.booms++; });
 }
+const MS_FLAG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA5klEQVR4AaSSQQqCQBSGn60LsY1XULpBe2nRRVx2lI7gacILhG4kSEhmk4y5sNXUL4yojxwl4eNXZ/5vnuCK/ryYIIoiFYahOtG+xeRngjiO6S0EBSRbTCImuGUZxUnSHQwRHiBCjmGCzXpNO98f7/s5DRO86ppA36Cn0NmfhglQlFIiBhzpaoEzXSygF5mgX0ZBowvjZAK9AUV9P5VMIKuKwFSpv8YEWHyWJWIWTLCkjBOYAC+XMBAcgkBtHYeA67pqjqgT+J6n7nlO+IRHUVDTNGTbtjJJOkGSphYQQljff6HDJPgAAAD//5jvsUEAAAAGSURBVAMAvrJmIfLbpMYAAAAASUVORK5CYII=";
+const MS_MINE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABTElEQVR4AaSSMa9EUBCFx0uWglBIREMhWv//h+gVNCJREAoU3n6TnRt5xTZvk9k7c+45H/fGj/zz9xXQNM1dVdX97RkO8NecZdnd973M8yxFUTgIQLwGdYB939WcJMlNOAgC8+iKxh5AvCq+/xyg6zrvPQvBKIpoJU1TyfNcXq+XoMVxrLp5GRyAgTB1XZeGCPq+rz37lEHoKQfgFQkTsiKMidU0ZryslAK4FF5xXVc0fSIhBjsvMxA8eMmwrwBMXA4CJlbKdMLMtuJlD00BXApnozi/GcMwlLqu5TxPvLri4XLJICqAZhgG7zgOWoH+DCEyA6e3ML0DMADAZEUIndU07gDNygH4SBC5A0D04zgKX6OF0Sjz0jsAg51tmiZv2zYkLQAckcKj4ufPAZZl8Z5nA4K5LEsh+PELHrw2O4AJzxVz27b6iT/1Z/8LAAD//6oDZOwAAAAGSURBVAMADb7DISd29HoAAAAASUVORK5CYII=";
 const MS_FACES = {
   normal: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACUElEQVR4AdSXP08VQRTFB03AaDS29hj/dEYbKxNfYuz8EJZ+Ojtj8rCUAkJDAgQKGvgA0PCngPnN40xmZ+/dnfcCIRDO3pm5955zZpbdx3sU7vlnIQNfVz9eWVhkL80GSsHp7xfBQlnTambUgEinu8+DEN5chYxCqTSlviJtDgcNQJJFzfa4iJkY6l+ZgaPOlXPXAI2Il8Xu2DFBPUbgYmzBNEBDszise0tcXWBieflJvG/9kp6B2xaX5PnW52CZ6BhI4vEvPDg7mrw9Fd8sGnWTHyeznHG1THQMdHoq8iz++F9IBqs8vVn8/RrTJmQDefdlGyIREp/ub8yyhoDEh2pork8hGyA5hsnrT6lEMU2qi3KKVbo3ncsA3S3ELTVwgWTAPH6yd4TyNiQDd6TTRPswDPAmK7dTz8nVa/WcGgvNJyBCRYtMOUWrpl5rNkBjC3FLDVxCMrB2sLmkF4kSit668kPR7I2fnCsf/oeLi7P0CZYMeCQiIC4CeOkjJkTxFIvLoAEd559vO4FX7LxARxyMLWQD3m2A4Pvfd+Hy1zOr313jbUhvLrjZ/crT9Xz85LIBJh4gkgmMgMMvq6EG66An7hHH9Y4B7xRiXfovGBOMj7ZfEXpgnRoMd5LO7qnpGGChxcTP45fBwzzi6PUMsIgJHhXGNRAYQl3PvL7vrAmmAZI8p54J8qPg2COGxOFwDZCUiWYjUVBfWBAGcMDlYdAATRAATAisd3AjjKBAD+jUGZNRA+qBTJCRHOOzjbDyRPWNxWYDJRECFsoajcfiNQAAAP//TqODpgAAAAZJREFUAwC89YRQZk0nzAAAAABJRU5ErkJggg==",
   win: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACRElEQVR4AcyXwS5DQRSGpxYqhKcgIlbCxpImYudBPJ2dSMqSBbEShKewohY1323PZGbuOXOnRRB/Z+bMf8755t5e1QX3xz9zARyu7441zXOWaoC44fBszWmKPbUwnQBSdPi06kRuc+yCok4xlORF2+q0CECR0FRN90Fg/JD/Cgw18r14bQKQSPPYbM4NCPyAUIu5JhWAhOrmVH3u8WoKiMXFJX/f2pYWwE83l5Yf9/tOg0gAmub+He46TiRFq33TBA0iAZj6JoMFQVw0cX7rNQCE08flpFE8xvtzzPOrEADyWr3tK5drcPIWYjKXvNzLWjwyF288CsD48vUuFCchNjH3V8jhyed4EfFYmh8fGo3eg1UA3PjhoCVxacXYy3OIIc2fe+WJaABIIDEXSexpJ2ev1q95JbcBkIU28keEeAxSKpj7S17qdgJgogiFGRGxkvCIv+RjrwoA42/pfwD4N1mPZ1Y7pRXXvFqsle8/Ofs7184/is0nWPEKSDLjvEqgfPNk7RdFAN5I3uOGL7cz6/zokdTmX7dmYrwEAOs2ADHY2DPS9fDn6Yo7vthKm09P31++CZef7ADAwtIsEGpzq7CPJwDWVfC+5jRdV8JsbpyeugkAgRoIQDS1LjsFC83ZbgEQBIJHhXkubkdJuZ91ft+JiVQANnlOLQj2O8XJvUrNqWECsCkQ1SC+oXxhoTGiBrUsFQFIogACQkQ80bQxDUXkoMSnLDoBJIdiIgEJo3+2aSz7jJLXNVYDxIVooCn2yLxr/AIAAP//CQpC2AAAAAZJREFUAwBc+85QsDrscQAAAABJRU5ErkJggg==",
@@ -3595,17 +3598,18 @@ function boardView(F, { onReveal, onFlag, canPlay }) {
       if (!c.on) return;
       let cls = "mc", txt = "";
       if (c.open) {
-        if (c.mine) { cls += " open boom"; txt = "💥"; }
+        if (c.mine) { cls += " open boom"; txt = "@mine"; }
         else { cls += " open n" + c.n; txt = c.n ? String(c.n) : ""; }
-      } else if (showAll && c.mine && !c.flag) { cls += " open mine"; txt = "💣"; }
+      } else if (showAll && c.mine && !c.flag) { cls += " open mine"; txt = "@mine"; }
       else if (showAll && c.flag && !c.mine) { cls += " open wrong"; txt = "❌"; }
-      else if (c.flag) { cls += " flag"; txt = "🚩"; }
+      else if (c.flag) { cls += " flag"; txt = "@flag"; }
       else if (i === startCell) { cls += " start"; txt = "★"; }
       const key = cls + "|" + txt;
       if (last[i] === key) return;
       last[i] = key;
       cellEls[i].className = cls;
-      cellEls[i].textContent = txt;
+      if (txt[0] === "@") { const im = el("img", "mcimg"); im.alt = ""; im.draggable = false; im.src = txt === "@flag" ? MS_FLAG : MS_MINE; cellEls[i].replaceChildren(im); }
+      else cellEls[i].textContent = txt;
     });
   }
   return { node: wrap, grid, paint, setFlagMode: (v) => { flagMode = v; } };
@@ -4276,6 +4280,7 @@ const TD = {
     sniper: { name: "Sniper", icon: "🎯", color: "#2e602e", cost: 120, up: [90, 160], range: [5, 5.8, 6.6], dmg: [45, 75, 120], rate: [2, 1.8, 1.6], pierce: true, air: 0.5, ground: true, desc: "Very long range. Pierces armor." },
     tesla:  { name: "Tesla", icon: "⚡", color: "#7050b8", cost: 150, up: [110, 180], range: [2.4, 2.6, 2.8], dmg: [12, 18, 26], rate: [1.1, 1, 0.9], chain: [3, 4, 5], ground: true, desc: "Lightning jumps between enemies. Ground only." },
     aa:     { name: "Anti-air", icon: "🏹", color: "#a03a3a", cost: 80, up: [60, 110], range: [3.2, 3.6, 4], dmg: [14, 24, 38], rate: [0.5, 0.45, 0.4], air: 1, ground: false, desc: "Shoots flyers only. Strong against them." },
+    barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", cost: 150, up: [120, 180], pvpCost: 450, pvpUp: [300, 450], every: [12, 10, 8], units: [["recruit"], ["recruit", "gunner"], ["recruit", "gunner", "shielder"]], desc: "Doesn't shoot. Sends units by itself (Recruit, then Gunner, then Shielder). Solo: they are ALLIES that fight the enemies. PvP: they attack the other base for free." },
     money:  { name: "Money", icon: "💰", color: "#b09020", cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only)." },
   },
   ENEMIES: {
@@ -4286,10 +4291,14 @@ const TD = {
     medic:    { name: "Medic", color: "#f4f4f4", hp: 70, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 6, pts: 3, desc: "Heals the enemies around." },
     jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies straight to the base." },
     tank:     { name: "Tank", color: "#6b4a2a", hp: 400, armor: 6, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
+    gunner:   { name: "Gunner", color: "#2f5a2a", hp: 90, speed: 0.75, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, pts: 4, gun: { range: 2.5, dmg: 8, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Shoots enemy units from far (every 1 s). Every 15 s it stuns a tower for 3 s." },
+    saboteur: { name: "Saboteur", color: "#303030", hp: 60, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
+    captain:  { name: "Captain", color: "#b08a10", hp: 120, speed: 0.7, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, pts: 4, aura: 2, desc: "Allies around him are 20% faster and hit 20% harder." },
+    kamikaze: { name: "Kamikaze", color: "#d02020", hp: 40, speed: 1.3, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 70 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
     boss:     { name: "Boss", color: "#8000a0", hp: 1300, armor: 8, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
   },
-  ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", boss: "👑" },
-  SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank"],
+  ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑" },
+  SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze"],
   ECO_START: 30, ECO_MIN: 5, ECO_MAX: 200, INCOME_EVERY: 7,
 };
 TD.TTYPES = Object.keys(TD.TOWERS);
@@ -4394,6 +4403,8 @@ function tdNewState({ seed, pvp, linked }) {
   };
   return st;
 }
+const tdCost = (st, T) => (st.pvp && T.pvpCost) || T.cost;
+const tdUpCost = (st, T, lv) => ((st.pvp && T.pvpUp) || T.up)[lv];
 const tdWX = (st, side, lx) => side === 0 ? lx : st.X1 + st.W - 1 - lx;          // world cell x of a local cell
 const tdInMap = (st, side, x) => side === 0 ? x < st.W : x >= st.X1;
 function tdLocal(st, wx, wy) {   // world point -> { side, x, y } (local cell) or null (lane)
@@ -4429,6 +4440,15 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
     path, idx: 0, hp, maxHp: hp, armor: E.armor || 0, speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: !!E.air, dead: false,
   });
 }
+// solo: an ally from a Barracks walks from the base towards an entry and fights the enemies
+function tdSpawnAlly(st, type, hpMult = 1) {
+  const E = TD.ENEMIES[type];
+  const rt = st.map.routes[Math.floor(st.r() * st.map.routes.length)];
+  const path = rt.cells.slice().reverse().map(([x, y]) => [tdWX(st, 0, x) + 0.5, y + 0.5]);
+  const hp = Math.round(E.hp * hpMult);
+  st.enemies.push({ id: st.nextId++, type, side: -1, from: 0, x: path[0][0], y: path[0][1], path: path.slice(1), idx: 0, hp, maxHp: hp, armor: E.armor || 0,
+    speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: false, dead: false });
+}
 function tdHit(st, e, dmg, pierce, byTowerSide) {
   if (e.dead) return;
   const d = pierce ? dmg : Math.max(1, dmg - e.armor);
@@ -4459,8 +4479,50 @@ function tdStep(st, dt) {
     if (e.dead) continue;
     const E = TD.ENEMIES[e.type];
     if (E.heal) for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal * dt);
+    const fights = st.linked || !st.pvp;   // PvP linked maps, or solo (allies from Barracks vs enemies)
+    // Captain aura
+    e.buff = false;
+    for (const o of st.enemies) if (o !== e && !o.dead && o.type === "captain" && o.from === e.from && Math.hypot(o.x - e.x, o.y - e.y) < TD.ENEMIES.captain.aura) { e.buff = true; break; }
+    // Gunner: shoots enemy units from far + stuns a tower now and then
+    if (E.gun && fights) {
+      e.gcd = (e.gcd ?? 0) - dt;
+      if (e.gcd <= 0) {
+        let tg = null, td = E.gun.range;
+        for (const o of st.enemies) { if (o.dead || o.from === e.from) continue; const d = Math.hypot(o.x - e.x, o.y - e.y); if (d < td) { td = d; tg = o; } }
+        if (tg) {
+          e.gcd = E.gun.every;
+          tg.hp -= E.gun.dmg * (e.buff ? 1.2 : 1);
+          if (tg.hp <= 0 && !tg.dead) { tg.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[tg.type].reward / 2); }
+          st.fx.push({ k: "gunner", x1: e.x, y1: e.y, x2: tg.x, y2: tg.y, until: t + 0.08 });
+        }
+      }
+    }
+    // Gunner stun / Saboteur bomb: switch off a tower of the base they attack
+    const off = E.stun || E.sabo;
+    if (off && e.side >= 0) {
+      e.scd = (e.scd ?? (E.sabo ? 2 : 4)) - dt;
+      if (e.scd <= 0) {
+        let tw0 = null, bd = off.range;
+        for (const tw of st.towers) { if (tw.side !== e.side || (tw.stun || 0) > t) continue; const d = Math.hypot(tw.wx - e.x, tw.wy - e.y); if (d < bd) { bd = d; tw0 = tw; } }
+        if (tw0) { e.scd = off.every; tw0.stun = t + off.time; st.fx.push({ k: E.sabo ? "boom" : "zap", x1: E.sabo ? tw0.wx : e.x, y1: E.sabo ? tw0.wy : e.y, x2: E.sabo ? 0.6 : tw0.wx, y2: E.sabo ? 0 : tw0.wy, until: t + 0.3 }); }
+      }
+    }
+    // Kamikaze: explodes on the first enemy units it meets
+    if (E.boom && fights) {
+      let near = false;
+      for (const o of st.enemies) if (!o.dead && !o.air && o.from !== e.from && Math.hypot(o.x - e.x, o.y - e.y) < E.boom.range) { near = true; break; }
+      if (near) {
+        for (const o of st.enemies) if (!o.dead && o.from !== e.from && Math.hypot(o.x - e.x, o.y - e.y) < E.boom.radius) {
+          o.hp -= E.boom.dmg;
+          if (o.hp <= 0) { o.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[o.type].reward / 2); }
+        }
+        e.dead = true;
+        st.fx.push({ k: "boom", x1: e.x, y1: e.y, x2: E.boom.radius, y2: 0, until: t + 0.35 });
+        continue;
+      }
+    }
     let blocked = false;
-    if (st.linked && !e.air) {   // PvP: enemies of the 2 players fight each other anywhere they meet
+    if (fights && !e.air) {   // PvP: enemies of the 2 players fight each other anywhere they meet
       let foe = null, fd = 0.65;
       for (const o of st.enemies) {
         if (o.dead || o.air || o.from === e.from) continue;
@@ -4469,8 +4531,8 @@ function tdStep(st, dt) {
       }
       if (foe) {
         blocked = true; e.fighting = true;
-        foe.hp -= E.power * dt;
-        if (foe.hp <= 0 && !foe.dead) { foe.dead = true; st.money[e.from] += Math.floor(TD.ENEMIES[foe.type].reward / 2); }
+        foe.hp -= E.power * (e.buff ? 1.2 : 1) * dt;
+        if (foe.hp <= 0 && !foe.dead) { foe.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[foe.type].reward / 2); }
         if (st.r() < dt * 3) st.fx.push({ k: "hit", x1: (e.x + foe.x) / 2, y1: (e.y + foe.y) / 2, x2: 0, y2: 0, until: t + 0.15 });
       } else {
         e.fighting = false;
@@ -4482,7 +4544,7 @@ function tdStep(st, dt) {
     }
     e.blocked = blocked;
     if (blocked) continue;
-    let spd = e.speed;
+    let spd = e.speed * (e.buff ? 1.2 : 1);
     if (E.rush && !e.air) {   // Shielder: rush to the front, then keep the speed of the fastest one in front
       let ahead = false, front = 0;
       for (const o of st.enemies) {
@@ -4501,6 +4563,7 @@ function tdStep(st, dt) {
     }
     if (e.idx >= e.path.length) {
       e.dead = true;
+      if (e.side < 0) continue;   // solo ally reached the end of its road
       st.lives[e.side] = Math.max(0, st.lives[e.side] - E.life);
       st.fx.push({ k: "base", x1: e.x, y1: e.y, x2: 0, y2: 0, until: t + 0.4 });
     }
@@ -4508,6 +4571,17 @@ function tdStep(st, dt) {
   // towers
   for (const tw of st.towers) {
     const T = TD.TOWERS[tw.type];
+    if ((tw.stun || 0) > t) continue;   // stunned / sabotaged
+    if (T.every && (st.pvp ? st.started : st.waveOn || st.enemies.some((x) => x.side === 0))) {   // Barracks
+      tw.bt = (tw.bt ?? T.every[tw.lvl]) - dt;
+      if (tw.bt <= 0) {
+        tw.bt = T.every[tw.lvl];
+        const list = T.units[tw.lvl], ty = list[(tw.bi = (tw.bi || 0) + 1) % list.length];
+        if (st.pvp) tdSpawn(st, ty, 1 - tw.side, tw.side, 0, 1 + t / 600, -1);
+        else tdSpawnAlly(st, ty, 1 + st.wave * 0.08);
+      }
+      continue;
+    }
     if (!T.dmg) continue;
     tw.cd -= dt;
     if (tw.cd > 0) continue;
@@ -4546,7 +4620,7 @@ function tdStep(st, dt) {
   st.enemies = st.enemies.filter((e) => !e.dead);
   st.fx = st.fx.filter((f) => f.until > t);
   // waves end (solo)
-  if (!st.pvp && st.waveOn && !st.queue.length && !st.enemies.length) {
+  if (!st.pvp && st.waveOn && !st.queue.length && !st.enemies.some((x) => x.side === 0)) {
     st.waveOn = false;
     const bonus = 20 + st.wave * 4 + st.towers.filter((x) => x.type === "money").reduce((n, x) => n + TD.TOWERS.money.income[x.lvl], 0);
     st.money[0] += bonus;
@@ -4570,6 +4644,10 @@ function tdStartWave(st) {
   if (w >= 6) pool.push("shielder");
   if (w >= 7) pool.push("medic");
   if (w >= 9) pool.push("tank");
+  if (w >= 7) pool.push("kamikaze");
+  if (w >= 8) pool.push("saboteur");
+  if (w >= 10) pool.push("gunner");
+  if (w >= 12) pool.push("captain");
   let budget = 4 + w * 6 + w * w * 0.6;
   const list = [];
   if (w % 10 === 0) list.push("boss");
@@ -4592,10 +4670,11 @@ function tdApply(st, side, a) {
     const T = TD.TOWERS[a.type];
     if (!T || (st.pvp && a.type === "money")) return "?";
     if (!tdCanBuild(st, side, a.x | 0, a.y | 0)) return "You can't build here.";
-    if (st.money[side] < T.cost) return "Not enough money.";
-    st.money[side] -= T.cost;
+    const cost = tdCost(st, T);
+    if (st.money[side] < cost) return "Not enough money.";
+    st.money[side] -= cost;
     const lx = a.x | 0, ly = a.y | 0;
-    st.towers.push({ id: st.nextId++, side, type: a.type, lvl: 0, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: T.cost });
+    st.towers.push({ id: st.nextId++, side, type: a.type, lvl: 0, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: cost, bt: T.every ? T.every[0] : 0, bi: 0 });
     return null;
   }
   const tw = st.towers.find((x) => x.id === a.id && x.side === side);
@@ -4603,7 +4682,7 @@ function tdApply(st, side, a) {
     if (!tw) return "?";
     const T = TD.TOWERS[tw.type];
     if (tw.lvl >= 2) return "Max level.";
-    const c = T.up[tw.lvl];
+    const c = tdUpCost(st, T, tw.lvl);
     if (st.money[side] < c) return "Not enough money.";
     st.money[side] -= c; tw.spent += c; tw.lvl++;
     return null;
@@ -4634,7 +4713,7 @@ function tdSnap(st) {
   const r1 = (v) => Math.round(v * 20);
   return JSON.stringify({
     t: Math.round(st.t * 10), m: st.money.map(Math.floor), l: st.lives, o: st.over ? 1 : 0, w: st.winner,
-    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly]),
+    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0]),
     e: st.enemies.slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
     ec: st.eco, sl: tdSpawnInfo(st, true), it: Math.ceil(st.incomeT),
@@ -4649,7 +4728,7 @@ function tdSpawnInfo(st, compact) {   // per side: [current type index, progress
 }
 function tdView(st) {   // live state -> what we draw
   return {
-    towers: st.towers, money: st.money, lives: st.lives, t: st.t,
+    towers: st.towers.map((x) => ({ ...x, stunned: (x.stun || 0) > st.t })), money: st.money, lives: st.lives, t: st.t,
     enemies: st.enemies.map((e) => ({ id: e.id, type: e.type, x: e.x, y: e.y, hp: e.hp / e.maxHp, slow: e.slowUntil > st.t, side: e.side })),
     fx: st.fx, eco: st.eco, sl: tdSpawnInfo(st, false), it: Math.ceil(st.incomeT),
   };
@@ -4754,6 +4833,10 @@ function tdDraw(cv, st, V, o) {
     ctx.strokeStyle = "#000"; ctx.beginPath(); ctx.moveTo(px + ts * 0.42, py - ts * 0.42); ctx.lineTo(px + ts * 0.42, py + ts * 0.42); ctx.lineTo(px - ts * 0.42, py + ts * 0.42); ctx.stroke();
     ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText(T.icon, px, py + 1);
     for (let i = 0; i < tw.lvl; i++) { ctx.fillStyle = "#ffe000"; ctx.fillRect(px - ts * 0.38 + i * ts * 0.22, py + ts * 0.24, ts * 0.16, ts * 0.14); }
+    if (tw.stunned) {
+      ctx.fillStyle = "rgba(0,0,0,.45)"; ctx.fillRect(px - ts * 0.42, py - ts * 0.42, ts * 0.84, ts * 0.84);
+      ctx.font = Math.floor(ts * 0.55) + "px sans-serif"; ctx.fillText(performance.now() % 400 < 200 ? "💫" : "⚡", px + ts * 0.25, py - ts * 0.3);
+    }
     if (o.selId === tw.id && T.range) {
       ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, T.range[tw.lvl] * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
     }
@@ -4777,10 +4860,15 @@ function tdDraw(cv, st, V, o) {
       if (e.type === "medic") { ctx.fillStyle = "#d00000"; ctx.fillRect(px - r * 0.6, py - r * 0.18, r * 1.2, r * 0.36); ctx.fillRect(px - r * 0.18, py - r * 0.6, r * 0.36, r * 1.2); }
       if (e.type === "shielder") { ctx.fillStyle = "#d0d0e0"; ctx.fillRect(px - r * 0.25, py - r * 1.05, r * 0.5, r * 2.1); ctx.strokeStyle = "#303040"; ctx.strokeRect(px - r * 0.25 + 0.5, py - r * 1.05 + 0.5, r * 0.5, r * 2.1); }
       if (e.type === "heavy") { ctx.fillStyle = "#101830"; ctx.fillRect(px - r * 0.5, py - r * 0.5, r, r); }
+      if (e.type === "gunner") { ctx.fillStyle = "#000"; ctx.fillRect(px, py - r * 0.15, r * 1.3, r * 0.3); }
+      if (e.type === "saboteur") { ctx.fillStyle = "#ff8000"; ctx.fillRect(px - r * 0.35, py - r * 0.35, r * 0.7, r * 0.7); }
+      if (e.type === "captain") { ctx.font = Math.floor(r * 1.3) + "px sans-serif"; ctx.fillText("⭐", px, py + 1); }
+      if (e.type === "kamikaze") { ctx.fillStyle = "#ffe000"; ctx.beginPath(); ctx.arc(px, py, r * 0.45, 0, Math.PI * 2); ctx.fill(); }
       if (e.type === "scout") { ctx.fillStyle = "#806000"; ctx.fillRect(px - r * 0.2, py - r * 0.2, r * 0.4, r * 0.4); }
     }
     if (e.slow) { ctx.strokeStyle = "#80e0ff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(px, py, r + 2, 0, Math.PI * 2); ctx.stroke(); }
     if (st.pvp) { ctx.fillStyle = e.side === 1 ? "#ff4040" : "#40a0ff"; ctx.fillRect(px - 2, py - r - 7, 4, 3); }
+    else if (e.side === -1) { ctx.strokeStyle = "#40a0ff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(px, py, r + 2, 0, Math.PI * 2); ctx.stroke(); }
     if (e.hp < 1) { ctx.fillStyle = "#000"; ctx.fillRect(px - r, py - r - 4, r * 2, 3); ctx.fillStyle = e.hp > 0.5 ? "#20e020" : e.hp > 0.25 ? "#e0c000" : "#e02020"; ctx.fillRect(px - r, py - r - 4, r * 2 * e.hp, 3); }
   }
   // effects
@@ -4790,7 +4878,7 @@ function tdDraw(cv, st, V, o) {
     if (f.k === "base") { ctx.fillStyle = "rgba(255,0,0,.5)"; ctx.beginPath(); ctx.arc(a, b, ts * 0.8, 0, Math.PI * 2); ctx.fill(); continue; }
     if (f.k === "hit") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("💥", a, b); continue; }
     const c = SX(f.x2), d = SY(f.y2);
-    ctx.strokeStyle = { gun: "#ffff60", sniper: "#ffffff", frost: "#80e0ff", zap: "#d0a0ff", aa: "#ff6060" }[f.k] || "#fff";
+    ctx.strokeStyle = { gunner: "#ffa040", gun: "#ffff60", sniper: "#ffffff", frost: "#80e0ff", zap: "#d0a0ff", aa: "#ff6060" }[f.k] || "#fff";
     ctx.lineWidth = f.k === "sniper" ? 2 : 1;
     ctx.beginPath(); ctx.moveTo(a, b);
     if (f.k === "zap") { const n = 4; for (let i = 1; i < n; i++) ctx.lineTo(a + (c - a) * i / n + (Math.random() - 0.5) * ts * 0.4, b + (d - b) * i / n + (Math.random() - 0.5) * ts * 0.4); }
@@ -4824,7 +4912,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   if (canAct) for (const ty of TD.TTYPES) {
     const T = TD.TOWERS[ty];
     const b = el("button", "tdt"); b.type = "button";
-    b.append(el("span", "ti", T.icon), el("span", "tn", T.name), el("span", "tc", "💰" + T.cost));
+    b.append(el("span", "ti", T.icon), el("span", "tn", T.name), el("span", "tc", "💰" + tdCost(st, T)));
     b.title = T.desc;
     b.onclick = () => { ui.buildType = ui.buildType === ty ? null : ty; ui.selId = null; refreshUI(); };
     tbtn[ty] = b; bar.append(b);
@@ -4869,7 +4957,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     const V = ui.V;
     if (!V) return;
     const money = Math.floor(V.money[side] || 0);
-    for (const [ty, b] of Object.entries(tbtn)) { b.classList.toggle("on", ui.buildType === ty); b.disabled = money < TD.TOWERS[ty].cost; b.hidden = st.pvp && ty === "money"; }
+    for (const [ty, b] of Object.entries(tbtn)) { b.classList.toggle("on", ui.buildType === ty); b.disabled = money < tdCost(st, TD.TOWERS[ty]); b.hidden = st.pvp && ty === "money"; }
     info.replaceChildren();
     const tw = ui.selId != null ? V.towers.find((x) => x.id === ui.selId) : null;
     if (tw) {
@@ -4877,22 +4965,24 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       const mine = canAct && tw.side === side;
       const lv = tw.lvl;
       const stats = T.dmg ? "Damage " + T.dmg[lv] + " · range " + T.range[lv] + " · every " + T.rate[lv] + " s" + (T.slow ? " · slow " + Math.round((1 - T.slow[lv]) * 100) + "%" : "") + (T.chain ? " · jumps " + T.chain[lv] : "") + (T.splash ? " · blast " + T.splash[lv] : "")
+        : T.every ? "Sends " + T.units[lv].map((u) => TD.ICON[u] + " " + TD.ENEMIES[u].name).join(", ") + " (one every " + T.every[lv] + " s)" + (st.pvp ? " to attack the other base" : " as allies")
         : "Income: +" + T.income[lv] + " 💰 every wave";
       info.append(el("b", null, T.icon + " " + T.name + " (level " + (lv + 1) + "/3)"), el("span", "dim", "  " + stats));
       if (mine) {
         if (lv < 2) {
-          const u = el("button", null, "⬆ Upgrade (💰" + T.up[lv] + ")"); u.type = "button"; u.disabled = money < T.up[lv];
+          const uc = tdUpCost(st, T, lv);
+          const u = el("button", null, "⬆ Upgrade (💰" + uc + ")"); u.type = "button"; u.disabled = money < uc;
           u.onclick = () => send({ a: "up", id: tw.id });
           info.append(u);
         }
-        const spent = tw.spent ?? (T.cost + T.up.slice(0, lv).reduce((a, b) => a + b, 0));
+        const spent = tw.spent ?? (tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lv).reduce((a, b) => a + b, 0));
         const s = el("button", null, "Sell (+💰" + Math.floor(spent * 0.7) + ")"); s.type = "button";
         s.onclick = () => { send({ a: "sell", id: tw.id }); ui.selId = null; };
         info.append(s);
       }
     } else if (ui.buildType) {
       const T = TD.TOWERS[ui.buildType];
-      info.append(el("b", null, T.icon + " " + T.name + " 💰" + T.cost), el("span", "dim", "  " + T.desc + "  Click a green tile to build. Right-click to stop."));
+      info.append(el("b", null, T.icon + " " + T.name + " 💰" + tdCost(st, T)), el("span", "dim", "  " + T.desc + "  Click a green tile to build. Right-click to stop."));
     } else if (canAct) info.append(el("span", "dim", "Pick a tower below, then click on the grass. Click a tower to upgrade or sell it."));
     else info.append(el("span", "dim", "👀 You are watching."));
     if (ui.listBox) {
@@ -4986,7 +5076,7 @@ function openTdSolo() {
       let n = 0;
       while (acc >= TD.STEP && n++ < 120) { tdStep(st, TD.STEP); acc -= TD.STEP; }
     }
-    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.length + st.queue.length) + " left)" : "");
+    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
     nextB.textContent = st.wave === 0 ? "▶ Start wave 1" : st.waveOn ? "▶ Call wave " + (st.wave + 1) + " early (+💰)" : "▶ Wave " + (st.wave + 1);
     nextB.disabled = st.over || st.queue.length > 0;
     newB.hidden = st.wave > 0 && !st.over;
@@ -5213,7 +5303,7 @@ function openTd(gid) {
     const k = Math.min(1, (performance.now() - snapAt) / 200);
     return {
       money: snap.m, lives: snap.l, eco: snap.ec || [0, 0], sl: snap.sl || [[-1, 0, []], [-1, 0, []]], it: snap.it,
-      towers: snap.tw.map(([id, side, ti, lvl, lx, ly]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly })),
+      towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn })),
       enemies: snap.e.map(([id, ti, x, y, hp, slow, sd]) => {
         const c = curPos.get(id), p = prevPos.get(id) || c;
         return { id, type: TD.ETYPES[ti], x: p[0] + (c[0] - p[0]) * k, y: p[1] + (c[1] - p[1]) * k, hp: hp / 100, slow: !!slow, side: sd };
@@ -5259,7 +5349,7 @@ function tdRestore(st, s) {
   try {
     const v = JSON.parse(s);
     st.t = (v.t || 0) / 10; st.money = v.m; st.lives = v.l; if (v.ec) st.eco = v.ec;
-    st.towers = v.tw.map(([id, side, ti, lvl, lx, ly]) => { const type = TD.TTYPES[ti], T = TD.TOWERS[type]; return { id, side, type, lvl, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: T.cost + T.up.slice(0, lvl).reduce((a, b) => a + b, 0) }; });
+    st.towers = v.tw.map(([id, side, ti, lvl, lx, ly]) => { const type = TD.TTYPES[ti], T = TD.TOWERS[type]; return { id, side, type, lvl, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lvl).reduce((a, b) => a + b, 0) }; });
     st.nextId = Math.max(1, ...st.towers.map((x) => x.id), ...v.e.map((e) => e[0])) + 1;
   } catch {}
 }
