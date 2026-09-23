@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-e10Z1LumRevmj5zG+bcrJGBg78GZfDhOB2PTvIHMpko=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-YnDeORQ3CEWskarG6+I3tJ3d4FSLVE0J6jRHJSzihlU=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -516,6 +516,9 @@
   .pvpres { font-size: 18px; font-weight: bold; text-align: center; padding: 4px 12px; background: #ffe0e0; border: 2px solid #800000; }
   .pvpres.good { background: #fff4b8; border-color: #806000; }
   .lcd.hearts-lcd { color: #ff6090; }
+  .msfaceimg { width: 26px; height: 26px; image-rendering: pixelated; display: block; margin: auto; pointer-events: none; }
+  .gicon .msfaceimg { width: 40px; height: 40px; margin: 0; }
+  .gname .msfaceimg { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; margin: 0; }
   .gchip.big { display: inline-flex; margin: 2px 4px; }
   .gchip.big button { font-weight: bold; padding: 3px 10px; background: #ffe8a0; }
   .specrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 100%; }
@@ -742,7 +745,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "8.1";
+const APP_VERSION = "8.2";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -3497,6 +3500,14 @@ function applyBoard(F, b) {
   F.opened = 0; F.booms = 0;
   F.cells.forEach((c, i) => { const ch = (b || "")[i] || "."; c.open = ch === "o" || ch === "x"; c.boom = ch === "x"; c.flag = ch === "f"; if (c.open && !c.mine) F.opened++; if (c.boom) F.booms++; });
 }
+const MS_FACES = {
+  normal: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACUElEQVR4AdSXP08VQRTFB03AaDS29hj/dEYbKxNfYuz8EJZ+Ojtj8rCUAkJDAgQKGvgA0PCngPnN40xmZ+/dnfcCIRDO3pm5955zZpbdx3sU7vlnIQNfVz9eWVhkL80GSsHp7xfBQlnTambUgEinu8+DEN5chYxCqTSlviJtDgcNQJJFzfa4iJkY6l+ZgaPOlXPXAI2Il8Xu2DFBPUbgYmzBNEBDszise0tcXWBieflJvG/9kp6B2xaX5PnW52CZ6BhI4vEvPDg7mrw9Fd8sGnWTHyeznHG1THQMdHoq8iz++F9IBqs8vVn8/RrTJmQDefdlGyIREp/ub8yyhoDEh2pork8hGyA5hsnrT6lEMU2qi3KKVbo3ncsA3S3ELTVwgWTAPH6yd4TyNiQDd6TTRPswDPAmK7dTz8nVa/WcGgvNJyBCRYtMOUWrpl5rNkBjC3FLDVxCMrB2sLmkF4kSit668kPR7I2fnCsf/oeLi7P0CZYMeCQiIC4CeOkjJkTxFIvLoAEd559vO4FX7LxARxyMLWQD3m2A4Pvfd+Hy1zOr313jbUhvLrjZ/crT9Xz85LIBJh4gkgmMgMMvq6EG66An7hHH9Y4B7xRiXfovGBOMj7ZfEXpgnRoMd5LO7qnpGGChxcTP45fBwzzi6PUMsIgJHhXGNRAYQl3PvL7vrAmmAZI8p54J8qPg2COGxOFwDZCUiWYjUVBfWBAGcMDlYdAATRAATAisd3AjjKBAD+jUGZNRA+qBTJCRHOOzjbDyRPWNxWYDJRECFsoajcfiNQAAAP//TqODpgAAAAZJREFUAwC89YRQZk0nzAAAAABJRU5ErkJggg==",
+  win: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACRElEQVR4AcyXwS5DQRSGpxYqhKcgIlbCxpImYudBPJ2dSMqSBbEShKewohY1323PZGbuOXOnRRB/Z+bMf8755t5e1QX3xz9zARyu7441zXOWaoC44fBszWmKPbUwnQBSdPi06kRuc+yCok4xlORF2+q0CECR0FRN90Fg/JD/Cgw18r14bQKQSPPYbM4NCPyAUIu5JhWAhOrmVH3u8WoKiMXFJX/f2pYWwE83l5Yf9/tOg0gAmub+He46TiRFq33TBA0iAZj6JoMFQVw0cX7rNQCE08flpFE8xvtzzPOrEADyWr3tK5drcPIWYjKXvNzLWjwyF288CsD48vUuFCchNjH3V8jhyed4EfFYmh8fGo3eg1UA3PjhoCVxacXYy3OIIc2fe+WJaABIIDEXSexpJ2ev1q95JbcBkIU28keEeAxSKpj7S17qdgJgogiFGRGxkvCIv+RjrwoA42/pfwD4N1mPZ1Y7pRXXvFqsle8/Ofs7184/is0nWPEKSDLjvEqgfPNk7RdFAN5I3uOGL7cz6/zokdTmX7dmYrwEAOs2ADHY2DPS9fDn6Yo7vthKm09P31++CZef7ADAwtIsEGpzq7CPJwDWVfC+5jRdV8JsbpyeugkAgRoIQDS1LjsFC83ZbgEQBIJHhXkubkdJuZ91ft+JiVQANnlOLQj2O8XJvUrNqWECsCkQ1SC+oXxhoTGiBrUsFQFIogACQkQ80bQxDUXkoMSnLDoBJIdiIgEJo3+2aSz7jJLXNVYDxIVooCn2yLxr/AIAAP//CQpC2AAAAAZJREFUAwBc+85QsDrscQAAAABJRU5ErkJggg==",
+  lost: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACQ0lEQVR4AcSXPy8FQRTFhwKR0FNLaEWlJdH6hD6ETkMloRENQaKS6IUGDfMbeyZ35s3szPMnxNl75/475+5aL2/W/fPPtwTsrG19lPCdXboFWMLjw2VXgq3pFdMUoKHHt0tOcOsfLsIwWVHqM+miOyqAIZG02O6DiPEm/5UYZuQ5e64KoBFyW1z1KyKoRwiz8EsoCqChm5ypdzNcq0DE3NyCf26TJRMCfptclG+X264kIhEQyP1fuGtspKHddUNDSUQiYKj7MoOI3Y2Xr7OuxD1sfHf/WdnE1uK2KAqI29usJ+L5BTLva2MGE1cpPjGdsZyJ41vkdyEKsEW5zyAGEsdyxrcgRo4YljN+C10CWkN+kg8Circ/m8pGrc16ahhrH0MQQLAFkWNrteQkolaTx7sF5I2/de4SoM0grW3YU0N/jqYAO1jNuYieGvXmtikAsryJs41bn5xQiyuPDQJO7i9m2ILAn8N/cs5vnrn399fwCRYE/DmpCDy5XNmpBHCXeqDhPTYKGHsMIuWZnj5cu4PVp4CjvZtgdSZHjeoTAcP284vn8faTjwI4jIHBY3mbm6Y2EVC7C9MMlJCkp7I9tYkAAjUR5AD/x9fPH3Hd49VKsFyIkcNPMEJO3YQAgojgVcEvASIILYiVaonlz52YUBRAkve0JQJSgZ4EbO4xRk59VQBJiRgTQl2EJ9QXFogBM2K+4IwKoJ4BABEC8QQDMYQCPSCpKxyaAtTDMEFCovXvNsTKY9XXst0C7CAISrA18lv2EwAA//99uSgmAAAABklEQVQDAL9Zf1BT0hRQAAAAAElFTkSuQmCC",
+  hurt: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACZElEQVR4AcSWvU4cQRCEGwdg2bLl1DmW7dCyE0eWfJLljIcg5OnIENKRQgAiQQIEAQk8ACT8BDDfiBpm53p2lmMlEEX39E9V7d7tHW/slX/mMvB3+ee9h3muZbCBXHC6/tE85DNDzTQNiHR69MEE+3pvCZlSbkp7WdtNew1AkkTd9VDETAjlr8zAUfbyc9UAi4jnw9W8YoJ5jMBF7sE1wMJgcViPF/hbBSYWF9+G1212ZMbA2OKSvNn/bZ6JjoEoHt7h1rgikXpzk5VLA2kmSzwTHQPZrHnksY85IRae/iA8Pdk1QP7UqWfJQLr6fFZCIU6+XRnI23mOIMKqkVPTWbG8C8mABrwIEYSA3JuZt9Y0gCDCEiCnpvNLYzTg3v6XMvfs5y9DNNAzO7jFsz758ivNk1NLhUoymgH4EUQYkFNroWkAIghFRE5N5zLSA2W9dm4aYBFChAE5tbEwyABiCAPyMRENbJ3uLYz5aPUaDN+cSz+27fb2On6DRQO9C2M2g3hJN8gAd6dESTTvORmovQwIb/w7NMCnICCnLpTibv3x6pfe7aTbz14ywOE5wARmgAQVqdHn3OLsGKjdhf+b3yPP3dp7AxzODz7b2Z/lCARz0NcOefwHNiTl1YeSdQxQKE3w6AEIBcSZFWSEyGcFYAf0ibM/Y4AiJnhUyAXIhNWLT1aDZrRH9K6cOnAN0OA5LU1QBxLxIv0I3nQBfeLMVQ3QlImaEWY6CILxloeIMICjM1Mceg0wCwHAhEC9gyCIMIICO6Az5xyaBrQDmSAjKYZnG2H1idprxcEGciIEPOQzylvxAQAA///R3OdwAAAABklEQVQDAAtvkFA4wrucAAAAAElFTkSuQmCC",
+};
+function faceImg(kind) { const i = el("img", "msfaceimg"); i.alt = kind; i.src = MS_FACES[kind] || MS_FACES.normal; i.draggable = false; return i; }
+function setFace(btn, kind) { btn.replaceChildren(faceImg(kind)); btn.dataset.face = kind; }
 function lcd(n) { const s = el("span", "lcd"); s.textContent = (n < 0 ? "-" + String(-n).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); return s; }
 function setLcd(node, n) { node.textContent = (n < 0 ? "-" + String(Math.min(99, -n)).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); }
 
@@ -3678,7 +3689,7 @@ function openMinesSolo() {
     let phase = "ready", t0 = 0;
     const head = el("div", "mshead raisedin");
     const lm = lcd(F.mines), lt = lcd(0);
-    const face = el("button", "msface", "🙂"); face.type = "button"; face.title = "New game (same settings)";
+    const face = el("button", "msface"); setFace(face, "normal"); face.type = "button"; face.title = "New game (same settings)";
     face.onclick = () => play({ ...c, seed: randSeed() });
     head.append(lm, face, lt);
     const msg = el("div", "msmsg", matchMedia("(pointer: coarse)").matches ? "Tap: open · Long-press (or 🚩 Flag mode): flag · Tap a number: open around it" : "Left click: open · Right click: 🚩 flag · Click a number: open around it");
@@ -3697,7 +3708,7 @@ function openMinesSolo() {
     function tick() { setLcd(lt, Math.floor((performance.now() - t0) / 1000)); }
     function refresh() { setLcd(lm, F.left); view.paint(phase === "lost"); }
     function lose() {
-      phase = "lost"; clearInterval(timerI); face.textContent = "😵";
+      phase = "lost"; clearInterval(timerI); setFace(face, "lost");
       msg.textContent = "💥 Boom! You hit a mine. Click 😵 to try again.";
       beep([[220, 0, 0.25], [110, 0.2, 0.4]], "sawtooth", 0.06);
     }
@@ -3705,7 +3716,7 @@ function openMinesSolo() {
       phase = "won"; clearInterval(timerI);
       const ms = Math.round(performance.now() - t0);
       F.cells.forEach((x) => { if (x.mine) x.flag = true; });
-      face.textContent = "😎";
+      setFace(face, "win");
       msg.textContent = "🎉 You win! Time: " + fmtMs(ms);
       beep([[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3, 0.25]]);
       if (PRESETS[c.preset] && c.shape === "rect") saveBest(c.preset, ms, msg);
@@ -3946,7 +3957,8 @@ function openPvp(gid) {
       return;
     }
     const headB = el("div", "mshead raisedin");
-    const lm = lcd(F.left), face = el("button", "msface", "🙂"), lh = el("span", "lcd hearts-lcd");
+    const lm = lcd(F.left), face = el("button", "msface"), lh = el("span", "lcd hearts-lcd");
+    setFace(face, "normal");
     face.type = "button"; face.title = "PvP: no restart!";
     headB.append(lm, face, lh);
     const cd = el("div", "pvpcd");
@@ -3957,7 +3969,7 @@ function openPvp(gid) {
         const booms = F.cells[i].open ? F.chord(i) : F.open(i);
         if (booms) {
           lives = Math.max(0, lives - booms);
-          face.textContent = "😵"; setTimeout(() => { if (!ended) face.textContent = "🙂"; }, 700);
+          setFace(face, lives > 0 ? "hurt" : "lost"); setTimeout(() => { if (!ended && lives > 0) setFace(face, "normal"); }, 700);
           beep([[200, 0, 0.2]], "sawtooth", 0.06);
           toast(lives > 0 ? "💥 Mine! -1 ❤ (" + lives + " left)" : "💀 No more lives!");
         }
@@ -4035,7 +4047,7 @@ function openPvp(gid) {
   function end() {
     ended = true;
     if (F && G.winner === me) F.cells.forEach((x) => { if (x.mine && !x.open) x.flag = true; });
-    if (view) { view.repaint(); view.cd.hidden = true; view.face.textContent = G.winner === me ? "😎" : "😵"; }
+    if (view) { view.repaint(); view.cd.hidden = true; setFace(view.face, G.winner === me ? "win" : "lost"); }
     const txt = !isPlayer() ? "🏆 " + uname(G.winner) + " wins!" : G.winner === me ? "🏆 You win!" : "💀 You lose... " + uname(G.winner) + " wins.";
     stage.prepend(el("div", "pvpres" + (G.winner === me ? " good" : ""), txt));
     if (isPlayer()) {
@@ -4082,7 +4094,7 @@ function gameRow(gid, g, { showWhere = true } = {}) {
 function renderGamesPanel(pane) {
   pane.append(el("div", "cat", "Mini games"));
   const card = el("div", "gcard");
-  card.append(el("div", "gname", "💣 Minesweeper"));
+  const gn = el("div", "gname"); gn.append(faceImg("normal"), " Minesweeper"); card.append(gn);
   const b1 = el("button", "small", "▶ Solo"); b1.type = "button"; b1.onclick = openMinesSolo;
   const b2 = el("button", "small", "⚔ Challenge"); b2.type = "button"; b2.onclick = () => createChallenge(S.room);
   b2.disabled = !!S.me.guest; if (S.me.guest) b2.title = "Accounts only";
@@ -4109,7 +4121,8 @@ function renderGamesPage() {
   const fsG = el("fieldset", "span2"); fsG.append(el("legend", null, "🎮 Mini games"));
   const cards = el("div", "gcards");
   const c1 = el("div", "gcard big raised");
-  c1.append(el("div", "gicon", "💣"), el("div", "gname", "Minesweeper"),
+  const gi = el("div", "gicon"); gi.append(faceImg("normal"));
+  c1.append(gi, el("div", "gname", "Minesweeper"),
     el("div", "hint", "Solo: pick the size, the mines and a special map shape.\nPvP: same map for both, first to clear it wins!"));
   const r = el("div", "row-btns");
   const b1 = el("button", null, "▶ Solo"); b1.type = "button"; b1.onclick = openMinesSolo;
@@ -4128,29 +4141,8 @@ function renderGamesPage() {
   if (!open.length) listC.append(el("div", "empty-row", "No open challenge."));
   for (const [gid, g] of open) listC.append(gameRow(gid, g));
   fsC.append(listC);
-  const fsP = el("fieldset"); fsP.append(el("legend", null, "▶ Playing now / 🏆 results"));
-  const listP = el("div", "list sunken tall");
-  const recent = all.filter(([, g]) => gameState(g) === "done").slice(0, 15);
-  if (!playing.length && !recent.length) listP.append(el("div", "empty-row", "No games yet."));
-  for (const [gid, g] of [...playing, ...recent]) listP.append(gameRow(gid, g));
-  fsP.append(listP);
-  const fsB = el("fieldset", "span2"); fsB.append(el("legend", null, "🏆 Best times (Solo, rectangle maps)"));
-  const tbls = el("div", "gcards");
-  for (const [k, p] of Object.entries(PRESETS)) {
-    const box = el("div", "gscore");
-    box.append(el("b", null, p.label));
-    const rows = Object.entries(S.scores?.[k] || {}).filter(([uid]) => S.users[uid] && !S.users[uid].deleted).sort((a, b) => a[1].t - b[1].t).slice(0, 10);
-    const ol = el("ol", "sunken");
-    if (!rows.length) ol.append(el("li", "dim", "no time yet"));
-    rows.forEach(([uid, v]) => { const li = el("li" + "", uid === S.me.uid ? "mine" : null); li.append(el("span", null, uname(uid)), el("span", null, fmtMs(v.t))); ol.append(li); });
-    box.append(ol); tbls.append(box);
-  }
-  fsB.append(tbls);
-  if (!S.me.guest) {
-    const w = S.myStats?.minesW || 0, l = S.myStats?.minesL || 0;
-    fsB.append(el("div", "hint", "📊 Your PvP record: " + w + " win" + (w === 1 ? "" : "s") + " / " + l + " loss" + (l === 1 ? "" : "es")));
-  }
-  grid.append(fsG, fsC, fsP, fsB);
+  fsC.classList.add("span2");
+  grid.append(fsG, fsC);
   wrap.append(grid);
   page.append(wrap);
 }
