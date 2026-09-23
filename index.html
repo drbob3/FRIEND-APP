@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-r5F7Q+yWffx01qF/C5WRmhk3xSS5YFZKMvSjCVpjvL8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Ag7peUPkvUVxRUyAQ2Rt61cl84WOr/Z6ClhAhQT693k=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -419,6 +419,103 @@
   .mempane .cat { border-bottom: 1px dotted var(--shadow); }
   .split { gap: 4px; }
   .dir form input { flex: 1 1 220px; min-width: 0; }
+
+  /* ======== v8: pings, unread, games ======== */
+  .sv.unread { font-weight: bold; }
+  .ch.unread .n { font-weight: bold; }
+  .line.pinged { background: #fff4b8; box-shadow: inset 3px 0 #d0a000; }
+  .mention { font-weight: bold; color: #000080; background: #dde4ff; padding: 0 2px; cursor: pointer; }
+  .mention.me { background: #ffe066; color: #000; }
+  form.composer { position: relative; }
+  .mentionpop { position: absolute; left: 44px; bottom: calc(100% - 2px); z-index: 50; min-width: 220px; max-width: 320px; background: var(--face); padding: 2px;
+    border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); box-shadow: inset -1px -1px var(--shadow), inset 1px 1px var(--mid), 2px 2px 0 rgba(0,0,0,.35); }
+  .mentionpop .mphead { font-size: 11px; color: #404040; padding: 2px 4px; border-bottom: 1px solid var(--shadow); margin-bottom: 2px; }
+  .mentionpop .mpi { display: flex; align-items: center; gap: 6px; padding: 2px 6px; cursor: pointer; }
+  .mentionpop .mpi .av { width: 18px; height: 18px; font-size: 12px; }
+  .mentionpop .mpi .dim { margin-left: auto; color: #008000; font-size: 11px; }
+  .mentionpop .mpi.on, .mentionpop .mpi:hover { background: var(--select); color: #fff; }
+  .mentionpop .mpi.on .dim, .mentionpop .mpi:hover .dim { color: #cfc; }
+  .rswitch { display: flex; gap: 2px; padding: 2px 0 4px; position: sticky; top: -2px; background: inherit; z-index: 1; }
+  .rswitch button { flex: 1; min-width: 0; padding: 2px 4px; font-size: 12px; }
+  .rswitch button.on { font-weight: bold; background: #dcdcdc; border-color: var(--dark) var(--light) var(--light) var(--dark); box-shadow: inset 1px 1px var(--shadow); }
+  .gcard { padding: 4px; margin: 2px 0 4px; }
+  .gcard .gname { font-weight: bold; margin-bottom: 3px; }
+  .gcard .row-btns { margin-top: 3px; }
+  .gsoon { color: #808080; font-style: italic; font-size: 12px; padding: 0 4px 4px; }
+  .grow { display: flex; align-items: center; gap: 4px; padding: 3px 4px; border-bottom: 1px dotted #b0b0b0; font-size: 12px; }
+  .grow .gtxt { flex: 1; min-width: 0; overflow: hidden; }
+  .grow .dim { color: #555; }
+  .grow button.small, .gchip button.small { min-width: 0; padding: 0 6px; font-size: 11px; }
+  .gchip { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; }
+  .gchip .dim { color: #555; font-size: 12px; }
+  .gcards { display: flex; flex-wrap: wrap; gap: 10px; }
+  .gcard.big { width: 250px; padding: 10px; background: var(--face); display: flex; flex-direction: column; gap: 4px; }
+  .gcard.big .gicon { font-size: 34px; line-height: 1; }
+  .gcard.big .gname { font-size: 15px; }
+  .gcard.big.soon { opacity: .6; }
+  .gcard .hint { white-space: pre-line; }
+  .gscore { flex: 1 1 180px; min-width: 160px; }
+  .gscore ol { margin: 4px 0 0; padding: 4px 6px 4px 28px; background: #fff; min-height: 60px; }
+  .gscore li { font-size: 12px; }
+  .gscore li span:last-child { float: right; font-family: "Courier New", monospace; }
+  .gscore li.mine { font-weight: bold; color: #000080; }
+  #gamesPage { overflow-y: auto; }
+  /* minesweeper window */
+  .float.mswin { width: auto; min-width: 280px; max-width: calc(100vw - 16px); }
+  .float.mswin .content { align-items: center; }
+  .msboard { padding: 6px; background: var(--face); display: flex; flex-direction: column; gap: 6px; max-width: 100%; }
+  .mshead { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  .lcd { background: #000; color: #ff2020; font: bold 22px/1 "Courier New", monospace; padding: 2px 4px; letter-spacing: 1px; min-width: 50px; text-align: right; border: 1px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  .msface { min-width: 0; width: 34px; height: 34px; padding: 0; font-size: 20px; }
+  .msgridwrap { overflow: auto; max-width: calc(100vw - 50px); max-height: calc(100dvh - 230px); border: 3px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  .msgrid { --cs: 22px; display: grid; width: max-content; user-select: none; -webkit-user-select: none; touch-action: manipulation; background: #b8b8b8; }
+  .mc { width: var(--cs); height: var(--cs); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font: bold calc(var(--cs) * .62) Tahoma, sans-serif; cursor: default;
+    background: var(--face); border: calc(var(--cs) / 8) solid; border-color: var(--light) var(--shadow) var(--shadow) var(--light); }
+  .mc.void { visibility: hidden; }
+  .mc.open { border: 1px solid #909090; border-width: 0 1px 1px 0; background: #c6c6c6; }
+  .mc.flag, .mc.mine, .mc.wrong, .mc.boom { font-size: calc(var(--cs) * .55); }
+  .mc.boom { background: #ff2020; }
+  .mc.start { color: #008000; background: #d8ffd0; }
+  .mc.n1 { color: #0000ff; } .mc.n2 { color: #008000; } .mc.n3 { color: #ff0000; } .mc.n4 { color: #000080; }
+  .mc.n5 { color: #800000; } .mc.n6 { color: #008080; } .mc.n7 { color: #000; } .mc.n8 { color: #808080; }
+  .msmsg { text-align: center; font-size: 12px; max-width: 420px; white-space: pre-line; }
+  .mstools { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  .mstools button { min-width: 0; padding: 2px 8px; }
+  .mstools button.on { font-weight: bold; border-color: var(--dark) var(--light) var(--light) var(--dark); background: #dcdcdc; }
+  .mssetup { display: flex; flex-direction: column; gap: 6px; width: min(430px, calc(100vw - 40px)); }
+  .mssetup .check { display: block; margin: 2px 0; }
+  .mscustom { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 0 22px; }
+  .mscustom input, .mssetup input[type=number] { width: 58px; }
+  .msshapes { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
+  .msshapes select { font: inherit; background: #fff; border-radius: 0; padding: 2px; }
+  .mspreview { border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); image-rendering: pixelated; }
+  .msinfo { flex: 1; font-size: 12px; color: #202020; align-self: center; }
+  .msgo { font-weight: bold; }
+  .pvphead { width: 100%; }
+  .pvptitle { font-weight: bold; text-align: center; }
+  .pvpbars { width: 100%; display: flex; flex-direction: column; gap: 3px; min-width: min(420px, calc(100vw - 40px)); }
+  .pvprow { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 2px 4px; }
+  .pvprow.me { background: #e8e8ff; }
+  .pvprow.win { background: #fff4b8; }
+  .pvprow .pvpname { width: 120px; display: flex; align-items: center; gap: 3px; overflow: hidden; white-space: nowrap; font-weight: bold; }
+  .pvprow .pvpname .av { width: 16px; height: 16px; font-size: 11px; flex-shrink: 0; }
+  .pvpbar { flex: 1; height: 16px; background: #fff; position: relative; min-width: 60px; }
+  .pvpbar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(90deg, #000080 0 8px, #fff 8px 10px); }
+  .pvpbar .pct { position: absolute; right: 2px; top: 1px; font-size: 10px; line-height: 12px; color: #000; background: #fff; padding: 0 2px; }
+  .pvprow .hearts { white-space: nowrap; font-size: 11px; }
+  .pvprow .pvpst { width: 74px; text-align: right; color: #404040; white-space: nowrap; }
+  .pvprow button { min-width: 0; padding: 0 5px; font-size: 11px; }
+  .pvptime { text-align: center; font-weight: bold; font-family: "Courier New", monospace; }
+  .pvpstage { display: flex; flex-direction: column; align-items: center; gap: 6px; max-width: 100%; }
+  .pvpboardwrap { position: relative; max-width: 100%; }
+  .pvpcd { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: bold 64px Tahoma, sans-serif; color: #fff; text-shadow: 3px 3px 0 #000; background: rgba(0,0,64,.35); pointer-events: none; }
+  .pvpcd[hidden] { display: none; }
+  .pvpwait { text-align: center; padding: 14px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; min-width: min(380px, calc(100vw - 40px)); }
+  .pvpwait input { width: 100%; font-size: 12px; }
+  .pvpbig { font-size: 17px; font-weight: bold; }
+  .pvpres { font-size: 18px; font-weight: bold; text-align: center; padding: 4px 12px; background: #ffe0e0; border: 2px solid #800000; }
+  .pvpres.good { background: #fff4b8; border-color: #806000; }
+  .lcd.hearts-lcd { color: #ff6090; }
   @media (max-width: 1100px) {
     .mempane { position: fixed; right: 0; top: 0; bottom: 0; z-index: 501; box-shadow: -2px 0 0 var(--dark); transform: translateX(105%); transition: transform .15s; }
     .mempane.open { transform: none; }
@@ -463,11 +560,13 @@
     <button type="button" data-t="about">ℹ About</button>
     <button type="button" data-t="dir" id="dirTabBtn">🔎 Directory</button>
     <button type="button" data-t="chat" class="on">💬 Chat</button>
+    <button type="button" data-t="games">🎮 Games</button>
     <button type="button" data-t="admin" id="adminTabBtn" hidden>🔧 Admin<span id="adminTabBadge" class="redbadge" hidden></span></button>
   </div>
   <div class="tabline"></div>
   <div class="page sunken" id="aboutPage" hidden></div>
   <div class="page sunken" id="dirPage" hidden></div>
+  <div class="page sunken graypage" id="gamesPage" hidden></div>
   <div class="page sunken graypage" id="adminPage" hidden>
     <div class="admin">
       <div class="agrid">
@@ -550,11 +649,13 @@
         <span class="cd" id="chatDesc"></span>
         <button id="inviteBtn" title="Invite people">Invite...</button>
         <button id="membersBtn" title="Show / hide members">👥 Members</button>
+        <button id="gamesBtn" title="Mini games">🎮 Games</button>
         <button id="moreBtn" title="More actions">More ▾</button>
       </div>
       <div class="banner" id="banner"></div>
       <div id="messages" class="sunken"></div>
       <form class="composer" id="composer">
+        <div class="mentionpop" id="mentionPop" hidden></div>
         <button type="button" id="attachBtn" title="Send images, videos or files">📎</button>
         <input type="file" id="fileInput" multiple hidden>
         <textarea id="input" class="sunken" rows="1" maxlength="500" placeholder="Type a message..."></textarea>
@@ -631,7 +732,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "7.1";
+const APP_VERSION = "8.0";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -796,7 +897,7 @@ function appendRichText(parent, text, msg) {
   let last = 0;
   for (const match of text.matchAll(URL_RE)) {
     const url = cleanUrl(match[0]);
-    parent.append(text.slice(last, match.index));
+    appendMentions(parent, text.slice(last, match.index));
     const a = el("a", null, url);
     a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
     const vid = parseVideo(url);
@@ -810,7 +911,7 @@ function appendRichText(parent, text, msg) {
     parent.append(a);
     last = match.index + url.length;
   }
-  parent.append(text.slice(last));
+  appendMentions(parent, text.slice(last));
 }
 
 let zTop = 10, cascade = 0;
@@ -842,10 +943,10 @@ function openWindow(title, icon, { key, narrow } = {}) {
   cascade = (cascade + 1) % 6;
   w.style.left = x + "px"; w.style.top = y + "px";
   focusWindow(w);
-  const api = { w, content, setTitle: (s) => { t.textContent = s; }, close: () => { w.remove(); if (key) openWins.delete(key); } };
+  const api = { w, content, setTitle: (s) => { t.textContent = s; }, close: () => { if (!w.isConnected) return; w.remove(); if (key) openWins.delete(key); try { api.onClosed && api.onClosed(); } catch {} } };
   if (key) openWins.set(key, api);
   w.addEventListener("pointerdown", () => focusWindow(w));
-  bClose.addEventListener("click", () => api.close());
+  bClose.addEventListener("click", async () => { if (api.beforeClose && !(await api.beforeClose())) return; api.close(); });
   bMax.addEventListener("click", () => { w.classList.toggle("max"); bMax.textContent = w.classList.contains("max") ? "❐" : "□"; });
   bar.addEventListener("dblclick", (e) => { if (e.target === bar || e.target === t) bMax.click(); });
   bar.addEventListener("pointerdown", (e) => {
@@ -986,7 +1087,8 @@ const S = {
   room: null, readOnly: false, legacyView: false, tab: "chat", about: null, home: false,
   showMembers: store("chat-members") !== "0",
   messages: [], deleted: {}, showDeleted: false,
-  unread: {}, connected: false, serverOffset: 0,
+  unread: {}, pings: {}, connected: false, serverOffset: 0,
+  games: {}, gamesLoaded: false, scores: {}, myStats: {}, rightMode: store("right-mode") === "games" ? "games" : "members",
 };
 const unsubs = [];
 let roomUnsubs = [];
@@ -1241,11 +1343,12 @@ function startApp() {
     sub(R("friendReqs/" + S.me.uid), (s) => {
       const before = S.reqIn;
       S.reqIn = s.val() || {};
-      if (!firstReq) for (const uid of Object.keys(S.reqIn)) if (!before[uid]) toast("➕ " + displayName(S.users[uid]) + " sent you a friend request!");
+      if (!firstReq) for (const uid of Object.keys(S.reqIn)) if (!before[uid]) { toast("➕ " + displayName(S.users[uid]) + " sent you a friend request!"); pingSound(); }
       firstReq = false;
-      renderSide();
+      renderSide(); updateTitleCount();
     });
   }
+  startGamesSub();
   boot();
 }
 
@@ -1266,16 +1369,20 @@ async function boot() {
   const h = parseHash();
   if (h.room) await openRoom(h.room, h.code);
   else await goDefault();
-  if (!h.room) setTab(store("chat-tab") || "chat");
+  if (!h.room) setTab(h.game ? "games" : (store("chat-tab") || "chat"));
+  if (h.game) { openPvp(h.game); history.replaceState(null, "", location.pathname + (S.room ? "#room=" + S.room : "")); }
 }
 function parseHash() {
   const room = (location.hash.match(/room=(dm-[A-Za-z0-9]+-[A-Za-z0-9]+|[a-z0-9-]{3,40})/i) || [])[1];
   const code = (location.hash.match(/code=([a-z0-9]{16,40})/i) || [])[1];
-  return { room: room ? (room.startsWith("dm-") ? room : room.toLowerCase()) : null, code: code || null };
+  const game = (location.hash.match(/game=([-A-Za-z0-9_]{12,40})/) || [])[1];
+  if (game) return { room: null, code: null, game };
+  return { room: room ? (room.startsWith("dm-") ? room : room.toLowerCase()) : null, code: code || null, game: null };
 }
 window.addEventListener("hashchange", () => {
   if (!started) return;
   const h = parseHash();
+  if (h.game) { openPvp(h.game); history.replaceState(null, "", location.pathname + (S.room ? "#room=" + S.room : "")); return; }
   if (h.room && h.room !== S.room) openRoom(h.room, h.code);
 });
 async function goDefault() {
@@ -1388,7 +1495,7 @@ function parseMsg(key, x) {
   return {
     key, uid: x.uid || null, name: x.name || "?", guest: !!x.guest, color: x.color, icon: x.icon || null,
     text: x.text || "", ts: x.ts || 0, media: x.media || null,
-    files: x.files ? Object.values(x.files) : null, folder: x.folder || null,
+    files: x.files ? Object.values(x.files) : null, folder: x.folder || null, game: typeof x.game === "string" ? x.game : null,
   };
 }
 function syncDeletedSub() {
@@ -1401,7 +1508,7 @@ function syncDeletedSub() {
 
 let markTimer = null;
 function markRead() {
-  if (!S.room || S.readOnly || document.hidden) return;
+  if (!S.room || S.readOnly || document.hidden || S.tab !== "chat") return;
   const dm = isDM(S.room);
   const entry = dm ? S.myDMs[S.room] : S.myChats[S.room];
   if (!entry) return;
@@ -1415,7 +1522,7 @@ function markRead() {
     D.update(R(path), { lastRead: last }).catch((e) => logError("Mark read: " + e.message));
   }, 800);
 }
-document.addEventListener("visibilitychange", markRead);
+document.addEventListener("visibilitychange", () => { markRead(); updateTitleCount(); if (started) renderSide(); });
 
 function syncUnreadSubs() {
   const want = new Map();
@@ -1430,11 +1537,23 @@ function syncUnreadSubs() {
     if (unreadSubs.has(room)) continue;
     const q = D.query(R("rooms/" + room), D.orderByChild("ts"), D.startAfter(lastRead), D.limitToLast(99));
     const unsub = D.onValue(q, (snap) => {
-      let n = 0;
-      snap.forEach((c) => { if (c.val()?.uid !== S.me.uid) n++; });
+      let n = 0, p = 0;
+      const dm = isDM(room);
+      snap.forEach((c) => {
+        const x = c.val() || {};
+        if (x.uid === S.me.uid) return;
+        n++;
+        if (!dm && !mentionsMe(x.text, x.uid)) return;
+        p++;
+        if (pingSeen.has(c.key)) return;
+        pingSeen.add(c.key);
+        if ((x.ts || 0) > BOOT_TIME + (S.serverOffset || 0) && !viewing(room)) notifyPing(room, x, dm);
+      });
       S.unread[room] = n;
+      S.pings[room] = p;
       renderSide();
-    }, () => { S.unread[room] = 0; });
+      updateTitleCount();
+    }, () => { S.unread[room] = 0; S.pings[room] = 0; });
     unreadSubs.set(room, { lastRead, unsub });
   }
 }
@@ -1772,7 +1891,9 @@ async function openProfile(uid) {
   ];
   if (S.friends[uid]) rows.push(["Friends since", fmtDate(S.friends[uid].since)]);
   if (S.isAdmin && S.bans[uid]) rows.push(["Status", "⛔ Banned"]);
-  const { tbl } = infoTable(rows);
+  if (!u.guest && !u.deleted) rows.push(["Minesweeper PvP", "...", "pvp"]);
+  const { tbl, refs } = infoTable(rows);
+  if (refs.pvp) D.get(R("stats/" + uid)).then((s) => { const v = s.val() || {}; const w = v.minesW || 0, l = v.minesL || 0; refs.pvp.textContent = w + " win" + (w === 1 ? "" : "s") + " / " + l + " loss" + (l === 1 ? "" : "es"); }).catch(() => { refs.pvp.textContent = "?"; });
   const bioBox = el("fieldset"); bioBox.append(el("legend", null, "Bio"));
   const bio = el("div", "bio sunken", u.bio || (u.guest ? "(guests have no bio)" : "(no bio yet)"));
   if (!u.bio) bio.style.color = "#808080";
@@ -1814,7 +1935,7 @@ function openSettings() {
     const txt = el("div", null, "Guests can't change their icon or write a bio.\nCreate an account to get your own icon, a bio, friends and DMs!");
     txt.style.whiteSpace = "pre-line";
     const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
-    content.append(head, txt, btns);
+    content.append(head, txt, soundBox(), btns);
     return;
   }
   let icon = u.icon || null, avatar = u.avatar || null, color = u.color || COLORS[0];
@@ -1877,8 +1998,17 @@ function openSettings() {
   const delBtn = el("button", "danger", "Delete my account...");
   delBtn.onclick = () => deleteMyAccount(close);
   fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
-  content.append(fsI, fsB, fsC, btns, fsX);
+  content.append(fsI, fsB, fsC, soundBox(), btns, fsX);
   refresh();
+}
+function soundBox() {
+  const fs = el("fieldset"); fs.append(el("legend", null, "🔔 Sounds"));
+  const l = el("label", "check"); const c = el("input"); c.type = "checkbox"; c.checked = soundOn();
+  c.onchange = () => { store("ping-sound", c.checked ? "1" : "0"); if (c.checked) pingSound(); };
+  const test = el("button", "small", "▶ Test"); test.type = "button"; test.onclick = () => { const was = store("ping-sound"); store("ping-sound", "1"); pingSound(); if (was === "0") store("ping-sound", "0"); };
+  l.append(c, " Play a sound when someone pings me (@my_name) or sends me a DM");
+  fs.append(l, test, el("div", "hint", "Saved on this device only."));
+  return fs;
 }
 
 async function deleteMyAccount(closeWin) {
@@ -2181,15 +2311,18 @@ function initials(name) {
   const w = [...String(name)];
   return (w[0] || "?").toUpperCase() + (w[1] || "");
 }
-function unreadIn(base) { return (S.unread[base] || 0) + subsOf(base).reduce((n, [sid]) => n + (S.unread[sid] || 0), 0); }
+const viewing = (r) => r === S.room && S.tab === "chat" && !document.hidden;
+function unreadIn(base) { return [base, ...subsOf(base).map(([sid]) => sid)].reduce((n, r) => n + (viewing(r) ? 0 : (S.unread[r] || 0)), 0); }
+function pingsIn(base) { return [base, ...subsOf(base).map(([sid]) => sid)].reduce((n, r) => n + (viewing(r) ? 0 : (S.pings[r] || 0)), 0); }
 function renderRail() {
   const rail = $("rail");
   rail.replaceChildren();
   const server = curServer();
-  const mk = (label, title, on, onClick, dot, cls) => {
+  const mk = (label, title, on, onClick, dot, cls, bold) => {
     const w = el("div", "svw");
     if (on) w.append(el("span", "pill"));
-    const b = el("button", "sv" + (on ? " on" : "") + (cls ? " " + cls : ""), label);
+    const b = el("button", "sv" + (on ? " on" : "") + (cls ? " " + cls : "") + (bold ? " unread" : ""), label);
+    if (dot) b.title = title + " — " + dot + " ping" + (dot > 1 ? "s" : "");
     b.type = "button"; b.title = title;
     b.addEventListener("click", onClick);
     if (dot) b.append(el("span", "dot", dot > 99 ? "99+" : String(dot)));
@@ -2197,14 +2330,13 @@ function renderRail() {
     rail.append(w);
     return b;
   };
-  const homeUnread = Object.keys(S.myDMs).reduce((n, d) => n + (d === S.room ? 0 : (S.unread[d] || 0)), 0) + Object.keys(S.reqIn).length;
-  mk("✉ Home", "Friends & direct messages", server === "home", goHome, homeUnread);
+  const homePings = Object.keys(S.myDMs).reduce((n, d) => n + (viewing(d) ? 0 : (S.pings[d] || 0)), 0) + Object.keys(S.reqIn).length;
+  mk("✉ Home", "Friends & direct messages", server === "home", goHome, homePings, "", homePings > 0);
   rail.append(el("div", "railtitle", "My chats"));
   const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].parent).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
   for (const r of mine) {
     const c = S.chats[r];
-    const n = server === r ? 0 : unreadIn(r);
-    const b = mk((c.type === "private" ? "🔒 " : "# ") + c.name, (c.desc ? c.name + " - " + c.desc : c.name), server === r, () => openServer(r), n, "");
+    const b = mk((c.type === "private" ? "🔒 " : "# ") + c.name, (c.desc ? c.name + " - " + c.desc : c.name), server === r, () => openServer(r), pingsIn(r), "", unreadIn(r) > 0);
     bindMenu(b, async (x, y) => { if (curServer() !== r) await openServer(r); roomMenu(x, y); });
   }
   if (!mine.length) rail.append(el("div", "railhint", "No chats yet"));
@@ -2236,14 +2368,14 @@ function showHome() {
   setLoc();
   renderToolbar(); renderSide(); render();
 }
-function chRow(parent, { label, icon, sel, unread, title, onClick, onMenu, extra, hash }) {
+function chRow(parent, { label, icon, sel, unread, pings, title, onClick, onMenu, extra, hash }) {
   const it = el("div", "ch" + (sel ? " sel" : "") + (unread ? " unread" : ""));
   if (hash) it.append(el("span", "hash", hash));
   if (icon) it.append(icon);
   const n = el("span", "n", label);
   it.append(n);
   if (extra) it.append(extra);
-  if (unread) it.append(el("span", "badge", unread > 99 ? "99+" : String(unread)));
+  if (pings) { const bd = el("span", "badge", pings > 99 ? "99+" : String(pings)); bd.title = pings + " ping" + (pings > 1 ? "s" : ""); it.append(bd); }
   if (title) it.title = title;
   if (onClick) it.addEventListener("click", onClick);
   if (onMenu) bindMenu(it, onMenu);
@@ -2295,7 +2427,7 @@ function renderChannels() {
       const on = isOnline(uid);
       const it = chRow(col, {
         label: displayName(S.users[uid]), icon: iconNode(uid), sel: dm === S.room,
-        unread: dm === S.room ? 0 : (S.unread[dm] || 0),
+        unread: viewing(dm) ? 0 : (S.unread[dm] || 0), pings: viewing(dm) ? 0 : (S.pings[dm] || 0),
         onClick: () => openRoom(dm), onMenu: (x, y) => personMenu(x, y, uid),
       });
       it.prepend(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"));
@@ -2322,7 +2454,7 @@ function renderChannels() {
   }
   col.append(cat);
   const row = (id, name) => chRow(col, {
-    hash: "#", label: name, sel: id === S.room, unread: id === S.room ? 0 : (S.unread[id] || 0),
+    hash: "#", label: name, sel: id === S.room, unread: viewing(id) ? 0 : (S.unread[id] || 0), pings: viewing(id) ? 0 : (S.pings[id] || 0),
     title: S.chats[id]?.desc || "", onClick: () => openRoom(id),
     onMenu: async (x, y) => { if (S.room !== id) await openRoom(id); roomMenu(x, y); },
   });
@@ -2359,6 +2491,14 @@ function renderMembers() {
   if (wide) { pane.hidden = !(has && S.showMembers); pane.classList.remove("open"); }
   else pane.hidden = !has;
   if (!has) return;
+  const sw = el("div", "rswitch");
+  for (const [k, t] of [["members", "👥 Members"], ["games", "🎮 Games"]]) {
+    const b = el("button", S.rightMode === k ? "on" : null, t); b.type = "button";
+    b.onclick = () => { S.rightMode = k; store("right-mode", k); renderMembers(); renderToolbar(); };
+    sw.append(b);
+  }
+  pane.append(sw);
+  if (S.rightMode === "games") { renderGamesPanel(pane); return; }
   const ids = Object.keys(S.members).filter((u) => S.users[u]);
   const on = sortPeople(ids.filter(isOnline)), off = sortPeople(ids.filter((u) => !isOnline(u)));
   const add = (uid) => {
@@ -2378,7 +2518,9 @@ function renderMembers() {
   on.forEach(add);
   if (off.length) { pane.append(el("div", "cat", "Offline — " + off.length)); off.forEach(add); }
 }
-function toggleMembers() {
+function toggleMembers(mode) {
+  if (mode && innerWidth > 1100 && S.showMembers && S.rightMode !== mode) { S.rightMode = mode; store("right-mode", mode); renderMembers(); return; }
+  if (mode && S.rightMode !== mode) { S.rightMode = mode; store("right-mode", mode); renderMembers(); if (innerWidth <= 1100 && $("memPane").classList.contains("open")) return; }
   if (innerWidth > 1100) {
     S.showMembers = !S.showMembers;
     store("chat-members", S.showMembers ? "1" : "0");
@@ -2489,7 +2631,9 @@ function renderToolbar() {
   $("inviteBtn").hidden = dm || !chat || archived || (bchat?.type === "private" && !member && !S.isAdmin);
   $("moreBtn").hidden = !S.room;
   $("membersBtn").hidden = !S.room;
-  $("membersBtn").classList.toggle("on", innerWidth > 1100 && S.showMembers);
+  $("membersBtn").classList.toggle("on", innerWidth > 1100 && S.showMembers && S.rightMode === "members");
+  $("gamesBtn").hidden = !S.room;
+  $("gamesBtn").classList.toggle("on", innerWidth > 1100 && S.showMembers && S.rightMode === "games");
   const locked = !!S.settings.lockdown && !S.isAdmin;
   const canWrite = !!S.room && !S.readOnly && !S.banned && !locked;
   $("input").disabled = !canWrite;
@@ -2560,7 +2704,7 @@ function render() {
   for (const m of list) {
     const key = (m.uid || m.name) + "|" + m.guest;
     if (prevKey !== null && key !== prevKey) box.append(el("div", "sep", SEP));
-    const line = el("div", "line" + (m.deletedView ? " deleted" : ""));
+    const line = el("div", "line" + (m.deletedView ? " deleted" : "") + (mentionsMe(m.text, m.uid) ? " pinged" : ""));
     line.dataset.key = m.key;
     const u = m.uid ? S.users[m.uid] : null;
     const who = el("span", "who", m.name);
@@ -2574,6 +2718,7 @@ function render() {
     const text = el("span");
     appendRichText(text, m.text || "", m);
     parts.push(text);
+    if (m.game && /^⚔/.test(m.text || "")) parts.push(gameChip(m.game));
     line.append(...parts);
     if (m.deletedView) {
       const by = m.deletedView.by === m.uid ? "by author" : "by admin " + (S.users[m.deletedView.by]?.name || "");
@@ -2842,19 +2987,22 @@ const DEFAULT_ABOUT = [
 function setTab(t) {
   if (t === "dir" && (!S.me || S.me.guest)) t = "chat";
   if (t === "admin" && !S.isAdmin) t = "chat";
-  if (!["about", "dir", "chat", "admin"].includes(t)) t = "chat";
+  if (!["about", "dir", "chat", "games", "admin"].includes(t)) t = "chat";
   S.tab = t;
   store("chat-tab", t);
   document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
   $("chatSplit").hidden = t !== "chat";
   $("aboutPage").hidden = t !== "about";
   $("dirPage").hidden = t !== "dir";
+  $("gamesPage").hidden = t !== "games";
   $("adminPage").hidden = t !== "admin";
   closeMenu();
   closeSide();
   if (t === "about") renderAbout();
   if (t === "dir") renderDirectory();
-  if (t === "chat") { renderSide(); render(); }
+  if (t === "games") { startGamesTabSubs(); renderGamesPage(); }
+  updateTitleCount();
+  if (t === "chat") { renderSide(); render(); markRead(); }
   if (t === "admin") { renderReports(); renderAdminLists(); renderDebug(); loadAdminChats(); }
 }
 document.querySelectorAll("#mainTabs button").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.t)));
@@ -2986,7 +3134,8 @@ async function logout() {
 /* ========================= UI WIRING ========================= */
 $("inviteBtn").addEventListener("click", inviteLink);
 $("moreBtn").addEventListener("click", () => { const r = $("moreBtn").getBoundingClientRect(); roomMenu(r.right - 200, r.bottom); });
-$("membersBtn").addEventListener("click", () => { toggleMembers(); renderToolbar(); });
+$("membersBtn").addEventListener("click", () => { toggleMembers("members"); renderToolbar(); });
+$("gamesBtn").addEventListener("click", () => { toggleMembers("games"); renderToolbar(); });
 $("pingBtn").addEventListener("click", ping);
 $("scanBtn").addEventListener("click", scanDatabase);
 $("archiveBtn").addEventListener("click", openArchive);
@@ -3027,13 +3176,18 @@ $("messages").addEventListener("drop", (e) => { const list = [...(e.dataTransfer
 
 const input = $("input");
 input.addEventListener("input", () => { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 110) + "px"; });
-input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("composer").requestSubmit(); } });
+input.addEventListener("keydown", (e) => { if (mentionKey(e)) return; if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("composer").requestSubmit(); } });
+input.addEventListener("input", updateMentionPop);
+input.addEventListener("click", updateMentionPop);
+input.addEventListener("blur", () => setTimeout(hideMentionPop, 150));
 let lastSend = 0;
 $("composer").addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = input.value.trim().slice(0, MAX_LEN);
   if (!text || !S.room || S.readOnly) return;
   if (S.me.guest && LINK_RE.test(text)) { showBanner("Guests can't send links. Create an account to share links!"); return; }
+  if (/@everyone(?![A-Za-z0-9_])/i.test(text) && !S.isAdmin) { showBanner("Only admins can use @everyone. Ping people with @their_name instead."); return; }
+  hideMentionPop();
   const wait = 950 - (Date.now() - lastSend);
   input.value = "";
   if (wait > 0) await new Promise((r) => setTimeout(r, wait));   // small anti-spam: wait instead of dropping
@@ -3044,6 +3198,959 @@ $("composer").addEventListener("submit", async (e) => {
   catch (err) { input.value = text; showBanner("Message not sent: " + authError(err)); }
 });
 setInterval(() => { if (started) renderSide(); }, 60000);
+
+/* ========================= PINGS (@mentions) + SOUND ========================= */
+const escRe = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function mentionsMe(text, fromUid) {
+  if (!text || !S.me || fromUid === S.me.uid) return false;
+  if (/@everyone(?![A-Za-z0-9_])/i.test(text) && isAdminUid(fromUid)) return true;
+  return new RegExp("@" + escRe(S.me.name) + "(?![A-Za-z0-9_])", "i").test(text);
+}
+let nameMapFor = null, nameMap = new Map();
+function userByName(lower) {
+  if (nameMapFor !== S.users) {
+    nameMap = new Map();
+    for (const [uid, u] of Object.entries(S.users)) if (u && !u.deleted && u.name) nameMap.set(u.name.toLowerCase(), uid);
+    nameMapFor = S.users;
+  }
+  return nameMap.get(lower);
+}
+const MENTION_RE = /@([A-Za-z0-9_]{1,24})/g;
+function appendMentions(parent, s) {
+  let last = 0;
+  for (const m of s.matchAll(MENTION_RE)) {
+    const low = m[1].toLowerCase();
+    const uid = low === "everyone" ? null : userByName(low);
+    if (low !== "everyone" && !uid) continue;
+    parent.append(s.slice(last, m.index));
+    const me = low === "everyone" || (S.me && low === S.me.name.toLowerCase());
+    const sp = el("span", "mention" + (me ? " me" : ""), "@" + (uid ? S.users[uid].name : "everyone"));
+    if (uid) { sp.title = "View profile"; sp.addEventListener("click", (e) => { e.stopPropagation(); openProfile(uid); }); }
+    parent.append(sp);
+    last = m.index + m[0].length;
+  }
+  parent.append(s.slice(last));
+}
+
+let audioCtx = null;
+function soundOn() { return store("ping-sound") !== "0"; }
+function unlockAudio() {
+  try { audioCtx ||= new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === "suspended") audioCtx.resume(); } catch {}
+}
+document.addEventListener("pointerdown", unlockAudio, { capture: true });
+document.addEventListener("keydown", unlockAudio, { capture: true });
+function beep(notes, type = "square", vol = 0.07) {
+  if (!soundOn()) return;
+  try {
+    unlockAudio();
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime + 0.01;
+    for (const [f, d, len = 0.1] of notes) {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t + d);
+      g.gain.exponentialRampToValueAtTime(vol, t + d + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d + len);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t + d); o.stop(t + d + len + 0.02);
+    }
+  } catch {}
+}
+const pingSound = () => beep([[880, 0], [1320, 0.11, 0.16]]);
+const pingSeen = new Set();
+function notifyPing(room, x, dm) {
+  pingSound();
+  if (!dm) toast("🔔 " + (x.name || "?") + " pinged you in " + chatLabel(room));
+}
+function totalPings() {
+  let n = Object.keys(S.reqIn).length;
+  for (const [room, p] of Object.entries(S.pings)) if (!viewing(room)) n += p || 0;
+  return n;
+}
+function updateTitleCount() {
+  const n = totalPings();
+  const base = "Hangout Chat";
+  const want = (n ? "(" + (n > 99 ? "99+" : n) + ") " : "") + base;
+  if (document.title !== want) document.title = want;
+}
+
+/* ----- @ autocomplete in the message box ----- */
+let mItems = [], mSel = 0;
+function mentionPopOpen() { return !$("mentionPop").hidden; }
+function hideMentionPop() { $("mentionPop").hidden = true; mItems = []; }
+function mentionCandidates() {
+  const ids = Object.keys(S.members).filter((u) => u !== S.me.uid && S.users[u] && !S.users[u].deleted);
+  const list = sortPeople(ids).map((u) => ({ uid: u, name: S.users[u].name }));
+  if (S.isAdmin && S.room && !isDM(S.room)) list.push({ uid: null, name: "everyone" });
+  return list;
+}
+function updateMentionPop() {
+  const inp = $("input");
+  const before = inp.value.slice(0, inp.selectionStart);
+  const m = before.match(/(?:^|\s)@([A-Za-z0-9_]{0,20})$/);
+  if (!m || inp.disabled || !S.room) return hideMentionPop();
+  const q = m[1].toLowerCase();
+  mItems = mentionCandidates().filter((c) => c.name.toLowerCase().startsWith(q) && !/\s/.test(c.name)).slice(0, 8);
+  if (!mItems.length) return hideMentionPop();
+  mSel = Math.min(mSel, mItems.length - 1);
+  const pop = $("mentionPop");
+  pop.replaceChildren(el("div", "mphead", "Ping someone:"));
+  mItems.forEach((c, i) => {
+    const it = el("div", "mpi" + (i === mSel ? " on" : ""));
+    if (c.uid) it.append(iconNode(c.uid), el("span", null, c.name + (S.users[c.uid].guest ? " [GUEST]" : "")), el("span", "dim", isOnline(c.uid) ? "●" : ""));
+    else it.append(el("span", "av", "📢"), el("span", null, "everyone"), el("span", "dim", "admins only"));
+    it.addEventListener("mousedown", (e) => { e.preventDefault(); pickMention(c.name); });
+    pop.append(it);
+  });
+  pop.hidden = false;
+}
+function pickMention(name) {
+  const inp = $("input");
+  const pos = inp.selectionStart;
+  const before = inp.value.slice(0, pos).replace(/@([A-Za-z0-9_]{0,20})$/, "@" + name + " ");
+  inp.value = before + inp.value.slice(pos);
+  inp.selectionStart = inp.selectionEnd = before.length;
+  hideMentionPop();
+  inp.focus();
+}
+function mentionKey(e) {
+  if (!mentionPopOpen()) return false;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    mSel = (mSel + (e.key === "ArrowDown" ? 1 : -1) + mItems.length) % mItems.length;
+    updateMentionPop();
+    return true;
+  }
+  if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); if (mItems[mSel]) pickMention(mItems[mSel].name); return true; }
+  if (e.key === "Escape") { e.preventDefault(); hideMentionPop(); return true; }
+  return false;
+}
+
+/* ========================= GAMES: MINESWEEPER ========================= */
+const srvNow = () => Date.now() + (S.serverOffset || 0);
+const SHAPES = { rect: "⬛ Rectangle", heart: "❤ Heart", circle: "⚪ Circle", diamond: "🔷 Diamond", cross: "➕ Cross", donut: "🍩 Donut", blob: "🎲 Random blob" };
+const PRESETS = {
+  beginner: { w: 9, h: 9, mines: 10, label: "Beginner" },
+  intermediate: { w: 16, h: 16, mines: 40, label: "Intermediate" },
+  expert: { w: 30, h: 16, mines: 99, label: "Expert" },
+};
+const OPEN_TTL = 24 * 3600 * 1000;      // a challenge nobody accepts disappears after 1 day
+const PLAY_TTL = 60 * 60 * 1000;        // a game still "playing" after 1 hour is abandoned
+const GONE_AFTER = 90 * 1000;           // opponent silent for 90 s -> you can claim the win
+function defaultLives(mines) { return Math.max(1, Math.min(10, Math.round(mines * 3 / 7))); }
+function shapeName(s) { return (SHAPES[s] || SHAPES.rect).replace(/^\S+\s/, ""); }
+function cfgText(c) { return c.w + "×" + c.h + (c.shape && c.shape !== "rect" ? " " + shapeName(c.shape).toLowerCase() : "") + ", " + c.mines + " mines" + (c.lives ? ", " + c.lives + " ❤" : ""); }
+function randSeed() { return crypto.getRandomValues(new Uint32Array(1))[0] % 2000000000; }
+function fmtMs(ms) { const s = Math.max(0, ms) / 1000; return s < 60 ? s.toFixed(1) + "s" : Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0"); }
+function gameLink(gid) { return location.origin + location.pathname + "#game=" + gid; }
+function gameState(g) {
+  if (!g) return "gone";
+  if (g.status === "open") return (srvNow() - (g.createdAt || 0) > OPEN_TTL) ? "expired" : "open";
+  if (g.status === "playing") return (srvNow() - (g.createdAt || 0) > PLAY_TTL + OPEN_TTL) ? "abandoned" : "playing";
+  return "done";
+}
+function uname(uid) { return S.users[uid]?.name || "?"; }
+
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function shapeMask(shape, w, h, seed) {
+  const m = new Array(w * h).fill(true);
+  if (shape === "blob") {
+    m.fill(false);
+    const r = rng(seed ^ 0x51ed);
+    const target = Math.max(12, Math.round(w * h * 0.62));
+    const cx = w >> 1, cy = h >> 1; m[cy * w + cx] = true; let n = 1;
+    const edge = [cy * w + cx];
+    let guard = 0;
+    while (n < target && guard++ < w * h * 60) {
+      const i = edge[Math.floor(r() * edge.length)];
+      const x = i % w, y = (i / w) | 0;
+      const d = [[1, 0], [-1, 0], [0, 1], [0, -1]][Math.floor(r() * 4)];
+      const nx = x + d[0], ny = y + d[1];
+      if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+      const j = ny * w + nx;
+      if (!m[j]) { m[j] = true; n++; edge.push(j); }
+    }
+    for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x; if (!m[i] && m[i - 1] && m[i + 1] && m[i - w] && m[i + w]) m[i] = true; }
+    return m;
+  }
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const nx = ((x + 0.5) / w) * 2 - 1, ny = ((y + 0.5) / h) * 2 - 1;
+    const r2 = nx * nx + ny * ny;
+    let on = true;
+    if (shape === "circle") on = r2 <= 1.02;
+    else if (shape === "diamond") on = Math.abs(nx) + Math.abs(ny) <= 1.04;
+    else if (shape === "cross") on = Math.abs(nx) <= 0.36 || Math.abs(ny) <= 0.36;
+    else if (shape === "donut") on = r2 <= 1.02 && r2 >= 0.22;
+    else if (shape === "heart") { const X = nx * 1.18, Y = -ny * 1.18 + 0.16; const a = X * X + Y * Y - 1; on = a * a * a - X * X * Y * Y * Y <= 0; }
+    m[y * w + x] = on;
+  }
+  return m;
+}
+function maxMines(cells) { return Math.max(1, Math.floor(cells * 0.8) - 9); }
+// turns the setup (preset/custom + shape) into the real board settings
+function resolveCfg(c) {
+  const p = PRESETS[c.preset];
+  const w = p ? p.w : Math.max(5, Math.min(40, c.w | 0)), h = p ? p.h : Math.max(5, Math.min(30, c.h | 0));
+  const seed = c.seed ?? randSeed();
+  const cells = shapeMask(c.shape || "rect", w, h, seed).filter(Boolean).length;
+  let mines = p ? (c.shape === "rect" ? p.mines : Math.round(p.mines * cells / (w * h))) : (c.mines | 0);
+  mines = Math.max(1, Math.min(maxMines(cells), mines));
+  return { w, h, mines, shape: c.shape || "rect", seed, cells };
+}
+
+class Minefield {
+  constructor(c) {
+    this.w = c.w; this.h = c.h; this.seed = c.seed;
+    this.mask = shapeMask(c.shape, c.w, c.h, c.seed);
+    this.active = [];
+    this.mask.forEach((on, i) => on && this.active.push(i));
+    this.mines = Math.min(c.mines, maxMines(this.active.length));
+    this.cells = this.mask.map((on) => ({ on, mine: false, n: 0, open: false, flag: false, boom: false }));
+    this.opened = 0; this.booms = 0;
+    this.safeTotal = this.active.length - this.mines;
+    this.generated = false;
+  }
+  nb(i) {
+    const x = i % this.w, y = (i / this.w) | 0, out = [];
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      if (!dx && !dy) continue;
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || ny < 0 || nx >= this.w || ny >= this.h) continue;
+      const j = ny * this.w + nx;
+      if (this.mask[j]) out.push(j);
+    }
+    return out;
+  }
+  generate(safe = -1) {
+    const r = rng(this.seed);
+    const ex = new Set();
+    if (safe >= 0) { ex.add(safe); this.nb(safe).forEach((j) => ex.add(j)); }
+    let pool = this.active.filter((i) => !ex.has(i));
+    if (pool.length < this.mines) pool = this.active.filter((i) => i !== safe);
+    for (let k = 0; k < this.mines; k++) {
+      const j = k + Math.floor(r() * (pool.length - k));
+      [pool[k], pool[j]] = [pool[j], pool[k]];
+      this.cells[pool[k]].mine = true;
+    }
+    for (const i of this.active) this.cells[i].n = this.nb(i).filter((j) => this.cells[j].mine).length;
+    this.generated = true;
+  }
+  startCell() {   // PvP: same safe starting spot for both players
+    const r = rng(this.seed ^ 0x9e3779b9);
+    const zeros = this.active.filter((i) => !this.cells[i].mine && this.cells[i].n === 0);
+    if (zeros.length) return zeros[Math.floor(r() * zeros.length)];
+    return this.active.filter((i) => !this.cells[i].mine).sort((a, b) => this.cells[a].n - this.cells[b].n)[0];
+  }
+  open(i) {   // returns number of mines hit (0 or 1)
+    const c = this.cells[i];
+    if (!c || !c.on || c.open || c.flag) return 0;
+    if (c.mine) { c.open = true; c.boom = true; this.booms++; return 1; }
+    const stack = [i];
+    while (stack.length) {
+      const k = stack.pop();
+      const d = this.cells[k];
+      if (d.open || d.mine) continue;
+      d.open = true; d.flag = false; this.opened++;
+      if (d.n === 0) for (const j of this.nb(k)) if (!this.cells[j].open && !this.cells[j].mine) stack.push(j);
+    }
+    return 0;
+  }
+  chord(i) {   // click on a number: opens the neighbours if enough flags are around
+    const c = this.cells[i];
+    if (!c.open || c.mine || !c.n) return 0;
+    const around = this.nb(i);
+    const marked = around.filter((j) => this.cells[j].flag || (this.cells[j].open && this.cells[j].mine)).length;
+    if (marked !== c.n) return 0;
+    let booms = 0;
+    for (const j of around) if (!this.cells[j].open && !this.cells[j].flag) booms += this.open(j);
+    return booms;
+  }
+  toggleFlag(i) { const c = this.cells[i]; if (c && c.on && !c.open) c.flag = !c.flag; }
+  get won() { return this.opened >= this.safeTotal; }
+  get flags() { return this.cells.reduce((n, c) => n + (c.flag ? 1 : 0), 0); }
+  get left() { return this.mines - this.flags - this.booms; }
+  get progress() { return this.safeTotal ? Math.floor(this.opened * 100 / this.safeTotal) : 100; }
+}
+
+function lcd(n) { const s = el("span", "lcd"); s.textContent = (n < 0 ? "-" + String(-n).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); return s; }
+function setLcd(node, n) { node.textContent = (n < 0 ? "-" + String(Math.min(99, -n)).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); }
+
+// the grid of cells (shared by solo and PvP)
+function boardView(F, { onReveal, onFlag, canPlay }) {
+  const wrap = el("div", "msgridwrap");
+  const grid = el("div", "msgrid");
+  grid.style.gridTemplateColumns = "repeat(" + F.w + ", var(--cs))";
+  const cellEls = F.cells.map((c, i) => { const d = el("div", c.on ? "mc" : "mc void"); d.dataset.i = i; grid.append(d); return d; });
+  const last = new Array(F.cells.length).fill("");
+  wrap.append(grid);
+  let flagMode = false, lp = null, lpFired = false, lastType = "mouse";
+  const cellOf = (e) => { const d = e.target.closest(".mc"); return d && !d.classList.contains("void") ? +d.dataset.i : -1; };
+  grid.addEventListener("pointerdown", (e) => {
+    lastType = e.pointerType;
+    if (e.pointerType !== "touch") return;
+    const i = cellOf(e);
+    lpFired = false;
+    clearTimeout(lp);
+    if (i < 0) return;
+    lp = setTimeout(() => { lpFired = true; if (canPlay()) { onFlag(i); try { navigator.vibrate?.(25); } catch {} } }, 420);
+  });
+  for (const ev of ["pointerup", "pointercancel", "pointerleave", "pointermove"]) grid.addEventListener(ev, (e) => { if (ev !== "pointermove" || Math.abs(e.movementX) + Math.abs(e.movementY) > 6) clearTimeout(lp); });
+  grid.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    const i = cellOf(e);
+    if (i < 0 || !canPlay()) return;
+    if (lastType === "touch") { if (!lpFired) { clearTimeout(lp); lpFired = true; onFlag(i); } return; }
+    onFlag(i);
+  });
+  grid.addEventListener("click", (e) => {
+    const i = cellOf(e);
+    if (i < 0 || !canPlay()) return;
+    if (lpFired) { lpFired = false; return; }
+    if (flagMode && !F.cells[i].open) onFlag(i);
+    else onReveal(i);
+  });
+  grid.addEventListener("auxclick", (e) => { if (e.button === 1) { const i = cellOf(e); if (i >= 0 && canPlay() && F.cells[i].open) onReveal(i); } });
+  function paint(showAll = false, startCell = -1) {
+    F.cells.forEach((c, i) => {
+      if (!c.on) return;
+      let cls = "mc", txt = "";
+      if (c.open) {
+        if (c.mine) { cls += " open boom"; txt = "💥"; }
+        else { cls += " open n" + c.n; txt = c.n ? String(c.n) : ""; }
+      } else if (showAll && c.mine && !c.flag) { cls += " open mine"; txt = "💣"; }
+      else if (showAll && c.flag && !c.mine) { cls += " open wrong"; txt = "❌"; }
+      else if (c.flag) { cls += " flag"; txt = "🚩"; }
+      else if (i === startCell) { cls += " start"; txt = "★"; }
+      const key = cls + "|" + txt;
+      if (last[i] === key) return;
+      last[i] = key;
+      cellEls[i].className = cls;
+      cellEls[i].textContent = txt;
+    });
+  }
+  return { node: wrap, grid, paint, setFlagMode: (v) => { flagMode = v; } };
+}
+
+// zoom buttons + flag mode (for phones)
+function boardTools(view, { onNew, extra = [] } = {}) {
+  const bar = el("div", "mstools");
+  const flag = el("button", null, "🚩 Flag mode: off");
+  flag.type = "button"; flag.title = "On a phone: tap = flag. (Or long-press a cell.)";
+  let on = false;
+  flag.onclick = () => { on = !on; view.setFlagMode(on); flag.textContent = "🚩 Flag mode: " + (on ? "ON" : "off"); flag.classList.toggle("on", on); };
+  let cs = +(store("mines-zoom") || (innerWidth <= 760 ? 26 : 22));
+  const apply = () => { view.grid.style.setProperty("--cs", cs + "px"); store("mines-zoom", String(cs)); };
+  const zm = el("button", null, "−"); zm.type = "button"; zm.title = "Smaller"; zm.onclick = () => { cs = Math.max(14, cs - 2); apply(); };
+  const zp = el("button", null, "+"); zp.type = "button"; zp.title = "Bigger"; zp.onclick = () => { cs = Math.min(36, cs + 2); apply(); };
+  apply();
+  bar.append(flag, zm, zp, ...extra);
+  if (onNew) { const nb = el("button", null, "⚙ New game..."); nb.type = "button"; nb.onclick = onNew; bar.append(nb); }
+  return bar;
+}
+
+// setup form: difficulty, custom size, shape (+ lives and "post in chat" for PvP)
+function minesSetup({ pvp, room, onGo, goText }) {
+  const saved = JSON.parse(store(pvp ? "mines-cfg-pvp" : "mines-cfg") || "null") || {};
+  const st = { preset: saved.preset || "beginner", w: saved.w || 12, h: saved.h || 12, mines: saved.mines || 20, shape: SHAPES[saved.shape] ? saved.shape : "rect", lives: saved.lives || null };
+  const box = el("div", "mssetup");
+  const fsD = el("fieldset"); fsD.append(el("legend", null, "Difficulty"));
+  const custom = el("div", "mscustom");
+  const num = (label, key, min, max) => {
+    const l = el("label", null, label + " ");
+    const i = el("input"); i.type = "number"; i.min = min; i.max = max; i.value = st[key]; i.className = "sunken";
+    i.addEventListener("input", () => { st[key] = Math.max(min, Math.min(max, +i.value || min)); refresh(); });
+    i.addEventListener("change", () => { i.value = st[key]; refresh(); });
+    l.append(i); return { l, i };
+  };
+  const cw = num("Width", "w", 5, 40), ch = num("Height", "h", 5, 30), cm = num("Mines", "mines", 1, 950);
+  custom.append(cw.l, ch.l, cm.l);
+  for (const [k, p] of [...Object.entries(PRESETS), ["custom", { label: "Custom" }]]) {
+    const l = el("label", "check");
+    const r = el("input"); r.type = "radio"; r.name = "msd" + (pvp ? "p" : "s"); r.value = k; r.checked = st.preset === k;
+    r.addEventListener("change", () => { st.preset = k; refresh(); });
+    l.append(r, " " + p.label + (p.w ? "  (" + p.w + "×" + p.h + ", " + p.mines + " mines)" : ""));
+    fsD.append(l);
+  }
+  fsD.append(custom);
+  const fsS = el("fieldset"); fsS.append(el("legend", null, "Map shape"));
+  const shapeRow = el("div", "msshapes");
+  const preview = el("canvas", "mspreview"); preview.width = 120; preview.height = 90;
+  const shapeSel = el("select", "sunken");
+  for (const [k, v] of Object.entries(SHAPES)) { const o = el("option", null, v); o.value = k; o.selected = st.shape === k; shapeSel.append(o); }
+  shapeSel.addEventListener("change", () => { st.shape = shapeSel.value; refresh(); });
+  const col = el("div"); col.append(shapeSel, el("div", "hint", "Special shapes: the map isn't a full box!"));
+  shapeRow.append(col, preview);
+  fsS.append(shapeRow);
+  let livesIn = null, livesTouched = !!st.lives, postBox = null;
+  const fsL = el("fieldset");
+  if (pvp) {
+    fsL.append(el("legend", null, "PvP rules"));
+    const l = el("label", null, "❤ Lives: ");
+    livesIn = el("input"); livesIn.type = "number"; livesIn.min = 1; livesIn.max = 10; livesIn.className = "sunken";
+    livesIn.addEventListener("input", () => { livesTouched = true; st.lives = Math.max(1, Math.min(10, +livesIn.value || 1)); info.textContent = info.textContent.replace(/\d+ ❤/, st.lives + " ❤"); });
+    livesIn.addEventListener("change", () => { livesIn.value = st.lives; });
+    l.append(livesIn);
+    const auto = el("button", null, "Auto"); auto.type = "button"; auto.title = "3 lives for every 7 mines";
+    auto.onclick = () => { livesTouched = false; refresh(); };
+    const lr = el("div", "row-btns"); lr.append(l, auto);
+    fsL.append(lr, el("div", "hint", "Hit a mine = lose 1 life (the game goes on). 0 lives = you lose.\nBoth players get the SAME map. The first to clear it wins!"));
+    if (room) {
+      postBox = el("input"); postBox.type = "checkbox"; postBox.checked = true;
+      const pl = el("label", "check"); pl.append(postBox, " Post the challenge in " + (isDM(room) ? "this DM (@" + uname(dmOther(room)) + ")" : chatLabel(room)));
+      fsL.append(pl);
+    } else fsL.append(el("div", "hint", "Open a chat first if you want to post the challenge there. You can also just share the link."));
+  }
+  const info = el("div", "msinfo");
+  const go = el("button", "msgo", goText || "Start!"); go.type = "button";
+  let cur = null;
+  function refresh() {
+    const custom_ = st.preset === "custom";
+    custom.hidden = !custom_;
+    cur = resolveCfg({ ...st, seed: 777 });
+    if (custom_ && st.mines > maxMines(cur.cells)) { st.mines = maxMines(cur.cells); cm.i.value = st.mines; cur = resolveCfg({ ...st, seed: 777 }); }
+    cm.i.max = maxMines(cur.cells);
+    if (pvp && !livesTouched) st.lives = defaultLives(cur.mines);
+    if (livesIn) livesIn.value = st.lives;
+    info.textContent = cur.w + "×" + cur.h + " · " + cur.cells + " cells · " + cur.mines + " mines" + (pvp ? " · " + st.lives + " ❤" : "") + (PRESETS[st.preset] && st.shape === "rect" && !pvp ? " · 🏆 best times count!" : "");
+    const m = shapeMask(st.shape, cur.w, cur.h, 777);
+    const ctx = preview.getContext("2d");
+    ctx.fillStyle = "#808080"; ctx.fillRect(0, 0, 120, 90);
+    const s = Math.min(116 / cur.w, 86 / cur.h), ox = (120 - s * cur.w) / 2, oy = (90 - s * cur.h) / 2;
+    for (let i = 0; i < m.length; i++) if (m[i]) {
+      ctx.fillStyle = "#c0c0c0"; ctx.fillRect(ox + (i % cur.w) * s, oy + ((i / cur.w) | 0) * s, Math.max(1, s - 0.6), Math.max(1, s - 0.6));
+    }
+  }
+  go.onclick = () => {
+    store(pvp ? "mines-cfg-pvp" : "mines-cfg", JSON.stringify(st));
+    const c = resolveCfg({ ...st, seed: randSeed() });
+    onGo({ ...c, preset: st.preset, lives: pvp ? st.lives : 0 }, postBox ? postBox.checked : false);
+  };
+  refresh();
+  box.append(fsD, fsS);
+  if (pvp) box.append(fsL);
+  const btns = el("div", "wbuttons"); btns.append(info, go);
+  box.append(btns);
+  return box;
+}
+
+/* ----- SOLO ----- */
+function openMinesSolo() {
+  const key = "mines-solo";
+  if (openWins.has(key) && document.body.contains(openWins.get(key).w)) { focusWindow(openWins.get(key).w); return; }
+  const win = openWindow("Minesweeper", "💣", { key });
+  win.w.classList.add("mswin");
+  let timerI = null;
+  win.onClosed = () => clearInterval(timerI);
+  const setup = () => {
+    clearInterval(timerI);
+    win.setTitle("Minesweeper - New game");
+    win.content.replaceChildren(minesSetup({ pvp: false, onGo: (c) => play(c) }));
+  };
+  function play(c) {
+    clearInterval(timerI);
+    win.setTitle("Minesweeper - " + (PRESETS[c.preset] ? PRESETS[c.preset].label : "Custom") + (c.shape !== "rect" ? " (" + shapeName(c.shape) + ")" : ""));
+    const F = new Minefield(c);
+    let phase = "ready", t0 = 0;
+    const head = el("div", "mshead raisedin");
+    const lm = lcd(F.mines), lt = lcd(0);
+    const face = el("button", "msface", "🙂"); face.type = "button"; face.title = "New game (same settings)";
+    face.onclick = () => play({ ...c, seed: randSeed() });
+    head.append(lm, face, lt);
+    const msg = el("div", "msmsg", matchMedia("(pointer: coarse)").matches ? "Tap: open · Long-press (or 🚩 Flag mode): flag · Tap a number: open around it" : "Left click: open · Right click: 🚩 flag · Click a number: open around it");
+    const view = boardView(F, {
+      canPlay: () => phase === "ready" || phase === "play",
+      onFlag: (i) => { F.toggleFlag(i); refresh(); },
+      onReveal: (i) => {
+        if (!F.generated) { F.generate(i); phase = "play"; t0 = performance.now(); timerI = setInterval(tick, 200); }
+        const cell = F.cells[i];
+        const booms = cell.open ? F.chord(i) : F.open(i);
+        if (booms) lose(); else if (F.won) win_();
+        refresh();
+      },
+    });
+    const board = el("div", "msboard raised"); board.append(head, view.node);
+    function tick() { setLcd(lt, Math.floor((performance.now() - t0) / 1000)); }
+    function refresh() { setLcd(lm, F.left); view.paint(phase === "lost"); }
+    function lose() {
+      phase = "lost"; clearInterval(timerI); face.textContent = "😵";
+      msg.textContent = "💥 Boom! You hit a mine. Click 😵 to try again.";
+      beep([[220, 0, 0.25], [110, 0.2, 0.4]], "sawtooth", 0.06);
+    }
+    function win_() {
+      phase = "won"; clearInterval(timerI);
+      const ms = Math.round(performance.now() - t0);
+      F.cells.forEach((x) => { if (x.mine) x.flag = true; });
+      face.textContent = "😎";
+      msg.textContent = "🎉 You win! Time: " + fmtMs(ms);
+      beep([[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3, 0.25]]);
+      if (PRESETS[c.preset] && c.shape === "rect") saveBest(c.preset, ms, msg);
+    }
+    refresh();
+    win.content.replaceChildren(board, msg, boardTools(view, { onNew: setup }));
+  }
+  const last = JSON.parse(store("mines-cfg") || "null");
+  if (last) { const c = resolveCfg({ ...last, seed: randSeed() }); play({ ...c, preset: last.preset, lives: 0 }); }
+  else setup();
+}
+async function saveBest(preset, ms, msgEl) {
+  if (S.me.guest) { msgEl.textContent += "  (Create an account to save your best times!)"; return; }
+  try {
+    const ref = R("scores/mines/" + preset + "/" + S.me.uid);
+    const old = (await D.get(ref)).val();
+    if (old && old.t <= ms) { msgEl.textContent += "  (Your best: " + fmtMs(old.t) + ")"; return; }
+    await D.set(ref, { t: ms, ts: now() });
+    msgEl.textContent += "  🏆 New best time!";
+    toast("🏆 New best time in " + PRESETS[preset].label + ": " + fmtMs(ms));
+  } catch (e) { logError("Best time: " + e.message); }
+}
+
+/* ----- PvP: create / accept / cancel ----- */
+function canPostIn(room) {
+  if (!room || S.banned || (S.settings.lockdown && !S.isAdmin)) return false;
+  if (isDM(room)) return !!S.myDMs[room];
+  const c = S.chats[room];
+  if (!c || c.archived) return false;
+  return !!S.myChats[c.parent || room];
+}
+function createChallenge(room = S.room) {
+  if (S.me.guest) { toast("Guests can only play solo. Create an account to play PvP!"); return; }
+  if (!canPostIn(room)) room = null;
+  const win = openWindow("New Minesweeper challenge", "⚔", { key: "mines-new" });
+  win.w.classList.add("mswin");
+  win.content.append(minesSetup({
+    pvp: true, room, goText: "⚔ Create challenge",
+    onGo: async (c, post) => {
+      const gid = D.push(R("games")).key;
+      const g = { kind: "mines", by: S.me.uid, status: "open", createdAt: now(), cfg: { w: c.w, h: c.h, mines: c.mines, shape: c.shape, lives: c.lives, seed: c.seed } };
+      if (post && room) g.room = room;
+      try { await D.update(R("/"), { ["games/" + gid]: g, ["rate/" + S.me.uid + "/game"]: now() }); }
+      catch (e) { showBanner("Can't create the challenge: " + (/permission/i.test(e.message) ? "wait a few seconds between challenges." : authError(e))); return; }
+      win.close();
+      if (post && room) {
+        try { await sendMessage("⚔ challenges you to Minesweeper! (" + cfgText(c) + ") First to clear the map wins.", null, room, { game: gid }); }
+        catch (e) { toast("Challenge created, but it couldn't be posted in the chat. Share the link!"); logError("Post challenge: " + e.message); }
+      }
+      openPvp(gid);
+    },
+  }));
+}
+async function acceptChallenge(gid) {
+  if (S.me.guest) { toast("Guests can only play solo. Create an account to play PvP!"); return; }
+  if (S.banned) { toast("You are banned."); return; }
+  try {
+    const g = (await D.get(R("games/" + gid))).val();
+    const st = gameState(g);
+    if (st === "gone" || st === "expired") { toast("This challenge doesn't exist anymore."); return; }
+    if (g.by === S.me.uid) { openPvp(gid); return; }
+    if (st !== "open") { if (g.opp !== S.me.uid) toast("Too late: someone already accepted this challenge. You can watch it!"); openPvp(gid); return; }
+    await D.update(R("games/" + gid), { opp: S.me.uid, status: "playing" });
+    openPvp(gid);
+  } catch (e) { showBanner("Can't accept: " + authError(e)); }
+}
+async function cancelChallenge(gid) {
+  const ok = await dialog({ title: "Cancel challenge", message: "Cancel this challenge?", okText: "Cancel it", cancelText: "Keep it" });
+  if (!ok) return false;
+  try { await D.set(R("games/" + gid), null); await D.set(R("gameP/" + gid), null).catch(() => {}); toast("Challenge cancelled."); return true; }
+  catch (e) { showBanner("Can't cancel: " + authError(e)); return false; }
+}
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); toast("Link copied!"); }
+  catch { dialog({ title: "Challenge link", message: "Copy this link:", input: true, inputValue: t, cancelText: null }); }
+}
+
+/* ----- PvP window ----- */
+function openPvp(gid) {
+  const key = "game-" + gid;
+  if (openWins.has(key) && document.body.contains(openWins.get(key).w)) { focusWindow(openWins.get(key).w); return; }
+  const win = openWindow("Minesweeper PvP", "⚔", { key });
+  win.w.classList.add("mswin");
+  const me = S.me.uid;
+  let G, P = {}, F = null, view = null, started = false, ended = false, lives = 0, t0 = 0;
+  let readySent = false, startSent = false, finishing = false, statsDone = false, pushT = null, lastPush = 0;
+  const saveKey = "mines-pvp-" + gid;
+  const head = el("div", "pvphead");
+  const bars = el("div", "pvpbars");
+  const stage = el("div", "pvpstage");
+  const foot = el("div", "wbuttons");
+  win.content.append(head, bars, stage, foot);
+  const unsubs_ = [];
+  const tickI = setInterval(() => { if (G) { renderBars(); countdown(); } }, 250);
+  const hbI = setInterval(() => { if (started && !ended && isPlayer()) pushNow(); }, 20000);
+  win.onClosed = () => { unsubs_.forEach((u) => u()); clearInterval(tickI); clearInterval(hbI); clearTimeout(pushT); };
+  win.beforeClose = async () => {
+    if (!G || !isPlayer() || ended || G.winner || gameState(G) !== "playing" || !G.startAt) return true;
+    const ok = await dialog({ title: "Give up?", message: "The game is still running. If you close it, you give up and lose.", okText: "Give up", cancelText: "Keep playing" });
+    if (!ok) return false;
+    await giveUp();
+    return true;
+  };
+  const isPlayer = () => !!G && (G.by === me || G.opp === me);
+  const other = () => (G.by === me ? G.opp : G.by);
+  unsubs_.push(D.onValue(R("games/" + gid), (s) => { G = s.val(); update(); }, (e) => { stage.replaceChildren(el("div", "msmsg", "Can't load this game: " + e.message)); }));
+  unsubs_.push(D.onValue(R("gameP/" + gid), (s) => { P = s.val() || {}; update(); }, () => {}));
+
+  function update() {
+    const st = gameState(G);
+    if (st === "gone") {
+      win.setTitle("Minesweeper PvP");
+      head.replaceChildren(el("div", "msmsg", "❌ This challenge doesn't exist anymore (cancelled or expired)."));
+      bars.replaceChildren(); stage.replaceChildren(); footBtns([]);
+      return;
+    }
+    win.setTitle(uname(G.by) + " vs " + (G.opp ? uname(G.opp) : "?") + " - Minesweeper");
+    head.replaceChildren(el("div", "pvptitle", "💣 " + cfgText(G.cfg) + (G.room ? "  ·  in " + (isDM(G.room) ? "a DM" : chatLabel(G.room)) : "")));
+    if (st === "open" || st === "expired") return showOpen(st);
+    if (isPlayer() && !G.winner && !readySent) {
+      readySent = true;
+      const saved = loadLocal();
+      lives = Math.min(G.cfg.lives, P[me]?.lives ?? G.cfg.lives, saved?.lives ?? G.cfg.lives);
+      D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: P[me]?.prog || 0, lives, last: now() }).catch((e) => logError("Game ready: " + e.message));
+    }
+    if (isPlayer() && !G.startAt && !startSent && P[G.by]?.ready && P[G.opp]?.ready) {
+      startSent = true;
+      D.set(R("games/" + gid + "/startAt"), now()).catch(() => {});
+    }
+    if (G.startAt && !F) buildBoard();
+    renderBars();
+    if (!G.startAt) {
+      const waitFor = isPlayer() ? (P[other()]?.ready ? null : other()) : null;
+      stage.replaceChildren(el("div", "pvpwait", waitFor ? "⏳ Waiting for " + uname(waitFor) + " to open the game..." : isPlayer() ? "Starting..." : "👀 The game hasn't started yet."));
+    }
+    if (G.winner && !ended) end();
+    if (st === "abandoned" && !G.winner && !ended) { ended = true; stage.append(el("div", "pvpres", "⌛ This game was abandoned.")); }
+    const btns = [];
+    if (isPlayer() && G.startAt && !ended && !G.winner) btns.push(["🏳 Give up", async () => { const ok = await dialog({ title: "Give up?", message: "Give up this game? " + uname(other()) + " wins.", okText: "Give up" }); if (ok) giveUp(); }]);
+    if (ended || G.winner) btns.push(["⚔ Rematch...", () => createChallenge(G.room && canPostIn(G.room) ? G.room : S.room)]);
+    footBtns(btns);
+  }
+  function footBtns(list) {
+    foot.replaceChildren();
+    for (const [t, fn] of list) { const b = el("button", null, t); b.type = "button"; b.onclick = fn; foot.append(b); }
+    const cl = el("button", null, "Close"); cl.type = "button"; cl.onclick = async () => { if (!win.beforeClose || await win.beforeClose()) win.close(); };
+    foot.append(cl);
+  }
+  function showOpen(st) {
+    bars.replaceChildren();
+    const box = el("div", "pvpwait");
+    if (st === "expired") { box.textContent = "⌛ This challenge expired."; stage.replaceChildren(box); footBtns([]); return; }
+    if (G.by === me) {
+      box.append(el("div", null, "⏳ Waiting for an opponent..."), el("div", "hint", "Anyone with the link (or in the chat) can accept."));
+      const link = el("input", "sunken"); link.readOnly = true; link.value = gameLink(gid);
+      link.onclick = () => link.select();
+      box.append(link);
+      if (!P[me]?.ready) D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: 0, lives: G.cfg.lives, last: now() }).catch(() => {});
+      stage.replaceChildren(box);
+      const btns = [["📋 Copy link", () => copyText(gameLink(gid))]];
+      if (!G.room && canPostIn(S.room)) btns.push(["💬 Post in " + (isDM(S.room) ? "this DM" : chatLabel(S.room)), async () => {
+        try { await sendMessage("⚔ challenges you to Minesweeper! (" + cfgText(G.cfg) + ") First to clear the map wins.", null, S.room, { game: gid }); toast("Posted!"); }
+        catch (e) { showBanner("Can't post: " + authError(e)); }
+      }]);
+      btns.push(["✖ Cancel challenge", async () => { if (await cancelChallenge(gid)) win.close(); }]);
+      footBtns(btns);
+    } else {
+      box.append(el("div", "pvpbig", "⚔ " + uname(G.by) + " challenges you!"), el("div", null, cfgText(G.cfg)),
+        el("div", "hint", "Same map for both players. Hit a mine = -1 ❤. First to clear the map wins!"));
+      stage.replaceChildren(box);
+      if (S.me.guest) { box.append(el("div", "hint", "Guests can only play solo. Create an account to play PvP!")); footBtns([]); }
+      else footBtns([["⚔ Accept!", () => acceptChallenge(gid)]]);
+    }
+  }
+  function renderBars() {
+    if (!G || !G.opp) return;
+    bars.replaceChildren();
+    for (const uid of [G.by, G.opp]) {
+      const p = P[uid] || {};
+      const row = el("div", "pvprow" + (uid === me ? " me" : ""));
+      const nm = el("span", "pvpname"); nm.append(iconNode(uid), " " + uname(uid) + (uid === me ? " (you)" : ""));
+      const bar = el("div", "pvpbar sunken"); const fill = el("div", "fill"); fill.style.width = Math.min(100, p.prog || 0) + "%"; bar.append(fill, el("span", "pct", (p.prog || 0) + "%"));
+      const lv = G.cfg.lives, l = p.lives ?? lv;
+      const hearts = el("span", "hearts", lv > 5 ? "❤ " + l + "/" + lv : "❤".repeat(Math.max(0, l)) + "🖤".repeat(Math.max(0, lv - l)));
+      let stt = !p.ready ? "not here yet" : p.dead ? "💀 out" : p.done ? "🏁 " + fmtMs(p.time || 0) : G.winner ? (G.winner === uid ? "🏆 winner" : "lost") : G.startAt ? "playing" : "ready";
+      const gone = started && !ended && !G.winner && uid !== me && isPlayer() && p.last && srvNow() - p.last > GONE_AFTER;
+      if (gone) stt = "📴 gone?";
+      row.append(nm, bar, hearts, el("span", "pvpst", stt));
+      if (gone) { const b = el("button", null, "Claim win"); b.type = "button"; b.title = uname(uid) + " hasn't played for a while"; b.onclick = () => setWinner(me, "gone"); row.append(b); }
+      if (G.winner === uid) row.classList.add("win");
+      bars.append(row);
+    }
+    if (started && !ended && t0) bars.append(el("div", "pvptime", "⏱ " + fmtMs(srvNow() - t0)));
+  }
+  function loadLocal() { try { return JSON.parse(store(saveKey) || "null"); } catch { return null; } }
+  function saveLocal() {
+    if (!F) return;
+    const open = [], flags = [];
+    F.cells.forEach((c, i) => { if (c.open) open.push(i); if (c.flag) flags.push(i); });
+    store(saveKey, JSON.stringify({ open, flags, lives }));
+  }
+  function buildBoard() {
+    F = new Minefield(G.cfg);
+    F.generate(-1);
+    const start = F.startCell();
+    const saved = isPlayer() ? loadLocal() : null;
+    if (saved) {
+      for (const i of saved.open || []) { const c = F.cells[i]; if (c && !c.open) { if (c.mine) { c.open = true; c.boom = true; F.booms++; } else F.open(i); } }
+      for (const i of saved.flags || []) if (F.cells[i] && !F.cells[i].open) F.cells[i].flag = true;
+    }
+    if (!isPlayer()) {
+      stage.replaceChildren(el("div", "pvpwait", "👀 You are watching. The bars above show each player's progress."));
+      return;
+    }
+    const headB = el("div", "mshead raisedin");
+    const lm = lcd(F.left), face = el("button", "msface", "🙂"), lh = el("span", "lcd hearts-lcd");
+    face.type = "button"; face.title = "PvP: no restart!";
+    headB.append(lm, face, lh);
+    const cd = el("div", "pvpcd");
+    view = boardView(F, {
+      canPlay: () => started && !ended && !G.winner && lives > 0,
+      onFlag: (i) => { F.toggleFlag(i); paint(); saveLocal(); },
+      onReveal: (i) => {
+        const booms = F.cells[i].open ? F.chord(i) : F.open(i);
+        if (booms) {
+          lives = Math.max(0, lives - booms);
+          face.textContent = "😵"; setTimeout(() => { if (!ended) face.textContent = "🙂"; }, 700);
+          beep([[200, 0, 0.2]], "sawtooth", 0.06);
+          toast(lives > 0 ? "💥 Mine! -1 ❤ (" + lives + " left)" : "💀 No more lives!");
+        }
+        paint(); saveLocal();
+        if (lives <= 0) die();
+        else if (F.won) finish();
+        else schedulePush();
+      },
+    });
+    const board = el("div", "msboard raised");
+    const bwrap = el("div", "pvpboardwrap"); bwrap.append(view.node, cd);
+    board.append(headB, bwrap);
+    function paint() {
+      setLcd(lm, F.left);
+      lh.textContent = "❤" + lives;
+      view.paint(ended || !!G?.winner, started ? -1 : start);
+    }
+    view.repaint = paint;
+    view.cd = cd; view.start = start; view.face = face;
+    stage.replaceChildren(board, boardTools(view));
+    paint();
+  }
+  function countdown() {
+    if (!F || !view || !G.startAt || started || ended || G.winner) return;
+    const left = G.startAt + 3000 - srvNow();
+    if (left > 0) { view.cd.hidden = false; view.cd.textContent = String(Math.ceil(left / 1000)); return; }
+    started = true; t0 = G.startAt + 3000;
+    view.cd.textContent = "GO!"; setTimeout(() => { view.cd.hidden = true; }, 600);
+    beep([[660, 0, 0.12], [990, 0.12, 0.2]]);
+    if (!F.cells[view.start].open) F.open(view.start);
+    view.repaint(); saveLocal(); pushNow();
+    if (F.won) finish();
+  }
+  function schedulePush() {
+    const wait = 350 - (Date.now() - lastPush);
+    clearTimeout(pushT);
+    pushT = setTimeout(pushNow, Math.max(0, wait));
+  }
+  function pushNow() {
+    if (!isPlayer() || !F) return;
+    lastPush = Date.now();
+    D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives, last: now() }).catch((e) => logError("Game progress: " + e.message));
+  }
+  async function die() {
+    clearTimeout(pushT);
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives: 0, dead: true, last: now() }).catch(() => {});
+    await setWinner(other(), "dead");
+  }
+  async function giveUp() {
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F ? F.progress : 0, lives: 0, dead: true, last: now() }).catch(() => {});
+    await setWinner(other(), "giveup");
+  }
+  async function finish() {
+    if (finishing) return;
+    finishing = true;
+    clearTimeout(pushT);
+    const time = Math.max(0, Math.round(srvNow() - t0));
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: 100, lives, done: true, time, last: now() }).catch(() => {});
+    await setWinner(me, "clear", time);
+  }
+  async function setWinner(w, why, time) {
+    try {
+      const cur = (await D.get(R("games/" + gid + "/winner"))).val();
+      if (cur) return;
+      await D.update(R("games/" + gid), { winner: w, status: "done", endAt: now() });
+    } catch (e) { logError("Game end: " + e.message); return; }
+    if (!G.room) return;
+    const o = uname(other());
+    const text = why === "clear" ? "🏆 beat " + o + " at Minesweeper in " + fmtMs(time) + " (" + lives + " ❤ left)!"
+      : why === "gone" ? "🏆 wins at Minesweeper: " + o + " left the game."
+      : why === "giveup" ? "🏳 gave up at Minesweeper. " + o + " wins!"
+      : "💥 ran out of lives at Minesweeper. " + o + " wins!";
+    try { await sendMessage(text, null, G.room, { game: gid }); } catch (e) { logError("Post result: " + e.message); }
+  }
+  function end() {
+    ended = true;
+    if (F && G.winner === me) F.cells.forEach((x) => { if (x.mine && !x.open) x.flag = true; });
+    if (view) { view.repaint(); view.cd.hidden = true; view.face.textContent = G.winner === me ? "😎" : "😵"; }
+    const txt = !isPlayer() ? "🏆 " + uname(G.winner) + " wins!" : G.winner === me ? "🏆 You win!" : "💀 You lose... " + uname(G.winner) + " wins.";
+    stage.prepend(el("div", "pvpres" + (G.winner === me ? " good" : ""), txt));
+    if (isPlayer()) {
+      beep(G.winner === me ? [[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3, 0.3]] : [[392, 0, 0.2], [330, 0.2, 0.2], [262, 0.4, 0.4]]);
+      countStats();
+    }
+  }
+  async function countStats() {
+    if (statsDone || S.me.guest) return;
+    statsDone = true;
+    const k = "mines-stat-" + gid;
+    if (store(k)) return;
+    store(k, "1");
+    const f = G.winner === me ? "minesW" : "minesL";
+    try { const v = (await D.get(R("stats/" + me + "/" + f))).val() || 0; await D.set(R("stats/" + me + "/" + f), v + 1); }
+    catch (e) { logError("Stats: " + e.message); }
+  }
+}
+
+/* ----- lists: games tab + right panel ----- */
+function visibleGames() {
+  return Object.entries(S.games || {}).filter(([, g]) => g && g.kind === "mines" && g.cfg)
+    .filter(([, g]) => !g.room || g.by === S.me.uid || g.opp === S.me.uid || S.isAdmin || (isDM(g.room) ? !!S.myDMs[g.room] : !!S.myChats[S.chats[g.room]?.parent || g.room] || S.chats[g.room]?.type === "public"))
+    .sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+}
+function gameRow(gid, g, { showWhere = true } = {}) {
+  const st = gameState(g);
+  const it = el("div", "grow");
+  const txt = el("div", "gtxt");
+  const whereTxt = showWhere ? (g.room ? (isDM(g.room) ? " · DM" : " · " + chatLabel(g.room)) : " · link") : "";
+  if (st === "open") txt.append(el("b", null, "⚔ " + uname(g.by)), el("span", "dim", " " + cfgText(g.cfg) + whereTxt));
+  else if (st === "playing") txt.append(el("b", null, "▶ " + uname(g.by) + " vs " + uname(g.opp)), el("span", "dim", " playing" + whereTxt));
+  else txt.append(el("b", null, "🏆 " + uname(g.winner)), el("span", "dim", " beat " + uname(g.winner === g.by ? g.opp : g.by) + " · " + fmtAgo(g.endAt || g.createdAt)));
+  it.append(txt);
+  const btn = (t, fn) => { const b = el("button", "small", t); b.type = "button"; b.onclick = (e) => { e.stopPropagation(); fn(); }; it.append(b); };
+  if (st === "open") {
+    if (g.by === S.me.uid) { btn("Open", () => openPvp(gid)); btn("✖", () => cancelChallenge(gid)); }
+    else if (!S.me.guest) btn("⚔ Accept", () => acceptChallenge(gid));
+    else btn("View", () => openPvp(gid));
+  } else if (st === "playing") btn(g.by === S.me.uid || g.opp === S.me.uid ? "▶ Play" : "👀 Watch", () => openPvp(gid));
+  else btn("See", () => openPvp(gid));
+  return it;
+}
+function renderGamesPanel(pane) {
+  pane.append(el("div", "cat", "Mini games"));
+  const card = el("div", "gcard");
+  card.append(el("div", "gname", "💣 Minesweeper"));
+  const b1 = el("button", "small", "▶ Solo"); b1.type = "button"; b1.onclick = openMinesSolo;
+  const b2 = el("button", "small", "⚔ Challenge"); b2.type = "button"; b2.onclick = () => createChallenge(S.room);
+  b2.disabled = !!S.me.guest; if (S.me.guest) b2.title = "Accounts only";
+  const r = el("div", "row-btns"); r.append(b1, b2); card.append(r);
+  pane.append(card, el("div", "gsoon", "❓ More games soon..."));
+  const here = visibleGames().filter(([, g]) => g.room && S.room && (g.room === S.room));
+  const live = here.filter(([, g]) => ["open", "playing"].includes(gameState(g)));
+  const done = here.filter(([, g]) => gameState(g) === "done").slice(0, 5);
+  pane.append(el("div", "cat", "Challenges here — " + live.length));
+  if (!live.length) pane.append(el("div", "padhint", "None yet. Click ⚔ Challenge!"));
+  for (const [gid, g] of live) pane.append(gameRow(gid, g, { showWhere: false }));
+  if (done.length) { pane.append(el("div", "cat", "Recent results")); for (const [gid, g] of done) pane.append(gameRow(gid, g, { showWhere: false })); }
+}
+let scoresUnsub = null, statsUnsub = null;
+function startGamesTabSubs() {
+  if (!scoresUnsub) scoresUnsub = D.onValue(R("scores/mines"), (s) => { S.scores = s.val() || {}; if (S.tab === "games") renderGamesPage(); }, (e) => logError("Scores: " + e.message));
+  if (!statsUnsub && !S.me.guest) statsUnsub = D.onValue(R("stats/" + S.me.uid), (s) => { S.myStats = s.val() || {}; if (S.tab === "games") renderGamesPage(); }, () => {});
+}
+function renderGamesPage() {
+  const page = $("gamesPage");
+  page.replaceChildren();
+  const wrap = el("div", "admin");
+  const grid = el("div", "agrid");
+  const fsG = el("fieldset", "span2"); fsG.append(el("legend", null, "🎮 Mini games"));
+  const cards = el("div", "gcards");
+  const c1 = el("div", "gcard big raised");
+  c1.append(el("div", "gicon", "💣"), el("div", "gname", "Minesweeper"),
+    el("div", "hint", "Solo: pick the size, the mines and a special map shape.\nPvP: same map for both, first to clear it wins!"));
+  const r = el("div", "row-btns");
+  const b1 = el("button", null, "▶ Solo"); b1.type = "button"; b1.onclick = openMinesSolo;
+  const b2 = el("button", null, "⚔ PvP challenge..."); b2.type = "button"; b2.onclick = () => createChallenge(S.room);
+  b2.disabled = !!S.me.guest;
+  r.append(b1, b2); c1.append(r);
+  if (S.me.guest) c1.append(el("div", "hint", "Guests: solo only. Create an account for PvP!"));
+  const c2 = el("div", "gcard big raised soon");
+  c2.append(el("div", "gicon", "❓"), el("div", "gname", "More games"), el("div", "hint", "Coming soon..."));
+  cards.append(c1, c2); fsG.append(cards);
+  const fsC = el("fieldset"); fsC.append(el("legend", null, "⚔ Open challenges"));
+  const listC = el("div", "list sunken tall");
+  const all = visibleGames();
+  const open = all.filter(([, g]) => gameState(g) === "open");
+  const playing = all.filter(([, g]) => gameState(g) === "playing");
+  if (!open.length) listC.append(el("div", "empty-row", "No open challenge."));
+  for (const [gid, g] of open) listC.append(gameRow(gid, g));
+  fsC.append(listC);
+  const fsP = el("fieldset"); fsP.append(el("legend", null, "▶ Playing now / 🏆 results"));
+  const listP = el("div", "list sunken tall");
+  const recent = all.filter(([, g]) => gameState(g) === "done").slice(0, 15);
+  if (!playing.length && !recent.length) listP.append(el("div", "empty-row", "No games yet."));
+  for (const [gid, g] of [...playing, ...recent]) listP.append(gameRow(gid, g));
+  fsP.append(listP);
+  const fsB = el("fieldset", "span2"); fsB.append(el("legend", null, "🏆 Best times (Solo, rectangle maps)"));
+  const tbls = el("div", "gcards");
+  for (const [k, p] of Object.entries(PRESETS)) {
+    const box = el("div", "gscore");
+    box.append(el("b", null, p.label));
+    const rows = Object.entries(S.scores?.[k] || {}).filter(([uid]) => S.users[uid] && !S.users[uid].deleted).sort((a, b) => a[1].t - b[1].t).slice(0, 10);
+    const ol = el("ol", "sunken");
+    if (!rows.length) ol.append(el("li", "dim", "no time yet"));
+    rows.forEach(([uid, v]) => { const li = el("li" + "", uid === S.me.uid ? "mine" : null); li.append(el("span", null, uname(uid)), el("span", null, fmtMs(v.t))); ol.append(li); });
+    box.append(ol); tbls.append(box);
+  }
+  fsB.append(tbls);
+  if (!S.me.guest) {
+    const w = S.myStats?.minesW || 0, l = S.myStats?.minesL || 0;
+    fsB.append(el("div", "hint", "📊 Your PvP record: " + w + " win" + (w === 1 ? "" : "s") + " / " + l + " loss" + (l === 1 ? "" : "es")));
+  }
+  grid.append(fsG, fsC, fsP, fsB);
+  wrap.append(grid);
+  page.append(wrap);
+}
+// small button under a challenge message in the chat
+function gameChip(gid) {
+  const g = S.games?.[gid];
+  const box = el("span", "gchip");
+  const st = gameState(g);
+  const btn = (t, fn) => { const b = el("button", "small", t); b.type = "button"; b.onclick = (e) => { e.stopPropagation(); fn(); }; box.append(b); };
+  if (!g) { if (S.gamesLoaded) box.append(el("span", "dim", "(challenge over)")); else btn("Open", () => openPvp(gid)); return box; }
+  if (st === "open") {
+    if (g.by === S.me.uid) { box.append(el("span", "dim", "waiting... ")); btn("Open", () => openPvp(gid)); }
+    else btn("⚔ Accept", () => acceptChallenge(gid));
+  } else if (st === "playing") { box.append(el("span", "dim", uname(g.opp) + " accepted · ")); btn(g.by === S.me.uid || g.opp === S.me.uid ? "▶ Play" : "👀 Watch", () => openPvp(gid)); }
+  else if (st === "done") { box.append(el("span", "dim", "🏆 " + uname(g.winner) + " won · ")); btn("See", () => openPvp(gid)); }
+  else box.append(el("span", "dim", "(expired)"));
+  return box;
+}
+let gamesSig = "";
+function startGamesSub() {
+  sub(D.query(R("games"), D.orderByChild("createdAt"), D.limitToLast(60)), (s) => {
+    const first = !S.gamesLoaded;
+    const before = S.games || {};
+    S.games = s.val() || {};
+    S.gamesLoaded = true;
+    const sig = JSON.stringify(Object.entries(S.games).map(([k, g]) => [k, g.status, g.winner || "", g.opp || ""]));
+    const changed = sig !== gamesSig;
+    gamesSig = sig;
+    if (!first) for (const [gid, g] of Object.entries(S.games)) {
+      const b = before[gid];
+      if (g.by === S.me.uid && g.status === "playing" && b && b.status === "open") {
+        pingSound();
+        toast("⚔ " + uname(g.opp) + " accepted your Minesweeper challenge!");
+        openPvp(gid);
+      }
+    }
+    if (first) cleanOldGames();
+    if (!changed) return;
+    if (S.tab === "games") renderGamesPage();
+    if (S.tab === "chat") { renderMembers(); if (S.messages.some((m) => m.game)) render(); }
+  }, () => { S.gamesLoaded = true; });
+}
+function cleanOldGames() {
+  const t = srvNow();
+  for (const [gid, g] of Object.entries(S.games)) {
+    if (g.by !== S.me.uid) continue;
+    const old = (g.status === "open" && t - g.createdAt > OPEN_TTL) || (g.status === "done" && t - (g.endAt || g.createdAt) > 3 * 86400000) || (g.status === "playing" && t - g.createdAt > PLAY_TTL + OPEN_TTL);
+    if (old) { D.set(R("games/" + gid), null).catch(() => {}); D.set(R("gameP/" + gid), null).catch(() => {}); }
+  }
+}
 
 /* ========================= NEW VERSION POPUP ========================= */
 // Every few minutes, look at the index.html on the server. If its version is newer than the one
