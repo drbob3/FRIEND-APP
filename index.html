@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UtjVZnWyuf6S6VbXsd0sCoRwad+o63uoeSuZeOvwF3E=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="A small chat room to talk with friends.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
 <style>
@@ -480,6 +482,8 @@
         <fieldset>
           <legend>⚙ Settings</legend>
           <label class="check"><input type="checkbox" id="guestToggle"> Guests can join</label>
+          <label class="check"><input type="checkbox" id="signupsToggle"> New accounts can be created</label>
+          <label class="check"><input type="checkbox" id="lockdownToggle"> <b>🔒 Lockdown</b> (only admins can write, for raids / spam attacks)</label>
           <label class="check"><input type="checkbox" id="deletedToggle"> Show deleted messages (in chats)</label>
           <div class="hint" style="margin-top:6px">Tip: right-click anyone (in a list or on a message) to ban, unban, kick or DM them.</div>
         </fieldset>
@@ -496,6 +500,12 @@
             </select>
           </div>
           <div class="list sunken tall" id="usersList"></div>
+        </fieldset>
+        <fieldset class="span2">
+          <legend id="allChatsTitle">🗂 All chats</legend>
+          <div class="hint">Every chat on the site, public and private. As admin you can join any of them (no invite needed).</div>
+          <div class="list sunken tall" id="allChatsList"><div class="empty-row">Loading...</div></div>
+          <div class="row-btns"><button class="small" id="allChatsBtn">Refresh</button></div>
         </fieldset>
         <fieldset>
           <legend>🗄 Archive</legend>
@@ -621,7 +631,9 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "6.2";
+const APP_VERSION = "7.0";
+// Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
+const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
@@ -668,6 +680,7 @@ function logError(msg) {
 }
 window.addEventListener("error", (e) => logError("JS: " + (e.message || e)));
 window.addEventListener("unhandledrejection", (e) => logError("Promise: " + (e.reason?.message || e.reason)));
+document.addEventListener("securitypolicyviolation", (e) => logError("Blocked by security policy: " + e.violatedDirective + " " + (e.blockedURI || "")));
 
 /* ========================= SMALL HELPERS ========================= */
 function store(key, val) { try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch { return null; } }
@@ -954,6 +967,12 @@ const { initializeApp } = await import(SDK + "firebase-app.js");
 const D = await import(SDK + "firebase-database.js");
 const A = await import(SDK + "firebase-auth.js");
 const fbApp = initializeApp(firebaseConfig);
+if (APP_CHECK_SITE_KEY) {
+  try {
+    const AC = await import(SDK + "firebase-app-check.js");
+    AC.initializeAppCheck(fbApp, { provider: new AC.ReCaptchaV3Provider(APP_CHECK_SITE_KEY), isTokenAutoRefreshEnabled: true });
+  } catch (e) { logError("App Check: " + e.message); }
+}
 const db = D.getDatabase(fbApp);
 const auth = A.getAuth(fbApp);
 const R = (path) => D.ref(db, path);
@@ -1101,9 +1120,11 @@ A.onAuthStateChanged(auth, async (user) => {
     return;
   }
   if (started) return;
+  let hadProfile = true;
   try {
     const isGuest = user.isAnonymous;
     let profile = (await D.get(R("users/" + user.uid))).val();
+    hadProfile = !!profile && !profile.deleted;
     if (!profile || profile.deleted) {
       let name = pendingName;
       if (!isGuest && !name) name = (user.email || "user").split("@")[0];
@@ -1120,11 +1141,12 @@ A.onAuthStateChanged(auth, async (user) => {
     $("main").hidden = false;
     startApp();
   } catch (err) {
-    const msg = authError(err);
-    $(user.isAnonymous ? "gsErr" : "rgErr").textContent = user.isAnonymous && /allowed/i.test(msg) ? "Guests are turned off right now." : msg;
+    let msg = authError(err);
+    if (/allowed/i.test(msg)) msg = user.isAnonymous ? "Guests are turned off right now." : "New accounts are closed right now. Try again later.";
+    $(user.isAnonymous ? "gsErr" : "rgErr").textContent = msg;
     $("liErr").textContent = msg;
     logError("Login: " + (err?.message || err));
-    if (user.isAnonymous) { try { await user.delete(); } catch {} }
+    if (user.isAnonymous || !hadProfile) { try { await user.delete(); } catch {} }
     await A.signOut(auth).catch(() => {});
     $("loginOverlay").classList.add("show");
   }
@@ -1177,7 +1199,15 @@ function startApp() {
     if (S.isAdmin && !was) startAdmin();
     renderMe(); renderToolbar(); renderSide(); render();
   });
-  sub(R("settings"), (s) => { S.settings = s.val() || {}; $("guestToggle").checked = S.settings.guestsAllowed !== false; renderSide(); });
+  sub(R("settings"), (s) => {
+    const was = !!S.settings.lockdown;
+    S.settings = s.val() || {};
+    $("guestToggle").checked = S.settings.guestsAllowed !== false;
+    $("signupsToggle").checked = S.settings.signupsOpen !== false;
+    $("lockdownToggle").checked = !!S.settings.lockdown;
+    if (!!S.settings.lockdown !== was && !S.isAdmin) toast(S.settings.lockdown ? "🔒 Lockdown: only admins can write for now." : "Lockdown is over. You can write again.");
+    renderSide(); renderToolbar();
+  });
   sub(R("bans"), (s) => {
     S.bans = s.val() || {};
     const was = S.banned;
@@ -1191,6 +1221,7 @@ function startApp() {
     syncUnreadSubs();
     renderSide(); renderToolbar();
     if (S.tab === "dir" && !$("dirPage").contains(document.activeElement)) renderDirectory();
+    if (S.tab === "admin") renderAdminChats();
     if (S.room && !isDM(S.room) && !S.chats[S.room] && !S.legacyView) { toast("This chat was deleted."); goDefault(); }
   });
   sub(R("userChats/" + S.me.uid), (s) => { S.myChats = s.val() || {}; syncUnreadSubs(); renderSide(); });
@@ -1446,6 +1477,10 @@ async function createChat(parentId) {
     data.parent = parentId;
     upd["chats/" + id] = data;
     upd["userChats/" + S.me.uid + "/" + id] = { lastRead: 0 };
+  }
+  if (!S.isAdmin) upd["rate/" + S.me.uid + "/chat"] = now();   // anti-spam: 1 new chat per minute
+  if (parent) {
+    // already filled above
   } else if (res.type === "private") {
     const code = randomCode(24);
     upd["chats/" + id] = data;
@@ -1463,7 +1498,7 @@ async function createChat(parentId) {
     await openRoom(id);
     if (parent) toast("Sub-chat # " + name + " created in " + parent.name + ".");
     else if (res.type === "private") toast("Private chat created. Click \"Invite...\" to get the link.");
-  } catch (e) { showBanner("Can't create chat: " + authError(e)); }
+  } catch (e) { showBanner("Can't create chat: " + (S.settings.lockdown && !S.isAdmin ? "the site is in lockdown." : "you can create only 1 chat per minute, or you're not allowed.")); logError("Create chat: " + e.message); }
 }
 async function leaveChat() {
   const chat = S.chats[S.room];
@@ -1532,10 +1567,12 @@ async function sendFriendRequest(uid) {
   if (!isAccount(uid)) { toast("You can only add accounts as friends (not guests)."); return; }
   if (S.reqIn[uid]) return acceptFriend(uid);
   try {
-    await D.set(R("friendReqs/" + uid + "/" + S.me.uid), { ts: now() });
+    const upd = { ["friendReqs/" + uid + "/" + S.me.uid]: { ts: now() } };
+    if (!S.isAdmin) upd["rate/" + S.me.uid + "/fr"] = now();   // anti-spam
+    await D.update(R("/"), upd);
     S.reqOut[uid] = true;
     toast("Friend request sent to " + S.users[uid].name + ".");
-  } catch (e) { showBanner("Can't send request: " + authError(e)); }
+  } catch (e) { showBanner("Can't send the request right now (wait a few seconds)."); logError("Friend request: " + e.message); }
 }
 async function acceptFriend(uid) {
   const upd = {};
@@ -1618,8 +1655,11 @@ async function reportMessage(m) {
   if (m.folder) msg.folder = m.folder;
   const rep = { by: S.me.uid, room: S.room, msgId: m.key, reason: res.reason, ts: now(), msg, status: "open" };
   if (res.comment) rep.comment = res.comment.slice(0, 300);
-  try { await D.push(R("reports"), rep); toast("Thanks, the report was sent to the admins."); }
-  catch (e) { showBanner("Report failed: " + authError(e)); }
+  try {
+    const key = D.push(R("reports")).key;
+    await D.update(R("/"), { ["reports/" + key]: rep, ["rate/" + S.me.uid + "/rep"]: now() });
+    toast("Thanks, the report was sent to the admins.");
+  } catch (e) { showBanner("Report not sent: you can send 1 report every 30 seconds."); logError("Report: " + e.message); }
 }
 
 /* ========================= RIGHT-CLICK MENU ========================= */
@@ -1989,6 +2029,40 @@ async function cleanGuests(auto) {
     } catch (e) { logError("Clean guest: " + e.message); }
   }
   if (n) { logError("Cleaned " + n + " old guest(s)"); if (!auto) toast("Cleaned " + n + " old guest(s)."); }
+}
+let adminMembers = null;
+async function loadAdminChats() {
+  try { adminMembers = (await D.get(R("members"))).val() || {}; } catch (e) { logError("All chats: " + e.message); adminMembers = {}; }
+  renderAdminChats();
+}
+function renderAdminChats() {
+  const list = $("allChatsList");
+  if (!list || !S.isAdmin) return;
+  if (!adminMembers) { loadAdminChats(); return; }
+  list.replaceChildren();
+  const tops = Object.entries(S.chats).filter(([, c]) => !c.parent).sort((a, b) => (a[1].archived - b[1].archived) || a[1].name.localeCompare(b[1].name));
+  $("allChatsTitle").textContent = "🗂 All chats (" + tops.length + ")";
+  if (!tops.length) list.append(el("div", "empty-row", "No chats yet"));
+  const row = (id, c, isSub, last) => {
+    const it = el("div", "item" + (isSub ? " sub" : ""));
+    if (isSub) it.append(el("span", "tree", last ? "└" : "├"));
+    const mem = adminMembers[c.parent || id] || {};
+    const count = Object.keys(mem).length;
+    it.append(el("span", "n", (isSub ? "# " : (c.type === "private" ? "🔒 " : "# ")) + c.name + (c.archived ? " (archived)" : "")));
+    if (!isSub) it.append(el("span", "dim", (c.type === "private" ? "private" : "public") + " · " + count + " member" + (count === 1 ? "" : "s") + " · by " + (S.users[c.createdBy]?.name || "?")));
+    const joined = !!S.myChats[c.parent || id];
+    const b = el("button", "small", joined || c.archived ? "Open" : "Join");
+    b.title = joined ? "Open this chat" : c.archived ? "Read this archived chat" : "Join this chat (admin: no invite needed)";
+    b.addEventListener("click", async () => { await openRoom(id); adminMembers = null; });
+    it.append(b);
+    if (c.desc) it.title = c.desc;
+    list.append(it);
+  };
+  for (const [id, c] of tops) {
+    row(id, c, false);
+    const subs = Object.entries(S.chats).filter(([, x]) => x.parent === id);
+    subs.forEach(([sid, sc], i) => row(sid, sc, true, i === subs.length - 1));
+  }
 }
 async function openArchive() {
   const list = $("archiveList");
@@ -2416,12 +2490,13 @@ function renderToolbar() {
   $("moreBtn").hidden = !S.room;
   $("membersBtn").hidden = !S.room;
   $("membersBtn").classList.toggle("on", innerWidth > 1100 && S.showMembers);
-  const canWrite = !!S.room && !S.readOnly && !S.banned;
+  const locked = !!S.settings.lockdown && !S.isAdmin;
+  const canWrite = !!S.room && !S.readOnly && !S.banned && !locked;
   $("input").disabled = !canWrite;
   $("sendBtn").disabled = !canWrite;
   $("attachBtn").disabled = !canWrite;
   $("attachBtn").hidden = !!S.me.guest;
-  $("input").placeholder = S.banned ? "You are banned." : !S.room ? "" : S.readOnly ? "Read-only" : (S.me.guest ? "Message " + where + " (guests can't send links or files)" : "Message " + where);
+  $("input").placeholder = locked ? "🔒 Lockdown: only admins can write right now." : S.banned ? "You are banned." : !S.room ? "" : S.readOnly ? "Read-only" : (S.me.guest ? "Message " + where + " (guests can't send links or files)" : "Message " + where);
   renderStatus();
 }
 function renderStatus() {
@@ -2526,7 +2601,7 @@ function loadMedia(room, media) {
       if (!v) throw new Error("file not found");
       const arr = Array.isArray(v) ? v : Object.keys(v).sort((a, b) => a - b).map((k) => v[k]);
       if (arr.length < media.chunks) throw new Error("file incomplete");
-      const url = URL.createObjectURL(new Blob(arr.slice(0, media.chunks).map(b64ToBytes), { type: media.mime || "application/octet-stream" }));
+      const url = URL.createObjectURL(new Blob(arr.slice(0, media.chunks).map(b64ToBytes), { type: safeBlobType(media.kind, media.mime) }));
       mediaUrls.set(media.id, url);
       return url;
     })();
@@ -2536,7 +2611,7 @@ function loadMedia(room, media) {
   return mediaLoading.get(media.id);
 }
 async function compressImage(file) {
-  if (file.type === "image/gif" || file.type === "image/svg+xml") return { blob: file, mime: file.type };
+  if (file.type === "image/gif") return { blob: file, mime: file.type };
   try {
     const bmp = await createImageBitmap(file);
     const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
@@ -2557,10 +2632,11 @@ async function sendFile(file) {
   if (!S.room || S.readOnly || S.banned) return;
   if (S.me.guest) { toast("Guests can't send files. Create an account!"); return; }
   const room = S.room;
-  const isImg = file.type.startsWith("image/"), isVid = file.type.startsWith("video/");
-  if (!isImg && !isVid) { showBanner("Only images and videos can be sent."); return; }
+  const isImg = fileKind(file) === "image", isVid = fileKind(file) === "video";
+  if (!isImg && !isVid) { file._asFile = true; return sendFiles([file]); }
   let blob = file, mime = file.type;
   if (isImg) ({ blob, mime } = await compressImage(file));
+  if (isImg && !SAFE_IMG_RE.test(mime)) { file._asFile = true; return sendFiles([file]); }   // unusual image format: send it as a file
   const limit = isImg ? MAX_IMAGE : MAX_VIDEO;
   if (blob.size > limit) { showBanner((isImg ? "Image" : "Video") + " too big: " + fmtSize(blob.size) + ". Max is " + fmtSize(limit) + "."); return; }
   let fname = (file.name || (isImg ? "image" : "video")).slice(0, 80);
@@ -2575,7 +2651,7 @@ async function sendFile(file) {
       await D.set(R("media/" + room + "/" + id + "/chunks/" + i), await blobToB64(blob.slice(i * CHUNK, (i + 1) * CHUNK)));
     }
     const media = { id, kind: isImg ? "image" : "video", mime: mime.slice(0, 60), size: blob.size, chunks: count, fname };
-    mediaUrls.set(id, URL.createObjectURL(blob));
+    mediaUrls.set(id, URL.createObjectURL(new Blob([blob], { type: safeBlobType(media.kind, media.mime) })));
     sentJustNow = true;
     await sendMessage(caption, media, room);
     $("input").value = "";
@@ -2594,7 +2670,7 @@ function sendMessage(text, media, room = S.room, extra = null) {
   if (media) msg.media = media;
   if (extra) Object.assign(msg, extra);
   const key = D.push(R("rooms/" + room)).key;
-  const upd = { ["rooms/" + room + "/" + key]: msg };
+  const upd = { ["rooms/" + room + "/" + key]: msg, ["rate/" + S.me.uid + "/msg"]: now() };   // anti-spam (checked by the database)
   if (isDM(room)) {
     const other = dmOther(room);
     upd["userDMs/" + S.me.uid + "/" + room + "/with"] = other;
@@ -2612,7 +2688,15 @@ const BLOCKED_RE = /\.(exe|bat|cmd|com|scr|msi|ps1|vbs|vbe|jse|wsf|hta|pif|cpl|m
 const TEXT_RE = /\.(txt|md|json|csv|log|ini|cfg|conf|xml|yml|yaml|html|css|js|ts|py|lua|cs|java|c|cpp|h|tkt|srt|bat_)$/i;
 const MAX_FILES = 10, MAX_TOTAL = 30 * 1000 * 1000;
 const openFolders = new Set();
-function fileKind(f) { const t = f.type || ""; return t.startsWith("image/") ? "image" : t.startsWith("video/") ? "video" : "file"; }
+const SAFE_IMG_RE = /^image\/(png|jpeg|gif|webp|bmp)$/;
+const SAFE_VID_RE = /^video\/(mp4|webm|ogg|quicktime)$/;
+const SAFE_AUD_RE = /^audio\/(mpeg|mp3|wav|x-wav|ogg|webm|aac|flac|mp4|x-m4a)$/;
+// security: only real images/videos/audio keep their type; everything else becomes a plain download (never runs in the site)
+function safeBlobType(kind, mime) {
+  const mt = String(mime || "").toLowerCase();
+  return (kind === "image" && SAFE_IMG_RE.test(mt)) || (kind === "video" && SAFE_VID_RE.test(mt)) || SAFE_AUD_RE.test(mt) ? mt : "application/octet-stream";
+}
+function fileKind(f) { const t = (f.type || "").toLowerCase(); return (t.startsWith("image/") && t !== "image/svg+xml") ? "image" : SAFE_VID_RE.test(t) ? "video" : "file"; }
 function fileIcon(f) {
   const n = f.fname || f.name || "";
   if (f.kind === "image") return "🖼";
@@ -2626,7 +2710,7 @@ function fileIcon(f) {
 async function sendFiles(list) {
   if (!list.length || !S.room || S.readOnly || S.banned) return;
   if (S.me.guest) { toast("Guests can't send files. Create an account!"); return; }
-  if (list.length === 1 && /^(image|video)\//.test(list[0].type)) return sendFile(list[0]);
+  if (list.length === 1 && fileKind(list[0]) !== "file" && !list[0]._asFile) return sendFile(list[0]);
   const room = S.room;
   const rows = el("div", "sendlist sunken");
   let total = 0;
@@ -2659,6 +2743,7 @@ async function sendFiles(list) {
       if (kind === "image") {
         ({ blob, mime } = await compressImage(f));
         if (mime === "image/jpeg" && !/\.jpe?g$/i.test(fname)) fname = (fname.replace(/\.[^.]+$/, "") + ".jpg").slice(0, 80);
+        if (!SAFE_IMG_RE.test(mime)) { kind = "file"; blob = f; mime = f.type || "application/octet-stream"; }
       }
       const count = Math.max(1, Math.ceil(blob.size / CHUNK));
       const id = D.push(R("media/" + room)).key;
@@ -2666,7 +2751,7 @@ async function sendFiles(list) {
         $("statusConn").textContent = "Uploading " + (n + 1) + "/" + ok.length + " · " + Math.round((i / count) * 100) + "%";
         await D.set(R("media/" + room + "/" + id + "/chunks/" + i), await blobToB64(blob.slice(i * CHUNK, (i + 1) * CHUNK)));
       }
-      mediaUrls.set(id, URL.createObjectURL(blob));
+      mediaUrls.set(id, URL.createObjectURL(new Blob([blob], { type: safeBlobType(kind, mime) })));
       files.push({ id, kind, mime: mime.slice(0, 100), size: blob.size, chunks: count, fname });
     }
     sentJustNow = true;
@@ -2770,7 +2855,7 @@ function setTab(t) {
   if (t === "about") renderAbout();
   if (t === "dir") renderDirectory();
   if (t === "chat") { renderSide(); render(); }
-  if (t === "admin") { renderReports(); renderAdminLists(); renderDebug(); }
+  if (t === "admin") { renderReports(); renderAdminLists(); renderDebug(); loadAdminChats(); }
 }
 document.querySelectorAll("#mainTabs button").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.t)));
 function formatDoc(doc, text) {
@@ -2912,6 +2997,13 @@ $("guestToggle").addEventListener("change", (e) => {
   D.set(R("settings/guestsAllowed"), e.target.checked).then(() => toast(e.target.checked ? "Guests allowed." : "Guests blocked.")).catch((err) => { showBanner(err.message); e.target.checked = !e.target.checked; });
 });
 $("deletedToggle").addEventListener("change", (e) => { S.showDeleted = e.target.checked; syncDeletedSub(); });
+$("signupsToggle").addEventListener("change", (e) => {
+  D.set(R("settings/signupsOpen"), e.target.checked).then(() => toast(e.target.checked ? "New accounts allowed." : "New accounts blocked.")).catch((err) => { showBanner(err.message); e.target.checked = !e.target.checked; });
+});
+$("lockdownToggle").addEventListener("change", (e) => {
+  D.set(R("settings/lockdown"), e.target.checked).then(() => toast(e.target.checked ? "🔒 Lockdown ON: only admins can write." : "Lockdown OFF.")).catch((err) => { showBanner(err.message); e.target.checked = !e.target.checked; });
+});
+$("allChatsBtn").addEventListener("click", loadAdminChats);
 $("logoutBtn").addEventListener("click", logout);
 $("settingsBtn").addEventListener("click", openSettings);
 $("meName").addEventListener("click", () => openProfile(S.me.uid));
@@ -2942,7 +3034,7 @@ $("composer").addEventListener("submit", async (e) => {
   const text = input.value.trim().slice(0, MAX_LEN);
   if (!text || !S.room || S.readOnly) return;
   if (S.me.guest && LINK_RE.test(text)) { showBanner("Guests can't send links. Create an account to share links!"); return; }
-  const wait = 700 - (Date.now() - lastSend);
+  const wait = 950 - (Date.now() - lastSend);
   input.value = "";
   if (wait > 0) await new Promise((r) => setTimeout(r, wait));   // small anti-spam: wait instead of dropping
   lastSend = Date.now();
