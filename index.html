@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-b0dczoGkPjIFkjd2NqXYaNp33rvwKTvJrZElyW5aD2A=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-iO71vZ9TpeFMIPjc9vKFBB/kT8TyimpJt7lDJDmLrdM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -789,7 +789,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "9.3";
+const APP_VERSION = "9.4";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -4331,17 +4331,39 @@ function tdGenMap(seed, W, H, nEnt = 2, perEnt = 1) {
       return { entry: ei, cells };
     };
     const routes = [];
+    const used = new Set();
+    const key = ([x, y]) => x + "," + y;
+    // a path may share cells with another one or cross it, but never run right next to it (or next to itself)
+    const clean = (R) => {
+      const idx = new Map(R.cells.map((c, i) => [key(c), i]));
+      for (let i = 0; i < R.cells.length; i++) {
+        const [x, y] = R.cells[i];
+        const shared = used.has(key(R.cells[i]));
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const n = (x + dx) + "," + (y + dy);
+          const j = idx.get(n);
+          if (j !== undefined && Math.abs(j - i) > 1) return false;          // folds back next to itself
+          if (!shared && used.has(n) && j === undefined) return false;       // runs next to another path
+        }
+      }
+      return true;
+    };
+    const add = (R) => { routes.push(R); R.cells.forEach((c) => used.add(key(c))); };
     let ok = true;
-    for (let ei = 0; ei < nEnt && ok; ei++) { const A = mk(ei, ri(1, 2)); if (!A) ok = false; else routes.push(A); }
+    for (let ei = 0; ei < nEnt && ok; ei++) {
+      let A = null;
+      for (let k = 0; k < 30 && !A; k++) { const c = mk(ei, ri(1, 2)); if (c && clean(c)) A = c; }
+      if (!A) ok = false; else add(A);
+    }
     if (!ok) continue;
-    for (let k = 0; k < 40 && routes.length < want; k++) {
+    for (let k = 0; k < 120 && routes.length < want; k++) {
       const cnt = entries.map((_, i) => routes.filter((x) => x.entry === i).length);
       const ei = perEnt === 1 ? (r() < 0.5 ? 0 : 1) : cnt.indexOf(Math.min(...cnt));
       const C = mk(ei, ri(2, 3));
-      if (!C) continue;
+      if (!C || !clean(C)) continue;
       const others = new Set(routes.filter((x) => x.entry === ei).flatMap((x) => x.cells.map(([a, b]) => a + "," + b)));
       const fresh = C.cells.filter(([a, b]) => !others.has(a + "," + b)).length;
-      if (fresh >= C.cells.length * 0.35) routes.push(C);
+      if (fresh >= C.cells.length * 0.35) add(C);
     }
     if (routes.length < want) continue;
     routes.sort((a, b) => a.entry - b.entry);
