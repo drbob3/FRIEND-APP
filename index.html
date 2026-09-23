@@ -299,6 +299,96 @@
   .notepad { background: #fff; font: 13px/1.4 "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; padding: 6px; max-height: 55dvh; overflow: auto; }
   .sendlist { background: #fff; max-height: 180px; overflow: auto; padding: 4px; font: 12px/1.5 "Lucida Console", monospace; white-space: nowrap; }
   .sendlist .bad { color: var(--err); }
+  /* ======== v6: Discord-style layout (retro look) ======== */
+  .split { flex: 1; display: flex; gap: 0; min-height: 0; padding-top: 4px; }
+  .leftcol { display: flex; flex-shrink: 0; min-height: 0; }
+  .rail {
+    width: 64px; flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    padding: 8px 0; overflow-y: auto; overflow-x: hidden;
+    background: #9c9c9c;
+    border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+  }
+  .svw { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; }
+  .svw .pill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 5px; height: 32px; background: #fff; border: 1px solid #000; border-left: 0; }
+  .sv { position: relative; width: 46px; height: 46px; min-width: 0 !important; padding: 0 !important; font: bold 14px Tahoma, sans-serif; overflow: visible; }
+  .sv.on { background: #e8e8e8; border-color: var(--dark) var(--light) var(--light) var(--dark); box-shadow: inset 1px 1px var(--shadow); color: var(--select); }
+  .sv.priv::after { content: "🔒"; position: absolute; left: -3px; bottom: -4px; font-size: 11px; }
+  .sv.add { font-size: 20px; color: #006000; }
+  .sv .dot { position: absolute; right: -5px; bottom: -5px; min-width: 18px; height: 16px; padding: 0 3px; background: #c00000; color: #fff; font: bold 10px/14px Tahoma, sans-serif; border: 1px solid #fff; text-align: center; }
+  .railsep { width: 34px; border-top: 2px groove #fff; flex-shrink: 0; }
+  .chcol { width: 240px; display: flex; flex-direction: column; min-height: 0; background: #c8c8c8; border-right: 2px groove #fff; }
+  .chhead { padding: 8px 10px; font-weight: bold; font-size: 14px; border-bottom: 2px groove #fff; display: flex; align-items: center; gap: 6px; min-height: 38px; flex-shrink: 0; user-select: none; }
+  .chhead .hn { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chhead.click { cursor: pointer; }
+  .chhead.click:hover { background: #d8d8d8; }
+  .chbody { flex: 1; overflow-y: auto; padding: 4px 6px 8px; min-height: 0; }
+  .sdesc { font-size: 11px; color: #333; padding: 4px 4px 2px; overflow-wrap: anywhere; }
+  .cat { font-size: 11px; font-weight: bold; color: #404040; text-transform: uppercase; letter-spacing: .3px; padding: 10px 4px 3px; display: flex; align-items: center; gap: 4px; user-select: none; }
+  .cat .add { margin-left: auto; min-width: 0; padding: 0 5px; font-size: 12px; line-height: 14px; }
+  .ch { display: flex; align-items: center; gap: 6px; padding: 3px 6px; margin: 1px 0; cursor: pointer; color: #383838; white-space: nowrap; }
+  .ch:hover { background: #dadada; color: #000; }
+  .ch.sel { background: var(--select); color: #fff; }
+  .ch.unread { font-weight: bold; color: #000; }
+  .ch.sel.unread { color: #fff; }
+  .ch .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ch .hash { color: #707070; font-weight: bold; }
+  .ch.sel .hash { color: #ccc; }
+  .ch .badge { background: #c00000; color: #fff; font-size: 10px; padding: 0 4px; font-weight: bold; }
+  .ch .dim { font-size: 11px; color: #555; }
+  .ch.sel .dim { color: #ddd; }
+  .ch.req { background: #ffffe1; flex-wrap: wrap; white-space: normal; cursor: default; border: 1px solid #b0a060; }
+  .ch.req button { min-width: 0; padding: 1px 6px; font-size: 11px; }
+  .ch .col { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .ch .col .n { flex: none; }
+  .padhint { color: #555; font-size: 12px; font-style: italic; padding: 4px 6px; }
+  .youpanel { display: flex; align-items: center; gap: 6px; padding: 6px; border-top: 2px groove #fff; background: #b0b0b0; flex-shrink: 0; }
+  .youpanel .yn { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .youpanel .yn b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+  .youpanel .yn small { color: #303030; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .youpanel button { min-width: 0; padding: 2px 6px; }
+  .youpanel .av { width: 32px; height: 32px; font-size: 20px; border-width: 2px; }
+  .chatpane { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 0 4px; }
+  .chathead { display: flex; align-items: center; gap: 6px; padding: 4px 2px 6px; border-bottom: 2px groove #fff; min-height: 38px; flex-shrink: 0; margin-bottom: 4px; }
+  .chathead .cn { font-weight: bold; font-size: 15px; white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .chathead .cd { color: #333; font-size: 12px; border-left: 1px solid var(--shadow); padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+  .chathead .cd:empty { border: 0; }
+  .chathead button { min-width: 0; padding: 2px 8px; }
+  .mempane { width: 220px; flex-shrink: 0; overflow-y: auto; padding: 4px 6px; background: #c8c8c8; border-left: 2px groove #fff; }
+  .mem { display: flex; gap: 7px; align-items: center; padding: 3px 6px; cursor: pointer; }
+  .mem:hover { background: #dadada; }
+  .mem.off { opacity: .5; }
+  .mem .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bold; flex: 1; min-width: 0; }
+  .mem .t { font-size: 10px; color: #555; font-weight: bold; }
+  .mem .av { width: 26px; height: 26px; font-size: 16px; }
+  /* grouped messages */
+  .grp { display: flex; gap: 10px; padding: 3px 2px 2px; }
+  .grp > .av.msgav { width: 38px; height: 38px; font-size: 24px; border-width: 2px; cursor: pointer; margin-top: 2px; }
+  .grp .gb { flex: 1; min-width: 0; }
+  .grp .gh { font-family: Tahoma, sans-serif; display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
+  .grp .gh .who { font-size: 14px; }
+  .grp .gh .gtime { font-size: 11px; color: #808080; margin-left: 4px; }
+  .grp .line { padding: 1px 4px; margin-left: -4px; }
+  .line .htime { display: none; position: absolute; left: -54px; width: 46px; text-align: right; font: 10px/1.9 Tahoma, sans-serif; color: #888; top: 1px; }
+  .line:hover .htime { display: block; }
+  .grp .line:first-of-type .htime { display: none; }
+  .grp .attach, .grp .folder { margin-left: 0; }
+  #attachBtn { font-size: 18px; font-weight: bold; padding: 0 12px; }
+  /* admin page */
+  .page.graypage { background: var(--face); }
+  .admin { padding: 10px; }
+  .agrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .agrid .span2 { grid-column: 1 / -1; }
+  .agrid fieldset { background: var(--face); }
+  .list.tall { max-height: 300px; min-height: 60px; }
+  .urow { display: flex; gap: 6px; margin-bottom: 6px; }
+  .urow select { font: inherit; background: #fff; border-radius: 0; }
+  #reportsBox .report:last-child { border-bottom: 0; }
+  #reportsBox { background: #fff; max-height: 50dvh; overflow-y: auto; padding: 4px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  @media (max-width: 1100px) {
+    .mempane { position: fixed; right: 0; top: 0; bottom: 0; z-index: 501; box-shadow: -2px 0 0 var(--dark); transform: translateX(105%); transition: transform .15s; }
+    .mempane.open { transform: none; }
+  }
   @media (max-width: 760px) {
     body { padding: 0; }
     #main { height: 100dvh; border: none; box-shadow: none; }
@@ -314,6 +404,13 @@
     .float, .float.narrow { width: calc(100vw - 16px); }
     .toolbar button { min-width: 0; }
     .chatdesc { display: none; }
+    .leftcol { position: fixed; left: 0; top: 0; bottom: 0; z-index: 500; transform: translateX(-105%); transition: transform .15s; background: var(--face); box-shadow: 2px 0 0 var(--dark); }
+    .leftcol.open { transform: none; }
+    .chcol { width: min(240px, calc(88vw - 64px)); }
+    .chathead .cd { display: none; }
+    .grp > .av.msgav { width: 30px; height: 30px; font-size: 18px; }
+    .agrid { grid-template-columns: 1fr; }
+    .line .htime { display: none !important; }
     .maintabs button { padding: 4px 8px; }
   }
 </style>
@@ -331,87 +428,97 @@
     <button type="button" data-t="about">ℹ About</button>
     <button type="button" data-t="dir" id="dirTabBtn">🔎 Directory</button>
     <button type="button" data-t="chat" class="on">💬 Chat</button>
+    <button type="button" data-t="admin" id="adminTabBtn" hidden>🔧 Admin<span id="adminTabBadge" class="redbadge" hidden></span></button>
   </div>
   <div class="tabline"></div>
   <div class="page sunken" id="aboutPage" hidden></div>
   <div class="page sunken" id="dirPage" hidden></div>
+  <div class="page sunken graypage" id="adminPage" hidden>
+    <div class="admin">
+      <div class="agrid">
+        <fieldset class="span2">
+          <legend>🚩 Reports <span id="reportsBadge" class="redbadge" hidden></span></legend>
+          <div id="reportsBox"></div>
+        </fieldset>
+        <fieldset>
+          <legend id="onlineTitle">● Online now</legend>
+          <div class="list sunken tall" id="onlineList"></div>
+        </fieldset>
+        <fieldset>
+          <legend>⚙ Settings</legend>
+          <label class="check"><input type="checkbox" id="guestToggle"> Guests can join</label>
+          <label class="check"><input type="checkbox" id="deletedToggle"> Show deleted messages (in chats)</label>
+          <div class="hint" style="margin-top:6px">Tip: right-click anyone (in a list or on a message) to ban, unban, kick or DM them.</div>
+        </fieldset>
+        <fieldset class="span2">
+          <legend id="usersTitle">👥 All users</legend>
+          <div class="urow">
+            <input type="text" id="userSearch" class="sunken" placeholder="Search a name...">
+            <select id="userFilter" class="sunken">
+              <option value="all">Everyone</option>
+              <option value="acc">Accounts</option>
+              <option value="guest">Guests</option>
+              <option value="banned">Banned</option>
+              <option value="admin">Admins</option>
+            </select>
+          </div>
+          <div class="list sunken tall" id="usersList"></div>
+        </fieldset>
+        <fieldset>
+          <legend>🗄 Archive</legend>
+          <div class="hint">Archived chats (everyone left), old chats from before accounts, and all DMs.</div>
+          <div class="list sunken tall" id="archiveList"><div class="empty-row">Click "Load archive".</div></div>
+          <div class="row-btns"><button class="small" id="archiveBtn">Load archive</button></div>
+        </fieldset>
+        <fieldset>
+          <legend>🛠 Debug</legend>
+          <table class="kv" id="debugTable"></table>
+          <div class="row-btns">
+            <button class="small" id="pingBtn">Ping</button>
+            <button class="small" id="scanBtn">Scan database</button>
+            <button class="small" id="cleanBtn">Clean guests</button>
+          </div>
+          <div style="margin-top:6px;font-weight:bold">Error log</div>
+          <div class="log sunken" id="errLog">(empty)</div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
   <div class="split" id="chatSplit">
-    <aside class="side" id="side">
-      <fieldset>
-        <legend>You</legend>
-        <div class="me-box">
+    <div class="leftcol" id="side">
+      <nav class="rail" id="rail"></nav>
+      <aside class="chcol">
+        <div class="chhead" id="chHead"></div>
+        <div class="chbody" id="chBody"></div>
+        <div class="youpanel">
           <span id="meIcon"></span>
-          <span class="n" id="meName" title="View my profile"></span>
-          <button class="small" id="settingsBtn" title="Settings">⚙</button>
-          <button class="small" id="logoutBtn">Log out</button>
+          <div class="yn"><b id="meName" title="View my profile"></b><small id="meStatus"></small></div>
+          <button id="settingsBtn" title="Settings">⚙</button>
+          <button id="logoutBtn" title="Log out">⏻</button>
         </div>
-      </fieldset>
-      <fieldset id="friendsBox">
-        <legend id="friendsTitle">Friends</legend>
-        <div class="list sunken" id="friendsList"></div>
-      </fieldset>
-      <fieldset id="dmBox">
-        <legend>Direct messages</legend>
-        <div class="list sunken" id="dmList"></div>
-      </fieldset>
-      <fieldset>
-        <legend>My chats</legend>
-        <div class="list sunken" id="myChatsList"></div>
-        <div class="row-btns"><button class="small" id="newChatBtn">+ New chat...</button></div>
-      </fieldset>
-      <fieldset>
-        <legend>Public chats</legend>
-        <div class="list sunken" id="publicList"></div>
-      </fieldset>
-      <fieldset>
-        <legend id="membersTitle">In this chat</legend>
-        <div class="list sunken" id="membersList"></div>
-      </fieldset>
-      <fieldset>
-        <legend id="onlineTitle">Online now</legend>
-        <div class="list sunken" id="onlineList"></div>
-      </fieldset>
-      <fieldset id="adminBox" hidden>
-        <legend>🔧 Admin</legend>
-        <div class="row-btns" style="margin:0 0 6px"><button id="reportsBtn">🚩 Reports<span id="reportsBadge" class="redbadge" hidden></span></button></div>
-        <label class="check"><input type="checkbox" id="guestToggle"> Guests can join</label>
-        <label class="check"><input type="checkbox" id="deletedToggle"> Show deleted messages</label>
-        <table class="kv" id="debugTable"></table>
-        <div class="row-btns">
-          <button class="small" id="pingBtn">Ping</button>
-          <button class="small" id="scanBtn">Scan database</button>
-          <button class="small" id="archiveBtn">Archive...</button>
-          <button class="small" id="cleanBtn">Clean guests</button>
-        </div>
-        <div style="margin-top:6px;font-weight:bold">Error log</div>
-        <div class="log sunken" id="errLog">(empty)</div>
-      </fieldset>
-    </aside>
+      </aside>
+    </div>
     <div class="backdrop" id="backdrop"></div>
 
     <section class="chatpane">
-      <div class="toolbar">
+      <div class="chathead">
         <button id="menuBtn" title="Menu">☰</button>
-        <span class="chatname" id="chatName">...</span>
-        <span class="spacer"></span>
-        <button id="profileBtn" class="small" hidden>Profile</button>
-        <button id="inviteBtn" class="small">Invite...</button>
-        <button id="subBtn" class="small" hidden>+ Sub-chat</button>
-        <button id="leaveBtn" class="small">Leave chat</button>
-        <button id="renameBtn" class="small" hidden>Rename</button>
-        <button id="clearBtn" class="small" hidden>Clear</button>
-        <button id="unarchiveBtn" class="small" hidden>Unarchive</button>
-        <button id="deleteBtn" class="small" hidden>Delete chat</button>
+        <span class="cn" id="chatName">...</span>
+        <span class="cd" id="chatDesc"></span>
+        <button id="inviteBtn" title="Invite people">🔗 Invite</button>
+        <button id="membersBtn" title="Show / hide members">👥</button>
+        <button id="moreBtn" title="More...">⋯</button>
       </div>
       <div class="banner" id="banner"></div>
       <div id="messages" class="sunken"></div>
       <form class="composer" id="composer">
-        <button type="button" id="attachBtn" title="Send images, videos or files">📎</button>
+        <button type="button" id="attachBtn" title="Send images, videos or files">＋</button>
         <input type="file" id="fileInput" multiple hidden>
         <textarea id="input" class="sunken" rows="1" maxlength="500" placeholder="Type a message..."></textarea>
         <button id="sendBtn" type="submit"><u>S</u>end</button>
       </form>
     </section>
+    <aside class="mempane" id="memPane"></aside>
   </div>
   <div class="statusbar">
     <div id="statusConn">Connecting...</div>
@@ -481,7 +588,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "5.0";
+const APP_VERSION = "6.0";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
@@ -546,6 +653,14 @@ function fmtTime(ms) {
   const t = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   return d.toDateString() === new Date().toDateString() ? t : d.toLocaleDateString([], { day: "2-digit", month: "2-digit" }) + " " + t;
 }
+function fmtDay(ms) {
+  if (!ms) return "just now";
+  const d = new Date(ms), t = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const today = new Date(); const y = new Date(Date.now() - 86400000);
+  if (d.toDateString() === today.toDateString()) return "Today at " + t;
+  if (d.toDateString() === y.toDateString()) return "Yesterday at " + t;
+  return d.toLocaleDateString() + " " + t;
+}
 function fmtFull(ms) { return ms ? new Date(ms).toLocaleString() : "just now"; }
 function fmtDate(ms) { return ms ? new Date(ms).toLocaleDateString() : "?"; }
 function fmtAgo(ms) {
@@ -590,7 +705,7 @@ function dialog({ title, message, input, inputValue = "", placeholder = "", okTe
     body.append(btns);
     const ov = $("dlgOverlay");
     ov.classList.add("show");
-    setTimeout(() => (inp || ok).focus(), 30);
+    setTimeout(() => { if (!$("dlgBody").contains(document.activeElement)) (inp || ok).focus(); }, 30);
     const done = (v) => { ov.classList.remove("show"); $("dlgForm").onsubmit = null; resolve(v); };
     $("dlgForm").onsubmit = (e) => {
       e.preventDefault();
@@ -816,7 +931,8 @@ const S = {
   me: null, isAdmin: false, banned: false,
   users: {}, status: {}, chats: {}, myChats: {}, myDMs: {}, members: {}, settings: {}, admins: {}, bans: {},
   friends: {}, reqIn: {}, reqOut: {}, loc: {}, reports: {},
-  room: null, readOnly: false, legacyView: false, tab: "chat", about: null,
+  room: null, readOnly: false, legacyView: false, tab: "chat", about: null, home: false,
+  showMembers: store("chat-members") !== "0",
   messages: [], deleted: {}, showDeleted: false,
   unread: {}, connected: false, serverOffset: 0,
 };
@@ -997,12 +1113,11 @@ function setLoc() {
 
 function startApp() {
   renderMe();
-  $("friendsBox").hidden = S.me.guest;
   $("dirTabBtn").hidden = S.me.guest;
   sub(R("site/about"), (s) => { S.about = s.val(); if (S.tab === "about") renderAbout(); });
   sub(R(".info/connected"), async (s) => {
     S.connected = !!s.val();
-    renderStatus();
+    renderStatus(); renderMe();
     if (!S.connected) return;
     const st = R("status/" + S.me.uid);
     try {
@@ -1019,12 +1134,13 @@ function startApp() {
     usersReadyResolve();
     renderMe(); renderSide(); render(); renderToolbar();
   });
-  sub(R("status"), (s) => { S.status = s.val() || {}; renderSide(); });
+  sub(R("status"), (s) => { S.status = s.val() || {}; syncAdminLoc(); renderSide(); });
   sub(R("admins"), (s) => {
     S.admins = { ...(s.val() || {}), [OWNER_UID]: true };
     const was = S.isAdmin;
     S.isAdmin = S.admins[S.me.uid] === true;
-    $("adminBox").hidden = !S.isAdmin;
+    $("adminTabBtn").hidden = !S.isAdmin;
+    if (!S.isAdmin && S.tab === "admin") setTab("chat");
     if (S.isAdmin && !was) startAdmin();
     renderMe(); renderToolbar(); renderSide(); render();
   });
@@ -1164,7 +1280,10 @@ async function openRoom(room, code) {
   roomUnsubs.forEach((u) => u());
   roomUnsubs = [];
   S.room = room;
+  S.home = false;
   S.readOnly = readOnly;
+  if (isDM(room)) store("chat-last-dm", room);
+  else if (S.chats[room]) store("last-in-" + (S.chats[room].parent || room), room);
   S.messages = [];
   S.members = {};
   S.deleted = {};
@@ -1724,13 +1843,13 @@ function startAdmin() {
     const before = S.reports;
     S.reports = s.val() || {};
     const open = Object.values(S.reports).filter((r) => r.status === "open").length;
-    $("reportsBadge").hidden = !open;
-    $("reportsBadge").textContent = open;
+    for (const id of ["reportsBadge", "adminTabBadge"]) { $(id).hidden = !open; $(id).textContent = open; }
     if (!first) for (const [k, r] of Object.entries(S.reports)) if (!before[k] && r.status === "open") toast("🚩 New report: " + (REASONS[r.reason] || r.reason));
     first = false;
-    if (openWins.has("reports")) renderReports();
+    if (S.tab === "admin") renderReports();
     renderDebug();
   });
+  syncAdminLoc();
   usersReady.then(() => setTimeout(() => cleanGuests(true), 3000));
 }
 async function adminKick(uid) {
@@ -1839,12 +1958,10 @@ async function cleanGuests(auto) {
   if (n) { logError("Cleaned " + n + " old guest(s)"); if (!auto) toast("Cleaned " + n + " old guest(s)."); }
 }
 async function openArchive() {
-  const { content, close } = openWindow("Archive - old & archived chats", "🗄", { key: "archive" });
-  const list = el("div", "list sunken"); list.style.maxHeight = "50dvh";
-  content.append(el("div", null, "Archived chats (everyone left), old chats from before accounts, and DMs. Click one to read it."), list);
-  list.append(el("div", "empty-row", "Loading..."));
+  const list = $("archiveList");
+  list.replaceChildren(el("div", "empty-row", "Loading..."));
   const rows = [];
-  for (const [id, c] of Object.entries(S.chats)) if (c.archived) rows.push({ id, label: (c.type === "private" ? "🔒 " : "# ") + c.name, note: "archived" });
+  for (const [id, c] of Object.entries(S.chats)) if (c.archived) rows.push({ id, label: chatLabel(id), note: "archived" });
   let keys = [];
   try { keys = Object.keys((await D.get(R("rooms"))).val() || {}); } catch (e) { logError(e.message); }
   for (const id of keys.filter((r) => !isDM(r) && !S.chats[r])) rows.push({ id, label: "# " + id, note: "old" });
@@ -1857,40 +1974,34 @@ async function openArchive() {
   for (const r of rows) {
     const it = el("div", "item click");
     it.append(el("span", "n", r.label), el("span", "dim", r.note));
-    it.addEventListener("click", () => { close(); openRoom(r.id); });
+    it.addEventListener("click", () => openRoom(r.id));
     list.append(it);
   }
-  const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
-  content.append(btns);
 }
 let showClosedReports = false;
-function openReports() {
-  openWindow("Reports", "🚩", { key: "reports" });
-  renderReports();
-}
+function openReports() { setTab("admin"); }
 function renderReports() {
-  const win = openWins.get("reports");
-  if (!win) return;
-  const { content, close } = win;
-  content.replaceChildren();
+  const box = $("reportsBox");
+  if (!box || !S.isAdmin) return;
+  box.replaceChildren();
   const all = Object.entries(S.reports).sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0));
   const openOnes = all.filter(([, r]) => r.status === "open");
-  const top = el("div", "wbuttons"); top.style.justifyContent = "space-between";
+  const top = el("div", "wbuttons"); top.style.justifyContent = "space-between"; top.style.padding = "2px 2px 6px";
   top.append(el("b", null, openOnes.length + " open report(s)"));
   const tog = el("label", "check"); const cb = el("input"); cb.type = "checkbox"; cb.checked = showClosedReports; cb.onchange = () => { showClosedReports = cb.checked; renderReports(); };
   tog.append(cb, "Show closed"); top.append(tog);
-  const list = el("div", "sunken"); list.style.background = "#fff"; list.style.maxHeight = "60dvh"; list.style.overflowY = "auto"; list.style.padding = "4px";
+  box.append(top);
   const shown = showClosedReports ? all : openOnes;
-  if (!shown.length) list.append(el("div", "empty", "No reports. 🎉"));
+  if (!shown.length) box.append(el("div", "empty", "No reports. 🎉"));
   for (const [id, r] of shown) {
-    const box = el("div", "report" + (r.status !== "open" ? " closed" : ""));
+    const rb = el("div", "report" + (r.status !== "open" ? " closed" : ""));
     const who = S.users[r.by];
-    const where = isDM(r.room) ? "a DM" : "# " + (S.chats[r.room]?.name || r.room);
-    box.append(el("div", null, "🚩 " + (REASONS[r.reason] || r.reason) + " · by " + (who ? who.name : "?") + " · " + fmtFull(r.ts) + " · in " + where + (r.status !== "open" ? " · CLOSED" : "")));
+    const where = isDM(r.room) ? "a DM" : (S.chats[r.room] ? chatLabel(r.room) : "# " + r.room);
+    rb.append(el("div", null, "🚩 " + (REASONS[r.reason] || r.reason) + " · by " + (who ? who.name : "?") + " · " + fmtFull(r.ts) + " · in " + where + (r.status !== "open" ? " · CLOSED" : "")));
     const mline = el("div", "rmsg sunken");
     mline.append(iconNode(r.msg?.uid, r.msg || {}), " " + (r.msg?.name || "?") + (r.msg?.guest ? " [GUEST]" : "") + ": " + (r.msg?.text || (r.msg?.media ? "[" + r.msg.media.kind + "] " + r.msg.media.fname : r.msg?.files ? "[📁 " + (r.msg.folder || "Files") + ": " + Object.values(r.msg.files).map((f) => f.fname).join(", ") + "]" : "")));
-    box.append(mline);
-    if (r.comment) box.append(el("div", null, "Comment: " + r.comment));
+    rb.append(mline);
+    if (r.comment) rb.append(el("div", null, "Comment: " + r.comment));
     const b = el("div", "wbuttons"); b.style.justifyContent = "flex-start";
     const go = el("button", "small", "Go to message"); go.onclick = () => goToMessage(r.room, r.msgId);
     const del = el("button", "small", "Delete message");
@@ -1898,19 +2009,17 @@ function renderReports() {
       let live = null;
       try { live = (await D.get(R("rooms/" + r.room + "/" + r.msgId))).val(); } catch {}
       if (!live) { toast("This message is already deleted."); return; }
-      if (await adminDeleteMessage({ key: r.msgId, ...live }, r.room)) D.update(R("reports/" + id), { status: "closed" }).catch(() => {});
+      if (await adminDeleteMessage({ ...parseMsg(r.msgId, live) }, r.room)) D.update(R("reports/" + id), { status: "closed" }).catch(() => {});
     };
     const ban = el("button", "small", S.bans[r.msg?.uid] ? "Unban author" : "Ban author"); ban.onclick = () => r.msg?.uid && adminBan(r.msg.uid);
-    if (r.msg?.uid === OWNER_UID) ban.disabled = true;
+    if (r.msg?.uid === OWNER_UID || !S.users[r.msg?.uid]) ban.disabled = true;
     const cls = el("button", "small", r.status === "open" ? "Close report" : "Reopen");
     cls.onclick = () => D.update(R("reports/" + id), { status: r.status === "open" ? "closed" : "open" }).catch((e) => showBanner(e.message));
     const rm = el("button", "small", "Delete report"); rm.onclick = () => D.set(R("reports/" + id), null).catch((e) => showBanner(e.message));
     b.append(go, del, ban, cls, rm);
-    box.append(b);
-    list.append(box);
+    rb.append(b);
+    box.append(rb);
   }
-  const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
-  content.append(top, list, btns);
 }
 async function goToMessage(room, key) {
   if (S.room !== room) await openRoom(room);
@@ -1927,8 +2036,8 @@ async function goToMessage(room, key) {
 function renderMe() {
   if (!S.me) return;
   $("meIcon").replaceChildren(iconNode(S.me.uid));
-  $("meName").textContent = S.me.name + (S.me.guest ? " [GUEST]" : "") + (S.isAdmin ? " ⭐" : "");
-  $("newChatBtn").hidden = S.me.guest;
+  $("meName").textContent = S.me.name + (S.isAdmin ? " ⭐" : "");
+  $("meStatus").textContent = (S.connected ? "● online" : "○ offline") + (S.me.guest ? " · [GUEST]" : S.isAdmin ? " · admin" : "");
 }
 function isOnline(uid) { return !!S.status[uid]?.online; }
 function personRow(uid, extraText) {
@@ -1948,88 +2057,269 @@ function personRow(uid, extraText) {
 function sortPeople(ids) { return ids.sort((a, b) => (isOnline(b) - isOnline(a)) || (S.users[a]?.name || "").localeCompare(S.users[b]?.name || "")); }
 function renderSide() {
   if (!S.me) return;
-  if (!S.me.guest) {
-    const fl = $("friendsList");
-    fl.replaceChildren();
-    const reqs = Object.keys(S.reqIn).filter((u) => S.users[u]);
-    for (const uid of reqs) {
-      const it = el("div", "item req");
-      it.append(iconNode(uid), el("span", "n", S.users[uid].name + " wants to be your friend"));
-      const ok = el("button", "small", "Accept"); ok.onclick = () => acceptFriend(uid);
-      const no = el("button", "small", "Decline"); no.onclick = () => declineFriend(uid);
-      it.append(ok, no);
-      fl.append(it);
-    }
-    const fr = sortPeople(Object.keys(S.friends).filter((u) => S.users[u]));
-    $("friendsTitle").textContent = "Friends (" + fr.filter(isOnline).length + "/" + fr.length + ")" + (reqs.length ? "  +" + reqs.length + " new" : "");
-    if (!fr.length && !reqs.length) fl.append(el("div", "empty-row", "Right-click a message → Add friend"));
-    for (const uid of fr) {
-      const row = personRow(uid, locText(uid));
-      row.title = "Click: profile · Double-click: send DM";
-      row.addEventListener("dblclick", () => startDM(uid));
-      fl.append(row);
-    }
-  }
-  const dl = $("dmList");
-  dl.replaceChildren();
-  const dms = Object.entries(S.myDMs).sort((a, b) => (b[1].lastTs || 0) - (a[1].lastTs || 0));
-  $("dmBox").hidden = S.me.guest && !dms.length;
-  if (!dms.length) dl.append(el("div", "empty-row", "Double-click a friend to chat"));
-  for (const [dm, v] of dms) {
-    const uid = v.with;
-    const it = el("div", "item click" + (dm === S.room ? " sel" : ""));
-    const on = isOnline(uid);
-    it.append(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"), iconNode(uid), el("span", "n", displayName(S.users[uid])));
-    const n = dm === S.room ? 0 : (S.unread[dm] || 0);
-    if (n) it.append(el("span", "badge", "(" + (n > 98 ? "99+" : n) + ")"));
-    it.addEventListener("click", () => openRoom(dm));
-    bindMenu(it, (x, y) => personMenu(x, y, uid));
-    dl.append(it);
-  }
-  const my = $("myChatsList");
-  my.replaceChildren();
-  const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].parent).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
-  if (!mine.length) my.append(el("div", "empty-row", "No chats yet"));
-  const addRow = (r, isSub, last) => {
-    const c = S.chats[r];
-    const it = el("div", "item click" + (r === S.room ? " sel" : "") + (isSub ? " sub" : ""));
-    if (isSub) it.append(el("span", "tree", last ? "└" : "├"));
-    it.append(el("span", "n", (isSub ? "# " : (c.type === "private" ? "🔒 " : "# ")) + c.name + (c.archived ? " (archived)" : "")));
-    if (c.desc) it.title = c.desc;
-    const n = r === S.room ? 0 : (S.unread[r] || 0);
-    if (n) it.append(el("span", "badge", "(" + (n > 98 ? "99+" : n) + ")"));
-    it.addEventListener("click", () => openRoom(r));
-    my.append(it);
+  renderRail();
+  renderChannels();
+  renderMembers();
+  renderMe();
+  if (S.isAdmin) { renderDebug(); if (S.tab === "admin") renderAdminLists(); }
+}
+function curServer() {
+  if (S.home || !S.room || isDM(S.room)) return "home";
+  const c = S.chats[S.room];
+  return c ? (c.parent || S.room) : S.room;
+}
+function initials(name) {
+  const words = String(name).split(/[\s_\-.]+/).filter(Boolean);
+  if (words.length > 1) return words.slice(0, 3).map((w) => [...w][0]).join("").toUpperCase();
+  const w = [...String(name)];
+  return (w[0] || "?").toUpperCase() + (w[1] || "");
+}
+function unreadIn(base) { return (S.unread[base] || 0) + subsOf(base).reduce((n, [sid]) => n + (S.unread[sid] || 0), 0); }
+function renderRail() {
+  const rail = $("rail");
+  rail.replaceChildren();
+  const server = curServer();
+  const mk = (label, title, on, onClick, dot, cls) => {
+    const w = el("div", "svw");
+    if (on) w.append(el("span", "pill"));
+    const b = el("button", "sv" + (on ? " on" : "") + (cls ? " " + cls : ""), label);
+    b.type = "button"; b.title = title;
+    b.addEventListener("click", onClick);
+    if (dot) b.append(el("span", "dot", dot > 99 ? "99+" : String(dot)));
+    w.append(b);
+    rail.append(w);
+    return b;
   };
+  const homeUnread = Object.keys(S.myDMs).reduce((n, d) => n + (d === S.room ? 0 : (S.unread[d] || 0)), 0) + Object.keys(S.reqIn).length;
+  mk("✉", "Home: friends & direct messages", server === "home", goHome, homeUnread);
+  rail.append(el("div", "railsep"));
+  const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].parent).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
   for (const r of mine) {
-    addRow(r, false);
-    const subs = subsOf(r);
-    subs.forEach(([sid], i) => addRow(sid, true, i === subs.length - 1));
+    const c = S.chats[r];
+    const n = server === r ? 0 : unreadIn(r);
+    const b = mk(initials(c.name), c.name + (c.type === "private" ? " (private)" : ""), server === r, () => openServer(r), n, c.type === "private" ? "priv" : "");
+    bindMenu(b, async (x, y) => { if (curServer() !== r) await openServer(r); roomMenu(x, y); });
   }
-  const pub = $("publicList");
-  pub.replaceChildren();
-  const pubs = Object.entries(S.chats).filter(([r, c]) => c.type === "public" && !c.archived && !c.parent && !S.myChats[r]).sort((a, b) => a[1].name.localeCompare(b[1].name));
-  if (!pubs.length) pub.append(el("div", "empty-row", "You're in all public chats"));
-  for (const [r, c] of pubs) {
-    const it = el("div", "item click" + (r === S.room ? " sel" : ""));
-    it.append(el("span", "n", "# " + c.name), el("span", "dim", "join"));
-    if (c.desc) it.title = c.desc;
-    it.addEventListener("click", () => openRoom(r));
-    pub.append(it);
+  if (S.legacyView && server !== "home" && !S.chats[server]) mk("🗄", "Old chat (read-only)", true, () => {}, 0);
+  if (!S.me.guest) {
+    if (mine.length) rail.append(el("div", "railsep"));
+    mk("+", "Create a chat", false, () => createChat(), 0, "add");
+    mk("🔎", "Find public chats (Directory)", false, () => setTab("dir"), 0);
   }
-  const mem = $("membersList");
-  mem.replaceChildren();
-  const ids = sortPeople(Object.keys(S.members).filter((u) => S.users[u]));
-  $("membersTitle").textContent = (isDM(S.room) ? "In this conversation" : "In this chat") + " (" + ids.length + ")";
-  if (!ids.length) mem.append(el("div", "empty-row", S.room ? "Nobody" : "No chat open"));
-  for (const uid of ids) mem.append(personRow(uid));
+}
+async function openServer(base) {
+  const last = store("last-in-" + base);
+  if (last && S.chats[last] && (last === base || S.chats[last].parent === base)) return openRoom(last);
+  return openRoom(base);
+}
+function goHome() {
+  const last = store("chat-last-dm");
+  if (last && S.myDMs[last]) return openRoom(last);
+  const recent = Object.entries(S.myDMs).sort((a, b) => (b[1].lastTs || 0) - (a[1].lastTs || 0))[0];
+  if (recent) return openRoom(recent[0]);
+  showHome();
+}
+function showHome() {
+  roomUnsubs.forEach((u) => u()); roomUnsubs = [];
+  S.room = null; S.home = true; S.readOnly = false; S.legacyView = false;
+  S.messages = []; S.members = {}; S.deleted = {};
+  closeSide();
+  history.replaceState(null, "", location.pathname);
+  setLoc();
+  renderToolbar(); renderSide(); render();
+}
+function chRow(parent, { label, icon, sel, unread, title, onClick, onMenu, extra, hash }) {
+  const it = el("div", "ch" + (sel ? " sel" : "") + (unread ? " unread" : ""));
+  if (hash) it.append(el("span", "hash", hash));
+  if (icon) it.append(icon);
+  const n = el("span", "n", label);
+  it.append(n);
+  if (extra) it.append(extra);
+  if (unread) it.append(el("span", "badge", unread > 99 ? "99+" : String(unread)));
+  if (title) it.title = title;
+  if (onClick) it.addEventListener("click", onClick);
+  if (onMenu) bindMenu(it, onMenu);
+  parent.append(it);
+  return it;
+}
+function canManage(base) { const b = S.chats[base]; return !!b && !S.me.guest && (S.isAdmin || b.createdBy === S.me.uid); }
+function renderChannels() {
+  const col = $("chBody"), head = $("chHead");
+  col.replaceChildren(); head.replaceChildren();
+  head.onclick = null; head.classList.remove("click");
+  const server = curServer();
+  if (server === "home") {
+    head.append(el("span", "hn", "✉ Home"));
+    if (!S.me.guest) {
+      const fr = sortPeople(Object.keys(S.friends).filter((u) => S.users[u]));
+      const reqs = Object.keys(S.reqIn).filter((u) => S.users[u]);
+      col.append(el("div", "cat", "Friends — " + fr.filter(isOnline).length + "/" + fr.length + " online"));
+      for (const uid of reqs) {
+        const it = el("div", "ch req");
+        it.append(iconNode(uid), el("span", "n", S.users[uid].name + " wants to be your friend"));
+        const ok = el("button", null, "Accept"); ok.onclick = () => acceptFriend(uid);
+        const no = el("button", null, "Decline"); no.onclick = () => declineFriend(uid);
+        it.append(ok, no);
+        col.append(it);
+      }
+      if (!fr.length && !reqs.length) col.append(el("div", "padhint", "No friends yet. Right-click someone's message → Add friend."));
+      for (const uid of fr) {
+        const on = isOnline(uid);
+        const box = el("span", "col");
+        const nm = el("span", "n", displayName(S.users[uid]));
+        box.append(nm, el("span", "dim", locText(uid)));
+        const it = el("div", "ch");
+        it.append(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"), iconNode(uid), box);
+        it.title = "Click: profile · Double-click: send a DM";
+        it.addEventListener("click", () => openProfile(uid));
+        it.addEventListener("dblclick", () => startDM(uid));
+        bindMenu(it, (x, y) => personMenu(x, y, uid));
+        col.append(it);
+      }
+    } else {
+      col.append(el("div", "padhint", "Guests can't add friends. Create an account to get friends and DMs!"));
+    }
+    col.append(el("div", "cat", "Direct messages"));
+    const dms = Object.entries(S.myDMs).sort((a, b) => (b[1].lastTs || 0) - (a[1].lastTs || 0));
+    if (!dms.length) col.append(el("div", "padhint", S.me.guest ? "No messages." : "Double-click a friend to start a conversation."));
+    for (const [dm, v] of dms) {
+      const uid = v.with;
+      const on = isOnline(uid);
+      const it = chRow(col, {
+        label: displayName(S.users[uid]), icon: iconNode(uid), sel: dm === S.room,
+        unread: dm === S.room ? 0 : (S.unread[dm] || 0),
+        onClick: () => openRoom(dm), onMenu: (x, y) => personMenu(x, y, uid),
+      });
+      it.prepend(el("span", on ? "dot-on" : "dot-off", on ? "●" : "○"));
+    }
+    return;
+  }
+  const c = S.chats[server];
+  if (!c) {
+    head.append(el("span", "hn", "🗄 Old chat"));
+    chRow(col, { hash: "#", label: server, sel: true });
+    col.append(el("div", "padhint", "Read-only chat from before accounts existed."));
+    return;
+  }
+  head.append(el("span", "hn", (c.type === "private" ? "🔒 " : "") + c.name + (c.archived ? " (archived)" : "")), el("span", null, "▾"));
+  head.classList.add("click");
+  head.title = "Chat menu";
+  head.onclick = () => { const r = head.getBoundingClientRect(); roomMenu(r.left + 8, r.bottom); };
+  if (c.desc) col.append(el("div", "sdesc", c.desc));
+  const cat = el("div", "cat", "Text channels");
+  if (canManage(server) && !c.archived) {
+    const add = el("button", "add", "+"); add.type = "button"; add.title = "Create a sub-chat";
+    add.onclick = () => createChat(server);
+    cat.append(add);
+  }
+  col.append(cat);
+  const row = (id, name) => chRow(col, {
+    hash: "#", label: name, sel: id === S.room, unread: id === S.room ? 0 : (S.unread[id] || 0),
+    title: S.chats[id]?.desc || "", onClick: () => openRoom(id),
+    onMenu: async (x, y) => { if (S.room !== id) await openRoom(id); roomMenu(x, y); },
+  });
+  row(server, c.name);
+  for (const [sid, sc] of subsOf(server)) row(sid, sc.name);
+}
+function roomMenu(x, y) {
+  const room = S.room;
+  if (!room) return;
+  const dm = isDM(room);
+  const chat = dm ? null : S.chats[room];
+  const base = chat ? (chat.parent || room) : null;
+  const bchat = base ? S.chats[base] : null;
+  const archived = !!(chat && (chat.archived || bchat?.archived));
+  const member = !!(base && S.myChats[base]);
+  const items = [];
+  if (chat && !archived && !(bchat?.type === "private" && !member && !S.isAdmin)) items.push({ label: "🔗 Invite people...", run: inviteLink });
+  if (chat && !S.me.guest && (S.isAdmin || chat.createdBy === S.me.uid)) items.push({ label: "✎ Edit " + (chat.parent ? "sub-chat" : "chat") + "...", run: adminRename });
+  if (bchat && !archived && canManage(base)) items.push({ label: "＋ Create sub-chat...", run: () => createChat(base) });
+  if (dm && room.slice(3).split("-").includes(S.me.uid)) items.push({ label: "👤 View profile", run: () => openProfile(dmOther(room)) });
+  items.push("-");
+  if (member) items.push({ label: "🚪 Leave " + (bchat?.name || "chat"), danger: true, run: leaveChat });
+  if (dm && S.myDMs[room]) items.push({ label: "✖ Close this DM", run: closeDM });
+  if (S.isAdmin) items.push("-", { label: "🔧 Clear all messages", danger: true, run: adminClear });
+  if (S.isAdmin && chat && chat.archived) items.push({ label: "🔧 Unarchive", run: adminUnarchive });
+  if (S.isAdmin || (chat && chat.parent && chat.createdBy === S.me.uid)) items.push({ label: (S.isAdmin ? "🔧 " : "🗑 ") + "Delete " + (dm ? "DM" : chat && chat.parent ? "sub-chat" : "chat"), danger: true, run: adminDeleteChat });
+  showMenu(x, y, null, cleanItems(items));
+}
+function renderMembers() {
+  const pane = $("memPane");
+  pane.replaceChildren();
+  const wide = innerWidth > 1100;
+  const has = !!S.room;
+  if (wide) { pane.hidden = !(has && S.showMembers); pane.classList.remove("open"); }
+  else pane.hidden = !has;
+  if (!has) return;
+  const ids = Object.keys(S.members).filter((u) => S.users[u]);
+  const on = sortPeople(ids.filter(isOnline)), off = sortPeople(ids.filter((u) => !isOnline(u)));
+  const add = (uid) => {
+    const u = S.users[uid];
+    const it = el("div", "mem" + (isOnline(uid) ? "" : " off"));
+    const n = el("span", "n", u.name + (isAdminUid(uid) ? " ⭐" : ""));
+    n.style.color = (!u.deleted && u.color) || "#000";
+    it.append(iconNode(uid), n);
+    if (u.guest) it.append(el("span", "t", "GUEST"));
+    if (S.isAdmin && S.bans[uid]) it.append(el("span", "t", "⛔"));
+    it.title = displayName(u);
+    it.addEventListener("click", () => openProfile(uid));
+    bindMenu(it, (x, y) => personMenu(x, y, uid));
+    pane.append(it);
+  };
+  pane.append(el("div", "cat", "Online — " + on.length));
+  on.forEach(add);
+  if (off.length) { pane.append(el("div", "cat", "Offline — " + off.length)); off.forEach(add); }
+}
+function toggleMembers() {
+  if (innerWidth > 1100) {
+    S.showMembers = !S.showMembers;
+    store("chat-members", S.showMembers ? "1" : "0");
+    renderMembers();
+  } else {
+    const open = !$("memPane").classList.contains("open");
+    $("memPane").classList.toggle("open", open);
+    $("backdrop").classList.toggle("show", open);
+  }
+}
+/* ----- admin page lists ----- */
+const adminLocSubs = new Map();
+function syncAdminLoc() {
+  if (!S.isAdmin) return;
+  const online = new Set(Object.keys(S.status).filter(isOnline));
+  for (const [uid, u] of adminLocSubs) if (!online.has(uid)) { u(); adminLocSubs.delete(uid); if (!S.friends[uid]) delete S.loc[uid]; }
+  for (const uid of online) {
+    if (adminLocSubs.has(uid) || uid === S.me.uid) continue;
+    adminLocSubs.set(uid, D.onValue(R("loc/" + uid), (s) => { S.loc[uid] = s.val(); if (S.tab === "admin") renderAdminLists(); }, () => {}));
+  }
+}
+function renderAdminLists() {
+  if (!S.isAdmin) return;
   const onl = $("onlineList");
   onl.replaceChildren();
   const online = sortPeople(Object.keys(S.status).filter((u) => isOnline(u) && S.users[u]));
-  $("onlineTitle").textContent = "Online now (" + online.length + ")";
+  $("onlineTitle").textContent = "● Online now (" + online.length + ")";
   if (!online.length) onl.append(el("div", "empty-row", "Nobody"));
-  for (const uid of online) onl.append(personRow(uid));
-  if (S.isAdmin) renderDebug();
+  for (const uid of online) onl.append(personRow(uid, uid === S.me.uid ? "you" : locText(uid)));
+  const q = ($("userSearch").value || "").trim().toLowerCase();
+  const f = $("userFilter").value;
+  const all = Object.keys(S.users).filter((uid) => {
+    const u = S.users[uid];
+    if (q && !u.name.toLowerCase().includes(q)) return false;
+    if (f === "acc") return !u.guest && !u.deleted;
+    if (f === "guest") return u.guest;
+    if (f === "banned") return !!S.bans[uid];
+    if (f === "admin") return isAdminUid(uid);
+    return true;
+  });
+  const list = $("usersList");
+  list.replaceChildren();
+  $("usersTitle").textContent = "👥 All users (" + Object.keys(S.users).length + ")";
+  if (!all.length) list.append(el("div", "empty-row", "No user found"));
+  for (const uid of sortPeople(all).slice(0, 300)) {
+    const u = S.users[uid];
+    const type = u.deleted ? "deleted" : u.guest ? "guest" : isAdminUid(uid) ? "admin" : "account";
+    list.append(personRow(uid, type + " · since " + fmtDate(u.created)));
+  }
 }
 function renderDebug() {
   if (!S.isAdmin) return;
@@ -2068,39 +2358,36 @@ function renderToolbar() {
   const base = chat ? (chat.parent || S.room) : null;
   const bchat = base ? S.chats[base] : null;
   const archived = !!(chat && (chat.archived || bchat?.archived));
+  const member = !!(base && S.myChats[base]);
   const cn = $("chatName");
   cn.replaceChildren();
-  if (!S.room) cn.textContent = "No chat open";
+  let desc = "";
+  let where = "";
+  if (!S.room) { cn.textContent = S.home ? "✉ Home" : "No chat open"; desc = S.home ? "Friends and private messages" : ""; }
   else if (dm) {
     const parts = S.room.slice(3).split("-");
-    if (parts.includes(S.me.uid)) { const o = dmOther(S.room); cn.append(iconNode(o), "✉ " + displayName(S.users[o])); }
+    if (parts.includes(S.me.uid)) { const o = dmOther(S.room); cn.append(iconNode(o), "@ " + displayName(S.users[o])); where = "@" + (S.users[o]?.name || "?"); desc = S.users[o]?.bio || ""; }
     else cn.append("✉ " + parts.map((u) => S.users[u]?.name || "?").join(" ↔ ") + " (admin view)");
   }
   else if (!chat) cn.textContent = "# " + S.room + " (old chat, read-only)";
   else {
-    cn.append(chatLabel(S.room) + (archived ? " (archived)" : ""));
-    if (chat.desc) { const d = el("span", "chatdesc", "— " + chat.desc); d.title = chat.desc; cn.append(d); }
+    cn.append((chat.parent ? "" : (chat.type === "private" ? "🔒 " : "")) + "# " + chat.name + (archived ? " (archived)" : ""));
+    where = "#" + chat.name;
+    desc = chat.desc || "";
   }
-  $("titleText").textContent = "Hangout Chat" + (S.room ? " - " + (dm ? "DM" : (chat ? chat.name : S.room)) : "");
-  const member = !!(base && S.myChats[base]);
-  const owner = !!(bchat && bchat.createdBy === S.me.uid);
-  $("profileBtn").hidden = !(dm && S.room.slice(3).split("-").includes(S.me.uid));
+  $("chatDesc").textContent = desc;
+  $("chatDesc").title = desc;
+  $("titleText").textContent = "Hangout Chat" + (S.room ? " - " + (dm ? "DM" : (chat ? (chat.parent ? (bchat?.name || "") + " › " : "") + chat.name : S.room)) : "");
   $("inviteBtn").hidden = dm || !chat || archived || (bchat?.type === "private" && !member && !S.isAdmin);
-  $("leaveBtn").hidden = !(member || (dm && S.myDMs[S.room]));
-  $("leaveBtn").textContent = dm ? "Close DM" : "Leave chat";
-  $("subBtn").hidden = !(bchat && !archived && !S.me.guest && (S.isAdmin || owner));
-  $("renameBtn").hidden = !(chat && !S.me.guest && (S.isAdmin || chat.createdBy === S.me.uid));
-  $("renameBtn").textContent = "Edit...";
-  $("clearBtn").hidden = !(S.isAdmin && S.room);
-  $("deleteBtn").hidden = !((S.isAdmin && S.room) || (chat && chat.parent && chat.createdBy === S.me.uid));
-  $("deleteBtn").textContent = chat && chat.parent ? "Delete sub-chat" : "Delete chat";
-  $("unarchiveBtn").hidden = !(S.isAdmin && chat && chat.archived);
+  $("moreBtn").hidden = !S.room;
+  $("membersBtn").hidden = !S.room;
+  $("membersBtn").classList.toggle("on", innerWidth > 1100 && S.showMembers);
   const canWrite = !!S.room && !S.readOnly && !S.banned;
   $("input").disabled = !canWrite;
   $("sendBtn").disabled = !canWrite;
   $("attachBtn").disabled = !canWrite;
   $("attachBtn").hidden = !!S.me.guest;
-  $("input").placeholder = S.banned ? "You are banned." : (S.readOnly ? "Read-only" : (S.me.guest ? "Type a message... (guests can't send links or files)" : "Type a message..."));
+  $("input").placeholder = S.banned ? "You are banned." : !S.room ? "" : S.readOnly ? "Read-only" : (S.me.guest ? "Message " + where + " (guests can't send links or files)" : "Message " + where);
   renderStatus();
 }
 function renderStatus() {
@@ -2145,7 +2432,11 @@ function render() {
   const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 120;
   box.replaceChildren();
   renderStatus();
-  if (!S.room) { box.append(el("div", "empty", "*** Pick a chat on the left" + (!S.me.guest ? ", or create one with \"+ New chat...\"" : "") + ".")); return; }
+  if (!S.room) {
+    if (S.home) box.append(el("div", "empty", "*** Welcome home! Double-click a friend on the left to start a private conversation."));
+    else box.append(el("div", "empty", "*** Pick a chat on the left" + (!S.me.guest ? ", or create one with the + button." : ".")));
+    return;
+  }
   let list = S.messages;
   if (S.isAdmin && S.showDeleted) {
     const live = new Set(list.map((m) => m.key));
@@ -2153,28 +2444,40 @@ function render() {
     list = [...list, ...dels].sort((a, b) => a.ts - b.ts);
   }
   if (!list.length) {
-    box.append(el("div", "empty", isDM(S.room) ? "*** This is the start of your private conversation." : '*** No messages yet. Say hi, then click "Invite..." and send the link.'));
+    box.append(el("div", "empty", isDM(S.room) ? "*** This is the start of your private conversation." : '*** No messages yet. Say hi, then click "🔗 Invite" and send the link.'));
     return;
   }
-  let prevKey = null;
+  let prevKey = null, prevTs = 0, gb = null;
   for (const m of list) {
     const key = (m.uid || m.name) + "|" + m.guest;
-    if (prevKey !== null && key !== prevKey) box.append(el("div", "sep", SEP));
+    const newPerson = key !== prevKey;
+    if (prevKey !== null && newPerson) box.append(el("div", "sep", SEP));
+    if (newPerson || !gb || (m.ts - prevTs) > 7 * 60 * 1000) {
+      const grp = el("div", "grp");
+      const av = iconNode(m.uid, m, "msgav");
+      if (m.uid && S.users[m.uid]) av.addEventListener("click", () => openProfile(m.uid));
+      bindMenu(av, (x, y) => messageMenu(x, y, m));
+      gb = el("div", "gb");
+      const gh = el("div", "gh");
+      const u = m.uid ? S.users[m.uid] : null;
+      const who = el("span", "who", m.name);
+      who.style.color = (u && !u.deleted && u.color) || m.color || "#000";
+      if (m.uid && S.users[m.uid]) who.addEventListener("click", () => openProfile(m.uid));
+      gh.append(who);
+      if (m.guest) gh.append(el("span", "tag", "[GUEST]"));
+      if (u && u.deleted) gh.append(el("span", "tag", "(deleted account)"));
+      if (m.uid && isAdminUid(m.uid)) gh.append(el("span", null, "⭐"));
+      const gt = el("span", "gtime", fmtDay(m.ts)); gt.title = fmtFull(m.ts); gh.append(gt);
+      gb.append(gh);
+      grp.append(av, gb);
+      box.append(grp);
+    }
     const line = el("div", "line" + (m.deletedView ? " deleted" : ""));
     line.dataset.key = m.key;
-    const u = m.uid ? S.users[m.uid] : null;
-    const who = el("span", "who", m.name);
-    who.style.color = (u && !u.deleted && u.color) || m.color || "#000";
-    if (m.uid && S.users[m.uid]) who.addEventListener("click", () => openProfile(m.uid));
-    const parts = [el("span", "time", "[" + fmtTime(m.ts) + "] "), iconNode(m.uid, m), who];
-    if (m.guest) parts.push(el("span", "tag", " [GUEST]"));
-    if (u && u.deleted) parts.push(el("span", "tag", " (deleted account)"));
-    if (m.uid && isAdminUid(m.uid)) parts.push(el("span", null, " ⭐"));
-    parts.push(el("span", "who", ": "));
+    line.append(el("span", "htime", fmtTime(m.ts)));
     const text = el("span");
     appendRichText(text, m.text || "", m);
-    parts.push(text);
-    line.append(...parts);
+    line.append(text);
     if (m.deletedView) {
       const by = m.deletedView.by === m.uid ? "by author" : "by admin " + (S.users[m.deletedView.by]?.name || "");
       line.append(el("span", "delnote", "(deleted " + by + ", " + fmtFull(m.deletedView.at) + ")"));
@@ -2182,12 +2485,12 @@ function render() {
     if (m.media) line.append(renderAttachment(m, S.room));
     if (m.files && m.files.length) line.append(renderFolder(m, S.room));
     bindMenu(line, (x, y) => messageMenu(x, y, m));
-    box.append(line);
+    gb.append(line);
     prevKey = key;
+    prevTs = m.ts;
   }
   if (nearBottom || sentJustNow) { box.scrollTop = box.scrollHeight; sentJustNow = false; }
 }
-
 /* ========================= MEDIA ========================= */
 const mediaUrls = new Map(), mediaLoading = new Map();
 function b64ToBytes(b64) { const bin = atob(b64); const out = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
@@ -2432,17 +2735,21 @@ const DEFAULT_ABOUT = [
 ].join("\n");
 function setTab(t) {
   if (t === "dir" && (!S.me || S.me.guest)) t = "chat";
-  if (!["about", "dir", "chat"].includes(t)) t = "chat";
+  if (t === "admin" && !S.isAdmin) t = "chat";
+  if (!["about", "dir", "chat", "admin"].includes(t)) t = "chat";
   S.tab = t;
   store("chat-tab", t);
   document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
   $("chatSplit").hidden = t !== "chat";
   $("aboutPage").hidden = t !== "about";
   $("dirPage").hidden = t !== "dir";
+  $("adminPage").hidden = t !== "admin";
   closeMenu();
+  closeSide();
   if (t === "about") renderAbout();
   if (t === "dir") renderDirectory();
-  if (t === "chat") render();
+  if (t === "chat") { renderSide(); render(); }
+  if (t === "admin") { renderReports(); renderAdminLists(); renderDebug(); }
 }
 document.querySelectorAll("#mainTabs button").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.t)));
 function formatDoc(doc, text) {
@@ -2571,20 +2878,15 @@ async function logout() {
 }
 
 /* ========================= UI WIRING ========================= */
-$("newChatBtn").addEventListener("click", createChat);
-$("leaveBtn").addEventListener("click", () => (isDM(S.room) ? closeDM() : leaveChat()));
 $("inviteBtn").addEventListener("click", inviteLink);
-$("profileBtn").addEventListener("click", () => S.room && isDM(S.room) && openProfile(dmOther(S.room)));
-$("renameBtn").addEventListener("click", adminRename);
-$("subBtn").addEventListener("click", () => { const c = S.chats[S.room]; if (c) createChat(c.parent || S.room); });
-$("clearBtn").addEventListener("click", adminClear);
-$("deleteBtn").addEventListener("click", adminDeleteChat);
-$("unarchiveBtn").addEventListener("click", adminUnarchive);
+$("moreBtn").addEventListener("click", () => { const r = $("moreBtn").getBoundingClientRect(); roomMenu(r.right - 200, r.bottom); });
+$("membersBtn").addEventListener("click", () => { toggleMembers(); renderToolbar(); });
 $("pingBtn").addEventListener("click", ping);
 $("scanBtn").addEventListener("click", scanDatabase);
 $("archiveBtn").addEventListener("click", openArchive);
 $("cleanBtn").addEventListener("click", () => cleanGuests(false));
-$("reportsBtn").addEventListener("click", openReports);
+$("userSearch").addEventListener("input", () => renderAdminLists());
+$("userFilter").addEventListener("change", () => renderAdminLists());
 $("guestToggle").addEventListener("change", (e) => {
   D.set(R("settings/guestsAllowed"), e.target.checked).then(() => toast(e.target.checked ? "Guests allowed." : "Guests blocked.")).catch((err) => { showBanner(err.message); e.target.checked = !e.target.checked; });
 });
@@ -2592,10 +2894,13 @@ $("deletedToggle").addEventListener("change", (e) => { S.showDeleted = e.target.
 $("logoutBtn").addEventListener("click", logout);
 $("settingsBtn").addEventListener("click", openSettings);
 $("meName").addEventListener("click", () => openProfile(S.me.uid));
-function closeSide() { $("side").classList.remove("open"); $("backdrop").classList.remove("show"); }
+$("meIcon").addEventListener("click", () => openProfile(S.me.uid));
+function closeSide() { $("side").classList.remove("open"); $("memPane").classList.remove("open"); $("backdrop").classList.remove("show"); }
 $("menuBtn").addEventListener("click", () => { $("side").classList.add("open"); $("backdrop").classList.add("show"); });
 $("backdrop").addEventListener("click", closeSide);
 $("messages").addEventListener("scroll", closeMenu);
+let resizeT = null;
+window.addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (started) { renderMembers(); renderToolbar(); } }, 150); });
 
 $("attachBtn").addEventListener("click", () => $("fileInput").click());
 $("fileInput").addEventListener("change", (e) => { const list = [...e.target.files]; e.target.value = ""; if (list.length) sendFiles(list); });
