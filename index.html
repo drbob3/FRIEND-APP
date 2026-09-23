@@ -257,6 +257,48 @@
   .tip { position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); background: #ffffe1; color: #000; border: 1px solid #000; padding: 4px 8px; font-size: 12px; display: none; z-index: 4000; }
   .tip.show { display: block; }
   .backdrop { display: none; }
+  /* ---- top tabs ---- */
+  .maintabs { display: flex; padding: 5px 4px 0; position: relative; z-index: 1; margin-bottom: -2px; flex-shrink: 0; }
+  .maintabs button { min-width: 0; border-bottom: none; padding: 4px 14px; box-shadow: inset -1px 0 var(--shadow), inset 1px 1px var(--mid); }
+  .maintabs button.on { background: var(--face); padding-bottom: 6px; margin-top: -2px; font-weight: bold; border-color: var(--light) var(--dark) var(--face) var(--light); box-shadow: inset -1px 0 var(--shadow), inset 1px 1px var(--mid); }
+  .tabline { border-top: 2px solid var(--light); flex-shrink: 0; }
+  .page { flex: 1; overflow-y: auto; background: #fff; margin: 4px 2px 2px; min-height: 0; }
+  .doc { max-width: 760px; margin: 0 auto; padding: 18px 22px 30px; font: 15px/1.55 Georgia, "Times New Roman", serif; }
+  .doc h1 { font: bold 28px Georgia, serif; margin: 0 0 6px; }
+  .doc h2 { font: bold 19px Georgia, serif; border-bottom: 1px solid #999; margin: 22px 0 8px; padding-bottom: 2px; }
+  .doc p { margin: 6px 0; }
+  .doc ul { margin: 6px 0; padding-left: 24px; }
+  .doc li { margin: 2px 0; }
+  .doc a { color: var(--link); }
+  .doc .meta { color: #777; font-size: 12px; margin-top: 26px; border-top: 1px dotted #aaa; padding-top: 6px; }
+  .doc .editbar { float: right; }
+  .dir { max-width: 720px; margin: 0 auto; padding: 26px 18px 40px; font-family: Arial, Helvetica, sans-serif; }
+  .dir .logo { text-align: center; font: bold 46px "Times New Roman", Times, serif; color: #1a237e; letter-spacing: -1px; text-shadow: 2px 2px 0 #c5cae9; }
+  .dir .logo small { font: italic bold 14px Arial, sans-serif; color: #c62828; letter-spacing: 0; text-shadow: none; vertical-align: top; }
+  .dir .tag { text-align: center; color: #555; font-size: 13px; margin: 2px 0 14px; }
+  .dir form { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .dir form input { max-width: 420px; font: 16px Arial, sans-serif; }
+  .dir .count { color: #333; font-size: 13px; border-top: 1px solid #3366cc; background: #e5ecf9; padding: 3px 6px; margin: 18px 0 12px; display: flex; justify-content: space-between; gap: 8px; }
+  .dir .res { margin: 0 0 18px; }
+  .dir .res a.t { color: #1a0dab; font-size: 17px; text-decoration: underline; cursor: pointer; }
+  .dir .res .u { color: #006621; font-size: 13px; }
+  .dir .res .d { color: #222; font-size: 13px; line-height: 1.4; }
+  .dir .res .s { font-size: 12px; color: #666; }
+  .dir .res .s a { color: #1a0dab; cursor: pointer; text-decoration: underline; }
+  .dir .foot { text-align: center; color: #777; font-size: 12px; margin-top: 30px; }
+  .list .item.sub { padding-left: 12px; }
+  .list .item .tree { color: var(--shadow); font-family: "Courier New", monospace; }
+  .list .item.sel .tree { color: #ddd; }
+  .chatdesc { color: #444; font-size: 12px; font-weight: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 38vw; }
+  .folder { margin: 4px 0 4px 4ch; font: 13px/1.5 "Lucida Console", "Courier New", monospace; }
+  .folder .fhead { cursor: pointer; user-select: none; display: inline-block; padding: 1px 4px; font-weight: bold; }
+  .folder .fhead:hover { background: var(--select); color: #fff; }
+  .folder .fitem { display: flex; gap: 6px; align-items: center; padding: 0 4px; cursor: pointer; white-space: nowrap; }
+  .folder .fitem:hover { background: #dde0ff; }
+  .folder .fitem .br, .folder .fitem .sz { color: var(--shadow); }
+  .notepad { background: #fff; font: 13px/1.4 "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; padding: 6px; max-height: 55dvh; overflow: auto; }
+  .sendlist { background: #fff; max-height: 180px; overflow: auto; padding: 4px; font: 12px/1.5 "Lucida Console", monospace; white-space: nowrap; }
+  .sendlist .bad { color: var(--err); }
   @media (max-width: 760px) {
     body { padding: 0; }
     #main { height: 100dvh; border: none; box-shadow: none; }
@@ -271,6 +313,8 @@
     .backdrop.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 499; }
     .float, .float.narrow { width: calc(100vw - 16px); }
     .toolbar button { min-width: 0; }
+    .chatdesc { display: none; }
+    .maintabs button { padding: 4px 8px; }
   }
 </style>
 </head>
@@ -283,7 +327,15 @@
     <span class="ctl raised" aria-hidden="true">□</span>
     <span class="ctl raised" aria-hidden="true">×</span>
   </div>
-  <div class="split">
+  <div class="maintabs" id="mainTabs">
+    <button type="button" data-t="about">ℹ About</button>
+    <button type="button" data-t="dir" id="dirTabBtn">🔎 Directory</button>
+    <button type="button" data-t="chat" class="on">💬 Chat</button>
+  </div>
+  <div class="tabline"></div>
+  <div class="page sunken" id="aboutPage" hidden></div>
+  <div class="page sunken" id="dirPage" hidden></div>
+  <div class="split" id="chatSplit">
     <aside class="side" id="side">
       <fieldset>
         <legend>You</legend>
@@ -344,6 +396,7 @@
         <span class="spacer"></span>
         <button id="profileBtn" class="small" hidden>Profile</button>
         <button id="inviteBtn" class="small">Invite...</button>
+        <button id="subBtn" class="small" hidden>+ Sub-chat</button>
         <button id="leaveBtn" class="small">Leave chat</button>
         <button id="renameBtn" class="small" hidden>Rename</button>
         <button id="clearBtn" class="small" hidden>Clear</button>
@@ -353,8 +406,8 @@
       <div class="banner" id="banner"></div>
       <div id="messages" class="sunken"></div>
       <form class="composer" id="composer">
-        <button type="button" id="attachBtn" title="Send an image or video">📎</button>
-        <input type="file" id="fileInput" accept="image/*,video/*" hidden>
+        <button type="button" id="attachBtn" title="Send images, videos or files">📎</button>
+        <input type="file" id="fileInput" multiple hidden>
         <textarea id="input" class="sunken" rows="1" maxlength="500" placeholder="Type a message..."></textarea>
         <button id="sendBtn" type="submit"><u>S</u>end</button>
       </form>
@@ -428,7 +481,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "4.0";
+const APP_VERSION = "5.0";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
@@ -763,7 +816,7 @@ const S = {
   me: null, isAdmin: false, banned: false,
   users: {}, status: {}, chats: {}, myChats: {}, myDMs: {}, members: {}, settings: {}, admins: {}, bans: {},
   friends: {}, reqIn: {}, reqOut: {}, loc: {}, reports: {},
-  room: null, readOnly: false, legacyView: false,
+  room: null, readOnly: false, legacyView: false, tab: "chat", about: null,
   messages: [], deleted: {}, showDeleted: false,
   unread: {}, connected: false, serverOffset: 0,
 };
@@ -781,6 +834,14 @@ const dmOther = (room) => room.slice(3).split("-").find((u) => u !== S.me.uid) |
 const isAdminUid = (uid) => uid === OWNER_UID || S.admins[uid] === true;
 const isAccount = (uid) => { const u = S.users[uid]; return !!u && !u.guest && !u.deleted; };
 function displayName(u) { return u ? u.name + (u.guest ? " [GUEST]" : "") + (u.deleted ? " (deleted account)" : "") : "?"; }
+const BOOT_TIME = Date.now();
+function subsOf(id) { return Object.entries(S.chats).filter(([, c]) => c.parent === id && !c.archived).sort((a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0)); }
+function chatLabel(id) {
+  const c = S.chats[id];
+  if (!c) return "# " + id;
+  if (c.parent) { const p = S.chats[c.parent]; return (p && p.type === "private" ? "🔒 " : "# ") + (p ? p.name : "?") + " › " + c.name; }
+  return (c.type === "private" ? "🔒 " : "# ") + c.name;
+}
 
 /* ========================= ICONS ========================= */
 function iconNode(uid, fallback = {}, size = "") {
@@ -937,6 +998,8 @@ function setLoc() {
 function startApp() {
   renderMe();
   $("friendsBox").hidden = S.me.guest;
+  $("dirTabBtn").hidden = S.me.guest;
+  sub(R("site/about"), (s) => { S.about = s.val(); if (S.tab === "about") renderAbout(); });
   sub(R(".info/connected"), async (s) => {
     S.connected = !!s.val();
     renderStatus();
@@ -976,7 +1039,9 @@ function startApp() {
   sub(R("chats"), (s) => {
     S.chats = s.val() || {};
     chatsReadyResolve();
+    syncUnreadSubs();
     renderSide(); renderToolbar();
+    if (S.tab === "dir" && !$("dirPage").contains(document.activeElement)) renderDirectory();
     if (S.room && !isDM(S.room) && !S.chats[S.room] && !S.legacyView) { toast("This chat was deleted."); goDefault(); }
   });
   sub(R("userChats/" + S.me.uid), (s) => { S.myChats = s.val() || {}; syncUnreadSubs(); renderSide(); });
@@ -1021,6 +1086,7 @@ async function boot() {
   const h = parseHash();
   if (h.room) await openRoom(h.room, h.code);
   else await goDefault();
+  if (!h.room) setTab(store("chat-tab") || "chat");
 }
 function parseHash() {
   const room = (location.hash.match(/room=(dm-[A-Za-z0-9]+-[A-Za-z0-9]+|[a-z0-9-]{3,40})/i) || [])[1];
@@ -1062,30 +1128,37 @@ async function openRoom(room, code) {
       if (S.isAdmin) { readOnly = true; S.legacyView = true; }
       else { showBanner("This chat doesn't exist (or was deleted)."); if (room !== S.room) await goDefault(); return; }
     } else {
+      const base = chat.parent || room;          // sub-chats use the membership of their main chat
+      const bchat = S.chats[base];
+      if (!bchat) { showBanner("This chat doesn't exist anymore."); return; }
+      const archived = !!(chat.archived || bchat.archived);
       let isMember = false;
-      try { isMember = (await D.get(R("members/" + room + "/" + S.me.uid))).exists(); } catch (e) { logError(e.message); }
+      try { isMember = (await D.get(R("members/" + base + "/" + S.me.uid))).exists(); } catch (e) { logError(e.message); }
       if (!isMember) {
-        if (chat.archived) {
+        if (archived) {
           if (S.isAdmin) readOnly = true;
           else { showBanner("This chat is archived."); return; }
         } else if (S.banned) {
           readOnly = true;
         } else {
           const upd = {};
-          if (chat.type === "public") {
-            upd["members/" + room + "/" + S.me.uid] = { joined: now() };
-            upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0 };
+          if (bchat.type === "public") {
+            upd["members/" + base + "/" + S.me.uid] = { joined: now() };
+            upd["userChats/" + S.me.uid + "/" + base] = { lastRead: 0 };
           } else {
-            let c = code || S.myChats[room]?.code;
-            if (!c && S.isAdmin) { try { c = (await D.get(R("chatInvites/" + room))).val(); } catch {} }
+            let c = code || S.myChats[base]?.code;
+            if (!c && S.isAdmin) { try { c = (await D.get(R("chatInvites/" + base))).val(); } catch {} }
             if (!c) { showBanner("This chat is private. You need an invite link from someone inside."); return; }
-            upd["members/" + room + "/" + S.me.uid] = { joined: now(), code: c };
-            upd["userChats/" + S.me.uid + "/" + room] = { lastRead: 0, code: c };
+            upd["members/" + base + "/" + S.me.uid] = { joined: now(), code: c };
+            upd["userChats/" + S.me.uid + "/" + base] = { lastRead: 0, code: c };
           }
-          try { await D.update(R("/"), upd); toast("You joined " + (chat.type === "private" ? "🔒 " : "# ") + chat.name); }
-          catch (e) { showBanner(chat.type === "private" ? "This invite link is not valid anymore." : "Can't join this chat: " + authError(e)); return; }
+          try { await D.update(R("/"), upd); toast("You joined " + chatLabel(base)); }
+          catch (e) { showBanner(bchat.type === "private" ? "This invite link is not valid anymore." : "Can't join this chat: " + authError(e)); return; }
         }
-      } else if (chat.archived) readOnly = true;
+      } else if (archived) readOnly = true;
+      if (chat.parent && !readOnly && !S.myChats[room]) {
+        D.update(R("userChats/" + S.me.uid + "/" + room), { lastRead: 0 }).catch((e) => logError("Sub-chat: " + e.message));
+      }
     }
   }
   roomUnsubs.forEach((u) => u());
@@ -1097,16 +1170,14 @@ async function openRoom(room, code) {
   S.deleted = {};
   store("chat-last-room", room);
   if (location.hash !== "#room=" + room) history.replaceState(null, "", "#room=" + room);
+  if (S.tab !== "chat") setTab("chat");
   setLoc();
   renderToolbar();
   render();
   const q = D.query(R("rooms/" + room), D.orderByChild("ts"), D.limitToLast(200));
   roomUnsubs.push(D.onValue(q, (snap) => {
     const list = [];
-    snap.forEach((c) => {
-      const x = c.val() || {};
-      list.push({ key: c.key, uid: x.uid || null, name: x.name || "?", guest: !!x.guest, color: x.color, icon: x.icon || null, text: x.text || "", ts: x.ts || 0, media: x.media || null });
-    });
+    snap.forEach((c) => { list.push(parseMsg(c.key, c.val() || {})); });
     if (room !== S.room) return;
     S.messages = list;
     render();
@@ -1119,7 +1190,8 @@ async function openRoom(room, code) {
     S.members = Object.fromEntries(room.slice(3).split("-").map((u) => [u, { joined: 0 }]));
     renderSide(); renderStatus();
   } else {
-    roomUnsubs.push(D.onValue(R("members/" + room), (s) => {
+    const memRoom = S.chats[room]?.parent || room;
+    roomUnsubs.push(D.onValue(R("members/" + memRoom), (s) => {
       if (room !== S.room) return;
       const was = S.members[S.me.uid];
       S.members = s.val() || {};
@@ -1129,7 +1201,13 @@ async function openRoom(room, code) {
   }
   syncDeletedSub();
 }
-
+function parseMsg(key, x) {
+  return {
+    key, uid: x.uid || null, name: x.name || "?", guest: !!x.guest, color: x.color, icon: x.icon || null,
+    text: x.text || "", ts: x.ts || 0, media: x.media || null,
+    files: x.files ? Object.values(x.files) : null, folder: x.folder || null,
+  };
+}
 function syncDeletedSub() {
   if (deletedUnsub) { deletedUnsub(); deletedUnsub = null; }
   S.deleted = {};
@@ -1160,6 +1238,8 @@ function syncUnreadSubs() {
   const want = new Map();
   for (const [room, v] of Object.entries(S.myChats)) want.set(room, v.lastRead || 0);
   for (const [room, v] of Object.entries(S.myDMs)) want.set(room, v.lastRead || 0);
+  // sub-chats never opened yet: only count new messages
+  for (const base of Object.keys(S.myChats)) for (const [sid] of subsOf(base)) if (!want.has(sid)) want.set(sid, BOOT_TIME);
   for (const [room, s] of unreadSubs) {
     if (!want.has(room) || want.get(room) !== s.lastRead) { s.unsub(); unreadSubs.delete(room); }
   }
@@ -1175,54 +1255,84 @@ function syncUnreadSubs() {
     unreadSubs.set(room, { lastRead, unsub });
   }
 }
-
-async function createChat() {
+async function createChat(parentId) {
   if (S.me.guest) { toast("Guests can't create chats. Create an account!"); return; }
-  const radios = el("div", "radio");
-  const mk = (val, label, checked) => { const l = el("label", "check"); const r = el("input"); r.type = "radio"; r.name = "ctype"; r.value = val; r.checked = checked; l.append(r, label); radios.append(l); return r; };
-  mk("public", "Public (everyone can see it)", true);
-  const priv = mk("private", "🔒 Private (invite only)", false);
-  radios.style.flexDirection = "column"; radios.style.gap = "4px";
-  const res = await dialog({ title: "New chat", message: "Chat name:", input: true, placeholder: "e.g. gaming", okText: "Create", extra: { node: radios, get: () => ({ type: priv.checked ? "private" : "public" }) } });
+  const parent = typeof parentId === "string" ? S.chats[parentId] : null;
+  const box = el("div");
+  box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "6px";
+  box.append(el("div", null, "Description (optional):"));
+  const desc = el("textarea", "sunken");
+  desc.maxLength = 200; desc.placeholder = parent ? "What goes in this sub-chat?" : "What is this chat about?";
+  desc.style.minHeight = "50px"; desc.style.font = "13px Tahoma, sans-serif"; desc.style.width = "100%";
+  box.append(desc);
+  let priv = null;
+  if (!parent) {
+    const radios = el("div", "radio");
+    const mk = (val, label, checked) => { const l = el("label", "check"); const r = el("input"); r.type = "radio"; r.name = "ctype"; r.value = val; r.checked = checked; l.append(r, label); radios.append(l); return r; };
+    mk("public", "Public (everyone can see it)", true);
+    priv = mk("private", "🔒 Private (invite only)", false);
+    radios.style.flexDirection = "column"; radios.style.gap = "4px";
+    box.append(radios);
+  } else {
+    box.append(el("div", "hint", "It will be " + (parent.type === "private" ? "🔒 private" : "public") + ", like " + parent.name + ". Everyone in " + parent.name + " can use it."));
+  }
+  const res = await dialog({
+    title: parent ? "New sub-chat in " + parent.name : "New chat",
+    message: parent ? "Sub-chat name (e.g. media, art):" : "Chat name:",
+    input: true, placeholder: parent ? "e.g. media" : "e.g. gaming", okText: "Create",
+    extra: { node: box, get: () => ({ type: parent ? parent.type : (priv.checked ? "private" : "public"), desc: desc.value.trim().slice(0, 200) }) },
+  });
   if (!res) return;
   const name = res.value.slice(0, 30);
   const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 28) || "chat";
   let id = (slug + "-" + randomCode(5)).replace(/^-/, "");
   if (id.startsWith("dm-")) id = "c" + id;
+  const data = { name, type: res.type, createdBy: S.me.uid, createdAt: now() };
+  if (res.desc) data.desc = res.desc;
   const upd = {};
-  upd["chats/" + id] = { name, type: res.type, createdBy: S.me.uid, createdAt: now() };
-  if (res.type === "private") {
+  if (parent) {
+    data.parent = parentId;
+    upd["chats/" + id] = data;
+    upd["userChats/" + S.me.uid + "/" + id] = { lastRead: 0 };
+  } else if (res.type === "private") {
     const code = randomCode(24);
+    upd["chats/" + id] = data;
     upd["chatInvites/" + id] = code;
     upd["members/" + id + "/" + S.me.uid] = { joined: now(), code };
     upd["userChats/" + S.me.uid + "/" + id] = { lastRead: 0, code };
   } else {
+    upd["chats/" + id] = data;
     upd["members/" + id + "/" + S.me.uid] = { joined: now() };
     upd["userChats/" + S.me.uid + "/" + id] = { lastRead: 0 };
   }
   try {
     await D.update(R("/"), upd);
-    S.chats[id] = upd["chats/" + id];
+    S.chats[id] = { ...data, createdAt: Date.now() };
     await openRoom(id);
-    if (res.type === "private") toast("Private chat created. Click \"Invite...\" to get the link.");
+    if (parent) toast("Sub-chat # " + name + " created in " + parent.name + ".");
+    else if (res.type === "private") toast("Private chat created. Click \"Invite...\" to get the link.");
   } catch (e) { showBanner("Can't create chat: " + authError(e)); }
 }
-
 async function leaveChat() {
-  const room = S.room, chat = S.chats[room];
+  const chat = S.chats[S.room];
   if (!chat) return;
-  const ok = await dialog({ title: "Leave chat", message: "Leave " + chat.name + "?" + (chat.type === "private" ? " You'll need a new invite link to come back." : ""), okText: "Leave" });
+  const base = chat.parent || S.room;
+  const bchat = S.chats[base];
+  if (!bchat) return;
+  const subs = subsOf(base);
+  const ok = await dialog({ title: "Leave chat", message: "Leave " + bchat.name + (subs.length ? " (and its sub-chats)" : "") + "?" + (bchat.type === "private" ? " You'll need a new invite link to come back." : ""), okText: "Leave" });
   if (!ok) return;
   try {
-    const mem = (await D.get(R("members/" + room))).val() || {};
+    const mem = (await D.get(R("members/" + base))).val() || {};
     const others = Object.keys(mem).filter((u) => u !== S.me.uid);
     const upd = {};
-    if (!others.length) upd["chats/" + room + "/archived"] = true;
-    upd["members/" + room + "/" + S.me.uid] = null;
-    upd["userChats/" + S.me.uid + "/" + room] = null;
+    if (!others.length) upd["chats/" + base + "/archived"] = true;
+    upd["members/" + base + "/" + S.me.uid] = null;
+    upd["userChats/" + S.me.uid + "/" + base] = null;
+    for (const [sid] of subs) upd["userChats/" + S.me.uid + "/" + sid] = null;
     roomUnsubs.forEach((u) => u()); roomUnsubs = [];
     await D.update(R("/"), upd);
-    toast(others.length ? "You left " + chat.name : "You were the last one: the chat was archived.");
+    toast(others.length ? "You left " + bchat.name : "You were the last one: the chat was archived.");
     S.room = null;
     await goDefault();
   } catch (e) { showBanner("Can't leave: " + authError(e)); }
@@ -1238,10 +1348,12 @@ async function closeDM() {
 async function inviteLink() {
   const room = S.room, chat = S.chats[room];
   if (!chat) return;
+  const base = chat.parent || room;
+  const bchat = S.chats[base];
   let link = location.origin + location.pathname + "#room=" + room;
-  if (chat.type === "private") {
-    let code = S.myChats[room]?.code;
-    if (!code) { try { code = (await D.get(R("chatInvites/" + room))).val(); } catch {} }
+  if (bchat && bchat.type === "private") {
+    let code = S.myChats[base]?.code;
+    if (!code) { try { code = (await D.get(R("chatInvites/" + base))).val(); } catch {} }
     if (!code) { showBanner("Can't get the invite code."); return; }
     link += "&code=" + code;
   }
@@ -1251,7 +1363,6 @@ async function inviteLink() {
   try { await navigator.clipboard.writeText(link); toast("Invite link copied! Paste it to your friends."); }
   catch { await dialog({ title: "Invite link", message: "Copy this link and send it to your friends:", input: true, inputValue: link, cancelText: null }); }
 }
-
 /* ========================= FRIENDS & DMs ========================= */
 function canDM(uid) {
   if (!uid || uid === S.me.uid || !S.users[uid] || S.users[uid].deleted) return false;
@@ -1304,14 +1415,15 @@ function locText(uid) {
   if (!l || l.kind === "none") return "online";
   if (l.kind === "dm") return "in DMs";
   if (l.kind === "private") return "in a private chat";
-  return "in # " + (S.chats[l.room]?.name || l.room || "?");
+  return "in " + (S.chats[l.room] ? chatLabel(l.room) : "# " + (l.room || "?"));
 }
-
 /* ========================= MESSAGE ACTIONS ========================= */
 function archiveCopy(m) {
   const copy = { uid: m.uid, name: m.name, guest: !!m.guest, color: m.color || "#000", text: m.text, ts: m.ts, deletedAt: now(), deletedBy: S.me.uid };
   if (m.icon) copy.icon = m.icon;
   if (m.media) copy.media = m.media;
+  if (m.files) copy.files = m.files;
+  if (m.folder) copy.folder = m.folder;
   return copy;
 }
 async function deleteOwnMessage(m) {
@@ -1336,7 +1448,7 @@ async function reportMessage(m) {
   if (S.me.guest) { toast("Guests can't report. Create an account!"); return; }
   const box = el("div");
   box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "4px";
-  const quote = el("div", "sunken", m.name + ": " + (m.text || (m.media ? "[" + m.media.kind + "]" : "")));
+  const quote = el("div", "sunken", m.name + ": " + (m.text || (m.media ? "[" + m.media.kind + "]" : m.files ? "[📁 " + (m.folder || "Files") + "]" : "")));
   quote.style.background = "#fff"; quote.style.padding = "4px 6px"; quote.style.maxHeight = "80px"; quote.style.overflow = "auto";
   box.append(quote, el("div", null, "Why are you reporting this message?"));
   let first = true;
@@ -1350,6 +1462,8 @@ async function reportMessage(m) {
   if (!res) return;
   const msg = { uid: m.uid, name: m.name, guest: !!m.guest, text: m.text, ts: m.ts };
   if (m.media) msg.media = m.media;
+  if (m.files) msg.files = m.files;
+  if (m.folder) msg.folder = m.folder;
   const rep = { by: S.me.uid, room: S.room, msgId: m.key, reason: res.reason, ts: now(), msg, status: "open" };
   if (res.comment) rep.comment = res.comment.slice(0, 300);
   try { await D.push(R("reports"), rep); toast("Thanks, the report was sent to the admins."); }
@@ -1637,9 +1751,21 @@ async function adminBan(uid) {
   D.set(R("bans/" + uid), { ts: now(), by: S.me.uid }).then(() => toast("Banned.")).catch((e) => showBanner("Ban failed: " + e.message));
 }
 async function adminRename() {
-  const chat = S.chats[S.room]; if (!chat) return;
-  const v = await dialog({ title: "Rename chat", message: "New name:", input: true, inputValue: chat.name, okText: "Rename" });
-  if (v) D.update(R("chats/" + S.room), { name: v.slice(0, 30) }).catch((e) => showBanner(e.message));
+  const room = S.room, chat = S.chats[room];
+  if (!chat) return;
+  const box = el("div");
+  box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "4px";
+  box.append(el("div", null, "Description:"));
+  const desc = el("textarea", "sunken");
+  desc.maxLength = 200; desc.value = chat.desc || ""; desc.placeholder = "What is this chat about?";
+  desc.style.minHeight = "60px"; desc.style.font = "13px Tahoma, sans-serif"; desc.style.width = "100%";
+  box.append(desc);
+  const res = await dialog({ title: "Edit " + (chat.parent ? "sub-chat" : "chat"), message: "Name:", input: true, inputValue: chat.name, okText: "Save", extra: { node: box, get: () => ({ desc: desc.value.trim().slice(0, 200) }) } });
+  if (!res) return;
+  try {
+    await D.update(R("chats/" + room), { name: res.value.slice(0, 30), desc: res.desc || null });
+    toast("Chat updated.");
+  } catch (e) { showBanner("Can't save: " + authError(e)); }
 }
 async function adminClear() {
   const ok = await dialog({ title: "Clear chat", message: "Delete ALL messages, images and videos in this chat? This can't be undone.", okText: "Clear" });
@@ -1648,17 +1774,23 @@ async function adminClear() {
 }
 async function adminDeleteChat() {
   const room = S.room;
-  const name = isDM(room) ? "this DM" : "\"" + (S.chats[room]?.name || room) + "\"";
-  const ok = await dialog({ title: "Delete chat", message: "Delete " + name + " completely (messages, members, files)? This can't be undone.", okText: "Delete" });
+  const chat = S.chats[room];
+  const subs = chat && !chat.parent ? subsOf(room) : [];
+  const name = isDM(room) ? "this DM" : "\"" + (chat ? chatLabel(room) : room) + "\"";
+  const ok = await dialog({ title: "Delete chat", message: "Delete " + name + (subs.length ? " and its " + subs.length + " sub-chat(s)" : "") + " completely (messages, files)? This can't be undone.", okText: "Delete" });
   if (!ok) return;
   roomUnsubs.forEach((u) => u()); roomUnsubs = [];
   const upd = { ["rooms/" + room]: null, ["media/" + room]: null };
-  if (!isDM(room)) upd["members/" + room] = null;
-  if (S.chats[room]) { upd["chats/" + room] = null; upd["chatInvites/" + room] = null; }
+  if (!isDM(room) && !(chat && chat.parent)) upd["members/" + room] = null;
+  if (chat) { upd["chats/" + room] = null; if (!chat.parent) upd["chatInvites/" + room] = null; }
   if (S.myChats[room]) upd["userChats/" + S.me.uid + "/" + room] = null;
   if (S.myDMs[room]) upd["userDMs/" + S.me.uid + "/" + room] = null;
+  for (const [sid] of subs) {
+    upd["chats/" + sid] = null; upd["rooms/" + sid] = null; upd["media/" + sid] = null;
+    if (S.myChats[sid]) upd["userChats/" + S.me.uid + "/" + sid] = null;
+  }
   try { await D.update(R("/"), upd); toast("Chat deleted."); S.room = null; await goDefault(); }
-  catch (e) { showBanner("Delete failed: " + e.message); }
+  catch (e) { showBanner("Delete failed: " + authError(e)); }
 }
 async function adminUnarchive() {
   D.update(R("chats/" + S.room), { archived: false }).then(() => toast("Chat restored.")).catch((e) => showBanner(e.message));
@@ -1756,7 +1888,7 @@ function renderReports() {
     const where = isDM(r.room) ? "a DM" : "# " + (S.chats[r.room]?.name || r.room);
     box.append(el("div", null, "🚩 " + (REASONS[r.reason] || r.reason) + " · by " + (who ? who.name : "?") + " · " + fmtFull(r.ts) + " · in " + where + (r.status !== "open" ? " · CLOSED" : "")));
     const mline = el("div", "rmsg sunken");
-    mline.append(iconNode(r.msg?.uid, r.msg || {}), " " + (r.msg?.name || "?") + (r.msg?.guest ? " [GUEST]" : "") + ": " + (r.msg?.text || (r.msg?.media ? "[" + r.msg.media.kind + "] " + r.msg.media.fname : "")));
+    mline.append(iconNode(r.msg?.uid, r.msg || {}), " " + (r.msg?.name || "?") + (r.msg?.guest ? " [GUEST]" : "") + ": " + (r.msg?.text || (r.msg?.media ? "[" + r.msg.media.kind + "] " + r.msg.media.fname : r.msg?.files ? "[📁 " + (r.msg.folder || "Files") + ": " + Object.values(r.msg.files).map((f) => f.fname).join(", ") + "]" : "")));
     box.append(mline);
     if (r.comment) box.append(el("div", null, "Comment: " + r.comment));
     const b = el("div", "wbuttons"); b.style.justifyContent = "flex-start";
@@ -1856,24 +1988,32 @@ function renderSide() {
   }
   const my = $("myChatsList");
   my.replaceChildren();
-  const mine = Object.keys(S.myChats).filter((r) => S.chats[r]).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
+  const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].parent).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
   if (!mine.length) my.append(el("div", "empty-row", "No chats yet"));
-  for (const r of mine) {
+  const addRow = (r, isSub, last) => {
     const c = S.chats[r];
-    const it = el("div", "item click" + (r === S.room ? " sel" : ""));
-    it.append(el("span", "n", (c.type === "private" ? "🔒 " : "# ") + c.name + (c.archived ? " (archived)" : "")));
+    const it = el("div", "item click" + (r === S.room ? " sel" : "") + (isSub ? " sub" : ""));
+    if (isSub) it.append(el("span", "tree", last ? "└" : "├"));
+    it.append(el("span", "n", (isSub ? "# " : (c.type === "private" ? "🔒 " : "# ")) + c.name + (c.archived ? " (archived)" : "")));
+    if (c.desc) it.title = c.desc;
     const n = r === S.room ? 0 : (S.unread[r] || 0);
     if (n) it.append(el("span", "badge", "(" + (n > 98 ? "99+" : n) + ")"));
     it.addEventListener("click", () => openRoom(r));
     my.append(it);
+  };
+  for (const r of mine) {
+    addRow(r, false);
+    const subs = subsOf(r);
+    subs.forEach(([sid], i) => addRow(sid, true, i === subs.length - 1));
   }
   const pub = $("publicList");
   pub.replaceChildren();
-  const pubs = Object.entries(S.chats).filter(([r, c]) => c.type === "public" && !c.archived && !S.myChats[r]).sort((a, b) => a[1].name.localeCompare(b[1].name));
+  const pubs = Object.entries(S.chats).filter(([r, c]) => c.type === "public" && !c.archived && !c.parent && !S.myChats[r]).sort((a, b) => a[1].name.localeCompare(b[1].name));
   if (!pubs.length) pub.append(el("div", "empty-row", "You're in all public chats"));
   for (const [r, c] of pubs) {
     const it = el("div", "item click" + (r === S.room ? " sel" : ""));
     it.append(el("span", "n", "# " + c.name), el("span", "dim", "join"));
+    if (c.desc) it.title = c.desc;
     it.addEventListener("click", () => openRoom(r));
     pub.append(it);
   }
@@ -1925,6 +2065,9 @@ function renderToolbar() {
   if (!S.me) return;
   const dm = isDM(S.room);
   const chat = dm ? null : S.chats[S.room];
+  const base = chat ? (chat.parent || S.room) : null;
+  const bchat = base ? S.chats[base] : null;
+  const archived = !!(chat && (chat.archived || bchat?.archived));
   const cn = $("chatName");
   cn.replaceChildren();
   if (!S.room) cn.textContent = "No chat open";
@@ -1934,23 +2077,30 @@ function renderToolbar() {
     else cn.append("✉ " + parts.map((u) => S.users[u]?.name || "?").join(" ↔ ") + " (admin view)");
   }
   else if (!chat) cn.textContent = "# " + S.room + " (old chat, read-only)";
-  else cn.textContent = (chat.type === "private" ? "🔒 " : "# ") + chat.name + (chat.archived ? " (archived)" : "");
+  else {
+    cn.append(chatLabel(S.room) + (archived ? " (archived)" : ""));
+    if (chat.desc) { const d = el("span", "chatdesc", "— " + chat.desc); d.title = chat.desc; cn.append(d); }
+  }
   $("titleText").textContent = "Hangout Chat" + (S.room ? " - " + (dm ? "DM" : (chat ? chat.name : S.room)) : "");
-  const member = !!(S.room && S.myChats[S.room]);
+  const member = !!(base && S.myChats[base]);
+  const owner = !!(bchat && bchat.createdBy === S.me.uid);
   $("profileBtn").hidden = !(dm && S.room.slice(3).split("-").includes(S.me.uid));
-  $("inviteBtn").hidden = dm || !chat || chat.archived || (chat.type === "private" && !member && !S.isAdmin);
+  $("inviteBtn").hidden = dm || !chat || archived || (bchat?.type === "private" && !member && !S.isAdmin);
   $("leaveBtn").hidden = !(member || (dm && S.myDMs[S.room]));
   $("leaveBtn").textContent = dm ? "Close DM" : "Leave chat";
-  $("renameBtn").hidden = !(S.isAdmin && chat);
+  $("subBtn").hidden = !(bchat && !archived && !S.me.guest && (S.isAdmin || owner));
+  $("renameBtn").hidden = !(chat && !S.me.guest && (S.isAdmin || chat.createdBy === S.me.uid));
+  $("renameBtn").textContent = "Edit...";
   $("clearBtn").hidden = !(S.isAdmin && S.room);
-  $("deleteBtn").hidden = !(S.isAdmin && S.room);
+  $("deleteBtn").hidden = !((S.isAdmin && S.room) || (chat && chat.parent && chat.createdBy === S.me.uid));
+  $("deleteBtn").textContent = chat && chat.parent ? "Delete sub-chat" : "Delete chat";
   $("unarchiveBtn").hidden = !(S.isAdmin && chat && chat.archived);
   const canWrite = !!S.room && !S.readOnly && !S.banned;
   $("input").disabled = !canWrite;
   $("sendBtn").disabled = !canWrite;
   $("attachBtn").disabled = !canWrite;
   $("attachBtn").hidden = !!S.me.guest;
-  $("input").placeholder = S.banned ? "You are banned." : (S.readOnly ? "Read-only" : (S.me.guest ? "Type a message... (guests can't send links or images)" : "Type a message..."));
+  $("input").placeholder = S.banned ? "You are banned." : (S.readOnly ? "Read-only" : (S.me.guest ? "Type a message... (guests can't send links or files)" : "Type a message..."));
   renderStatus();
 }
 function renderStatus() {
@@ -1999,7 +2149,7 @@ function render() {
   let list = S.messages;
   if (S.isAdmin && S.showDeleted) {
     const live = new Set(list.map((m) => m.key));
-    const dels = Object.entries(S.deleted).filter(([k]) => !live.has(k)).map(([k, x]) => ({ key: k, uid: x.uid, name: x.name, guest: !!x.guest, color: x.color, icon: x.icon, text: x.text || "", ts: x.ts || 0, media: x.media || null, deletedView: { at: x.deletedAt, by: x.deletedBy } }));
+    const dels = Object.entries(S.deleted).filter(([k]) => !live.has(k)).map(([k, x]) => ({ ...parseMsg(k, x), deletedView: { at: x.deletedAt, by: x.deletedBy } }));
     list = [...list, ...dels].sort((a, b) => a.ts - b.ts);
   }
   if (!list.length) {
@@ -2030,6 +2180,7 @@ function render() {
       line.append(el("span", "delnote", "(deleted " + by + ", " + fmtFull(m.deletedView.at) + ")"));
     }
     if (m.media) line.append(renderAttachment(m, S.room));
+    if (m.files && m.files.length) line.append(renderFolder(m, S.room));
     bindMenu(line, (x, y) => messageMenu(x, y, m));
     box.append(line);
     prevKey = key;
@@ -2072,6 +2223,7 @@ async function compressImage(file) {
     ctx.drawImage(bmp, 0, 0, c.width, c.height);
     for (const q of [0.85, 0.7, 0.55]) {
       const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", q));
+      if (blob && blob.size >= file.size && file.size <= 1500000) return { blob: file, mime: file.type || "image/jpeg" };   // already small: keep the original
       if (blob && (blob.size <= 1500000 || q === 0.55)) return { blob, mime: "image/jpeg" };
     }
   } catch {}
@@ -2079,7 +2231,7 @@ async function compressImage(file) {
 }
 async function sendFile(file) {
   if (!S.room || S.readOnly || S.banned) return;
-  if (S.me.guest) { toast("Guests can't send images or videos. Create an account!"); return; }
+  if (S.me.guest) { toast("Guests can't send files. Create an account!"); return; }
   const room = S.room;
   const isImg = file.type.startsWith("image/"), isVid = file.type.startsWith("video/");
   if (!isImg && !isVid) { showBanner("Only images and videos can be sent."); return; }
@@ -2111,11 +2263,12 @@ async function sendFile(file) {
     renderStatus();
   }
 }
-function sendMessage(text, media, room = S.room) {
+function sendMessage(text, media, room = S.room, extra = null) {
   const u = S.users[S.me.uid] || S.me;
   const msg = { uid: S.me.uid, name: S.me.name, guest: !!S.me.guest, color: u.color || "#000", text, ts: now() };
   if (u.icon) msg.icon = u.icon;
   if (media) msg.media = media;
+  if (extra) Object.assign(msg, extra);
   const key = D.push(R("rooms/" + room)).key;
   const upd = { ["rooms/" + room + "/" + key]: msg };
   if (isDM(room)) {
@@ -2130,6 +2283,263 @@ function sendMessage(text, media, room = S.room) {
   return D.update(R("/"), upd);
 }
 
+/* ========================= FILES (folders in the chat) ========================= */
+const BLOCKED_RE = /\.(exe|bat|cmd|com|scr|msi|ps1|vbs|vbe|jse|wsf|hta|pif|cpl|msc|jar|apk|dll|reg|lnk|sh|app|dmg|iso)$/i;
+const TEXT_RE = /\.(txt|md|json|csv|log|ini|cfg|conf|xml|yml|yaml|html|css|js|ts|py|lua|cs|java|c|cpp|h|tkt|srt|bat_)$/i;
+const MAX_FILES = 10, MAX_TOTAL = 30 * 1000 * 1000;
+const openFolders = new Set();
+function fileKind(f) { const t = f.type || ""; return t.startsWith("image/") ? "image" : t.startsWith("video/") ? "video" : "file"; }
+function fileIcon(f) {
+  const n = f.fname || f.name || "";
+  if (f.kind === "image") return "🖼";
+  if (f.kind === "video") return "🎞";
+  if (/^audio\//.test(f.mime || "") || /\.(mp3|wav|ogg|flac|m4a)$/i.test(n)) return "🎵";
+  if (/\.pdf$/i.test(n)) return "📕";
+  if (/\.(zip|rar|7z|tar|gz)$/i.test(n)) return "🗜";
+  if (TEXT_RE.test(n) || /^text\//.test(f.mime || "")) return "📝";
+  return "📄";
+}
+async function sendFiles(list) {
+  if (!list.length || !S.room || S.readOnly || S.banned) return;
+  if (S.me.guest) { toast("Guests can't send files. Create an account!"); return; }
+  if (list.length === 1 && /^(image|video)\//.test(list[0].type)) return sendFile(list[0]);
+  const room = S.room;
+  const rows = el("div", "sendlist sunken");
+  let total = 0;
+  const ok = [];
+  list.slice(0, 20).forEach((f, i) => {
+    let bad = "";
+    if (BLOCKED_RE.test(f.name)) bad = "blocked (programs are not allowed)";
+    else if (f.size > MAX_VIDEO) bad = "too big (max " + fmtSize(MAX_VIDEO) + ")";
+    else if (!f.size) bad = "empty file";
+    else if (ok.length >= MAX_FILES) bad = "max " + MAX_FILES + " files";
+    else if (total + f.size > MAX_TOTAL) bad = "total too big (max " + fmtSize(MAX_TOTAL) + ")";
+    const r = el("div", bad ? "bad" : null, (i === list.length - 1 ? "└ " : "├ ") + fileIcon({ fname: f.name, mime: f.type, kind: fileKind(f) }) + " " + f.name + "  (" + fmtSize(f.size) + ")" + (bad ? "  ✖ " + bad : ""));
+    rows.append(r);
+    if (!bad) { ok.push(f); total += f.size; }
+  });
+  const box = el("div"); box.style.display = "flex"; box.style.flexDirection = "column"; box.style.gap = "4px";
+  box.append(el("div", null, ok.length + " file(s) will be sent (" + fmtSize(total) + "):"), rows);
+  const def = list.length === 1 ? list[0].name.replace(/\.[^.]+$/, "").slice(0, 30) || "Files" : "Files";
+  const res = await dialog({ title: "📁 Send files", message: "Folder name:", input: true, inputValue: def, okText: ok.length ? "Send" : "OK", extra: { node: box, get: () => ({}) } });
+  if (!res || !ok.length) return;
+  const folder = res.value.slice(0, 30);
+  const caption = $("input").value.trim().slice(0, MAX_LEN);
+  $("attachBtn").disabled = true;
+  try {
+    const files = [];
+    for (let n = 0; n < ok.length; n++) {
+      const f = ok[n];
+      let blob = f, mime = f.type || "application/octet-stream", kind = fileKind(f);
+      let fname = f.name.slice(0, 80);
+      if (kind === "image") {
+        ({ blob, mime } = await compressImage(f));
+        if (mime === "image/jpeg" && !/\.jpe?g$/i.test(fname)) fname = (fname.replace(/\.[^.]+$/, "") + ".jpg").slice(0, 80);
+      }
+      const count = Math.max(1, Math.ceil(blob.size / CHUNK));
+      const id = D.push(R("media/" + room)).key;
+      for (let i = 0; i < count; i++) {
+        $("statusConn").textContent = "Uploading " + (n + 1) + "/" + ok.length + " · " + Math.round((i / count) * 100) + "%";
+        await D.set(R("media/" + room + "/" + id + "/chunks/" + i), await blobToB64(blob.slice(i * CHUNK, (i + 1) * CHUNK)));
+      }
+      mediaUrls.set(id, URL.createObjectURL(blob));
+      files.push({ id, kind, mime: mime.slice(0, 100), size: blob.size, chunks: count, fname });
+    }
+    sentJustNow = true;
+    await sendMessage(caption, null, room, { folder, files });
+    $("input").value = "";
+    toast("📁 " + folder + " sent!");
+  } catch (err) {
+    showBanner("Upload failed: " + authError(err));
+  } finally {
+    $("attachBtn").disabled = false;
+    renderStatus();
+  }
+}
+function renderFolder(m, room) {
+  const box = el("div", "folder");
+  const open = openFolders.has(m.key);
+  const total = m.files.reduce((n, f) => n + (f.size || 0), 0);
+  const head = el("div", "fhead", (open ? "▼ 📂 " : "▶ 📁 ") + (m.folder || "Files") + "  (" + m.files.length + " file" + (m.files.length > 1 ? "s" : "") + ", " + fmtSize(total) + ")" + (open ? "" : "  - click to open"));
+  head.title = open ? "Close folder" : "Open folder";
+  head.addEventListener("click", () => { if (open) openFolders.delete(m.key); else openFolders.add(m.key); render(); });
+  box.append(head);
+  if (open) m.files.forEach((f, i) => {
+    const it = el("div", "fitem");
+    it.append(el("span", "br", "  " + (i === m.files.length - 1 ? "└" : "├")), el("span", null, fileIcon(f) + " " + f.fname), el("span", "sz", "(" + fmtSize(f.size) + ")"));
+    it.title = "Open " + f.fname;
+    it.addEventListener("click", () => openFile(room, f, m));
+    box.append(it);
+  });
+  return box;
+}
+async function openFile(room, f, m) {
+  if (f.kind === "video") return openUploadedVideo(room, f, m);
+  let url;
+  try { url = await loadMedia(room, f); } catch (e) { toast("Can't load this file: " + e.message); return; }
+  if (f.kind === "image") return openImageWindow({ src: url, title: f.fname, msg: m, info: [["Size", fmtSize(f.size)], ["Type", f.mime || "?"]], download: f.fname });
+  const isText = (TEXT_RE.test(f.fname) || /^text\//.test(f.mime || "") || /json|xml/.test(f.mime || "")) && f.size <= 400000;
+  const isAudio = /^audio\//.test(f.mime || "");
+  const { content, close } = openWindow(f.fname + (isText ? " - Notepad" : " - File"), isText ? "📝" : fileIcon(f));
+  if (isText) {
+    const pad = el("div", "notepad sunken", "Loading...");
+    content.append(pad);
+    try { pad.textContent = await (await fetch(url)).text(); } catch { pad.textContent = "(can't read this file)"; }
+  } else if (isAudio) {
+    const a = el("audio"); a.controls = true; a.src = url; a.style.width = "100%";
+    content.append(a);
+  } else {
+    const head = el("div", "prof-head");
+    const ic = el("span", "av big", fileIcon(f)); head.append(ic, el("div", "pn", f.fname));
+    content.append(head);
+  }
+  const { tbl } = infoTable([["File", f.fname], ["Size", fmtSize(f.size)], ["Type", f.mime || "?"], ["Folder", m.folder || "Files"], ["Shared by", sharedBy(m)]]);
+  const fs = el("fieldset"); fs.append(el("legend", null, "File information"), tbl);
+  const btns = el("div", "wbuttons");
+  const save = el("a", "btn", "Save..."); save.href = url; save.download = f.fname;
+  const cl = el("button", null, "Close"); cl.onclick = close;
+  btns.append(save, cl);
+  content.append(fs, btns);
+}
+
+/* ========================= TABS: ABOUT & DIRECTORY ========================= */
+const DEFAULT_ABOUT = [
+  "# Welcome to Hangout Chat 💬",
+  "A small retro chat to hang out with friends.",
+  "",
+  "## Rules",
+  "- Be respectful. No insults, no harassment.",
+  "- No spam, no flooding.",
+  "- No shocking or inappropriate content.",
+  "- Don't share private information (address, phone number, passwords).",
+  "- Admins (⭐) can delete messages, kick and ban.",
+  "",
+  "## How to use it",
+  "- Pick a chat on the left, or find one in the 🔎 Directory tab.",
+  "- Right-click a message (long-press on a phone) to see a profile, add a friend, send a DM, delete your message or report it.",
+  "- Double-click a friend to send a private message (DM).",
+  "- Click ⚙ to change your icon, your bio and your name color.",
+  "- Click 📎 to send images, videos and files (in a folder).",
+  "",
+  "## Guests",
+  "- Guests show a [GUEST] tag.",
+  "- Guests can't send images, files or links, create chats, add friends or report.",
+  "- A guest identity is deleted when you log out or close the tab.",
+  "",
+  "## Accounts",
+  "- Create an account to get an icon, a bio, friends, DMs and files.",
+  "- Use a long password (at least 10 characters).",
+].join("\n");
+function setTab(t) {
+  if (t === "dir" && (!S.me || S.me.guest)) t = "chat";
+  if (!["about", "dir", "chat"].includes(t)) t = "chat";
+  S.tab = t;
+  store("chat-tab", t);
+  document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
+  $("chatSplit").hidden = t !== "chat";
+  $("aboutPage").hidden = t !== "about";
+  $("dirPage").hidden = t !== "dir";
+  closeMenu();
+  if (t === "about") renderAbout();
+  if (t === "dir") renderDirectory();
+  if (t === "chat") render();
+}
+document.querySelectorAll("#mainTabs button").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.t)));
+function formatDoc(doc, text) {
+  let ul = null, p = null;
+  for (const raw of String(text).split("\n")) {
+    const line = raw.replace(/\s+$/, "");
+    if (/^# /.test(line)) { ul = p = null; doc.append(el("h1", null, line.slice(2))); }
+    else if (/^## /.test(line)) { ul = p = null; doc.append(el("h2", null, line.slice(3))); }
+    else if (/^[-*] /.test(line)) { p = null; if (!ul) { ul = el("ul"); doc.append(ul); } const li = el("li"); appendRichText(li, line.slice(2), null); ul.append(li); }
+    else if (!line.trim()) { ul = p = null; }
+    else { ul = null; if (!p) { p = el("p"); doc.append(p); } else p.append(document.createElement("br")); appendRichText(p, line, null); }
+  }
+}
+function renderAbout() {
+  const page = $("aboutPage");
+  page.replaceChildren();
+  const doc = el("div", "doc");
+  if (S.isAdmin) { const b = el("button", "small editbar", "✎ Edit this page..."); b.onclick = editAbout; doc.append(b); }
+  formatDoc(doc, S.about?.text || DEFAULT_ABOUT);
+  if (S.about?.updatedAt) doc.append(el("div", "meta", "Last updated " + fmtFull(S.about.updatedAt) + " by " + (S.users[S.about.updatedBy]?.name || "admin") + " · Hangout Chat v" + APP_VERSION));
+  else doc.append(el("div", "meta", "Hangout Chat v" + APP_VERSION));
+  page.append(doc);
+}
+function editAbout() {
+  const { content, close } = openWindow("Edit the About page", "✎", { key: "editabout" });
+  const help = el("div", "hint", "Formatting: a line starting with \"# \" is a big title, \"## \" a section title, \"- \" a list item. Links become clickable.");
+  const ta = el("textarea", "sunken");
+  ta.value = S.about?.text || DEFAULT_ABOUT;
+  ta.maxLength = 8000;
+  ta.style.width = "100%"; ta.style.minHeight = "340px"; ta.style.flex = "1"; ta.style.font = "13px/1.4 'Lucida Console', 'Courier New', monospace";
+  const btns = el("div", "wbuttons");
+  const reset = el("button", null, "Reset to default"); reset.onclick = () => { ta.value = DEFAULT_ABOUT; };
+  const save = el("button", null, "Save");
+  save.onclick = async () => {
+    try { await D.set(R("site/about"), { text: ta.value.slice(0, 8000), updatedAt: now(), updatedBy: S.me.uid }); toast("About page saved."); close(); }
+    catch (e) { showBanner("Can't save: " + authError(e)); }
+  };
+  const cl = el("button", null, "Cancel"); cl.onclick = close;
+  btns.append(reset, save, cl);
+  content.append(help, ta, btns);
+}
+let dirQuery = "";
+const dirCounts = {};
+let dirCountsAt = 0;
+function listPublic() { return Object.entries(S.chats).filter(([, c]) => c.type === "public" && !c.archived && !c.parent).sort((a, b) => a[1].name.localeCompare(b[1].name)); }
+async function loadDirCounts() {
+  dirCountsAt = Date.now();
+  await Promise.all(listPublic().map(async ([id]) => { try { dirCounts[id] = Object.keys((await D.get(R("members/" + id))).val() || {}); } catch {} }));
+  if (S.tab === "dir" && !$("dirPage").contains(document.activeElement)) renderDirectory();
+}
+function renderDirectory() {
+  const page = $("dirPage");
+  page.replaceChildren();
+  const d = el("div", "dir");
+  const logo = el("div", "logo", "Hangout");
+  logo.append(el("small", null, " directory"));
+  d.append(logo, el("div", "tag", "Find a public chat to hang out in"));
+  const form = el("form");
+  const inp = el("input"); inp.type = "text"; inp.className = "sunken"; inp.value = dirQuery; inp.placeholder = "Search chats, descriptions, sub-chats...";
+  const go = el("button", null, "Search"); go.type = "submit";
+  const rnd = el("button", null, "Random chat"); rnd.type = "button";
+  form.append(inp, go, rnd);
+  form.onsubmit = (e) => { e.preventDefault(); dirQuery = inp.value.trim(); renderDirectory(); };
+  rnd.onclick = () => { const l = listPublic(); if (l.length) openRoom(l[Math.floor(Math.random() * l.length)][0]); };
+  d.append(form);
+  const all = listPublic();
+  const q = dirQuery.toLowerCase();
+  const res = all.filter(([id, c]) => !q || c.name.toLowerCase().includes(q) || (c.desc || "").toLowerCase().includes(q) || subsOf(id).some(([, s]) => s.name.toLowerCase().includes(q) || (s.desc || "").toLowerCase().includes(q)));
+  const cnt = el("div", "count");
+  cnt.append(el("span", null, q ? "Results for \"" + dirQuery + "\"" : "All public chats"), el("span", null, res.length + " of " + all.length + " chats"));
+  d.append(cnt);
+  if (!res.length) d.append(el("div", "d", "No chat matches your search. Try another word, or create one with \"+ New chat...\"."));
+  for (const [id, c] of res) {
+    const r = el("div", "res");
+    const t = el("a", "t", c.name);
+    t.href = "#room=" + id;
+    t.addEventListener("click", (e) => { e.preventDefault(); openRoom(id); });
+    const mem = dirCounts[id];
+    const info = mem ? mem.length + " member" + (mem.length === 1 ? "" : "s") + " · " + mem.filter(isOnline).length + " online" : "...";
+    r.append(t, el("div", "u", "hangout-chat / # " + id + " - " + info + (S.myChats[id] ? " · ✔ joined" : "")));
+    const dd = el("div", "d", c.desc || "No description yet.");
+    if (!c.desc) dd.style.color = "#888";
+    r.append(dd);
+    const subs = subsOf(id);
+    if (subs.length) {
+      const s = el("div", "s", "Sub-chats: ");
+      subs.forEach(([sid, sc], i) => { if (i) s.append(" · "); const a = el("a", null, "# " + sc.name); a.addEventListener("click", () => openRoom(sid)); s.append(a); });
+      r.append(s);
+    }
+    const by = S.users[c.createdBy];
+    r.append(el("div", "s", "Created by " + (by ? by.name : "?") + " on " + fmtDate(c.createdAt)));
+    d.append(r);
+  }
+  d.append(el("div", "foot", "Hangout Chat Directory · " + all.length + " public chat" + (all.length === 1 ? "" : "s")));
+  page.append(d);
+  if (Date.now() - dirCountsAt > 30000) loadDirCounts();
+}
 /* ========================= BANNED ========================= */
 function showBanned() {
   renderToolbar();
@@ -2166,6 +2576,7 @@ $("leaveBtn").addEventListener("click", () => (isDM(S.room) ? closeDM() : leaveC
 $("inviteBtn").addEventListener("click", inviteLink);
 $("profileBtn").addEventListener("click", () => S.room && isDM(S.room) && openProfile(dmOther(S.room)));
 $("renameBtn").addEventListener("click", adminRename);
+$("subBtn").addEventListener("click", () => { const c = S.chats[S.room]; if (c) createChat(c.parent || S.room); });
 $("clearBtn").addEventListener("click", adminClear);
 $("deleteBtn").addEventListener("click", adminDeleteChat);
 $("unarchiveBtn").addEventListener("click", adminUnarchive);
@@ -2187,14 +2598,14 @@ $("backdrop").addEventListener("click", closeSide);
 $("messages").addEventListener("scroll", closeMenu);
 
 $("attachBtn").addEventListener("click", () => $("fileInput").click());
-$("fileInput").addEventListener("change", (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) sendFile(f); });
+$("fileInput").addEventListener("change", (e) => { const list = [...e.target.files]; e.target.value = ""; if (list.length) sendFiles(list); });
 document.addEventListener("paste", (e) => {
   if (!started) return;
   const f = [...(e.clipboardData?.files || [])].find((x) => x.type.startsWith("image/"));
   if (f) { e.preventDefault(); sendFile(f); }
 });
 $("messages").addEventListener("dragover", (e) => e.preventDefault());
-$("messages").addEventListener("drop", (e) => { const f = e.dataTransfer?.files?.[0]; if (f) { e.preventDefault(); sendFile(f); } });
+$("messages").addEventListener("drop", (e) => { const list = [...(e.dataTransfer?.files || [])]; if (list.length) { e.preventDefault(); sendFiles(list); } });
 
 const input = $("input");
 input.addEventListener("input", () => { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 110) + "px"; });
