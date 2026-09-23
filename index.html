@@ -429,7 +429,8 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "3.0";
+const APP_VERSION = "3.0.1";
+const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
@@ -889,7 +890,7 @@ function startApp() {
   sub(R("users"), (s) => { S.users = s.val() || {}; renderSide(); render(); });
   sub(R("status"), (s) => { S.status = s.val() || {}; renderSide(); });
   sub(R("admins"), (s) => {
-    S.admins = s.val() || {};
+    S.admins = { ...(s.val() || {}), [OWNER_UID]: true };
     S.isAdmin = S.admins[S.me.uid] === true;
     $("adminBox").hidden = !S.isAdmin;
     renderMe(); renderToolbar(); renderSide(); render();
