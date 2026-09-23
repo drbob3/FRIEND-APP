@@ -196,12 +196,13 @@
    "test mode": messages only go between tabs on this PC.
    ========================================================= */
 const firebaseConfig = {
-  apiKey: "PASTE_HERE",
-  authDomain: "PASTE_HERE",
-  projectId: "PASTE_HERE",
-  storageBucket: "PASTE_HERE",
-  messagingSenderId: "PASTE_HERE",
-  appId: "PASTE_HERE"
+  apiKey: "AIzaSyDB_9bLkuXAHstoUlhKsOVeJpX7TL3Jdy4",
+  authDomain: "friend-app-cc816.firebaseapp.com",
+  databaseURL: "https://friend-app-cc816-default-rtdb.firebaseio.com",
+  projectId: "friend-app-cc816",
+  storageBucket: "friend-app-cc816.firebasestorage.app",
+  messagingSenderId: "819987678033",
+  appId: "1:819987678033:web:562cb00765e0c4eeea8970"
 };
 
 const $ = (id) => document.getElementById(id);
@@ -310,20 +311,22 @@ let sendMessage;
 
 if (configured) {
   const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-  const fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
-  const db = fs.getFirestore(initializeApp(firebaseConfig));
-  const col = fs.collection(db, "rooms", room, "messages");
-  const q = fs.query(col, fs.orderBy("ts", "asc"), fs.limitToLast(200));
-  fs.onSnapshot(q, (snap) => {
-    messages = snap.docs.map((d) => {
-      const x = d.data({ serverTimestamps: "estimate" });
-      return { name: x.name, color: x.color, text: x.text, ts: x.ts?.toMillis?.() || 0, pending: d.metadata.hasPendingWrites };
+  const rtdb = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+  const db = rtdb.getDatabase(initializeApp(firebaseConfig));
+  const roomRef = rtdb.ref(db, "rooms/" + room);
+  const q = rtdb.query(roomRef, rtdb.orderByChild("ts"), rtdb.limitToLast(200));
+  rtdb.onValue(q, (snap) => {
+    const list = [];
+    snap.forEach((c) => {
+      const x = c.val();
+      list.push({ name: x.name, color: x.color, text: x.text, ts: x.ts || 0 });
     });
+    messages = list;
     render();
   }, (err) => {
     showBanner("Can't load messages: " + err.message);
   });
-  sendMessage = (text) => fs.addDoc(col, { name: myName, color: myColor, text, ts: fs.serverTimestamp() });
+  sendMessage = (text) => rtdb.push(roomRef, { name: myName, color: myColor, text, ts: rtdb.serverTimestamp() });
 } else {
   showBanner("Test mode: Firebase isn't set up yet, so messages only reach other tabs on this computer. Follow the guide to go online.");
   const key = "chat-local-" + room;
