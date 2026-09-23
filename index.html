@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UtjVZnWyuf6S6VbXsd0sCoRwad+o63uoeSuZeOvwF3E=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-r5F7Q+yWffx01qF/C5WRmhk3xSS5YFZKMvSjCVpjvL8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -631,7 +631,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "7.0";
+const APP_VERSION = "7.1";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -3044,6 +3044,41 @@ $("composer").addEventListener("submit", async (e) => {
   catch (err) { input.value = text; showBanner("Message not sent: " + authError(err)); }
 });
 setInterval(() => { if (started) renderSide(); }, 60000);
+
+/* ========================= NEW VERSION POPUP ========================= */
+// Every few minutes, look at the index.html on the server. If its version is newer than the one
+// running in this tab, ask the person to reload the site.
+function isNewer(a, b) {
+  const pa = String(a).split(".").map(Number), pb = String(b).split(".").map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const x = pa[i] || 0, y = pb[i] || 0;
+    if (x !== y) return x > y;
+  }
+  return false;
+}
+let updateShownFor = null, updateSnoozeUntil = 0, updateOpen = false;
+async function checkForUpdate() {
+  if (updateOpen || Date.now() < updateSnoozeUntil) return;
+  try {
+    const r = await fetch(location.pathname + "?vcheck=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) return;
+    const m = (await r.text()).match(/const APP_VERSION = "([0-9.]+)"/);
+    if (!m || !isNewer(m[1], APP_VERSION)) return;
+    updateShownFor = m[1];
+    updateOpen = true;
+    const ok = await dialog({
+      title: "🔄 New version available",
+      message: "A new version of Hangout Chat is out (v" + m[1] + ").\nYou are using v" + APP_VERSION + ".\n\nReload the site to get the new features and fixes.",
+      okText: "Reload now", cancelText: "Later",
+    });
+    updateOpen = false;
+    if (ok) location.replace(location.pathname + "?v=" + m[1] + location.hash);   // "?v=" skips the old saved copy
+    else updateSnoozeUntil = Date.now() + 30 * 60 * 1000;   // ask again in 30 minutes
+  } catch { updateOpen = false; }
+}
+setTimeout(checkForUpdate, 20 * 1000);
+setInterval(checkForUpdate, 5 * 60 * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) checkForUpdate(); });
 </script>
 </body>
 </html>
