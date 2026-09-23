@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-XapCq+u3fpKOzm8HJwCpsFgKk792sSPQ+ZxYOg8syUg=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-b0dczoGkPjIFkjd2NqXYaNp33rvwKTvJrZElyW5aD2A=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -557,6 +557,9 @@
   .tdcur { display: flex; align-items: center; gap: 6px; }
   .tdcur .pvpbar { height: 10px; max-width: 200px; }
   .tdwait { font-size: 14px; letter-spacing: 1px; }
+  .tdpaths { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; font-size: 12px; }
+  .tdpath { min-width: 0; padding: 1px 7px; font-weight: bold; color: #000; }
+  .tdpath.on { outline: 2px solid #000; outline-offset: -4px; border-color: var(--dark) var(--light) var(--light) var(--dark); }
   .msfaceimg { width: 26px; height: 26px; image-rendering: pixelated; display: block; margin: auto; pointer-events: none; }
   .gicon .msfaceimg { width: 40px; height: 40px; margin: 0; }
   .gname .msfaceimg { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; margin: 0; }
@@ -786,7 +789,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "9.1";
+const APP_VERSION = "9.3";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -4276,14 +4279,14 @@ const TD = {
     money:  { name: "Money", icon: "💰", color: "#b09020", cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only)." },
   },
   ENEMIES: {
-    recruit:  { name: "Recruit", color: "#3aa040", hp: 45, speed: 1.3, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, pts: 1, desc: "Simple basic enemy." },
-    scout:    { name: "Scout", color: "#e0c020", hp: 26, speed: 2.3, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, pts: 1, desc: "Runs faster." },
-    heavy:    { name: "Heavy", color: "#28408a", hp: 150, speed: 0.9, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
-    shielder: { name: "Shielder", color: "#8a8a8a", hp: 260, armor: 2, speed: 1.0, rush: 2.5, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
-    medic:    { name: "Medic", color: "#f4f4f4", hp: 70, speed: 1.1, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 6, pts: 3, desc: "Heals the enemies around." },
-    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.7, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies straight to the base." },
-    tank:     { name: "Tank", color: "#6b4a2a", hp: 400, armor: 6, speed: 0.6, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
-    boss:     { name: "Boss", color: "#8000a0", hp: 1300, armor: 8, speed: 0.5, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
+    recruit:  { name: "Recruit", color: "#3aa040", hp: 45, speed: 0.8, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, pts: 1, desc: "Simple basic enemy." },
+    scout:    { name: "Scout", color: "#e0c020", hp: 26, speed: 1.35, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, pts: 1, desc: "Runs faster." },
+    heavy:    { name: "Heavy", color: "#28408a", hp: 150, speed: 0.55, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
+    shielder: { name: "Shielder", color: "#8a8a8a", hp: 260, armor: 2, speed: 0.6, rush: 1.4, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
+    medic:    { name: "Medic", color: "#f4f4f4", hp: 70, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 6, pts: 3, desc: "Heals the enemies around." },
+    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies straight to the base." },
+    tank:     { name: "Tank", color: "#6b4a2a", hp: 400, armor: 6, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
+    boss:     { name: "Boss", color: "#8000a0", hp: 1300, armor: 8, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
   },
   ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", boss: "👑" },
   SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank"],
@@ -4293,14 +4296,20 @@ TD.TTYPES = Object.keys(TD.TOWERS);
 TD.ETYPES = Object.keys(TD.ENEMIES);
 
 /* ----- map: 1 base, 2 entries, 3+ paths ----- */
-function tdGenMap(seed, W, H) {
+function tdGenMap(seed, W, H, nEnt = 2, perEnt = 1) {
+  const want = Math.max(3, nEnt * perEnt + (perEnt === 1 ? 1 : 0));
+  const maxRatio = nEnt > 2 ? 0.56 : 0.42;
   let best = null;
-  for (let attempt = 0; attempt < 120; attempt++) {
+  for (let attempt = 0; attempt < 250; attempt++) {
     const r = rng((seed + attempt * 7919) >>> 0);
     const ri = (a, b) => a + Math.floor(r() * (b - a + 1));
     const base = { x: 1, y: ri(2, H - 3) };
-    const e1 = ri(1, Math.floor(H / 2) - 2), e2 = ri(Math.ceil(H / 2) + 1, H - 2);
-    const entries = [{ x: W - 1, y: e1 }, { x: W - 1, y: e2 }];
+    const entries = [];
+    for (let k = 0; k < nEnt; k++) {
+      const lo = Math.floor(k * H / nEnt) + 1, hi = Math.max(lo, Math.floor((k + 1) * H / nEnt) - 2);
+      entries.push({ x: W - 1, y: Math.min(H - 2, ri(lo, hi)) });
+    }
+    if (entries.some((e, i) => i && e.y - entries[i - 1].y < 2)) continue;
     const mk = (ei, nway) => {
       const ent = entries[ei];
       const xs = [];
@@ -4321,33 +4330,41 @@ function tdGenMap(seed, W, H) {
       for (const [x, y] of cells) { const k = x + "," + y; if (seen.has(k)) return null; seen.add(k); }
       return { entry: ei, cells };
     };
-    const A = mk(0, ri(1, 2)), B = mk(1, ri(1, 2));
-    if (!A || !B) continue;
-    const routes = [A, B];
-    for (let k = 0; k < 6 && routes.length < 4; k++) {
-      const ei = k % 2 === 0 ? (r() < 0.5 ? 0 : 1) : 1 - routes[routes.length - 1].entry;
-      const C = mk(ei, 2);
+    const routes = [];
+    let ok = true;
+    for (let ei = 0; ei < nEnt && ok; ei++) { const A = mk(ei, ri(1, 2)); if (!A) ok = false; else routes.push(A); }
+    if (!ok) continue;
+    for (let k = 0; k < 40 && routes.length < want; k++) {
+      const cnt = entries.map((_, i) => routes.filter((x) => x.entry === i).length);
+      const ei = perEnt === 1 ? (r() < 0.5 ? 0 : 1) : cnt.indexOf(Math.min(...cnt));
+      const C = mk(ei, ri(2, 3));
       if (!C) continue;
       const others = new Set(routes.filter((x) => x.entry === ei).flatMap((x) => x.cells.map(([a, b]) => a + "," + b)));
       const fresh = C.cells.filter(([a, b]) => !others.has(a + "," + b)).length;
       if (fresh >= C.cells.length * 0.35) routes.push(C);
-      if (routes.length >= 3 && r() < 0.5) break;
     }
-    if (routes.length < 3) continue;
+    if (routes.length < want) continue;
+    routes.sort((a, b) => a.entry - b.entry);
     const path = new Set(routes.flatMap((x) => x.cells.map(([a, b]) => a + "," + b)));
     const ratio = path.size / (W * H);
-    if (ratio > 0.42 || ratio < 0.18) continue;
-    const m = { W, H, base, entries, routes, path };
-    if (!best) best = m;
-    return m;
+    if (ratio > maxRatio || ratio < 0.18) { if (!best) best = { W, H, base, entries, routes, path }; continue; }
+    return { W, H, base, entries, routes, path };
   }
-  return best || tdGenMap(seed + 1, W, H);
+  return best || tdGenMap(seed + 1, W, H, nEnt, perEnt);
 }
-
+// PvP: the full way of an enemy sent by `from` on route `ri` (own base -> own entry -> lane -> their entry -> their base)
+function tdRoutePts(st, from, ri) {
+  const route = st.map.routes[ri];
+  const own = st.map.routes.filter((x) => x.entry === route.entry).sort((a, b) => a.cells.length - b.cells.length)[0];
+  const out = own.cells.slice().reverse().map(([x, y]) => [tdWX(st, from, x) + 0.5, y + 0.5]);
+  const into = route.cells.map(([x, y]) => [tdWX(st, 1 - from, x) + 0.5, y + 0.5]);
+  return [...out, ...into];
+}
+const TD_ROUTE_COLORS = ["#ff3030", "#ffd000", "#30d0ff", "#ff60ff", "#60ff60", "#ff9000", "#ffffff", "#a080ff"];
 /* ----- state ----- */
 function tdNewState({ seed, pvp, linked }) {
   const W = pvp ? TD.W : TD.SOLO_W, H = pvp ? TD.H : TD.SOLO_H, L = pvp ? TD.L : 0;
-  const map = tdGenMap(seed, W, H);
+  const map = tdGenMap(seed, W, H, pvp ? 3 : 2, pvp ? 2 : 1);
   const st = {
     seed, pvp: !!pvp, linked: !!(pvp && linked), W, H, L, map, X1: W + L, totalW: pvp ? 2 * W + L : W,
     t: 0, towers: [], enemies: [], fx: [], nextId: 1, money: [pvp ? 200 : 250, pvp ? 200 : 0], lives: [20, 20], eco: [TD.ECO_START, TD.ECO_START],
@@ -4372,19 +4389,17 @@ function tdCanBuild(st, side, x, y) {
   return !st.towers.some((t) => t.side === side && t.lx === x && t.ly === y);
 }
 // spawn an enemy that attacks `side`'s base. from = sender side (PvP, starts in the sender's base) or -1 (solo waves)
-function tdSpawn(st, type, side, from, entry, hpMult = 1) {
+function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
   const E = TD.ENEMIES[type];
-  const pick = () => { const rs = st.map.routes.filter((x) => x.entry === entry); return rs[Math.floor(st.r() * rs.length)]; };
-  const pts = pick().cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
   let start, path;
-  if (!st.pvp) { start = [st.W + 0.2, st.map.entries[entry].y + 0.5]; path = E.air ? [tdBaseCenter(st, side)] : pts; }
-  else {
+  if (!st.pvp) {
+    const rs = st.map.routes.filter((x) => x.entry === entry);
+    const pts = rs[Math.floor(st.r() * rs.length)].cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
+    start = [st.W + 0.2, st.map.entries[entry].y + 0.5]; path = E.air ? [tdBaseCenter(st, side)] : pts;
+  } else {
+    const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : Math.floor(st.r() * st.map.routes.length);
     start = tdBaseCenter(st, from);
-    if (E.air) path = [tdBaseCenter(st, side)];
-    else {
-      const out = pick().cells.slice().reverse().map(([x, y]) => [tdWX(st, from, x) + 0.5, y + 0.5]);   // own base -> own entry
-      path = [...out.slice(1), ...pts];                                                                   // -> lane -> their entry -> their base
-    }
+    path = E.air ? [tdBaseCenter(st, side)] : tdRoutePts(st, from, ri).slice(1);
   }
   const hp = Math.round(E.hp * hpMult);
   st.enemies.push({
@@ -4410,8 +4425,7 @@ function tdStep(st, dt) {
       if (!st.cur[side] && st.list[side].length) { const it = st.list[side].shift(); st.cur[side] = { ...it, start: t, end: t + TD.ENEMIES[it.type].spawn }; }
       const c = st.cur[side];
       if (c && t >= c.end) {
-        const entry = c.lane === "top" ? 0 : c.lane === "bottom" ? 1 : (st.flip = !st.flip) ? 0 : 1;
-        tdSpawn(st, c.type, 1 - side, side, entry, 1 + t / 600);
+        tdSpawn(st, c.type, 1 - side, side, 0, 1 + t / 600, c.route);
         st.cur[side] = null;
       }
     }
@@ -4424,26 +4438,23 @@ function tdStep(st, dt) {
     const E = TD.ENEMIES[e.type];
     if (E.heal) for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal * dt);
     let blocked = false;
-    if (st.linked && !e.air && e.x > st.W - 0.05 && e.x < st.X1 + 0.05) {
-      const dir = e.from === 0 ? 1 : -1;
-      let foe = null, fd = 9;
+    if (st.linked && !e.air) {   // PvP: enemies of the 2 players fight each other anywhere they meet
+      let foe = null, fd = 0.65;
       for (const o of st.enemies) {
-        if (o.dead || o.air || o.from === e.from || Math.abs(o.y - e.y) > 0.5) continue;
-        if (o.x < st.W - 0.05 || o.x > st.X1 + 0.05) continue;
-        const d = (o.x - e.x) * dir;
-        if (d > -0.15 && d < 0.75 && d < fd) { fd = d; foe = o; }
+        if (o.dead || o.air || o.from === e.from) continue;
+        const d = Math.abs(o.x - e.x) + Math.abs(o.y - e.y);
+        if (d < fd && Math.hypot(o.x - e.x, o.y - e.y) < fd) { fd = Math.hypot(o.x - e.x, o.y - e.y); foe = o; }
       }
       if (foe) {
         blocked = true; e.fighting = true;
         foe.hp -= E.power * dt;
         if (foe.hp <= 0 && !foe.dead) { foe.dead = true; st.money[e.from] += Math.floor(TD.ENEMIES[foe.type].reward / 2); }
-        if (st.r() < dt * 3) st.fx.push({ k: "hit", x1: (e.x + foe.x) / 2, y1: e.y, x2: 0, y2: 0, until: t + 0.15 });
+        if (st.r() < dt * 3) st.fx.push({ k: "hit", x1: (e.x + foe.x) / 2, y1: (e.y + foe.y) / 2, x2: 0, y2: 0, until: t + 0.15 });
       } else {
         e.fighting = false;
         for (const o of st.enemies) {
-          if (o === e || o.dead || o.air || o.from !== e.from || Math.abs(o.y - e.y) > 0.5) continue;
-          const d = (o.x - e.x) * dir;
-          if (d > 0 && d < 0.45 && (o.fighting || o.blocked)) { blocked = true; break; }
+          if (o === e || o.dead || o.air || o.from !== e.from || !(o.fighting || o.blocked)) continue;
+          if (o.dist > e.dist && o.dist - e.dist < 0.5 && Math.hypot(o.x - e.x, o.y - e.y) < 0.5) { blocked = true; break; }
         }
       }
     }
@@ -4589,7 +4600,8 @@ function tdApply(st, side, a) {
     if (st.money[side] < E.cost) return "Not enough money.";
     st.money[side] -= E.cost;
     st.eco[side] = Math.max(TD.ECO_MIN, Math.min(TD.ECO_MAX, st.eco[side] + E.eco));
-    st.list[side].push({ type: a.type, lane: ["top", "bottom", "both"].includes(a.lane) ? a.lane : "both" });
+    const ri = Number.isInteger(a.route) && a.route >= 0 && a.route < st.map.routes.length ? a.route : -1;
+    st.list[side].push({ type: a.type, route: ri });
     return null;
   }
   return "?";
@@ -4676,6 +4688,38 @@ function tdDraw(cv, st, V, o) {
     ctx.fillStyle = "#fff"; ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.45)) + "px Tahoma, sans-serif"; ctx.textAlign = "center";
     ctx.fillText(st.linked ? "⚔ BATTLE LANES ⚔" : "(not linked)", (SX(W) + SX(st.X1)) / 2, ch - ts * 0.4);
   }
+  // PvP paths: preview of the selected path + numbers on the other map
+  if (st.pvp && o.routes) {
+    const R = o.routes;
+    const drawRoute = (ri, strong) => {
+      const pts = tdRoutePts(st, R.from, ri);
+      ctx.strokeStyle = TD_ROUTE_COLORS[ri % TD_ROUTE_COLORS.length]; ctx.lineWidth = strong ? 3 : 1.5;
+      ctx.globalAlpha = strong ? 0.95 : 0.45;
+      ctx.setLineDash([ts * 0.4, ts * 0.3]); ctx.lineDashOffset = -(performance.now() / 40) % (ts * 0.7);
+      ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(SX(x), SY(y)) : ctx.moveTo(SX(x), SY(y)))); ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+      const [ex, ey] = pts[pts.length - 1];
+      ctx.fillStyle = ctx.strokeStyle; ctx.beginPath(); ctx.arc(SX(ex), SY(ey), ts * 0.25, 0, Math.PI * 2); ctx.fill();
+    };
+    if (R.hover >= 0) drawRoute(R.hover, true);
+    else if (R.hover === -1 || R.sel < 0) st.map.routes.forEach((_, i) => drawRoute(i, false));
+    else drawRoute(R.sel, true);
+    // numbers: on a cell only this path uses, in the other player's map
+    ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.55)) + "px Tahoma, sans-serif";
+    st.labels ||= st.map.routes.map((rt, i) => {
+      const others = new Set(st.map.routes.filter((_, j) => j !== i).flatMap((x) => x.cells.map(([a, b]) => a + "," + b)));
+      const own = rt.cells.filter(([a, b]) => !others.has(a + "," + b));
+      const list = own.length ? own : rt.cells;
+      return list[Math.floor(list.length / 2)];
+    });
+    st.map.routes.forEach((rt, i) => {
+      const [cx, cy] = st.labels[i];
+      const px = SX(tdWX(st, 1 - R.from, cx) + 0.5), py = SY(cy + 0.5);
+      ctx.fillStyle = TD_ROUTE_COLORS[i % TD_ROUTE_COLORS.length]; ctx.fillRect(px - ts * 0.35, py - ts * 0.35, ts * 0.7, ts * 0.7);
+      ctx.strokeStyle = "#000"; ctx.lineWidth = 1; ctx.strokeRect(px - ts * 0.35 + 0.5, py - ts * 0.35 + 0.5, ts * 0.7, ts * 0.7);
+      ctx.fillStyle = "#000"; ctx.fillText(String(i + 1), px, py + 1);
+    });
+  }
   // entries
   ctx.font = Math.floor(ts * 0.7) + "px sans-serif";
   for (const side of sides) for (const ent of st.map.entries) ctx.fillText("🚪", SX(tdWX(st, side, ent.x) + 0.5), SY(ent.y + 0.5));
@@ -4752,7 +4796,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   const squadBox = el("div", "tdsquad");
   win.content.append(top, cvWrap, bar, info);
   if (pvp && canAct) win.content.append(squadBox);
-  const ui = { buildType: null, selId: null, hover: null, mode: innerWidth < 760 && pvp ? "mine" : "both", overlay: "", width: 900, V: null };
+  const ui = { route: -1, hoverRoute: -2, buildType: null, selId: null, hover: null, mode: innerWidth < 760 && pvp ? "mine" : "both", overlay: "", width: 900, V: null };
   // tower buttons
   const tbtn = {};
   if (canAct) for (const ty of TD.TTYPES) {
@@ -4766,7 +4810,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   // spawn list (PvP)
   let lane = "both";
   if (pvp && canAct) {
-    const how = "They leave from YOUR base" + (st.linked ? ", fight enemies in the battle lanes," : ",") + " then attack the other base.";
+    const how = "They leave from YOUR base" + (st.linked ? ", fight the other player's enemies wherever they meet," : ",") + " then attack the other base.";
     squadBox.append(el("div", "tdsqh", "⚔ Send enemies (click to add them to your spawn list)"), el("div", "hint", how + "  🟢 eco+ = more cash every " + TD.INCOME_EVERY + " s · 🔴 eco− = less."));
     const grid = el("div", "tdsendgrid");
     ui.sendBtns = {};
@@ -4775,14 +4819,26 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       const b = el("button", "tdsend"); b.type = "button";
       b.append(el("span", "ti", TD.ICON[ty]), el("span", "tn", E.name), el("span", "tc", "💰" + E.cost), el("span", E.eco > 0 ? "eco up" : "eco down", (E.eco > 0 ? "eco +" : "eco ") + E.eco));
       b.title = E.desc + "\nHP " + E.hp + " · speed " + E.speed + (E.armor ? " · armor " + E.armor : "") + " · wait " + E.spawn + " s";
-      b.onclick = () => send({ a: "send", type: ty, lane });
+      b.onclick = () => send({ a: "send", type: ty, route: ui.route });
       grid.append(b); ui.sendBtns[ty] = b;
     }
-    const laneSel = el("select", "sunken");
-    for (const [v, t] of [["both", "Both lanes (switch)"], ["top", "Top lane"], ["bottom", "Bottom lane"]]) { const op = el("option", null, t); op.value = v; laneSel.append(op); }
-    laneSel.onchange = () => { lane = laneSel.value; };
     const eco = el("span", "tdeco");
-    const foot = el("div", "row-btns"); foot.append(el("span", null, "Lane:"), laneSel, eco);
+    const paths = el("div", "tdpaths");
+    paths.append(el("span", null, "Path:"));
+    const pbtn = [];
+    const mkp = (i, label, color) => {
+      const b = el("button", "tdpath", label); b.type = "button";
+      if (color) { b.style.background = color; }
+      b.title = i < 0 ? "Each enemy takes a random path" : "Enemies take path " + (i + 1) + " (see the dashed line on the map)";
+      b.onclick = () => { ui.route = i; pbtn.forEach((x) => x.classList.toggle("on", x === b)); };
+      b.onmouseenter = () => { ui.hoverRoute = i; };
+      b.onmouseleave = () => { ui.hoverRoute = -2; };
+      pbtn.push(b); paths.append(b);
+      if (i === ui.route) b.classList.add("on");
+    };
+    mkp(-1, "🎲 Random");
+    st.map.routes.forEach((_, i) => mkp(i, String(i + 1), TD_ROUTE_COLORS[i % TD_ROUTE_COLORS.length]));
+    const foot = el("div", "row-btns"); foot.append(paths, eco);
     const listBox = el("div", "tdlist sunken");
     squadBox.append(grid, foot, listBox);
     ui.ecoEl = eco; ui.listBox = listBox;
@@ -4861,7 +4917,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     if (!win.w.isConnected) return;
     ui.width = cvWrap.clientWidth - 4;
     if (ui.getView) ui.V = ui.getView();
-    if (ui.V) tdDraw(cv, st, ui.V, { side, mode: ui.mode, hover: ui.hover, buildType: ui.buildType, selId: ui.selId, overlay: ui.overlay, width: ui.width, get toWorld() { return ui.toWorld; }, set toWorld(f) { ui.toWorld = f; }, set ts(v) {} });
+    if (ui.V) tdDraw(cv, st, ui.V, { side, mode: ui.mode, routes: pvp && canAct ? { from: side, sel: ui.route, hover: ui.hoverRoute } : null, hover: ui.hover, buildType: ui.buildType, selId: ui.selId, overlay: ui.overlay, width: ui.width, get toWorld() { return ui.toWorld; }, set toWorld(f) { ui.toWorld = f; }, set ts(v) {} });
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
@@ -4935,7 +4991,7 @@ function createTdChallenge(room = S.room) {
   const box = el("div", "mssetup");
   const fs = el("fieldset"); fs.append(el("legend", null, "PvP rules"));
   const lk = el("input"); lk.type = "checkbox"; lk.checked = store("td-linked") !== "0";
-  const l1 = el("label", "check"); l1.append(lk, " 🔗 Linked maps (battle lanes: enemies from both players fight in the middle)");
+  const l1 = el("label", "check"); l1.append(lk, " 🔗 Linked maps (enemies from both players fight each other when they meet)");
   fs.append(l1, el("div", "hint", "Same map for both (mirrored). No waves: you attack by sending enemies from your base.\nCash every " + TD.INCOME_EVERY + " s = your eco. Each base has 20 ❤. The first base to fall loses!"));
   let post = null;
   if (room) {
@@ -5006,7 +5062,7 @@ function openTd(gid) {
         btns.push(["✖ Cancel challenge", async () => { if (await cancelChallenge(gid)) shell.close(); }]);
         footBtns(btns);
       } else {
-        msg.append(el("div", "pvpbig", "⚔ " + uname(G.by) + " challenges you to Tower & Attack!"), el("div", null, G.cfg.linked ? "🔗 Linked maps: enemies fight in the middle." : "Mirror maps, no battle lanes."));
+        msg.append(el("div", "pvpbig", "⚔ " + uname(G.by) + " challenges you to Tower & Attack!"), el("div", null, G.cfg.linked ? "🔗 Linked maps: enemies fight each other when they meet." : "Mirror maps, no battle lanes."));
         if (S.me.guest) { msg.append(el("div", "hint", "Guests can only play solo. Create an account to play PvP!")); footBtns([]); }
         else footBtns([["⚔ Accept!", () => acceptChallenge(gid)]]);
       }
