@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Ag7peUPkvUVxRUyAQ2Rt61cl84WOr/Z6ClhAhQT693k=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-e10Z1LumRevmj5zG+bcrJGBg78GZfDhOB2PTvIHMpko=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -516,6 +516,16 @@
   .pvpres { font-size: 18px; font-weight: bold; text-align: center; padding: 4px 12px; background: #ffe0e0; border: 2px solid #800000; }
   .pvpres.good { background: #fff4b8; border-color: #806000; }
   .lcd.hearts-lcd { color: #ff6090; }
+  .gchip.big { display: inline-flex; margin: 2px 4px; }
+  .gchip.big button { font-weight: bold; padding: 3px 10px; background: #ffe8a0; }
+  .specrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 100%; }
+  .specbox { align-items: center; }
+  .specname { font-weight: bold; display: flex; align-items: center; gap: 4px; }
+  .specname .av { width: 18px; height: 18px; font-size: 12px; }
+  .specinfo { font-size: 12px; }
+  .specbox .msgridwrap { max-width: calc(50vw - 40px); max-height: 50dvh; }
+  .pvpwait.small { padding: 4px; min-width: 0; }
+  @media (max-width: 760px) { .specbox .msgridwrap { max-width: calc(100vw - 50px); } }
   @media (max-width: 1100px) {
     .mempane { position: fixed; right: 0; top: 0; bottom: 0; z-index: 501; box-shadow: -2px 0 0 var(--dark); transform: translateX(105%); transition: transform .15s; }
     .mempane.open { transform: none; }
@@ -732,7 +742,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "8.0";
+const APP_VERSION = "8.1";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -893,11 +903,20 @@ function parseStart(u) {
   return (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0);
 }
 function isImageUrl(url) { try { const u = new URL(url); return /^https?:$/.test(u.protocol) && /\.(png|jpe?g|gif|webp)$/i.test(u.pathname); } catch { return false; } }
+function gameIdFromUrl(url) {
+  try {
+    const u = new URL(url);
+    const m = u.hash.match(/^#game=([-A-Za-z0-9_]{12,40})$/);
+    return m && u.origin === location.origin && u.pathname === location.pathname ? m[1] : null;
+  } catch { return null; }
+}
 function appendRichText(parent, text, msg) {
   let last = 0;
   for (const match of text.matchAll(URL_RE)) {
     const url = cleanUrl(match[0]);
     appendMentions(parent, text.slice(last, match.index));
+    const gl = gameIdFromUrl(url);
+    if (gl) { parent.append(gameChip(gl, true)); last = match.index + url.length; continue; }
     const a = el("a", null, url);
     a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
     const vid = parseVideo(url);
@@ -3472,6 +3491,12 @@ class Minefield {
   get progress() { return this.safeTotal ? Math.floor(this.opened * 100 / this.safeTotal) : 100; }
 }
 
+// board as a short text for spectators: "." closed, "o" open, "f" flag, "x" mine hit
+function encodeBoard(F) { let s = ""; for (const c of F.cells) s += !c.on ? "." : c.open ? (c.mine ? "x" : "o") : c.flag ? "f" : "."; return s; }
+function applyBoard(F, b) {
+  F.opened = 0; F.booms = 0;
+  F.cells.forEach((c, i) => { const ch = (b || "")[i] || "."; c.open = ch === "o" || ch === "x"; c.boom = ch === "x"; c.flag = ch === "f"; if (c.open && !c.mine) F.opened++; if (c.boom) F.booms++; });
+}
 function lcd(n) { const s = el("span", "lcd"); s.textContent = (n < 0 ? "-" + String(-n).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); return s; }
 function setLcd(node, n) { node.textContent = (n < 0 ? "-" + String(Math.min(99, -n)).padStart(2, "0") : String(Math.min(999, n)).padStart(3, "0")); }
 
@@ -3765,7 +3790,7 @@ function openPvp(gid) {
   const win = openWindow("Minesweeper PvP", "⚔", { key });
   win.w.classList.add("mswin");
   const me = S.me.uid;
-  let G, P = {}, F = null, view = null, started = false, ended = false, lives = 0, t0 = 0;
+  let G, P = {}, F = null, view = null, spec = null, started = false, ended = false, lives = 0, t0 = 0;
   let readySent = false, startSent = false, finishing = false, statsDone = false, pushT = null, lastPush = 0;
   const saveKey = "mines-pvp-" + gid;
   const head = el("div", "pvphead");
@@ -3811,6 +3836,7 @@ function openPvp(gid) {
       D.set(R("games/" + gid + "/startAt"), now()).catch(() => {});
     }
     if (G.startAt && !F) buildBoard();
+    if (spec) paintSpec();
     renderBars();
     if (!G.startAt) {
       const waitFor = isPlayer() ? (P[other()]?.ready ? null : other()) : null;
@@ -3882,6 +3908,16 @@ function openPvp(gid) {
     F.cells.forEach((c, i) => { if (c.open) open.push(i); if (c.flag) flags.push(i); });
     store(saveKey, JSON.stringify({ open, flags, lives }));
   }
+  function paintSpec() {
+    if (!spec) return;
+    for (const [uid, x] of Object.entries(spec)) {
+      const p = P[uid] || {};
+      applyBoard(x.F, p.b);
+      x.v.paint(!!G.winner, p.b ? -1 : x.start);
+      const lv = G.cfg.lives, l = p.lives ?? lv;
+      x.info.textContent = "❤ " + l + "/" + lv + " · " + (p.prog || 0) + "%" + (p.dead ? " · 💀 out" : p.done ? " · 🏁 " + fmtMs(p.time || 0) : G.winner ? (G.winner === uid ? " · 🏆" : "") : "");
+    }
+  }
   function buildBoard() {
     F = new Minefield(G.cfg);
     F.generate(-1);
@@ -3892,7 +3928,21 @@ function openPvp(gid) {
       for (const i of saved.flags || []) if (F.cells[i] && !F.cells[i].open) F.cells[i].flag = true;
     }
     if (!isPlayer()) {
-      stage.replaceChildren(el("div", "pvpwait", "👀 You are watching. The bars above show each player's progress."));
+      spec = {};
+      const row = el("div", "specrow");
+      for (const uid of [G.by, G.opp]) {
+        const SF = new Minefield(G.cfg); SF.generate(-1);
+        const v = boardView(SF, { canPlay: () => false, onReveal() {}, onFlag() {} });
+        v.grid.style.setProperty("--cs", (G.cfg.w > 20 ? 13 : 17) + "px");
+        const box = el("div", "specbox msboard raised");
+        const nm = el("div", "specname"); nm.append(iconNode(uid), " " + uname(uid));
+        const info = el("div", "specinfo");
+        box.append(nm, v.node, info);
+        row.append(box);
+        spec[uid] = { F: SF, v, info, start: SF.startCell() };
+      }
+      stage.replaceChildren(el("div", "pvpwait small", "👀 You are watching " + uname(G.by) + " vs " + uname(G.opp) + " live!"), row);
+      paintSpec();
       return;
     }
     const headB = el("div", "mshead raisedin");
@@ -3949,15 +3999,15 @@ function openPvp(gid) {
   function pushNow() {
     if (!isPlayer() || !F) return;
     lastPush = Date.now();
-    D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives, last: now() }).catch((e) => logError("Game progress: " + e.message));
+    D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives, b: encodeBoard(F), last: now() }).catch((e) => logError("Game progress: " + e.message));
   }
   async function die() {
     clearTimeout(pushT);
-    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives: 0, dead: true, last: now() }).catch(() => {});
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F.progress, lives: 0, dead: true, b: encodeBoard(F), last: now() }).catch(() => {});
     await setWinner(other(), "dead");
   }
   async function giveUp() {
-    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F ? F.progress : 0, lives: 0, dead: true, last: now() }).catch(() => {});
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: F ? F.progress : 0, lives: 0, dead: true, ...(F ? { b: encodeBoard(F) } : {}), last: now() }).catch(() => {});
     await setWinner(other(), "giveup");
   }
   async function finish() {
@@ -3965,7 +4015,7 @@ function openPvp(gid) {
     finishing = true;
     clearTimeout(pushT);
     const time = Math.max(0, Math.round(srvNow() - t0));
-    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: 100, lives, done: true, time, last: now() }).catch(() => {});
+    await D.update(R("gameP/" + gid + "/" + me), { ready: true, prog: 100, lives, done: true, time, b: encodeBoard(F), last: now() }).catch(() => {});
     await setWinner(me, "clear", time);
   }
   async function setWinner(w, why, time) {
@@ -4105,9 +4155,22 @@ function renderGamesPage() {
   page.append(wrap);
 }
 // small button under a challenge message in the chat
-function gameChip(gid) {
+function gameChip(gid, big) {
   const g = S.games?.[gid];
-  const box = el("span", "gchip");
+  const box = el("span", "gchip" + (big ? " big" : ""));
+  if (big) {
+    const st = gameState(g);
+    const b = el("button", null, "💣 Minesweeper");
+    b.type = "button";
+    if (!g) b.textContent = S.gamesLoaded ? "⚔ Minesweeper challenge (open)" : "⚔ Minesweeper challenge";
+    else if (st === "open") b.textContent = g.by === S.me.uid ? "⚔ Your challenge: waiting for someone to join..." : "⚔ Join the fight vs " + uname(g.by) + "! (" + cfgText(g.cfg) + ")";
+    else if (st === "playing") b.textContent = (g.by === S.me.uid || g.opp === S.me.uid ? "▶ Back to your game vs " + uname(g.by === S.me.uid ? g.opp : g.by) : "👀 Watch " + uname(g.by) + " vs " + uname(g.opp) + " (live)");
+    else if (st === "done") b.textContent = "🏆 " + uname(g.winner) + " won " + uname(g.by) + " vs " + uname(g.opp) + " · See";
+    else b.textContent = "⌛ Challenge expired";
+    b.onclick = (e) => { e.stopPropagation(); if (st === "open" && g.by !== S.me.uid) acceptChallenge(gid); else openPvp(gid); };
+    box.append(b);
+    return box;
+  }
   const st = gameState(g);
   const btn = (t, fn) => { const b = el("button", "small", t); b.type = "button"; b.onclick = (e) => { e.stopPropagation(); fn(); }; box.append(b); };
   if (!g) { if (S.gamesLoaded) box.append(el("span", "dim", "(challenge over)")); else btn("Open", () => openPvp(gid)); return box; }
@@ -4140,7 +4203,7 @@ function startGamesSub() {
     if (first) cleanOldGames();
     if (!changed) return;
     if (S.tab === "games") renderGamesPage();
-    if (S.tab === "chat") { renderMembers(); if (S.messages.some((m) => m.game)) render(); }
+    if (S.tab === "chat") { renderMembers(); if (S.messages.some((m) => m.game || (m.text || "").includes("#game="))) render(); }
   }, () => { S.gamesLoaded = true; });
 }
 function cleanOldGames() {
