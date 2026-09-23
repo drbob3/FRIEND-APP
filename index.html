@@ -373,7 +373,7 @@
   .line:hover .htime { display: block; }
   .grp .line:first-of-type .htime { display: none; }
   .grp .attach, .grp .folder { margin-left: 0; }
-  #attachBtn { font-size: 18px; font-weight: bold; padding: 0 12px; }
+
   /* admin page */
   .page.graypage { background: var(--face); }
   .admin { padding: 10px; }
@@ -385,6 +385,38 @@
   .urow select { font: inherit; background: #fff; border-radius: 0; }
   #reportsBox .report:last-child { border-bottom: 0; }
   #reportsBox { background: #fff; max-height: 50dvh; overflow-y: auto; padding: 4px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  /* ======== v6.2: old-school restyle of the v6 layout ======== */
+  .rail { width: 150px; align-items: stretch; gap: 3px; padding: 6px; background: var(--face); border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); box-shadow: inset -1px -1px var(--shadow), inset 1px 1px var(--mid); }
+  .railtitle { font-weight: bold; font-size: 12px; padding: 8px 2px 2px; border-bottom: 1px solid var(--shadow); margin-bottom: 2px; }
+  .railhint { color: var(--shadow); font-style: italic; font-size: 12px; padding: 2px; }
+  .railsep { width: auto; margin: 6px 0 3px; }
+  .svw { width: auto; display: block; }
+  .svw .pill { display: none; }
+  .sv { width: 100%; height: auto; padding: 4px 8px !important; text-align: left; font: 13px Tahoma, "MS Sans Serif", sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .sv.on { font-weight: bold; color: #000; background: #dcdcdc; }
+  .sv.add { font-size: 12px; color: #000; }
+  .sv .dot { position: static; float: right; margin-left: 4px; border: 0; min-width: 0; height: auto; line-height: 1.4; padding: 0 4px; }
+  .chcol { background: var(--face); border: 0; padding: 0 4px; }
+  .chhead { margin: 0 0 4px; padding: 5px 8px; min-height: 0; border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); box-shadow: inset -1px -1px var(--shadow), inset 1px 1px var(--mid); background: var(--face); }
+  .chhead.click:hover { background: #d4d4d4; }
+  .chbody { background: #fff; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); box-shadow: inset 1px 1px var(--dark); padding: 2px 4px 6px; }
+  .cat { text-transform: none; letter-spacing: 0; font-size: 12px; color: #000; border-bottom: 1px dotted var(--shadow); padding: 8px 2px 2px; margin-bottom: 2px; }
+  .ch { padding: 2px 4px; color: #000; }
+  .ch:hover { background: transparent; outline: 1px dotted #000; outline-offset: -1px; }
+  .ch.sel:hover { background: var(--select); }
+  .ch .hash { color: #000; font-weight: normal; }
+  .sdesc { color: #444; font-style: italic; }
+  .youpanel { margin-top: 4px; background: var(--face); border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); box-shadow: inset -1px -1px var(--shadow), inset 1px 1px var(--mid); }
+  .chathead { border-bottom: 0; margin-bottom: 2px; padding: 2px 2px 4px; min-height: 0; }
+  .chathead .cd { font-style: italic; }
+  .mempane { background: #fff; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); box-shadow: inset 1px 1px var(--dark); margin: 0 0 0 4px; padding: 2px 4px; }
+  .mem { padding: 2px 4px; }
+  .mem:hover { background: transparent; outline: 1px dotted #000; outline-offset: -1px; }
+  .mem .av { width: 20px; height: 20px; font-size: 13px; }
+  .mem.off { opacity: .45; }
+  .mempane .cat { border-bottom: 1px dotted var(--shadow); }
+  .split { gap: 4px; }
+  .dir form input { flex: 1 1 220px; min-width: 0; }
   @media (max-width: 1100px) {
     .mempane { position: fixed; right: 0; top: 0; bottom: 0; z-index: 501; box-shadow: -2px 0 0 var(--dark); transform: translateX(105%); transition: transform .15s; }
     .mempane.open { transform: none; }
@@ -406,7 +438,8 @@
     .chatdesc { display: none; }
     .leftcol { position: fixed; left: 0; top: 0; bottom: 0; z-index: 500; transform: translateX(-105%); transition: transform .15s; background: var(--face); box-shadow: 2px 0 0 var(--dark); }
     .leftcol.open { transform: none; }
-    .chcol { width: min(240px, calc(88vw - 64px)); }
+    .rail { width: 118px; }
+    .chcol { width: min(230px, calc(90vw - 118px)); }
     .chathead .cd { display: none; }
     .grp > .av.msgav { width: 30px; height: 30px; font-size: 18px; }
     .agrid { grid-template-columns: 1fr; }
@@ -505,14 +538,14 @@
         <button id="menuBtn" title="Menu">☰</button>
         <span class="cn" id="chatName">...</span>
         <span class="cd" id="chatDesc"></span>
-        <button id="inviteBtn" title="Invite people">🔗 Invite</button>
-        <button id="membersBtn" title="Show / hide members">👥</button>
-        <button id="moreBtn" title="More...">⋯</button>
+        <button id="inviteBtn" title="Invite people">Invite...</button>
+        <button id="membersBtn" title="Show / hide members">👥 Members</button>
+        <button id="moreBtn" title="More actions">More ▾</button>
       </div>
       <div class="banner" id="banner"></div>
       <div id="messages" class="sunken"></div>
       <form class="composer" id="composer">
-        <button type="button" id="attachBtn" title="Send images, videos or files">＋</button>
+        <button type="button" id="attachBtn" title="Send images, videos or files">📎</button>
         <input type="file" id="fileInput" multiple hidden>
         <textarea id="input" class="sunken" rows="1" maxlength="500" placeholder="Type a message..."></textarea>
         <button id="sendBtn" type="submit"><u>S</u>end</button>
@@ -588,7 +621,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "6.0";
+const APP_VERSION = "6.2";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
 
 const $ = (id) => document.getElementById(id);
@@ -2091,20 +2124,21 @@ function renderRail() {
     return b;
   };
   const homeUnread = Object.keys(S.myDMs).reduce((n, d) => n + (d === S.room ? 0 : (S.unread[d] || 0)), 0) + Object.keys(S.reqIn).length;
-  mk("✉", "Home: friends & direct messages", server === "home", goHome, homeUnread);
-  rail.append(el("div", "railsep"));
+  mk("✉ Home", "Friends & direct messages", server === "home", goHome, homeUnread);
+  rail.append(el("div", "railtitle", "My chats"));
   const mine = Object.keys(S.myChats).filter((r) => S.chats[r] && !S.chats[r].parent).sort((a, b) => S.chats[a].name.localeCompare(S.chats[b].name));
   for (const r of mine) {
     const c = S.chats[r];
     const n = server === r ? 0 : unreadIn(r);
-    const b = mk(initials(c.name), c.name + (c.type === "private" ? " (private)" : ""), server === r, () => openServer(r), n, c.type === "private" ? "priv" : "");
+    const b = mk((c.type === "private" ? "🔒 " : "# ") + c.name, (c.desc ? c.name + " - " + c.desc : c.name), server === r, () => openServer(r), n, "");
     bindMenu(b, async (x, y) => { if (curServer() !== r) await openServer(r); roomMenu(x, y); });
   }
-  if (S.legacyView && server !== "home" && !S.chats[server]) mk("🗄", "Old chat (read-only)", true, () => {}, 0);
+  if (!mine.length) rail.append(el("div", "railhint", "No chats yet"));
+  if (S.legacyView && server !== "home" && !S.chats[server]) mk("🗄 Old chat", "Old chat (read-only)", true, () => {}, 0);
   if (!S.me.guest) {
-    if (mine.length) rail.append(el("div", "railsep"));
-    mk("+", "Create a chat", false, () => createChat(), 0, "add");
-    mk("🔎", "Find public chats (Directory)", false, () => setTab("dir"), 0);
+    rail.append(el("div", "railsep"));
+    mk("+ New chat...", "Create a chat", false, () => createChat(), 0, "add");
+    mk("🔎 Directory", "Find public chats", false, () => setTab("dir"), 0, "add");
   }
 }
 async function openServer(base) {
@@ -2434,7 +2468,7 @@ function render() {
   renderStatus();
   if (!S.room) {
     if (S.home) box.append(el("div", "empty", "*** Welcome home! Double-click a friend on the left to start a private conversation."));
-    else box.append(el("div", "empty", "*** Pick a chat on the left" + (!S.me.guest ? ", or create one with the + button." : ".")));
+    else box.append(el("div", "empty", "*** Pick a chat on the left" + (!S.me.guest ? ", or create one with \"+ New chat...\"" : "") + "."));
     return;
   }
   let list = S.messages;
@@ -2444,40 +2478,28 @@ function render() {
     list = [...list, ...dels].sort((a, b) => a.ts - b.ts);
   }
   if (!list.length) {
-    box.append(el("div", "empty", isDM(S.room) ? "*** This is the start of your private conversation." : '*** No messages yet. Say hi, then click "🔗 Invite" and send the link.'));
+    box.append(el("div", "empty", isDM(S.room) ? "*** This is the start of your private conversation." : '*** No messages yet. Say hi, then click "Invite..." and send the link.'));
     return;
   }
-  let prevKey = null, prevTs = 0, gb = null;
+  let prevKey = null;
   for (const m of list) {
     const key = (m.uid || m.name) + "|" + m.guest;
-    const newPerson = key !== prevKey;
-    if (prevKey !== null && newPerson) box.append(el("div", "sep", SEP));
-    if (newPerson || !gb || (m.ts - prevTs) > 7 * 60 * 1000) {
-      const grp = el("div", "grp");
-      const av = iconNode(m.uid, m, "msgav");
-      if (m.uid && S.users[m.uid]) av.addEventListener("click", () => openProfile(m.uid));
-      bindMenu(av, (x, y) => messageMenu(x, y, m));
-      gb = el("div", "gb");
-      const gh = el("div", "gh");
-      const u = m.uid ? S.users[m.uid] : null;
-      const who = el("span", "who", m.name);
-      who.style.color = (u && !u.deleted && u.color) || m.color || "#000";
-      if (m.uid && S.users[m.uid]) who.addEventListener("click", () => openProfile(m.uid));
-      gh.append(who);
-      if (m.guest) gh.append(el("span", "tag", "[GUEST]"));
-      if (u && u.deleted) gh.append(el("span", "tag", "(deleted account)"));
-      if (m.uid && isAdminUid(m.uid)) gh.append(el("span", null, "⭐"));
-      const gt = el("span", "gtime", fmtDay(m.ts)); gt.title = fmtFull(m.ts); gh.append(gt);
-      gb.append(gh);
-      grp.append(av, gb);
-      box.append(grp);
-    }
+    if (prevKey !== null && key !== prevKey) box.append(el("div", "sep", SEP));
     const line = el("div", "line" + (m.deletedView ? " deleted" : ""));
     line.dataset.key = m.key;
-    line.append(el("span", "htime", fmtTime(m.ts)));
+    const u = m.uid ? S.users[m.uid] : null;
+    const who = el("span", "who", m.name);
+    who.style.color = (u && !u.deleted && u.color) || m.color || "#000";
+    if (m.uid && S.users[m.uid]) who.addEventListener("click", () => openProfile(m.uid));
+    const parts = [el("span", "time", "[" + fmtTime(m.ts) + "] "), iconNode(m.uid, m), who];
+    if (m.guest) parts.push(el("span", "tag", " [GUEST]"));
+    if (u && u.deleted) parts.push(el("span", "tag", " (deleted account)"));
+    if (m.uid && isAdminUid(m.uid)) parts.push(el("span", null, " ⭐"));
+    parts.push(el("span", "who", ": "));
     const text = el("span");
     appendRichText(text, m.text || "", m);
-    line.append(text);
+    parts.push(text);
+    line.append(...parts);
     if (m.deletedView) {
       const by = m.deletedView.by === m.uid ? "by author" : "by admin " + (S.users[m.deletedView.by]?.name || "");
       line.append(el("span", "delnote", "(deleted " + by + ", " + fmtFull(m.deletedView.at) + ")"));
@@ -2485,9 +2507,8 @@ function render() {
     if (m.media) line.append(renderAttachment(m, S.room));
     if (m.files && m.files.length) line.append(renderFolder(m, S.room));
     bindMenu(line, (x, y) => messageMenu(x, y, m));
-    gb.append(line);
+    box.append(line);
     prevKey = key;
-    prevTs = m.ts;
   }
   if (nearBottom || sentJustNow) { box.scrollTop = box.scrollHeight; sentJustNow = false; }
 }
