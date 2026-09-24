@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-uEi81FaH3aiGX4LI7fiw/8+HifIJ1K+rV+s9eUACrQI=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GMmYktyg9lMwuJ1M/gBIJOopFy+8yWlhModFyDYz5oE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -940,7 +940,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.11";
+const APP_VERSION = "10.12";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5054,10 +5054,10 @@ const TD = {
     saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
     captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.7, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
     kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 1.3, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
-    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 6, speed: 0.8, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1, dmg: 1, every: 0.6, fx: "knife" }, desc: "Mercenary with a knife: stabs enemies from a bit far." },
-    m_gun:     { name: "Gun Man Merc", color: "#2a50a0", hp: 8, speed: 0.75, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.5, dmg: 1, every: 1 }, desc: "Mercenary: stops and shoots enemy units in range." },
-    m_rifle:   { name: "Rifleman Merc", color: "#1a3a80", hp: 10, speed: 0.75, reward: 12, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 3, dmg: 1, every: 2, burst: 3 }, desc: "Mercenary: fires 3 quick shots, then reloads." },
-    m_demo:    { name: "Demo Merc", color: "#5a4ab0", hp: 6, speed: 0.7, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.5, dmg: 2, every: 2.5, splash: 1, ground: true, fx: "throw" }, desc: "Mercenary: throws dynamite at groups (ground only)." },
+    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 9, speed: 0.8, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1.1, dmg: 1, every: 0.5, fx: "knife" }, desc: "Mercenary with a knife: stabs enemies from a bit far." },
+    m_gun:     { name: "Gun Man Merc", color: "#2a50a0", hp: 12, speed: 0.75, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 1, every: 0.7 }, desc: "Mercenary: stops and shoots enemy units in range." },
+    m_rifle:   { name: "Rifleman Merc", color: "#1a3a80", hp: 15, speed: 0.75, reward: 12, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 3.2, dmg: 1, every: 1.5, burst: 3 }, desc: "Mercenary: fires 3 quick shots, then reloads." },
+    m_demo:    { name: "Demo Merc", color: "#5a4ab0", hp: 9, speed: 0.7, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 3, every: 2.2, splash: 1.1, ground: true, fx: "throw" }, desc: "Mercenary: throws dynamite at groups (ground only)." },
     boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
   },
   ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑", m_recruit: "🔪", m_gun: "🔫", m_rifle: "🎖️", m_demo: "🧨" },
@@ -5158,14 +5158,24 @@ const TD_ROUTE_COLORS = ["#ff3030", "#ffd000", "#30d0ff", "#ff60ff", "#60ff60", 
 /* ----- state ----- */
 function tdNewState({ seed, pvp, linked }) {
   const W = pvp ? TD.W : TD.SOLO_W, H = pvp ? TD.H : TD.SOLO_H, L = pvp ? TD.L : 0;
-  const map = tdGenMap(seed, W, H, pvp ? 3 : 2, pvp ? 2 : 1);
+  const map = tdGenMap(seed, W, H, 3, 2);
   const st = {
     seed, pvp: !!pvp, linked: !!(pvp && linked), W, H, L, map, X1: W + L, totalW: pvp ? 2 * W + L : W,
     t: 0, towers: [], enemies: [], fx: [], nextId: 1, money: [pvp ? 200 : 250, pvp ? 200 : 0], lives: [20, 20], eco: [TD.ECO_START, TD.ECO_START],
     wave: 0, waveOn: false, queue: [], squads: [[], []], spawnQ: [[], []], autoT: [TD.AUTO_EVERY, TD.AUTO_EVERY], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
   };
+  if (!pvp) {   // solo: paths open one by one (one entry at a time first)
+    const byEnt = [0, 1, 2].map((ei) => map.routes.map((r, i) => (r.entry === ei ? i : -1)).filter((i) => i >= 0));
+    const first = seed % 3, order = [];
+    for (let k = 0; k < 3; k++) for (let e = 0; e < 3; e++) { const ri = byEnt[(first + e) % 3][k]; if (ri !== undefined) order.push(ri); }
+    st.order = order;
+  }
   return st;
 }
+// solo: how many paths are open for a wave (1 path for waves 1-5, +1 every 5 waves)
+const TD_PATH_EVERY = 5;
+function tdOpenCount(st, wave) { return Math.min(st.order.length, 1 + Math.floor(Math.max(0, wave - 1) / TD_PATH_EVERY)); }
+function tdOpenRoutes(st, wave = st.waveOn || st.queue.length ? st.wave : st.wave + 1) { return st.order.slice(0, tdOpenCount(st, wave)); }
 const tdCost = (st, T) => (st.pvp && T.pvpCost) || T.cost;
 const tdUpCost = (st, T, lv) => ((st.pvp && T.pvpUp) || T.up)[lv];
 const tdMaxLvl = (T) => T.up.length;   // last level index (0-based)
@@ -5207,9 +5217,9 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
   const E = TD.ENEMIES[type];
   let start, path;
   if (!st.pvp) {
-    const rs = st.map.routes.filter((x) => x.entry === entry);
-    const pts = rs[Math.floor(st.r() * rs.length)].cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
-    start = [st.W + 0.2, st.map.entries[entry].y + 0.5]; path = E.air ? tdFlyPath([start, ...pts]) : pts;
+    const rt = st.map.routes[routeIdx >= 0 ? routeIdx : st.order[0]];
+    const pts = rt.cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
+    start = [st.W + 0.2, st.map.entries[rt.entry].y + 0.5]; path = E.air ? tdFlyPath([start, ...pts]) : pts;
   } else {
     const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : tdPickRoute(st, from);
     start = tdBaseCenter(st, from);
@@ -5225,7 +5235,8 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
 // solo: an ally from a Barracks walks from the base towards an entry and fights the enemies
 function tdSpawnAlly(st, type, hpMult = 1) {
   const E = TD.ENEMIES[type];
-  const rt = st.map.routes[Math.floor(st.r() * st.map.routes.length)];
+  const open = tdOpenRoutes(st, Math.max(1, st.wave));
+  const rt = st.map.routes[open[Math.floor(st.r() * open.length)]];
   const path = rt.cells.slice().reverse().map(([x, y]) => [tdWX(st, 0, x) + 0.5, y + 0.5]);
   const hp = Math.round(E.hp * hpMult);
   st.enemies.push({ id: st.nextId++, type, side: -1, from: 0, x: path[0][0], y: path[0][1], path: path.slice(1), idx: 0, hp, maxHp: hp, armor: E.armor || 0,
@@ -5275,7 +5286,7 @@ function tdStep(st, dt) {
   st.t += dt;
   const t = st.t;
   // solo wave queue
-  while (st.queue.length && st.queue[0].at <= t) { const q = st.queue.shift(); tdSpawn(st, q.type, 0, -1, q.entry, q.hp); }
+  while (st.queue.length && st.queue[0].at <= t) { const q = st.queue.shift(); tdSpawn(st, q.type, 0, -1, 0, q.hp, q.route); }
   // PvP: squads + free units from the base + eco income
   if (st.pvp) {
     for (const side of [0, 1]) {
@@ -5505,7 +5516,8 @@ function tdStartWave(st) {
   }
   const gap = Math.max(0.3, 0.75 * Math.pow(0.97, w));
   let at = st.t + 0.5;
-  for (const ty of list) { st.queue.push({ at, type: ty, entry: st.r() < 0.5 ? 0 : 1, hp: hpMult }); at += ty === "boss" ? 2 : gap; }
+  const open = tdOpenRoutes(st, w);
+  for (const ty of list) { st.queue.push({ at, type: ty, route: open[Math.floor(st.r() * open.length)], hp: hpMult }); at += ty === "boss" ? 2 : gap; }
   st.waveOn = true;
   if (early) st.money[0] += 10 + w;
   return true;
@@ -5604,6 +5616,14 @@ function tdDraw(cv, st, V, o) {
   o.ts = ts;
   ctx.imageSmoothingEnabled = false;
   ctx.fillStyle = "#2f4a2a"; ctx.fillRect(0, 0, cw, ch);
+  // solo: which paths are open for the current / next wave
+  let openCells = null, openR = null;
+  if (!st.pvp && st.order) {
+    openR = tdOpenRoutes(st);
+    const key = openR.join(",");
+    if (st._ock !== key) { st._ock = key; st._oc = new Set(openR.flatMap((ri) => st.map.routes[ri].cells.map(([a, b]) => a + "," + b))); }
+    openCells = st._oc;
+  }
   // maps
   const sides = st.pvp ? [0, 1] : [0];
   for (const side of sides) {
@@ -5611,7 +5631,8 @@ function tdDraw(cv, st, V, o) {
       const wx = tdWX(st, side, x);
       const px = SX(flip ? wx + 1 : wx), py = SY(y);
       const onPath = st.map.path.has(x + "," + y);
-      ctx.fillStyle = onPath ? ((x + y) % 2 ? "#d6bd86" : "#cdb37c") : ((x + y) % 2 ? "#5f9e45" : "#57953f");
+      const closed = onPath && openCells && !openCells.has(x + "," + y);
+      ctx.fillStyle = closed ? ((x + y) % 2 ? "#8f8a78" : "#878270") : onPath ? ((x + y) % 2 ? "#d6bd86" : "#cdb37c") : ((x + y) % 2 ? "#5f9e45" : "#57953f");
       ctx.fillRect(px, py, ts, ts);
       if (!onPath && o.hover && o.hover.side === side && o.hover.x === x && o.hover.y === y && o.buildType && side === o.side) {
         ctx.strokeStyle = tdCanBuild(st, side, x, y) ? "#ffffff" : "#ff3030"; ctx.lineWidth = 2; ctx.strokeRect(px + 1, py + 1, ts - 2, ts - 2);
@@ -5671,9 +5692,33 @@ function tdDraw(cv, st, V, o) {
       ctx.fillStyle = "#000"; ctx.fillText(String(i + 1), px, py + 1);
     });
   }
+  // solo: "arrow enemies" walk the open paths between waves to show where the next wave goes
+  if (openR && !st.waveOn && !st.over) {
+    const nextW = st.wave + 1, newRi = tdOpenCount(st, nextW) > tdOpenCount(st, st.wave) || st.wave === 0 ? openR[openR.length - 1] : -1;
+    const tnow = performance.now() / 1000;
+    for (const ri of openR) {
+      const pts = st.map.routes[ri].cells.map(([x, y]) => [x + 0.5, y + 0.5]);
+      const len = pts.length - 1;
+      for (let a = 0; a < 3; a++) {
+        let d = (tnow * 2.2 + a * len / 3 + ri * 1.7) % len;
+        const i = Math.floor(d), f = d - i, [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+        const px = SX(x1 + (x2 - x1) * f), py = SY(y1 + (y2 - y1) * f), ang = Math.atan2(y2 - y1, (x2 - x1) * (flip ? -1 : 1)), r = ts * 0.3;
+        ctx.save(); ctx.translate(px, py); ctx.rotate(ang); ctx.globalAlpha = 0.75;
+        ctx.fillStyle = ri === newRi ? "#ffe000" : "#ff4040"; ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(r * 1.2, 0); ctx.lineTo(-r * 0.8, -r * 0.8); ctx.lineTo(-r * 0.3, 0); ctx.lineTo(-r * 0.8, r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.restore();
+      }
+      if (ri === newRi && st.wave > 0) {
+        const e = st.map.entries[st.map.routes[ri].entry];
+        ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.45)) + "px Tahoma, sans-serif"; ctx.textAlign = "right";
+        ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText("NEW PATH!", SX(st.W - 0.6), SY(e.y + 0.5)); ctx.fillStyle = "#ffe000"; ctx.fillText("NEW PATH!", SX(st.W - 0.6), SY(e.y + 0.5));
+        ctx.textAlign = "center";
+      }
+    }
+  }
   // entries
   ctx.font = Math.floor(ts * 0.7) + "px sans-serif";
-  for (const side of sides) for (const ent of st.map.entries) ctx.fillText("🚪", SX(tdWX(st, side, ent.x) + 0.5), SY(ent.y + 0.5));
+  for (const side of sides) st.map.entries.forEach((ent, ei) => { if (openR && !openR.some((ri) => st.map.routes[ri].entry === ei)) return; ctx.fillText("🚪", SX(tdWX(st, side, ent.x) + 0.5), SY(ent.y + 0.5)); });
   // towers
   for (const tw of V.towers) {
     const T = TD.TOWERS[tw.type];
@@ -5956,7 +6001,11 @@ function openTdSolo() {
   const pB = el("button", null, "⏸"); pB.type = "button"; pB.title = "Pause";
   const newB = el("button", null, "🗺 New map"); newB.type = "button";
   top.append(stats, nextB, spB, pB, newB);
-  nextB.onclick = () => { if (!tdStartWave(st)) toast("Wait until all the enemies of this wave are out."); };
+  nextB.onclick = () => {
+    const before = tdOpenCount(st, st.wave);
+    if (!tdStartWave(st)) { toast("Wait until all the enemies of this wave are out."); return; }
+    if (st.wave > 1 && tdOpenCount(st, st.wave) > before) toast("🛣 A new path is open! Enemies can come from it now.");
+  };
   spB.onclick = () => { speed = speed === 1 ? 2 : speed === 2 ? 3 : 1; spB.textContent = "⏩ x" + speed; };
   pB.onclick = () => { paused = !paused; pB.textContent = paused ? "▶" : "⏸"; ui.overlay = paused ? "PAUSE" : ""; };
   newB.onclick = async () => {
@@ -5978,7 +6027,7 @@ function openTdSolo() {
       let n = 0;
       while (acc >= TD.STEP && n++ < 120) { tdStep(st, TD.STEP); acc -= TD.STEP; }
     }
-    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
+    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.order.length + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
     nextB.textContent = st.wave === 0 ? "▶ Start wave 1" : st.waveOn ? "▶ Call wave " + (st.wave + 1) + " early (+💰)" : "▶ Wave " + (st.wave + 1);
     nextB.disabled = st.over || st.queue.length > 0;
     newB.hidden = st.wave > 0 && !st.over;
