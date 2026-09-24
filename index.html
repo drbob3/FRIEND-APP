@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-EEmGzZTmg7I8oSacxqXraq5F5O6NrstKpLI9WMySyLw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ylNFIdB4qEN5YRlJmj0zDTxpr9pkBfkGBLCWdTixFyo=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -882,7 +882,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.1";
+const APP_VERSION = "10.1.1";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -3378,15 +3378,7 @@ function renderAbout() {
   const page = $("aboutPage");
   const keep = page.scrollTop;
   page.replaceChildren();
-  const cfg = meDraft || meParse(S.about);
-  if (!cfg) {   // old About text (before v10.1): show it like before
-    const doc = el("div", "doc");
-    if (S.isAdmin) { const b = el("button", "small editbar", "✎ Edit this page..."); b.onclick = editAbout; doc.append(b); }
-    formatDoc(doc, S.about?.text || DEFAULT_ABOUT);
-    doc.append(el("div", "meta", "Hangout Chat v" + APP_VERSION));
-    page.append(doc);
-    return;
-  }
+  const cfg = meDraft || meParse(S.about) || DEFAULT_ME;   // nothing saved yet (or old text) = show the example page
   const wrap = el("div", "mewrap" + (meDraft ? " editing" : ""));
   if (S.isAdmin && !meDraft) { const b = el("button", "small meedit", "✎ Edit my page..."); b.onclick = editAbout; wrap.append(b); }
   if (meDraft) wrap.append(el("div", "medraft", "👀 PREVIEW — not saved yet"));
