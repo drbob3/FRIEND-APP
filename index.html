@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-JuomHTTpLdYHIzXGqBvO4exbOirZSTJHOdkud122tVw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-P4ex+55f2Vsv3z0ZJw+bTP6ERiPJHMv+ojeQZdvk4V8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -37,7 +37,14 @@
     padding: 12px;
     overflow: hidden;
   }
+  html { zoom: var(--z, 1); }
   [hidden] { display: none !important; }
+  /* resize grip (bottom-right corner of small windows) */
+  .rgrip { position: absolute; right: 1px; bottom: 1px; width: 15px; height: 15px; cursor: nwse-resize; touch-action: none; z-index: 3;
+    background: linear-gradient(135deg, transparent 0 52%, var(--light) 52% 58%, var(--shadow) 58% 66%, transparent 66% 70%, var(--light) 70% 76%, var(--shadow) 76% 84%, transparent 84%); }
+  .float.max .rgrip { display: none; }
+  .float.sized { max-width: none; max-height: none; }
+  .float.sized .content { padding-bottom: 14px; }
   .raised {
     background: var(--face);
     border: 2px solid;
@@ -50,7 +57,7 @@
     box-shadow: inset 1px 1px var(--dark);
   }
   .window { display: flex; flex-direction: column; padding: 3px; }
-  #main { width: 100%; height: calc(100dvh - 24px); }
+  #main { width: 100%; height: calc(calc(100dvh / var(--z, 1)) - 24px); }
   .titlebar {
     background: linear-gradient(90deg, var(--title-a), var(--title-b));
     color: #fff;
@@ -237,14 +244,14 @@
   .ctxmenu .mhead { padding: 3px 8px; font-weight: bold; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--shadow); margin-bottom: 2px; }
   .ctxmenu hr { border: 0; border-top: 1px solid var(--shadow); border-bottom: 1px solid var(--light); margin: 3px 2px; }
   /* ---- floating windows ---- */
-  .float { position: fixed; width: 560px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); z-index: 10; }
+  .float { position: fixed; width: 560px; max-width: calc(calc(100vw / var(--z, 1)) - 16px); max-height: calc(calc(100dvh / var(--z, 1)) - 16px); z-index: 10; }
   .float.narrow { width: 400px; }
-  .float.max { left: 0 !important; top: 0 !important; width: 100vw; max-width: none; height: 100dvh; max-height: none; }
+  .float.max { left: 0 !important; top: 0 !important; width: calc(100vw / var(--z, 1)); max-width: none; height: calc(100dvh / var(--z, 1)); max-height: none; }
   .float .content { padding: 6px 4px 4px; display: flex; flex-direction: column; gap: 8px; overflow: auto; min-height: 0; flex: 1; }
   .player { background: #000; display: flex; align-items: center; justify-content: center; }
   .player iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; }
-  .player video, .player img { max-width: 100%; max-height: 60dvh; display: block; }
-  .float.max .player video, .float.max .player img { max-height: 75dvh; }
+  .player video, .player img { max-width: 100%; max-height: calc(60dvh / var(--z, 1)); display: block; }
+  .float.max .player video, .float.max .player img { max-height: calc(75dvh / var(--z, 1)); }
   .player .ph { color: #c0c0c0; padding: 40px 10px; font-family: "Lucida Console", monospace; }
   .info { width: 100%; border-collapse: collapse; }
   .info td { padding: 2px 4px; vertical-align: top; }
@@ -267,7 +274,7 @@
   .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(0, 0, 0, .25); z-index: 1000; }
   .overlay.show { display: flex; }
   .overlay.solid { background: var(--desktop); }
-  .dialog { width: 100%; max-width: 360px; padding: 3px; max-height: calc(100dvh - 32px); overflow: auto; }
+  .dialog { width: 100%; max-width: 360px; padding: 3px; max-height: calc(calc(100dvh / var(--z, 1)) - 32px); overflow: auto; }
   .dialog .body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
   .dialog .buttons { display: flex; justify-content: flex-end; gap: 6px; }
   .dialog label.f { display: flex; flex-direction: column; gap: 3px; }
@@ -316,14 +323,14 @@
   .list .item.sub { padding-left: 12px; }
   .list .item .tree { color: var(--shadow); font-family: "Courier New", monospace; }
   .list .item.sel .tree { color: #ddd; }
-  .chatdesc { color: #444; font-size: 12px; font-weight: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 38vw; }
+  .chatdesc { color: #444; font-size: 12px; font-weight: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: calc(38vw / var(--z, 1)); }
   .folder { margin: 4px 0 4px 4ch; font: 13px/1.5 "Lucida Console", "Courier New", monospace; }
   .folder .fhead { cursor: pointer; user-select: none; display: inline-block; padding: 1px 4px; font-weight: bold; }
   .folder .fhead:hover { background: var(--select); color: #fff; }
   .folder .fitem { display: flex; gap: 6px; align-items: center; padding: 0 4px; cursor: pointer; white-space: nowrap; }
   .folder .fitem:hover { background: #dde0ff; }
   .folder .fitem .br, .folder .fitem .sz { color: var(--shadow); }
-  .notepad { background: #fff; font: 13px/1.4 "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; padding: 6px; max-height: 55dvh; overflow: auto; }
+  .notepad { background: #fff; font: 13px/1.4 "Lucida Console", "Courier New", monospace; white-space: pre-wrap; overflow-wrap: anywhere; padding: 6px; max-height: calc(55dvh / var(--z, 1)); overflow: auto; }
   .sendlist { background: #fff; max-height: 180px; overflow: auto; padding: 4px; font: 12px/1.5 "Lucida Console", monospace; white-space: nowrap; }
   .sendlist .bad { color: var(--err); }
   /* ======== v6: Discord-style layout (retro look) ======== */
@@ -411,7 +418,7 @@
   .urow { display: flex; gap: 6px; margin-bottom: 6px; }
   .urow select { font: inherit; background: #fff; border-radius: 0; }
   #reportsBox .report:last-child { border-bottom: 0; }
-  #reportsBox { background: #fff; max-height: 50dvh; overflow-y: auto; padding: 4px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  #reportsBox { background: #fff; max-height: calc(50dvh / var(--z, 1)); overflow-y: auto; padding: 4px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
   /* ======== v6.2: old-school restyle of the v6 layout ======== */
   .rail { width: 150px; align-items: stretch; gap: 3px; padding: 6px; background: var(--face); border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); box-shadow: inset -1px -1px var(--shadow), inset 1px 1px var(--mid); }
   .railtitle { font-weight: bold; font-size: 12px; padding: 8px 2px 2px; border-bottom: 1px solid var(--shadow); margin-bottom: 2px; }
@@ -486,13 +493,13 @@
   .gscore li.mine { font-weight: bold; color: #000080; }
   #gamesPage { overflow-y: auto; }
   /* minesweeper window */
-  .float.mswin { width: auto; min-width: 280px; max-width: calc(100vw - 16px); }
+  .float.mswin { width: auto; min-width: 280px; max-width: calc(calc(100vw / var(--z, 1)) - 16px); }
   .float.mswin .content { align-items: center; }
   .msboard { padding: 6px; background: var(--face); display: flex; flex-direction: column; gap: 6px; max-width: 100%; }
   .mshead { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
   .lcd { background: #000; color: #ff2020; font: bold 22px/1 "Courier New", monospace; padding: 2px 4px; letter-spacing: 1px; min-width: 50px; text-align: right; border: 1px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
   .msface { min-width: 0; width: 34px; height: 34px; padding: 0; font-size: 20px; }
-  .msgridwrap { overflow: auto; max-width: calc(100vw - 50px); max-height: calc(100dvh - 230px); border: 3px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  .msgridwrap { overflow: auto; max-width: calc(calc(100vw / var(--z, 1)) - 50px); max-height: calc(calc(100dvh / var(--z, 1)) - 230px); border: 3px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
   .msgrid { --cs: 22px; display: grid; width: max-content; user-select: none; -webkit-user-select: none; touch-action: manipulation; background: #b8b8b8; }
   .mc { width: var(--cs); height: var(--cs); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font: bold calc(var(--cs) * .62) Tahoma, sans-serif; cursor: default;
     background: var(--face); border: calc(var(--cs) / 8) solid; border-color: var(--light) var(--shadow) var(--shadow) var(--light); }
@@ -507,7 +514,7 @@
   .mstools { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
   .mstools button { min-width: 0; padding: 2px 8px; }
   .mstools button.on { font-weight: bold; border-color: var(--dark) var(--light) var(--light) var(--dark); background: #dcdcdc; }
-  .mssetup { display: flex; flex-direction: column; gap: 6px; width: min(430px, calc(100vw - 40px)); }
+  .mssetup { display: flex; flex-direction: column; gap: 6px; width: min(430px, calc(calc(100vw / var(--z, 1)) - 40px)); }
   .mssetup .check { display: block; margin: 2px 0; }
   .mscustom { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 0 22px; }
   .mscustom input, .mssetup input[type=number] { width: 58px; }
@@ -518,7 +525,7 @@
   .msgo { font-weight: bold; }
   .pvphead { width: 100%; }
   .pvptitle { font-weight: bold; text-align: center; }
-  .pvpbars { width: 100%; display: flex; flex-direction: column; gap: 3px; min-width: min(420px, calc(100vw - 40px)); }
+  .pvpbars { width: 100%; display: flex; flex-direction: column; gap: 3px; min-width: min(420px, calc(calc(100vw / var(--z, 1)) - 40px)); }
   .pvprow { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 2px 4px; }
   .pvprow.me { background: #e8e8ff; }
   .pvprow.win { background: #fff4b8; }
@@ -535,14 +542,14 @@
   .pvpboardwrap { position: relative; max-width: 100%; }
   .pvpcd { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: bold 64px Tahoma, sans-serif; color: #fff; text-shadow: 3px 3px 0 #000; background: rgba(0,0,64,.35); pointer-events: none; }
   .pvpcd[hidden] { display: none; }
-  .pvpwait { text-align: center; padding: 14px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; min-width: min(380px, calc(100vw - 40px)); }
+  .pvpwait { text-align: center; padding: 14px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; min-width: min(380px, calc(calc(100vw / var(--z, 1)) - 40px)); }
   .pvpwait input { width: 100%; font-size: 12px; }
   .pvpbig { font-size: 17px; font-weight: bold; }
   .pvpres { font-size: 18px; font-weight: bold; text-align: center; padding: 4px 12px; background: #ffe0e0; border: 2px solid #800000; }
   .pvpres.good { background: #fff4b8; border-color: #806000; }
   .lcd.hearts-lcd { color: #ff6090; }
   .mcimg { width: 72%; height: 72%; image-rendering: pixelated; pointer-events: none; display: block; }
-  .float.tdwin { width: min(1000px, calc(100vw - 16px)); }
+  .float.tdwin { width: min(1000px, calc(calc(100vw / var(--z, 1)) - 16px)); }
   .tdwin .content { gap: 4px; }
   .tdtop { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .tdtop button { min-width: 0; padding: 2px 8px; }
@@ -626,32 +633,32 @@
   .specname { font-weight: bold; display: flex; align-items: center; gap: 4px; }
   .specname .av { width: 18px; height: 18px; font-size: 12px; }
   .specinfo { font-size: 12px; }
-  .specbox .msgridwrap { max-width: calc(50vw - 40px); max-height: 50dvh; }
+  .specbox .msgridwrap { max-width: calc(calc(50vw / var(--z, 1)) - 40px); max-height: calc(50dvh / var(--z, 1)); }
   .pvpwait.small { padding: 4px; min-width: 0; }
-  @media (max-width: 760px) { .specbox .msgridwrap { max-width: calc(100vw - 50px); } }
+  @media (max-width: 760px) { .specbox .msgridwrap { max-width: calc(calc(100vw / var(--z, 1)) - 50px); } }
   @media (max-width: 1100px) {
     .mempane { position: fixed; right: 0; top: 0; bottom: 0; z-index: 501; box-shadow: -2px 0 0 var(--dark); transform: translateX(105%); transition: transform .15s; }
     .mempane.open { transform: none; }
   }
   @media (max-width: 760px) {
     body { padding: 0; }
-    #main { height: 100dvh; border: none; box-shadow: none; }
+    #main { height: calc(100dvh / var(--z, 1)); border: none; box-shadow: none; }
     #messages { font-size: 13px; }
     #menuBtn { display: inline-block; }
     .side {
-      position: fixed; left: 0; top: 0; bottom: 0; width: min(300px, 86vw); z-index: 500;
+      position: fixed; left: 0; top: 0; bottom: 0; width: min(300px, calc(86vw / var(--z, 1))); z-index: 500;
       background: var(--face); border-right: 2px solid var(--dark); padding: 8px;
       transform: translateX(-105%); transition: transform .15s;
     }
     .side.open { transform: none; }
     .backdrop.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 499; }
-    .float, .float.narrow { width: calc(100vw - 16px); }
+    .float, .float.narrow { width: calc(calc(100vw / var(--z, 1)) - 16px); }
     .toolbar button { min-width: 0; }
     .chatdesc { display: none; }
     .leftcol { position: fixed; left: 0; top: 0; bottom: 0; z-index: 500; transform: translateX(-105%); transition: transform .15s; background: var(--face); box-shadow: 2px 0 0 var(--dark); }
     .leftcol.open { transform: none; }
     .rail { width: 118px; }
-    .chcol { width: min(230px, calc(90vw - 118px)); }
+    .chcol { width: min(230px, calc(calc(90vw / var(--z, 1)) - 118px)); }
     .chathead .cd { display: none; }
     .grp > .av.msgav { width: 30px; height: 30px; font-size: 18px; }
     .agrid { grid-template-columns: 1fr; }
@@ -729,7 +736,7 @@
     .metag { margin-left: 0; font-size: 28px; }
   }
   @media (min-width: 1150px) { .mewrap.editing { padding-left: 490px; } }
-  .float.meeditor { width: min(480px, calc(100vw - 16px)); height: min(720px, calc(100dvh - 16px)); }
+  .float.meeditor { width: min(480px, calc(calc(100vw / var(--z, 1)) - 16px)); height: min(720px, calc(calc(100dvh / var(--z, 1)) - 16px)); }
   .meeditor fieldset { display: flex; flex-direction: column; gap: 6px; }
   .meeditor label.f { display: flex; flex-direction: column; gap: 2px; }
   .meeditor textarea { width: 100%; resize: vertical; font: 12px/1.35 "Lucida Console", "Courier New", monospace; box-sizing: border-box; }
@@ -958,7 +965,35 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.18";
+const APP_VERSION = "10.19";
+/* ----- screen size (UI zoom) ----- */
+let UIZ = 1;
+const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
+function autoZoom() {
+  if (innerWidth <= 760) return 1;                          // phones keep the phone layout
+  let z = Math.min(innerWidth / 1400, innerHeight / 820);   // the site was made for about 1400 x 820
+  if (innerWidth > 1100) z = Math.min(z, innerWidth / 1150); // keep room for the 3-column layout
+  z = Math.max(0.8, Math.min(1.8, z));
+  return Math.round(z * 20) / 20;
+}
+function zoomPref() { try { return localStorage.getItem("ui-zoom") || "auto"; } catch { return "auto"; } }
+function applyZoom() {
+  const pref = zoomPref();
+  const z = pref === "auto" ? autoZoom() : Math.max(0.5, Math.min(2.5, +pref || 1));
+  if (z === UIZ && document.documentElement.style.getPropertyValue("--z")) return;
+  UIZ = z;
+  document.documentElement.style.setProperty("--z", String(z));
+  for (const f of document.querySelectorAll(".float:not(.max)")) {
+    const l = parseFloat(f.style.left) || 0, t = parseFloat(f.style.top) || 0;
+    f.style.left = Math.max(0, Math.min(l, innerWidth / z - 80)) + "px";
+    f.style.top = Math.max(0, Math.min(t, innerHeight / z - 30)) + "px";
+  }
+  window.dispatchEvent(new Event("uizoom"));
+}
+applyZoom();
+let zoomT = 0;
+window.addEventListener("resize", () => { clearTimeout(zoomT); zoomT = setTimeout(applyZoom, 150); });
+const vwZ = () => innerWidth / UIZ, vhZ = () => innerHeight / UIZ;   // screen size in page pixels
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -1173,7 +1208,7 @@ function openWindow(title, icon, { key, narrow } = {}) {
   w.append(bar, content);
   document.body.append(w);
   const small = innerWidth <= 760;
-  const x = small ? 8 : Math.max(8, Math.min(innerWidth - w.offsetWidth - 8, 300 + cascade * 28));
+  const x = small ? 8 : Math.max(8, Math.min(vwZ() - w.offsetWidth - 8, 300 + cascade * 28));
   const y = small ? 40 + (cascade % 4) * 20 : Math.max(8, 40 + cascade * 28);
   cascade = (cascade + 1) % 6;
   w.style.left = x + "px"; w.style.top = y + "px";
@@ -1186,18 +1221,49 @@ function openWindow(title, icon, { key, narrow } = {}) {
   bar.addEventListener("dblclick", (e) => { if (e.target === bar || e.target === t) bMax.click(); });
   bar.addEventListener("pointerdown", (e) => {
     if (e.target.closest("button") || w.classList.contains("max")) return;
-    const r = w.getBoundingClientRect();
-    const dx = e.clientX - r.left, dy = e.clientY - r.top;
+    const r0 = w.getBoundingClientRect();
+    const r = { left: r0.left / UIZ, top: r0.top / UIZ, width: r0.width / UIZ };
+    const dx = e.clientX / UIZ - r.left, dy = e.clientY / UIZ - r.top;
     bar.setPointerCapture(e.pointerId);
     const move = (ev) => {
-      w.style.left = Math.min(Math.max(ev.clientX - dx, -r.width + 80), innerWidth - 80) + "px";
-      w.style.top = Math.min(Math.max(ev.clientY - dy, 0), innerHeight - 30) + "px";
+      w.style.left = Math.min(Math.max(ev.clientX / UIZ - dx, -r.width + 80), vwZ() - 80) + "px";
+      w.style.top = Math.min(Math.max(ev.clientY / UIZ - dy, 0), vhZ() - 30) + "px";
     };
     const up = () => { bar.removeEventListener("pointermove", move); bar.removeEventListener("pointerup", up); bar.removeEventListener("pointercancel", up); };
     bar.addEventListener("pointermove", move);
     bar.addEventListener("pointerup", up);
     bar.addEventListener("pointercancel", up);
   });
+  // keep the bottom of the window (and its resize corner) on the screen when its content grows
+  if (window.ResizeObserver) new ResizeObserver(() => {
+    if (!w.isConnected || w.classList.contains("max")) return;
+    const top = parseFloat(w.style.top) || 0, h = w.offsetHeight;
+    if (top + h > vhZ() - 4) w.style.top = Math.max(0, vhZ() - h - 8) + "px";
+  }).observe(w);
+  // resize grip: drag the bottom-right corner (double-click it = normal size)
+  const grip = el("div", "rgrip"); grip.title = "Drag to resize (double-click: normal size)";
+  w.append(grip);
+  grip.addEventListener("pointerdown", (e) => {
+    if (w.classList.contains("max")) return;
+    e.preventDefault(); e.stopPropagation();
+    focusWindow(w);
+    const r0 = w.getBoundingClientRect();
+    const sw = r0.width / UIZ, sh = r0.height / UIZ, sx = e.clientX, sy = e.clientY;
+    const left = r0.left / UIZ, top = r0.top / UIZ;
+    grip.setPointerCapture(e.pointerId);
+    w.classList.add("sized");
+    const move = (ev) => {
+      const nw = Math.max(220, Math.min(sw + (ev.clientX - sx) / UIZ, vwZ() - left - 2));
+      const nh = Math.max(120, Math.min(sh + (ev.clientY - sy) / UIZ, vhZ() - top - 2));
+      w.style.width = nw + "px"; w.style.height = nh + "px";
+      api.onResize && api.onResize();
+    };
+    const up = () => { grip.removeEventListener("pointermove", move); grip.removeEventListener("pointerup", up); grip.removeEventListener("pointercancel", up); };
+    grip.addEventListener("pointermove", move);
+    grip.addEventListener("pointerup", up);
+    grip.addEventListener("pointercancel", up);
+  });
+  grip.addEventListener("dblclick", () => { w.style.width = w.style.height = ""; w.classList.remove("sized"); api.onResize && api.onResize(); });
   return api;
 }
 function infoTable(rows) {
@@ -2301,8 +2367,9 @@ function showMenu(x, y, head, items) {
   }
   document.body.append(menuEl);
   const r = menuEl.getBoundingClientRect();
-  menuEl.style.left = Math.max(4, Math.min(x, innerWidth - r.width - 4)) + "px";
-  menuEl.style.top = Math.max(4, Math.min(y, innerHeight - r.height - 4)) + "px";
+  x /= UIZ; y /= UIZ;   // x, y come from the mouse / getBoundingClientRect (screen pixels)
+  menuEl.style.left = Math.max(4, Math.min(x, vwZ() - r.width / UIZ - 4)) + "px";
+  menuEl.style.top = Math.max(4, Math.min(y, vhZ() - r.height / UIZ - 4)) + "px";
   menuEl.querySelector(".mi")?.focus();
 }
 function cleanItems(items) {
@@ -2441,7 +2508,7 @@ function openSettings() {
     const txt = el("div", null, "Guests can't change their icon or write a bio.\nCreate an account to get your own icon, a bio, friends and DMs!");
     txt.style.whiteSpace = "pre-line";
     const btns = el("div", "wbuttons"); const cl = el("button", null, "Close"); cl.onclick = close; btns.append(cl);
-    content.append(head, txt, soundBox(), btns);
+    content.append(head, txt, zoomBox(), soundBox(), btns);
     return;
   }
   let icon = u.icon || null, avatar = u.avatar || null, color = u.color || COLORS[0];
@@ -2523,8 +2590,25 @@ function openSettings() {
   const delBtn = el("button", "danger", "Delete my account...");
   delBtn.onclick = () => deleteMyAccount(close);
   fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
-  content.append(fsI, fsB, fsC, soundBox(), btns, fsP, fsX);
+  content.append(fsI, fsB, fsC, zoomBox(), soundBox(), btns, fsP, fsX);
   refresh();
+}
+function zoomBox() {
+  const fs = el("fieldset"); fs.append(el("legend", null, "🔍 Screen size"));
+  const sel = el("select", "sunken");
+  const label = (v) => v === "auto" ? "Auto (fits your screen: " + Math.round(autoZoom() * 100) + "%)" : Math.round(+v * 100) + "%" + (v === "1" ? " (normal)" : "");
+  for (const v of ZOOM_CHOICES) { const o = el("option", null, label(v)); o.value = v; sel.append(o); }
+  sel.value = zoomPref();
+  const minus = el("button", "small", "−"), plus = el("button", "small", "+");
+  minus.type = plus.type = "button"; minus.title = "Smaller"; plus.title = "Bigger";
+  const set = (v) => { try { localStorage.setItem("ui-zoom", v); } catch {} sel.value = v; applyZoom(); };
+  const step = (d) => { const list = ZOOM_CHOICES.slice(1); const cur = UIZ; let i = list.findIndex((v) => +v >= cur - 0.001); if (i < 0) i = list.length - 1; if (d > 0 && +list[i] <= cur + 0.001) i++; if (d < 0) i--; set(list[Math.max(0, Math.min(list.length - 1, i))]); };
+  sel.onchange = () => set(sel.value);
+  minus.onclick = () => step(-1); plus.onclick = () => step(1);
+  const row = el("div"); row.style.cssText = "display:flex;gap:4px;align-items:center";
+  row.append(minus, sel, plus);
+  fs.append(row, el("div", "hint", "Makes everything bigger or smaller. Saved on this device only. Tip: drag the ◢ corner of a small window to resize it."));
+  return fs;
 }
 function soundBox() {
   const fs = el("fieldset"); fs.append(el("legend", null, "🔔 Sounds"));
@@ -6264,8 +6348,8 @@ function tdDraw(cv, st, V, o) {
 function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   const win = openWindow(title, "🏰", { key });
   win.w.classList.add("tdwin");
-  win.w.style.left = Math.max(8, Math.round((innerWidth - win.w.offsetWidth) / 2)) + "px";
-  win.w.style.top = Math.max(8, Math.min(60, innerHeight - win.w.offsetHeight - 8)) + "px";
+  win.w.style.left = Math.max(8, Math.round((vwZ() - win.w.offsetWidth) / 2)) + "px";
+  win.w.style.top = Math.max(8, Math.min(60, vhZ() - win.w.offsetHeight - 8)) + "px";
   const top = el("div", "tdtop");
   const cvWrap = el("div", "tdcv sunken");
   const cv = el("canvas");
@@ -6364,7 +6448,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       });
     }
   }
-  const pos = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  const pos = (e) => { const r = cv.getBoundingClientRect(); const k = r.width ? cv.offsetWidth / r.width : 1; return [(e.clientX - r.left) * k, (e.clientY - r.top) * k]; };
   cv.addEventListener("mousemove", (e) => {
     if (!ui.toWorld) return;
     const [wx, wy] = ui.toWorld(...pos(e));
@@ -6402,8 +6486,8 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   function openTowerWin(tw0) {
     const tw_ = openWindow("Tower", "🏰", { key: key + "-tower" });
     tw_.w.classList.add("tdtwwin");
-    const gr = win.w.getBoundingClientRect();
-    if (!tw_.placed && innerWidth > 760) { tw_.placed = true; const out = gr.right + 330 < innerWidth; tw_.w.style.left = (out ? gr.right + 6 : Math.max(8, gr.right - 336)) + "px"; tw_.w.style.top = Math.max(8, gr.top + (out ? 0 : 130)) + "px"; }
+    const gr0 = win.w.getBoundingClientRect(); const gr = { right: gr0.right / UIZ, top: gr0.top / UIZ };
+    if (!tw_.placed && innerWidth > 760) { tw_.placed = true; const out = gr.right + 330 < vwZ(); tw_.w.style.left = (out ? gr.right + 6 : Math.max(8, gr.right - 336)) + "px"; tw_.w.style.top = Math.max(8, gr.top + (out ? 0 : 130)) + "px"; }
     let sig = "";
     tw_.onClosed = () => { if (ui.selId != null) ui.twClosedFor = ui.selId; ui.twWin = null; };
     tw_.show = (tw, mine, money) => {
