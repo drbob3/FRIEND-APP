@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gnYSZsOC/9fr/Y4bb8UOVP9s3wBJQHGoVtDhCi/d9oE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-JsHGRF/G7ha9Z6wgCc71Z1oNWOPubl8ZDruMW4kmuMo=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -957,7 +957,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.16";
+const APP_VERSION = "10.17";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5238,6 +5238,30 @@ function tdDecorate(map, seed) {
     if (map.block.has(K(x, y)) || N4.some(([dx, dy]) => map.block.has(K(x + dx, y + dy)))) continue;
     map.nests.push([x, y]); map.block.add(K(x, y));
   }
+  // rare spots: watchtower (35% of maps), supply crate (40%), tunnel (30%)
+  map.watch = []; map.crates = []; map.tunnel = null;
+  const freeSpot = () => {
+    for (let k = 0; k < 60; k++) {
+      const [x, y] = cand[Math.floor(r() * cand.length)] || [];
+      if (x == null || map.block.has(K(x, y)) || N4.some(([dx, dy]) => map.block.has(K(x + dx, y + dy)))) continue;
+      if ([...map.nests, ...map.watch, ...map.crates].some(([a, b]) => Math.hypot(a - x, b - y) < 4)) continue;
+      return [x, y];
+    }
+    return null;
+  };
+  if (r() < 0.35) { const c = freeSpot(); if (c) { map.watch.push(c); map.block.add(K(...c)); } }
+  if (r() < 0.4) { const c = freeSpot(); if (c) { map.crates.push(c); map.block.add(K(...c)); } }
+  if (r() < 0.3) {
+    for (let k = 0; k < 30 && !map.tunnel; k++) {
+      const ri = Math.floor(r() * map.routes.length), cs = map.routes[ri].cells;
+      if (cs.length < 20) continue;
+      const i = 3 + Math.floor(r() * (cs.length - 16)), j = i + 8 + Math.floor(r() * 6);
+      if (j >= cs.length - 3) continue;
+      const bad = (c) => map.door && [map.door.A, map.door.B].some((q) => q[0] === c[0] && q[1] === c[1]);
+      if (bad(cs[i]) || bad(cs[j])) continue;
+      map.tunnel = { ri, A: cs[i], B: cs[j] };
+    }
+  }
   // cliffs: a few smooth "mountain" blobs on the grass
   const want = Math.round(W * H * 0.07);
   for (let k = 0; k < 30 && map.cliffs.size < want; k++) {
@@ -5299,7 +5323,7 @@ function tdNewState({ seed, pvp, linked }) {
     seed, pvp: !!pvp, linked: !!(pvp && linked), W, H, L, map, X1: W + L, totalW: pvp ? 2 * W + L : W,
     t: 0, towers: [], enemies: [], fx: [], nextId: 1, money: [pvp ? 200 : 250, pvp ? 200 : 0], lives: [20, 20], eco: [TD.ECO_START, TD.ECO_START],
     wave: 0, waveOn: false, queue: [], squads: [[], []], spawnQ: [[], []], autoT: [TD.AUTO_EVERY, TD.AUTO_EVERY], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
-    doorT: [0, 0], nestBy: [[], []],
+    doorT: [0, 0], nestBy: [[], []], crateT: [[], []],
   };
   if (!pvp) { st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1); }
   return st;
@@ -5421,6 +5445,19 @@ function tdDoorTake(st, e) {
   if (j < 0) return;
   e.path = [...e.path.slice(0, e.idx), ...D.cells.map(W), ...e.path.slice(j)];
 }
+// tunnel: a worker reaching the entrance may go in (70%) and come out at the exit a bit faster
+function tdTunnelTake(st, e) {
+  const Tn = st.map.tunnel, W = (c) => [tdWX(st, e.side, c[0]) + 0.5, c[1] + 0.5];
+  const [ax, ay] = W(Tn.A);
+  if (Math.abs(e.x - ax) > 0.01 || Math.abs(e.y - ay) > 0.01 || e.tunDone || st.r() > 0.7) return false;
+  const [bx, by] = W(Tn.B);
+  const j = e.path.findIndex((q, i) => i >= e.idx && Math.abs(q[0] - bx) < 0.01 && Math.abs(q[1] - by) < 0.01);
+  if (j < 0) return false;
+  e.tunDone = true; e.hidden = true;
+  e.tun = { j, until: st.t + Math.max(1.5, (j - e.idx + 1) * 0.6 / e.speed) };
+  st.fx.push({ k: "tunnel", x1: ax, y1: ay, x2: 0, y2: 0, until: st.t + 0.8 });
+  return true;
+}
 function tdHurtTower(st, tw, dmg) {
   if (tw.dead) return;
   tw.hp -= dmg;
@@ -5511,6 +5548,13 @@ function tdStep(st, dt) {
   // enemies
   for (const e of st.enemies) {
     if (e.dead) continue;
+    if (e.tun) {   // inside a tunnel: can't be seen or hit, pops out at the exit
+      if (t < e.tun.until) continue;
+      const [qx, qy] = e.path[e.tun.j];
+      e.x = qx; e.y = qy; e.idx = e.tun.j + 1; e.hidden = false; e.tun = null;
+      st.fx.push({ k: "tunnel", x1: qx, y1: qy, x2: 0, y2: 0, until: t + 0.8 });
+      continue;
+    }
     const E = TD.ENEMIES[e.type];
     if (E.heal) { e.hcd = (e.hcd ?? 2) - dt; if (e.hcd <= 0) { e.hcd += 2; for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal); } }
     const fights = st.linked || !st.pvp;   // PvP linked maps, or solo (allies from Barracks vs enemies)
@@ -5523,11 +5567,13 @@ function tdStep(st, dt) {
     const WP = E.gun && (fights || e.side >= 0) ? E.gun : null;
     if (WP) {
       e.gcd = (e.gcd ?? 0) - dt;
-      let tg = null, td = WP.range, ttw = null;
+      const wBuff = st.map.watch.length && st.enemies.some((o) => o.nest?.up && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) <= 4);
+      const RNG = WP.range * (wBuff ? 1.3 : 1);
+      let tg = null, td = RNG, ttw = null;
       const fire = (e.ofUntil || 0) > t;
-      if (fights && !fire) for (const o of st.enemies) { if (o.dead || o.from === e.from || (WP.ground && o.air)) continue; const d = Math.hypot(o.x - e.x, o.y - e.y); if (d < td) { td = d; tg = o; } }
+      if (fights && !fire) for (const o of st.enemies) { if (o.dead || o.hidden || o.from === e.from || (WP.ground && o.air)) continue; const d = Math.hypot(o.x - e.x, o.y - e.y); if (d < td) { td = d; tg = o; } }
       if (!tg && e.side >= 0) {
-        const inR = st.towers.filter((tw) => !tw.dead && tw.side === e.side && Math.hypot(tw.wx - e.x, tw.wy - e.y) <= WP.range);
+        const inR = st.towers.filter((tw) => !tw.dead && tw.side === e.side && Math.hypot(tw.wx - e.x, tw.wy - e.y) <= RNG);
         if (inR.length) ttw = fire ? (inR.includes(e.ftw) ? e.ftw : (e.ftw = inR[Math.floor(st.r() * inR.length)])) : inR.reduce((a, b) => (Math.hypot(a.wx - e.x, a.wy - e.y) <= Math.hypot(b.wx - e.x, b.wy - e.y) ? a : b));
       }
       if (tg || ttw) {
@@ -5583,7 +5629,7 @@ function tdStep(st, dt) {
     // Kamikaze: explodes on the first enemy units it meets
     if (E.boom && fights) {
       let near = false;
-      for (const o of st.enemies) if (!o.dead && !o.air && o.from !== e.from && Math.hypot(o.x - e.x, o.y - e.y) < E.boom.range) { near = true; break; }
+      for (const o of st.enemies) if (!o.dead && !o.hidden && !o.air && o.from !== e.from && Math.hypot(o.x - e.x, o.y - e.y) < E.boom.range) { near = true; break; }
       if (near) {
         for (const o of st.enemies) if (!o.dead && o.from !== e.from && Math.hypot(o.x - e.x, o.y - e.y) < E.boom.radius) {
           o.hp -= E.boom.dmg;
@@ -5608,6 +5654,29 @@ function tdStep(st, dt) {
           if (e.pull >= 2.5) { e.pulled = true; st.doorT[e.side] = t + 25; const [dx, dy] = M.door.cells[0]; st.fx.push({ k: "dooropen", x1: tdWX(st, e.side, dx) + 0.5, y1: dy + 0.5, x2: 0, y2: 0, until: t + 1.8 }); }
         }
       } else if (E.worker && (st.doorT[e.side] || 0) > t) e.pulled = true;
+      // supply crate: a worker opens it (2 s) -> +3 HP to every enemy of its group around (crate refills in 30 s)
+      if (E.worker && M.crates.length && !e.crated) M.crates.forEach(([cx, cy], i) => {
+        const sx = tdWX(st, e.side, cx) + 0.5, sy = cy + 0.5;
+        if (Math.hypot(sx - e.x, sy - e.y) > 1.1 || (st.crateT[e.side][i] || 0) > t) return;
+        blocked = true;
+        e.crate = (e.crate || 0) + dt;
+        if (Math.floor((e.crate - dt) * 3) !== Math.floor(e.crate * 3)) st.fx.push({ k: "lever", x1: sx, y1: sy, x2: e.crate / 2, y2: 0, until: t + 0.35 });
+        if (e.crate >= 2) {
+          e.crated = true; st.crateT[e.side][i] = t + 30;
+          for (const o of st.enemies) if (!o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - sx, o.y - sy) <= 3) o.hp = Math.min(o.maxHp, o.hp + 3);
+          st.fx.push({ k: "crate", x1: sx, y1: sy, x2: 3, y2: 0, until: t + 1.5 });
+        }
+      });
+      // watchtower: a worker climbs it (20 s): shooters of its group within 4 tiles get +30% range
+      if (E.worker && M.watch.length && !e.nest && !e.nestDone) M.watch.forEach(([wx, wy], i) => {
+        if (e.nest) return;
+        const sx = tdWX(st, e.side, wx) + 0.5, sy = wy + 0.5;
+        if (Math.hypot(sx - e.x, sy - e.y) > 1.2 || (e.nestTried ||= {})["w" + i]) return;
+        e.nestTried["w" + i] = true;
+        const by = st.nestBy[e.side]["w" + i];
+        if (by && st.enemies.some((o) => o.id === by && !o.dead && o.nest)) return;
+        if (st.r() < 0.6) { e.nest = { watch: true, i, sx, sy, rx: e.x, ry: e.y, until: t + 20, out: false }; st.nestBy[e.side]["w" + i] = e.id; }
+      });
       // sentry nest: a worker (Recruit / Trooper / Rifleman) jumps in and machine-guns the towers around (10 bullets, reload, stun every 10)
       if (E.worker && M.nests.length && !e.nest && !e.nestDone) {
         M.nests.forEach(([nx, ny], i) => {
@@ -5627,7 +5696,8 @@ function tdStep(st, dt) {
         else if (N.out) { e.nest = null; e.nestDone = true; }
         else {
           const inR = st.towers.filter((tw) => !tw.dead && tw.side === e.side && Math.hypot(tw.wx - e.x, tw.wy - e.y) <= 3.5);
-          if (!inR.length || t > N.until) N.out = true;
+          if (N.watch) { N.up = true; if (Math.floor(t) !== Math.floor(t - dt)) st.fx.push({ k: "watchup", x1: e.x, y1: e.y, x2: 4, y2: 0, until: t + 0.9 }); if (t > N.until) { N.out = true; N.up = false; } }
+        else if (!inR.length || t > N.until) N.out = true;
           else {
             N.cd -= dt;
             if (N.cd <= 0) {
@@ -5654,7 +5724,7 @@ function tdStep(st, dt) {
     if (fights && !e.air) {
       let foe = null, fd = 0.6;
       for (const o of st.enemies) {
-        if (o.dead || o.air || o.from === e.from) continue;
+        if (o.dead || o.hidden || o.air || o.from === e.from) continue;
         if (Math.abs(o.x - e.x) + Math.abs(o.y - e.y) >= fd * 1.5) continue;
         const d = Math.hypot(o.x - e.x, o.y - e.y);
         if (d < fd) { fd = d; foe = o; }
@@ -5693,7 +5763,7 @@ function tdStep(st, dt) {
     while (move > 0 && e.idx < e.path.length) {
       const [tx, ty] = e.path[e.idx];
       const dx = tx - e.x, dy = ty - e.y, d = Math.hypot(dx, dy);
-      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; if (st.map.door && e.side >= 0 && !e.air && (st.doorT[e.side] || 0) > t) tdDoorTake(st, e); }
+      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; if (st.map.door && e.side >= 0 && !e.air && (st.doorT[e.side] || 0) > t) tdDoorTake(st, e); if (st.map.tunnel && e.side >= 0 && E.worker && !e.air && tdTunnelTake(st, e)) { move = 0; break; } }
       else { e.x += dx / d * move; e.y += dy / d * move; e.dist += move; move = 0; }
     }
     if (e.idx >= e.path.length) {
@@ -5732,7 +5802,7 @@ function tdStep(st, dt) {
     tw.cd -= dt;
     if (tw.cd > 0) continue;
     const range = tdRangeOf(st, tw, T), cx = tw.wx, cy = tw.wy;
-    const canHit = (e) => !e.dead && e.side === tw.side && tdInMap(st, tw.side, e.x) && (e.air ? !!T.air : !!T.ground) && Math.hypot(e.x - cx, e.y - cy) <= range;
+    const canHit = (e) => !e.dead && !e.hidden && e.side === tw.side && tdInMap(st, tw.side, e.x) && (e.air ? !!T.air : !!T.ground) && Math.hypot(e.x - cx, e.y - cy) <= range;
     let target = null;
     for (const e of st.enemies) if (canHit(e) && (!target || e.dist > target.dist)) target = e;
     if (!target) continue;
@@ -5742,7 +5812,7 @@ function tdStep(st, dt) {
     else tw.cd = T.rate[tw.lvl];
     if (tw.type === "grenade") {
       const R = T.splash[tw.lvl];
-      for (const e of st.enemies) if (!e.dead && !e.air && e.side === tw.side && Math.hypot(e.x - target.x, e.y - target.y) <= R) tdHit(st, e, dmgOn(e), false, tw.side);
+      for (const e of st.enemies) if (!e.dead && !e.hidden && !e.air && e.side === tw.side && Math.hypot(e.x - target.x, e.y - target.y) <= R) tdHit(st, e, dmgOn(e), false, tw.side);
       st.fx.push({ k: "throw", x1: cx, y1: cy, x2: target.x, y2: target.y, until: t + 0.12 });
       st.fx.push({ k: "boom", x1: target.x, y1: target.y, x2: R, y2: 0, until: t + 0.25 });
     } else if (tw.type === "shotgun") {
@@ -5878,7 +5948,7 @@ function tdSnap(st) {
   return JSON.stringify({
     t: Math.round(st.t * 10), m: st.money.map(Math.floor), l: st.lives, o: st.over ? 1 : 0, w: st.winner,
     tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0, Math.max(1, Math.round(x.hp / x.maxHp * 100))]),
-    e: st.enemies.slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
+    e: st.enemies.filter((e) => !e.hidden).slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
     dr: st.doorT.map((x) => (x > st.t ? 1 : 0)), ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   });
@@ -5889,7 +5959,7 @@ function tdSquadInfo(st) {   // per side: [[progress %, units], ...]
 function tdView(st) {   // live state -> what we draw
   return {
     towers: st.towers.map((x) => ({ ...x, stunned: (x.stun || 0) > st.t })), money: st.money, lives: st.lives, t: st.t,
-    enemies: st.enemies.map((e) => ({ id: e.id, type: e.type, x: e.x, y: e.y, hp: e.hp / e.maxHp, slow: e.slowUntil > st.t, side: e.side })),
+    enemies: st.enemies.filter((e) => !e.hidden).map((e) => ({ id: e.id, type: e.type, x: e.x, y: e.y, hp: e.hp / e.maxHp, slow: e.slowUntil > st.t, side: e.side })),
     door: st.doorT.map((x) => x > st.t), fx: st.fx, eco: st.eco, sq: st.pvp ? tdSquadInfo(st) : [[], []], it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   };
 }
@@ -5949,6 +6019,23 @@ function tdDraw(cv, st, V, o) {
       ctx.fillStyle = "rgba(255,255,255,.35)"; if (!isC(x, y - 1)) ctx.fillRect(px, py, ts, 2);
       ctx.fillStyle = "rgba(0,0,0,.4)"; if (!isC(x, y + 1)) ctx.fillRect(px, py + ts - 3, ts, 3);
       if (!isC(x + (flip ? -1 : 1), y)) ctx.fillRect(px + ts - 2, py, 2, ts);
+    }
+    // watchtower, supply crate, tunnel
+    for (const [x, y] of M.watch) {
+      const px = SX(tdWX(st, side, x) + 0.5), py = SY(y + 0.5);
+      ctx.strokeStyle = "#5a3a18"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px - ts * 0.35, py + ts * 0.45); ctx.lineTo(px - ts * 0.2, py - ts * 0.15); ctx.moveTo(px + ts * 0.35, py + ts * 0.45); ctx.lineTo(px + ts * 0.2, py - ts * 0.15); ctx.moveTo(px - ts * 0.3, py + ts * 0.15); ctx.lineTo(px + ts * 0.3, py + ts * 0.15); ctx.stroke();
+      ctx.fillStyle = "#8a5a28"; ctx.fillRect(px - ts * 0.32, py - ts * 0.35, ts * 0.64, ts * 0.22); ctx.fillStyle = "#a03020"; ctx.beginPath(); ctx.moveTo(px - ts * 0.38, py - ts * 0.35); ctx.lineTo(px, py - ts * 0.55); ctx.lineTo(px + ts * 0.38, py - ts * 0.35); ctx.fill();
+    }
+    for (const [x, y] of M.crates) {
+      const px = SX(tdWX(st, side, x) + 0.5), py = SY(y + 0.5);
+      ctx.fillStyle = "#a07030"; ctx.fillRect(px - ts * 0.32, py - ts * 0.28, ts * 0.64, ts * 0.56); ctx.strokeStyle = "#4a3010"; ctx.lineWidth = 1; ctx.strokeRect(px - ts * 0.32 + 0.5, py - ts * 0.28 + 0.5, ts * 0.64, ts * 0.56);
+      ctx.fillStyle = "#e02020"; ctx.fillRect(px - ts * 0.06, py - ts * 0.2, ts * 0.12, ts * 0.4); ctx.fillRect(px - ts * 0.2, py - ts * 0.06, ts * 0.4, ts * 0.12);
+    }
+    if (M.tunnel) for (const [c, lab] of [[M.tunnel.A, "IN"], [M.tunnel.B, "OUT"]]) {
+      const px = SX(tdWX(st, side, c[0]) + 0.5), py = SY(c[1] + 0.5);
+      ctx.fillStyle = "#1a1208"; ctx.beginPath(); ctx.ellipse(px, py, ts * 0.42, ts * 0.3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#6a5030"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = "#e0d0a0"; ctx.font = "bold " + Math.max(7, Math.floor(ts * 0.28)) + "px Tahoma, sans-serif"; ctx.fillText(lab, px, py + 1);
     }
     // sentry nests (sandbags)
     for (const [x, y] of M.nests) {
@@ -6124,6 +6211,9 @@ function tdDraw(cv, st, V, o) {
       ctx.font = "bold " + Math.max(10, Math.floor(ts * 0.55)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.7); ctx.fillStyle = f.k === "openfire" ? "#ff5030" : "#ffe000"; ctx.fillText(txt, a, b - ts * 0.7);
       continue;
     }
+    if (f.k === "crate") { ctx.strokeStyle = "rgba(80,255,120,.8)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.5)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText("📦 SUPPLIES! +3 HP", a, b - ts * 0.7); ctx.fillStyle = "#60ff80"; ctx.fillText("📦 SUPPLIES! +3 HP", a, b - ts * 0.7); continue; }
+    if (f.k === "watchup") { ctx.strokeStyle = "rgba(255,200,40,.6)"; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); ctx.font = Math.floor(ts * 0.5) + "px sans-serif"; ctx.fillText("🔭", a, b - ts * 0.6); continue; }
+    if (f.k === "tunnel") { ctx.fillStyle = "rgba(120,90,40,.7)"; ctx.beginPath(); ctx.arc(a, b, ts * 0.5, 0, Math.PI * 2); ctx.fill(); continue; }
     if (f.k === "lever") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("🔧", a, b - ts * 0.6); ctx.fillStyle = "#000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8, 4); ctx.fillStyle = "#ffe000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8 * Math.min(1, f.x2), 4); continue; }
     if (f.k === "dooropen" || f.k === "reload") {
       const txt = f.k === "dooropen" ? "🚪 DOOR OPEN!" : "reload...";
