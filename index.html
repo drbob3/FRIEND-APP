@@ -931,7 +931,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.9";
+const APP_VERSION = "10.10";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5015,28 +5015,28 @@ function cleanOldGames() {
 const TD = {
   W: 24, H: 15, L: 6, SOLO_W: 28, SOLO_H: 16, STEP: 0.05,
   TOWERS: {
-    gun:    { name: "Gun", icon: "🔫", color: "#707070", cost: 50, up: [40, 80], range: [2.5, 2.8, 3.1], dmg: [6, 10, 16], rate: [0.45, 0.4, 0.32], air: 0.5, ground: true, desc: "Cheap and fast. Can hit flyers (weak)." },
-    cannon: { name: "Cannon", icon: "💣", color: "#5a3a22", cost: 90, up: [70, 130], range: [2.3, 2.5, 2.7], dmg: [16, 26, 42], rate: [1.4, 1.3, 1.2], splash: [0.9, 1.1, 1.3], ground: true, desc: "Explodes and hits groups. Ground only." },
-    frost:  { name: "Frost", icon: "🧊", color: "#3a88c0", cost: 70, up: [50, 90], range: [2.2, 2.5, 2.8], dmg: [2, 4, 6], rate: [0.8, 0.7, 0.6], slow: [0.55, 0.45, 0.35], air: 1, ground: true, desc: "Slows enemies down (flyers too)." },
-    sniper: { name: "Sniper", icon: "🎯", color: "#2e602e", cost: 120, up: [90, 160], range: [5, 5.8, 6.6], dmg: [45, 75, 120], rate: [2, 1.8, 1.6], pierce: true, air: 0.5, ground: true, desc: "Very long range. Pierces armor." },
-    tesla:  { name: "Tesla", icon: "⚡", color: "#7050b8", cost: 150, up: [110, 180], range: [2.4, 2.6, 2.8], dmg: [12, 18, 26], rate: [1.1, 1, 0.9], chain: [3, 4, 5], ground: true, desc: "Lightning jumps between enemies. Ground only." },
-    aa:     { name: "Anti-air", icon: "🏹", color: "#a03a3a", cost: 80, up: [60, 110], range: [3.2, 3.6, 4], dmg: [14, 24, 38], rate: [0.5, 0.45, 0.4], air: 1, ground: false, desc: "Shoots flyers only. Strong against them." },
+    gun:    { name: "Gun", icon: "🔫", color: "#707070", cost: 50, up: [40, 80], range: [2.5, 2.8, 3.1], dmg: [1, 2, 3], rate: [0.8, 0.8, 0.65], air: 0.5, ground: true, desc: "Cheap and fast. Can hit flyers (weak)." },
+    cannon: { name: "Cannon", icon: "💣", color: "#5a3a22", cost: 90, up: [70, 130], range: [2.3, 2.5, 2.7], dmg: [2, 3, 5], rate: [1.8, 1.6, 1.5], splash: [0.9, 1.1, 1.3], ground: true, desc: "Explodes and hits groups. Ground only." },
+    frost:  { name: "Frost", icon: "🧊", color: "#3a88c0", cost: 70, up: [50, 90], range: [2.2, 2.5, 2.8], dmg: [0, 0, 1], rate: [0.8, 0.7, 0.6], slow: [0.55, 0.45, 0.35], air: 1, ground: true, desc: "Slows enemies down (flyers too). Does 1 damage at level 3." },
+    sniper: { name: "Sniper", icon: "🎯", color: "#2e602e", cost: 120, up: [90, 160], range: [5, 5.8, 6.6], dmg: [4, 7, 11], rate: [2, 1.8, 1.6], pierce: true, air: 0.5, ground: true, desc: "Very long range. Pierces armor." },
+    tesla:  { name: "Tesla", icon: "⚡", color: "#7050b8", cost: 150, up: [110, 180], range: [2.4, 2.6, 2.8], dmg: [1, 2, 3], rate: [1.1, 1.1, 1], chain: [3, 4, 5], ground: true, desc: "Lightning jumps between enemies. Ground only." },
+    aa:     { name: "Anti-air", icon: "🏹", color: "#a03a3a", cost: 80, up: [60, 110], range: [3.2, 3.6, 4], dmg: [1, 2, 3], rate: [0.4, 0.4, 0.35], air: 1, ground: false, desc: "Shoots flyers only. Strong against them." },
     barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", cost: 150, up: [120, 180], pvpCost: 450, pvpUp: [300, 450], every: [12, 10, 8], units: [["recruit"], ["recruit", "gunner"], ["recruit", "gunner", "shielder"]], desc: "Doesn't shoot. Sends units by itself (Recruit, then Gun Man, then Shielder). Solo: they are ALLIES that fight the enemies. PvP: they attack the other base for free." },
     money:  { name: "Money", icon: "💰", color: "#b09020", cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only)." },
   },
   ENEMIES: {
-    recruit:  { name: "Recruit", color: "#3aa040", hp: 45, speed: 0.8, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, pts: 1, desc: "Simple basic enemy." },
-    scout:    { name: "Scout", color: "#e0c020", hp: 26, speed: 1.35, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, pts: 1, desc: "Runs faster." },
-    heavy:    { name: "Heavy", color: "#28408a", hp: 150, speed: 0.55, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
-    shielder: { name: "Shielder", color: "#8a8a8a", hp: 260, armor: 2, speed: 0.6, rush: 1.4, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
-    medic:    { name: "Medic", color: "#f4f4f4", hp: 70, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 6, pts: 3, desc: "Heals the enemies around." },
-    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
-    tank:     { name: "Tank", color: "#6b4a2a", hp: 400, armor: 6, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
-    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 90, speed: 0.75, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, pts: 4, gun: { range: 2.5, dmg: 8, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
-    saboteur: { name: "Saboteur", color: "#303030", hp: 60, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
-    captain:  { name: "Captain", color: "#b08a10", hp: 120, speed: 0.7, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, pts: 4, aura: 2, desc: "Allies around him are 20% faster and hit 20% harder." },
-    kamikaze: { name: "Kamikaze", color: "#d02020", hp: 40, speed: 1.3, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 70 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
-    boss:     { name: "Boss", color: "#8000a0", hp: 1300, armor: 8, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
+    recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.8, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, pts: 1, desc: "Simple basic enemy." },
+    scout:    { name: "Scout", color: "#e0c020", hp: 2, speed: 1.35, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, pts: 1, desc: "Runs faster." },
+    heavy:    { name: "Heavy", color: "#28408a", hp: 14, speed: 0.55, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
+    shielder: { name: "Shielder", color: "#8a8a8a", hp: 24, armor: 1, speed: 0.6, rush: 1.4, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
+    medic:    { name: "Medic", color: "#f4f4f4", hp: 6, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 1, pts: 3, desc: "Heals the enemies around (+1 HP every 2 s)." },
+    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
+    tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
+    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.75, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, pts: 4, gun: { range: 2.5, dmg: 1, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
+    saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
+    captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.7, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
+    kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 1.3, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
+    boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
   },
   ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑" },
   SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze"],
@@ -5225,6 +5225,7 @@ function tdPickRoute(st, from) {
 }
 function tdHit(st, e, dmg, pierce, byTowerSide) {
   if (e.dead) return;
+  if (dmg <= 0) return;
   const d = pierce ? dmg : Math.max(1, dmg - e.armor);
   e.hp -= d;
   if (e.hp <= 0) { e.dead = true; if (byTowerSide >= 0) st.money[byTowerSide] += TD.ENEMIES[e.type].reward; }
@@ -5266,7 +5267,7 @@ function tdStep(st, dt) {
   for (const e of st.enemies) {
     if (e.dead) continue;
     const E = TD.ENEMIES[e.type];
-    if (E.heal) for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal * dt);
+    if (E.heal) { e.hcd = (e.hcd ?? 2) - dt; if (e.hcd <= 0) { e.hcd += 2; for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal); } }
     const fights = st.linked || !st.pvp;   // PvP linked maps, or solo (allies from Barracks vs enemies)
     // Captain aura
     e.buff = false;
@@ -5280,8 +5281,8 @@ function tdStep(st, dt) {
       if (tg) {
         holding = true;
         if (e.gcd <= 0) {
-          e.gcd = E.gun.every;
-          tg.hp -= E.gun.dmg * (e.buff ? 1.2 : 1);
+          e.gcd = E.gun.every / (e.buff ? 1.2 : 1);
+          tg.hp -= E.gun.dmg;
           if (tg.hp <= 0 && !tg.dead) { tg.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[tg.type].reward / 2); }
           st.fx.push({ k: "gunner", x1: e.x, y1: e.y, x2: tg.x, y2: tg.y, until: t + 0.08 });
         }
@@ -5392,7 +5393,7 @@ function tdStep(st, dt) {
     }
     if (!target) continue;
     tw.cd = T.rate[tw.lvl];
-    const dmg = T.dmg[tw.lvl] * (target.air ? T.air || 0 : 1);
+    const dmg = Math.ceil(T.dmg[tw.lvl] * (target.air ? T.air || 0 : 1));
     if (tw.type === "cannon") {
       const R = T.splash[tw.lvl];
       for (const e of st.enemies) if (!e.dead && !e.air && e.side === tw.side && Math.hypot(e.x - target.x, e.y - target.y) <= R) tdHit(st, e, dmg, false, tw.side);
@@ -5403,7 +5404,7 @@ function tdStep(st, dt) {
       for (let i = 0; i < T.chain[tw.lvl] && cur; i++) {
         tdHit(st, cur, d, false, tw.side); hit.add(cur);
         st.fx.push({ k: "zap", x1: px, y1: py, x2: cur.x, y2: cur.y, until: t + 0.15 });
-        px = cur.x; py = cur.y; d *= 0.85;
+        px = cur.x; py = cur.y;
         let nx = null, nd = 1.6;
         for (const e of st.enemies) if (!e.dead && !e.air && !hit.has(e) && e.side === tw.side && Math.hypot(e.x - px, e.y - py) < nd) { nd = Math.hypot(e.x - px, e.y - py); nx = e; }
         cur = nx;
