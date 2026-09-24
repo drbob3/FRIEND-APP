@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-FCTLuZgoz68qhb9EfnGWMVbIX/4Fx48GEzP7MCnk/pE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tRYogUtcOlzxYUDwk4aS04mV7IoVhAINEfCj2avyIC0=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -867,12 +867,13 @@
           <label class="f">Username<input type="text" id="liUser" class="sunken" autocomplete="username" maxlength="20" required></label>
           <label class="f">Password<input type="password" id="liPass" class="sunken" autocomplete="current-password" required></label>
           <div class="err" id="liErr"></div>
-          <div style="display:flex;justify-content:flex-end"><button type="submit">Log in</button></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><a href="#" id="forgotBtn" style="font-size:12px">🔑 I forgot my password</a><button type="submit">Log in</button></div>
         </form>
         <form class="tabpanel" id="regForm" data-panel="register" hidden>
           <label class="f">Choose a username<input type="text" id="rgUser" class="sunken" autocomplete="username" maxlength="20" required>
             <span class="hint">3 to 20 characters: letters, numbers and _</span></label>
           <label class="f">Password<input type="password" id="rgPass" class="sunken" autocomplete="new-password" required></label>
+          <div class="hint" style="color:#a00000">⚠ Write your password down somewhere! If you forget it, use "🔑 I forgot my password" and the head admin will help you choose a new one.</div>
           <div class="meter" id="meter"><span></span><span></span><span></span><span></span></div>
           <div class="hint" id="meterText">At least 10 characters. Long phrases are best, e.g. "purple-tiger-eats-42-pizzas".</div>
           <label class="f">Confirm password<input type="password" id="rgPass2" class="sunken" autocomplete="new-password" required></label>
@@ -920,9 +921,13 @@ const firebaseConfig = {
   messagingSenderId: "819987678033",
   appId: "1:819987678033:web:562cb00765e0c4eeea8970"
 };
-const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
+const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // OLD accounts: <name>@this (never emailed)
+const RESET_BOX = "hangoutchatadmin";                        // NEW accounts: hangoutchatadmin+<name>@gmail.com -> reset emails land in the admin's Gmail
+const loginEmail = (name) => RESET_BOX + "+" + String(name).toLowerCase() + "@gmail.com";
+const oldEmail = (name) => String(name).toLowerCase() + "@" + EMAIL_DOMAIN;
+const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.5";
+const APP_VERSION = "10.6";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -1358,7 +1363,9 @@ function renderSupport() {
   if (!msgs.length) list.append(el("div", "dim", "No messages yet."));
   for (const [, m] of msgs) {
     const d = el("div", "supmsg " + (m.from === "a" ? "a" : "u"));
-    d.append(el("b", null, m.from === "a" ? "🛡 Admin: " : "You: "), m.text || "", el("span", "dim", "  " + fmtTime(m.ts)));
+    d.append(el("b", null, m.from === "a" ? "🛡 Admin: " : "You: "));
+    appendRichText(d, m.text || "", null);
+    d.append(el("span", "dim", "  " + fmtTime(m.ts)));
     list.append(d);
   }
   list.scrollTop = list.scrollHeight;
@@ -1378,6 +1385,37 @@ function enterSupport(uid) {
 $("supOpen").addEventListener("click", (e) => { e.preventDefault(); selectLoginTab("support"); $("supText").focus(); });
 $("supBack").addEventListener("click", () => selectLoginTab("login"));
 $("supNoteBtn").addEventListener("click", () => { showLogin(); selectLoginTab("support"); });
+async function sendHelpMessage(text, name) {
+  let u = auth.currentUser;
+  if (!u) {
+    supportWanted = true;
+    await A.setPersistence(auth, A.browserLocalPersistence);
+    u = (await A.signInAnonymously(auth)).user;
+  }
+  enterSupport(u.uid);
+  const id = D.push(R("support/" + u.uid + "/msgs")).key;
+  const upd = { ["support/" + u.uid + "/msgs/" + id]: { from: "u", text: text.slice(0, 500), ts: now() }, ["support/" + u.uid + "/last"]: now(), ["rate/" + u.uid + "/sup"]: now() };
+  if (name) upd["support/" + u.uid + "/name"] = name.slice(0, 24);
+  await D.update(R("/"), upd);
+}
+$("forgotBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  $("liErr").textContent = "";
+  const u = $("liUser").value.trim();
+  if (!USER_RE.test(u)) { $("liErr").textContent = "Type your username above first, then click \"I forgot my password\"."; $("liUser").focus(); return; }
+  const ok = await dialog({ title: "🔑 I forgot my password", message: "Send a password reset for \"" + u + "\"?\n\nThe reset email goes to the site's head admin. The admin will send you the link here (in the help messages, on this device). You click it and choose a new password yourself.", okText: "Send the reset" });
+  if (!ok) return;
+  try {
+    await A.sendPasswordResetEmail(auth, loginEmail(u));
+    await sendHelpMessage("🔑 I forgot my password. A reset email was sent for my username \"" + u + "\". Can you send me the link?", u);
+    $("supName").value = u;
+    selectLoginTab("support");
+    toast("🔑 Reset sent! Come back here later to get the link from the admin.");
+  } catch (err) {
+    $("liErr").textContent = /permission/i.test(err?.message || "") ? "Wait a little and try again." : authError(err);
+    logError("Reset: " + (err?.message || err));
+  }
+});
 $("supForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("supErr").textContent = "";
@@ -1452,7 +1490,12 @@ $("loginForm").addEventListener("submit", async (e) => {
   if (!USER_RE.test(u)) { $("liErr").textContent = "Wrong username or password."; return; }
   try {
     await A.setPersistence(auth, A.browserLocalPersistence);
-    await A.signInWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, $("liPass").value);
+    const pw = $("liPass").value;
+    try { await A.signInWithEmailAndPassword(auth, loginEmail(u), pw); }
+    catch (e1) {
+      if (!/invalid-credential|user-not-found|wrong-password|invalid-email/.test(e1?.code || "")) throw e1;
+      await A.signInWithEmailAndPassword(auth, oldEmail(u), pw);   // accounts made before v10.6
+    }
   } catch (err) { $("liErr").textContent = authError(err); }
 });
 $("regForm").addEventListener("submit", async (e) => {
@@ -1467,7 +1510,8 @@ $("regForm").addEventListener("submit", async (e) => {
   pendingName = u;
   try {
     await A.setPersistence(auth, A.browserLocalPersistence);
-    await A.createUserWithEmailAndPassword(auth, u.toLowerCase() + "@" + EMAIL_DOMAIN, p);
+    // the old-style login may already use this name
+    await A.createUserWithEmailAndPassword(auth, loginEmail(u), p);
   } catch (err) { pendingName = null; $("rgErr").textContent = authError(err); }
 });
 $("guestForm").addEventListener("submit", async (e) => {
@@ -1528,9 +1572,20 @@ async function handleUser2(user) {
     hadProfile = !!profile && !profile.deleted;
     if (!profile || profile.deleted) {
       let name = pendingName;
-      if (!isGuest && !name) name = (user.email || "user").split("@")[0];
+      if (!isGuest && !name) name = nameFromEmail(user.email);
       if (!name && isGuest) { startPublic(); enterSupport(user.uid); return; }   // help-message session (no guest name): stay on the public page
       if (!name) { await A.signOut(auth); $("loginOverlay").classList.add("show"); return; }
+      if (!isGuest) {   // old-style and new-style logins must never share a username
+        const all = (await D.get(R("users"))).val() || {};
+        const taken = Object.entries(all).some(([id, x]) => id !== user.uid && x && !x.guest && x.name && x.name.toLowerCase() === name.toLowerCase());
+        if (taken) {
+          try { await user.delete(); } catch {}
+          await A.signOut(auth).catch(() => {});
+          $("rgErr").textContent = "This username is already taken."; $("liErr").textContent = "";
+          showLogin(); selectLoginTab("register");
+          return;
+        }
+      }
       profile = { name, guest: isGuest, color: COLORS[Math.floor(Math.random() * 8)], created: Date.now() };
       profile.icon = isGuest ? "👤" : ICONS[Math.floor(Math.random() * 24)];
       if (user.uid === OWNER_UID) delete profile.icon;
@@ -1649,7 +1704,7 @@ function openSupportThread(uid) {
   const win = openWindow("Help chat - " + (t0?.name || "Someone"), "📨", { key: "sup-" + uid, narrow: true });
   const list = el("div", "suplist sunken");
   const ta = el("textarea", "sunken"); ta.rows = 3; ta.maxLength = 500; ta.placeholder = "Your answer (they see it on the log in page, on the device they wrote from)"; ta.style.width = "100%"; ta.style.boxSizing = "border-box"; ta.style.font = "13px Tahoma, sans-serif";
-  const info = el("div", "hint", "They are not logged in. Tip: if they forgot their password, it can't be recovered: they can make a new account (you can delete the old one: right-click their name → 👑 Delete account).");
+  const info = el("div", "hint", "They are not logged in. 🔑 Forgot password? Open " + RESET_BOX + "@gmail.com, find the email \"Reset your password\" for " + RESET_BOX + "+THEIRNAME@gmail.com, copy the link and paste it here: they click it and choose a new password. (Or click it yourself, choose a password and tell them.)");
   const btns = el("div", "wbuttons");
   const send = el("button", null, "Send ✉"); send.type = "button";
   const del = el("button", "danger", "🗑 Delete conversation"); del.type = "button";
@@ -1682,6 +1737,14 @@ function openSupportThread(uid) {
     if (!(await dialog({ title: "Delete conversation", message: "Delete this help conversation?", okText: "Delete" }))) return;
     try { await D.set(R("support/" + uid), null); win.close(); } catch (e) { showBanner("Can't delete: " + authError(e)); }
   };
+}
+function migrateLoginEmail() {
+  const u = auth.currentUser;
+  if (!u || u.isAnonymous || !u.email || !u.email.endsWith("@" + EMAIL_DOMAIN) || !A.verifyBeforeUpdateEmail) return;
+  const k = "mail-mig-" + u.uid;
+  if (store(k)) return;
+  store(k, "1");
+  A.verifyBeforeUpdateEmail(u, loginEmail(S.me.name)).catch((e) => { store(k, ""); logError("Email move: " + e.message); });
 }
 function startApp() {
   renderMe();
@@ -1764,6 +1827,7 @@ function startApp() {
     });
   }
   startGamesSub();
+  setTimeout(migrateLoginEmail, 4000);
   sub(R("warnings/" + S.me.uid), (s) => { S.warnings = s.val() || {}; showWarnings(); }, () => {});
   applyLoginAvail();
   boot();
@@ -2254,6 +2318,10 @@ function adminPersonItems(uid) {
     items.push("-");
     if (!u.guest && !u.deleted) items.push({ label: S.admins[uid] === true ? "👑 Remove admin" : "👑 Make admin", run: () => headSetAdmin(uid, S.admins[uid] !== true) });
     if (!u.deleted) items.push({ label: "👑 Send a warning (popup)...", run: () => headWarn(uid) });
+    if (!u.deleted && !u.guest) items.push({ label: "👑 Send a password reset email", run: async () => {
+      try { await A.sendPasswordResetEmail(auth, loginEmail(u.name)); toast("🔑 Reset email sent to " + RESET_BOX + "@gmail.com (for " + u.name + ")."); }
+      catch (e) { showBanner("Can't send: " + authError(e)); }
+    } });
     if (!u.deleted && !u.guest) items.push({ label: "👑 Delete account...", danger: true, run: () => headDelete(uid) });
   }
   return items;
@@ -2418,11 +2486,30 @@ function openSettings() {
     catch (e) { showBanner("Can't save: " + authError(e)); }
   };
   btns.append(save, cl);
+  const fsP = el("fieldset"); fsP.append(el("legend", null, "🔑 Change my password"));
+  const pOld = el("input", "sunken"); pOld.type = "password"; pOld.placeholder = "Current password"; pOld.autocomplete = "current-password";
+  const pNew = el("input", "sunken"); pNew.type = "password"; pNew.placeholder = "New password (10+ characters)"; pNew.autocomplete = "new-password";
+  const pNew2 = el("input", "sunken"); pNew2.type = "password"; pNew2.placeholder = "New password again"; pNew2.autocomplete = "new-password";
+  const pMsg = el("div", "hint");
+  const pBtn = el("button", null, "Change password"); pBtn.type = "button";
+  pBtn.onclick = async () => {
+    pMsg.style.color = "#a00000";
+    const { score, msg } = passwordScore(pNew.value, u.name);
+    if (score < 2) { pMsg.textContent = msg; return; }
+    if (pNew.value !== pNew2.value) { pMsg.textContent = "The two new passwords are different."; return; }
+    const user = auth.currentUser;
+    try { await A.reauthenticateWithCredential(user, A.EmailAuthProvider.credential(user.email, pOld.value)); }
+    catch { pMsg.textContent = "Wrong current password."; return; }
+    try { await A.updatePassword(user, pNew.value); pMsg.style.color = "#006000"; pMsg.textContent = "✔ Password changed!"; pOld.value = pNew.value = pNew2.value = ""; toast("🔑 Password changed."); }
+    catch (e) { pMsg.textContent = authError(e); }
+  };
+  for (const x of [pOld, pNew, pNew2]) { x.style.width = "100%"; x.style.boxSizing = "border-box"; x.style.marginBottom = "4px"; }
+  fsP.append(pOld, pNew, pNew2, pMsg, pBtn);
   const fsX = el("fieldset"); fsX.append(el("legend", null, "Danger zone"));
   const delBtn = el("button", "danger", "Delete my account...");
   delBtn.onclick = () => deleteMyAccount(close);
   fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
-  content.append(fsI, fsB, fsC, soundBox(), btns, fsX);
+  content.append(fsI, fsB, fsC, soundBox(), btns, fsP, fsX);
   refresh();
 }
 function soundBox() {
