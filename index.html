@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GMmYktyg9lMwuJ1M/gBIJOopFy+8yWlhModFyDYz5oE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-H9Q5WuP48gzgVW5PIPB6GBUkf+t3DtQmI+hcgczbRuw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -563,6 +563,23 @@
   .tdpick.on { background: #fff4b8; border-color: var(--dark) var(--light) var(--light) var(--dark); box-shadow: inset 1px 1px var(--shadow); }
   .tdpick.on .tph::after { content: "✔"; color: #008000; }
   .tdlo { font-size: 18px; letter-spacing: 2px; }
+  .float.tdtwwin { width: 320px; }
+  .tdtw { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+  .tdtwh { display: flex; align-items: center; gap: 8px; }
+  .tdtwh .ti { font-size: 30px; }
+  .tdpips { color: #b08000; letter-spacing: 1px; }
+  .tddps { font-weight: bold; font-size: 14px; color: #800000; }
+  .tdstun { font-weight: bold; color: #b00000; }
+  .tdtwt { width: 100%; border-collapse: collapse; background: #fff; }
+  .tdtwt th, .tdtwt td { padding: 1px 5px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+  .tdtwt th { background: #d8d8d8; }
+  .tdtwt td.lab { color: #333; }
+  .tdtwt td.up { color: #007000; font-weight: bold; }
+  .tdtwt td.same { color: #999; }
+  .tdhpbar { height: 10px; }
+  .tdnext { background: #e8ffe0; border: 1px solid #60a040; padding: 3px 5px; }
+  .tdnext.max { background: #fff4b8; border-color: #b08000; font-weight: bold; text-align: center; }
+  .tdenw td, .tdenw th { padding: 1px 6px; }
   .tdinfo { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 26px; font-size: 12px; padding: 2px 4px; background: #ffffe1; border: 1px solid #b0a060; }
   .tdinfo .dim { color: #444; }
   .tdinfo button { min-width: 0; padding: 1px 8px; }
@@ -940,7 +957,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.12";
+const APP_VERSION = "10.14";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5028,40 +5045,49 @@ function cleanOldGames() {
 const TD = {
   W: 24, H: 15, L: 6, SOLO_W: 28, SOLO_H: 16, STEP: 0.05,
   TOWERS: {
-    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], air: 0.5, ground: true, desc: "Cheap basic gun. Can hit flyers (weak)." },
-    shotgun:  { name: "Shotgunner", icon: "🎇", color: "#8a5a2a", cost: 70, up: [50, 90, 130, 180], range: [1.8, 1.9, 2, 2.1, 2.3], dmg: [1, 1, 1, 1, 1], pellets: [3, 4, 4, 5, 6], cone: 0.45, rate: [1.4, 1.3, 1.1, 1.1, 1], air: 0.5, ground: true, desc: "Close range. Each shot is a spray of pellets in a cone: great against groups or one big enemy up close." },
-    rifle:    { name: "Rifleman", icon: "🎖️", color: "#4a6a3a", cost: 80, up: [60, 100, 150, 200], range: [3, 3.2, 3.4, 3.6, 3.8], dmg: [1, 1, 1, 2, 2], burst: [3, 3, 4, 4, 5], rate: [2, 1.8, 1.8, 1.8, 1.6], air: 1, ground: true, desc: "Fires 3 quick shots, then reloads. Hits flyers well." },
-    sniper:   { name: "Sniper", icon: "🎯", color: "#2e602e", cost: 120, up: [90, 140, 200, 260], range: [5, 5.5, 6, 6.6, 7.2], dmg: [4, 6, 8, 11, 15], rate: [2, 1.9, 1.8, 1.6, 1.5], pierce: true, air: 1, ground: true, desc: "Very long range, big hits. Pierces armor." },
-    grenade:  { name: "Grenader", icon: "🧨", color: "#5a3a22", cost: 80, up: [70, 110, 160, 220], range: [2.3, 2.5, 2.7, 2.9, 3.1], dmg: [2, 3, 3, 4, 6], splash: [1.1, 1.2, 1.3, 1.5, 1.7], rate: [1.6, 1.5, 1.4, 1.3, 1.2], ground: true, desc: "Throws grenades that blow up groups. Ground only." },
-    officer:  { name: "Officer", icon: "📣", color: "#b08a10", cost: 120, up: [100, 180], range: [2.3, 2.6, 3], boost: [1, 1, 2], desc: "Doesn't shoot. Towers around him hit harder (+damage on every hit). Max level 3." },
-    riot:     { name: "Riot Guard", icon: "🛡️", color: "#304060", cost: 70, up: [60, 100, 140, 200], range: [1.2, 1.3, 1.4, 1.5, 1.6], dmg: [3, 4, 5, 7, 9], rate: [0.9, 0.8, 0.8, 0.7, 0.6], stunRes: [0.5, 0.4, 0.3, 0.2, 0], ground: true, desc: "Melee: build it right next to the road. Hits hard up close. Stun resistant (Gun Man / Saboteur stuns are shorter, level 5 = immune)." },
-    barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", cost: 150, up: [120, 160, 200, 260], pvpCost: 450, pvpUp: [300, 400, 500, 650], every: [12, 11, 10, 9, 8], hpUp: [1, 1, 1, 1.25, 1.5],
+    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", hp: [10, 12, 14, 16, 20], cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], air: 0.5, ground: true, desc: "Cheap basic gun. Can hit flyers (weak)." },
+    shotgun:  { name: "Shotgunner", icon: "🎇", color: "#8a5a2a", hp: [12, 14, 16, 19, 22], cost: 70, up: [50, 90, 130, 180], range: [1.8, 1.9, 2, 2.1, 2.3], dmg: [1, 1, 1, 1, 1], pellets: [3, 4, 4, 5, 6], cone: 0.45, rate: [1.4, 1.3, 1.1, 1.1, 1], air: 0.5, ground: true, desc: "Close range. Each shot is a spray of pellets in a cone: great against groups or one big enemy up close." },
+    rifle:    { name: "Rifleman", icon: "🎖️", color: "#4a6a3a", hp: [10, 12, 14, 17, 20], cost: 80, up: [60, 100, 150, 200], range: [3, 3.2, 3.4, 3.6, 3.8], dmg: [1, 1, 1, 2, 2], burst: [3, 3, 4, 4, 5], rate: [2, 1.8, 1.8, 1.8, 1.6], air: 1, ground: true, heal: { from: 3, range: 1.8, pct: 0.005, every: 5 }, desc: "Fires 3 quick shots, then reloads. Hits flyers well. Level 4+: heals towers around it (0.5% HP every 5 s)." },
+    sniper:   { name: "Sniper", icon: "🎯", color: "#2e602e", hp: [8, 9, 11, 13, 15], cost: 120, up: [90, 140, 200, 260], range: [5, 5.5, 6, 6.6, 7.2], dmg: [4, 6, 8, 11, 15], rate: [2, 1.9, 1.8, 1.6, 1.5], pierce: true, air: 1, ground: true, desc: "Very long range, big hits. Pierces armor." },
+    grenade:  { name: "Grenader", icon: "🧨", color: "#5a3a22", hp: [10, 12, 14, 16, 19], cost: 80, up: [70, 110, 160, 220], range: [2.3, 2.5, 2.7, 2.9, 3.1], dmg: [2, 3, 3, 4, 6], splash: [1.1, 1.2, 1.3, 1.5, 1.7], rate: [1.6, 1.5, 1.4, 1.3, 1.2], ground: true, desc: "Throws grenades that blow up groups. Ground only." },
+    officer:  { name: "Officer", icon: "📣", color: "#b08a10", hp: [15, 18, 22], cost: 120, up: [100, 180], range: [2.3, 2.6, 3], boost: [1, 1, 2], desc: "Doesn't shoot. Towers around him hit harder (+damage on every hit). Max level 3." },
+    riot:     { name: "Riot Guard", icon: "🛡️", color: "#304060", hp: [20, 25, 30, 36, 45], cost: 70, up: [60, 100, 140, 200], range: [1.2, 1.3, 1.4, 1.5, 1.6], dmg: [3, 4, 5, 7, 9], rate: [0.9, 0.8, 0.8, 0.7, 0.6], stunRes: [0.5, 0.4, 0.3, 0.2, 0], ground: true, desc: "Melee: build it right next to the road. Hits hard up close. Stun resistant (Gun Man / Saboteur stuns are shorter, level 5 = immune)." },
+    barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", hp: [25, 30, 35, 40, 50], cost: 150, up: [120, 160, 200, 260], pvpCost: 450, pvpUp: [300, 400, 500, 650], every: [12, 11, 10, 9, 8], hpUp: [1, 1, 1, 1.25, 1.5],
       units: [["m_recruit"], ["m_recruit", "m_gun"], ["m_recruit", "m_gun", "m_demo"], ["m_recruit", "m_rifle", "m_demo"], ["m_recruit", "m_rifle", "m_demo"]],
       desc: "Doesn't shoot. Sends mercenaries by itself: Recruit Merc (knife), then Gun Man Merc, then Demo Merc. Level 4: Gun Man becomes Rifleman. Levels 4-5: tougher mercs. Solo: they fight the enemies. PvP: they attack the other base." },
-    money:    { name: "Money", icon: "💰", color: "#b09020", cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only, always available)." },
+    money:    { name: "Money", icon: "💰", color: "#b09020", hp: [15, 18, 22], cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only, always available)." },
   },
   PICKS: ["gun", "shotgun", "rifle", "sniper", "grenade", "officer", "riot", "barracks"],
   LOADOUT: 6,
   ENEMIES: {
-    recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.8, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, pts: 1, desc: "Simple basic enemy." },
-    scout:    { name: "Scout", color: "#e0c020", hp: 2, speed: 1.35, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, pts: 1, desc: "Runs faster." },
-    heavy:    { name: "Heavy", color: "#28408a", hp: 14, speed: 0.55, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
-    shielder: { name: "Shielder", color: "#8a8a8a", hp: 24, armor: 1, speed: 0.6, rush: 1.4, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
-    medic:    { name: "Medic", color: "#f4f4f4", hp: 6, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 1, pts: 3, desc: "Heals the enemies around (+1 HP every 2 s)." },
-    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
-    tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
-    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.75, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, pts: 4, gun: { range: 2.5, dmg: 1, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
-    saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
-    captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.7, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
-    kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 1.3, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
-    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 9, speed: 0.8, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1.1, dmg: 1, every: 0.5, fx: "knife" }, desc: "Mercenary with a knife: stabs enemies from a bit far." },
-    m_gun:     { name: "Gun Man Merc", color: "#2a50a0", hp: 12, speed: 0.75, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 1, every: 0.7 }, desc: "Mercenary: stops and shoots enemy units in range." },
-    m_rifle:   { name: "Rifleman Merc", color: "#1a3a80", hp: 15, speed: 0.75, reward: 12, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 3.2, dmg: 1, every: 1.5, burst: 3 }, desc: "Mercenary: fires 3 quick shots, then reloads." },
-    m_demo:    { name: "Demo Merc", color: "#5a4ab0", hp: 9, speed: 0.7, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 3, every: 2.2, splash: 1.1, ground: true, fx: "throw" }, desc: "Mercenary: throws dynamite at groups (ground only)." },
-    boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.35, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
+    recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.6, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, solo: [1, 21, 10], pts: 1, desc: "Simple basic enemy." },
+    scout:    { name: "Scout", color: "#e0c020", hp: 2, speed: 1.01, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, solo: [1, 26, 7], pts: 1, desc: "Runs faster." },
+    heavy:    { name: "Heavy", color: "#28408a", hp: 14, speed: 0.41, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, solo: [3, 0, 6], pts: 3, desc: "A bit slow, lots of HP." },
+    shielder: { name: "Shielder", color: "#8a8a8a", hp: 24, armor: 1, speed: 0.45, rush: 1.05, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, solo: [6, 0, 4], pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
+    medic:    { name: "Medic", color: "#f4f4f4", hp: 6, speed: 0.52, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 1, solo: [7, 0, 3], pts: 3, desc: "Heals the enemies around (+1 HP every 2 s)." },
+    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 0.75, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, solo: [5, 0, 4], pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
+    tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.3, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, solo: [9, 0, 3], pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
+    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.56, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, solo: [10, 0, 3], pts: 4, gun: { range: 2.5, dmg: 1, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
+    saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.68, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, solo: [8, 0, 3], pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
+    captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.52, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, solo: [12, 0, 2], pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
+    kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 0.98, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, solo: [7, 0, 3], pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
+    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 9, speed: 0.6, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1.1, dmg: 1, every: 0.5, fx: "knife" }, desc: "Mercenary with a knife: stabs enemies from a bit far." },
+    m_gun:     { name: "Gun Man Merc", color: "#2a50a0", hp: 12, speed: 0.56, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 1, every: 0.7 }, desc: "Mercenary: stops and shoots enemy units in range." },
+    m_rifle:   { name: "Rifleman Merc", color: "#1a3a80", hp: 15, speed: 0.56, reward: 12, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 3.2, dmg: 1, every: 1.5, burst: 3 }, desc: "Mercenary: fires 3 quick shots, then reloads." },
+    m_demo:    { name: "Demo Merc", color: "#5a4ab0", hp: 9, speed: 0.52, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 3, every: 2.2, splash: 1.1, ground: true, fx: "throw" }, desc: "Mercenary: throws dynamite at groups (ground only)." },
+    trooper:   { name: "Trooper", color: "#206a28", hp: 10, speed: 0.6, reward: 10, life: 1, power: 0, cost: 30, spawn: 0.9, eco: 1, r: 0.27, solo: [8, 0, 6], pts: 2, desc: "A Recruit but way stronger." },
+    runner:    { name: "Runner", color: "#f0a000", hp: 6, speed: 1.2, reward: 8, life: 1, power: 0, cost: 30, spawn: 0.6, eco: 1, r: 0.21, solo: [9, 0, 5], pts: 2, desc: "A Scout but better: faster and tougher." },
+    bulldozer: { name: "Bulldozer", color: "#c09020", hp: 40, armor: 1, speed: 0.41, reward: 25, life: 3, power: 0, cost: 75, spawn: 2, eco: 1, r: 0.36, solo: [12, 0, 3], pts: 6, desc: "A Heavy but better: huge HP and armor. Takes 3 ❤." },
+    rifleman:  { name: "Rifleman", color: "#3a5a20", hp: 14, speed: 0.56, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.4, eco: -2, r: 0.27, solo: [13, 0, 3], pts: 5, gun: { range: 3, dmg: 1, every: 2, burst: 3 }, desc: "A Gun Man but better: fires 3 quick shots at your units and towers." },
+    eshotgun:  { name: "Shotgunner", color: "#8a4a1a", hp: 12, speed: 0.56, reward: 14, life: 1, power: 0, cost: 60, spawn: 1.3, eco: -2, r: 0.27, solo: [11, 0, 3], pts: 4, gun: { range: 1.9, dmg: 1, every: 1.6, pellets: 3, fx: "shotgun" }, desc: "Close range: a spray of 3 pellets at your units and towers." },
+    esniper:   { name: "Sniper", color: "#1a3a1a", hp: 8, speed: 0.52, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.5, eco: -2, r: 0.25, solo: [14, 0, 2], pts: 5, gun: { range: 5, dmg: 3, every: 3, fx: "sniper" }, desc: "Shoots your units and towers from very far (3 damage)." },
+    eofficer:  { name: "Officer", color: "#d0a000", hp: 20, speed: 0.49, reward: 40, life: 2, power: 0, cost: 150, spawn: 3, eco: -4, r: 0.3, solo: [15, 0, 1], pts: 10, gun: { range: 2.5, dmg: 1, every: 1 },
+      cmd: { fire: { first: 4, every: 20, time: 6 }, backup: { first: 10, every: 30, units: ["trooper", "rifleman", "trooper"] } },
+      desc: "Very rare. OPEN FIRE: every enemy with a gun stops and shoots your towers for 6 s. BACK UP: calls 3 soldiers from a random entry." },
+    boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.26, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
   },
-  ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑", m_recruit: "🔪", m_gun: "🔫", m_rifle: "🎖️", m_demo: "🧨" },
-  SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze"],
+  ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑", trooper: "💂", runner: "🏃", bulldozer: "🚜", rifleman: "🎖️", eshotgun: "🎇", esniper: "🎯", eofficer: "📣", m_recruit: "🔪", m_gun: "🔫", m_rifle: "🎖️", m_demo: "🧨" },
+  SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze", "trooper", "runner", "bulldozer", "rifleman", "eshotgun", "esniper", "eofficer"],
   ECO_START: 30, ECO_MIN: 5, ECO_MAX: 200, INCOME_EVERY: 7, AUTO_EVERY: 14, AUTO_TYPES: ["recruit", "recruit", "scout", "scout", "heavy"],
 };
 TD.TTYPES = Object.keys(TD.TOWERS);
@@ -5190,6 +5216,37 @@ function tdBoost(st, towers, tw) {
   }
   return b;
 }
+// stats of a tower at a level: [label, value, number-for-compare] rows + DPS
+function tdTowerStats(st, T, lv, boost = 0) {
+  const rows = [["Max HP", T.hp[lv], T.hp[lv]]];
+  let dps = null;
+  if (T.heal) rows.push(["Passive heal", lv >= T.heal.from ? "+" + T.heal.pct * 100 + "% HP / " + T.heal.every + " s (range " + T.heal.range + ")" : "unlocks at level " + (T.heal.from + 1), lv >= T.heal.from ? 1 : 0]);
+  if (T.dmg) {
+    const d = T.dmg[lv] + boost;
+    const hits = (T.pellets ? T.pellets[lv] : 1) * (T.burst ? T.burst[lv] : 1);
+    const cycle = T.burst ? T.rate[lv] + 0.15 * (T.burst[lv] - 1) : T.rate[lv];
+    dps = Math.round(d * hits / cycle * 100) / 100;
+    rows.push(["Damage", T.dmg[lv] + (boost ? " (+" + boost + " 📣)" : ""), T.dmg[lv]]);
+    if (T.pellets) rows.push(["Pellets per shot", T.pellets[lv], T.pellets[lv]]);
+    if (T.burst) rows.push(["Shots per burst", T.burst[lv], T.burst[lv]]);
+    rows.push(["Range", T.range[lv] + " tiles", T.range[lv]]);
+    rows.push([T.burst ? "Reload" : "Fires every", T.rate[lv] + " s", -T.rate[lv]]);
+    if (T.splash) rows.push(["Blast size", T.splash[lv] + " tiles", T.splash[lv]]);
+    if (T.stunRes) rows.push(["Stuns last", T.stunRes[lv] ? Math.round(T.stunRes[lv] * 100) + "%" : "immune", -T.stunRes[lv]]);
+    rows.push(["Targets", (T.ground ? "ground" : "") + (T.ground && T.air ? " + " : "") + (T.air ? "flyers" + (T.air < 1 ? " (half)" : "") : ""), 0]);
+    rows.push(["DPS" + (T.pellets ? " (all pellets)" : T.splash ? " (each enemy in blast)" : ""), dps, dps]);
+  } else if (T.boost) {
+    rows.push(["Damage bonus", "+" + T.boost[lv] + " per hit", T.boost[lv]]);
+    rows.push(["Range", T.range[lv] + " tiles", T.range[lv]]);
+  } else if (T.every) {
+    rows.push(["Sends", T.units[lv].map((u) => TD.ICON[u] + " " + TD.ENEMIES[u].name).join(", "), T.units[lv].join()]);
+    rows.push(["One unit every", T.every[lv] + " s", -T.every[lv]]);
+    rows.push(["Unit HP", T.units[lv].map((u) => Math.round(TD.ENEMIES[u].hp * T.hpUp[lv])).join(" / "), T.hpUp[lv]]);
+  } else if (T.income) {
+    rows.push(["Money every wave", "+" + T.income[lv] + " 💰", T.income[lv]]);
+  }
+  return { rows, dps };
+}
 // the player's 6 picked towers (saved in this browser)
 function tdLoadout() {
   const v = String(store("td-loadout") || "").split(",").filter((x) => TD.PICKS.includes(x));
@@ -5231,6 +5288,19 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
     id: st.nextId++, type, side, from, x: start[0], y: start[1],
     path, idx: 0, hp, maxHp: hp, armor: E.armor || 0, speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: !!E.air, dead: false,
   });
+}
+// spawn a unit at the entry of route ri of `side`'s map (Officer BACK UP)
+function tdSpawnAt(st, type, side, from, ri, hpMult = 1) {
+  const E = TD.ENEMIES[type], rt = st.map.routes[ri];
+  const pts = rt.cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
+  const hp = Math.round(E.hp * hpMult);
+  st.enemies.push({ id: st.nextId++, type, side, from, x: pts[0][0], y: pts[0][1], path: E.air ? tdFlyPath(pts) : pts.slice(1), idx: 0, hp, maxHp: hp, armor: E.armor || 0,
+    speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: !!E.air, dead: false });
+}
+function tdHurtTower(st, tw, dmg) {
+  if (tw.dead) return;
+  tw.hp -= dmg;
+  if (tw.hp <= 0) { tw.dead = true; st.fx.push({ k: "boom", x1: tw.wx, y1: tw.wy, x2: 0.9, y2: 0, until: st.t + 0.5 }); }
 }
 // solo: an ally from a Barracks walks from the base towards an entry and fights the enemies
 function tdSpawnAlly(st, type, hpMult = 1) {
@@ -5323,26 +5393,57 @@ function tdStep(st, dt) {
     // Captain aura
     e.buff = false;
     for (const o of st.enemies) if (o !== e && !o.dead && o.type === "captain" && o.from === e.from && Math.hypot(o.x - e.x, o.y - e.y) < TD.ENEMIES.captain.aura) { e.buff = true; break; }
-    // units with a weapon (enemy Gun Man, mercenaries): stop walking while an enemy unit is in range and attack it
+    // units with a weapon: stop and shoot enemy units in range; shoot towers of the base they attack while walking.
+    // OPEN FIRE (enemy Officer): stop and shoot random towers in range.
     let holding = false;
-    const WP = fights ? E.gun : null;
+    const WP = E.gun && (fights || e.side >= 0) ? E.gun : null;
     if (WP) {
       e.gcd = (e.gcd ?? 0) - dt;
-      let tg = null, td = WP.range;
-      for (const o of st.enemies) { if (o.dead || o.from === e.from || (WP.ground && o.air)) continue; const d = Math.hypot(o.x - e.x, o.y - e.y); if (d < td) { td = d; tg = o; } }
-      if (tg) {
-        holding = true;
+      let tg = null, td = WP.range, ttw = null;
+      const fire = (e.ofUntil || 0) > t;
+      if (fights && !fire) for (const o of st.enemies) { if (o.dead || o.from === e.from || (WP.ground && o.air)) continue; const d = Math.hypot(o.x - e.x, o.y - e.y); if (d < td) { td = d; tg = o; } }
+      if (!tg && e.side >= 0) {
+        const inR = st.towers.filter((tw) => !tw.dead && tw.side === e.side && Math.hypot(tw.wx - e.x, tw.wy - e.y) <= WP.range);
+        if (inR.length) ttw = fire ? (inR.includes(e.ftw) ? e.ftw : (e.ftw = inR[Math.floor(st.r() * inR.length)])) : inR.reduce((a, b) => (Math.hypot(a.wx - e.x, a.wy - e.y) <= Math.hypot(b.wx - e.x, b.wy - e.y) ? a : b));
+      }
+      if (tg || ttw) {
+        if (tg || fire) holding = true;
         if (e.gcd <= 0) {
           const fast = e.buff ? 1.2 : 1;
           if (WP.burst) { e.shots = (e.shots || 0) + 1; if (e.shots >= WP.burst) { e.shots = 0; e.gcd = WP.every / fast; } else e.gcd = 0.15; }
           else e.gcd = WP.every / fast;
-          const hurt = (o) => { o.hp -= WP.dmg; if (o.hp <= 0 && !o.dead) { o.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[o.type].reward / 2); } };
-          if (WP.splash) {
+          if (fire && e.ftw) e.ftw = null;   // next shot: another random tower
+          const hurt = (o, d = WP.dmg) => { o.hp -= d; if (o.hp <= 0 && !o.dead) { o.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[o.type].reward / 2); } };
+          const tx = tg ? tg.x : ttw.wx, ty = tg ? tg.y : ttw.wy;
+          if (ttw) tdHurtTower(st, ttw, WP.dmg * (WP.pellets || 1) + (WP.splash ? 0 : 0));
+          else if (WP.splash) {
             for (const o of st.enemies) if (!o.dead && !o.air && o.from !== e.from && Math.hypot(o.x - tg.x, o.y - tg.y) <= WP.splash) hurt(o);
-            st.fx.push({ k: "boom", x1: tg.x, y1: tg.y, x2: WP.splash, y2: 0, until: t + 0.3 });
+          } else if (WP.pellets) {
+            const near = st.enemies.filter((o) => !o.dead && o.from !== e.from && Math.hypot(o.x - tg.x, o.y - tg.y) <= 0.9);
+            for (let k = 0; k < WP.pellets; k++) { const al = near.filter((o) => !o.dead); if (al.length) hurt(al[k % al.length]); }
           } else hurt(tg);
-          st.fx.push({ k: WP.fx || "gunner", x1: e.x, y1: e.y, x2: tg.x, y2: tg.y, until: t + (WP.fx === "throw" ? 0.2 : 0.08) });
+          if (WP.splash) st.fx.push({ k: "boom", x1: tx, y1: ty, x2: WP.splash, y2: 0, until: t + 0.3 });
+          st.fx.push({ k: WP.fx || "gunner", x1: e.x, y1: e.y, x2: tx, y2: ty, until: t + (WP.fx === "throw" || WP.fx === "sniper" ? 0.2 : 0.08) });
         }
+      }
+    }
+    // enemy Officer: OPEN FIRE + BACK UP
+    if (E.cmd && e.side >= 0) {
+      e.ofT = (e.ofT ?? E.cmd.fire.first) - dt;
+      e.buT = (e.buT ?? E.cmd.backup.first) - dt;
+      if (e.ofT <= 0 && st.towers.some((tw) => tw.side === e.side && !tw.dead)) {
+        e.ofT = E.cmd.fire.every;
+        for (const o of st.enemies) if (!o.dead && o.from === e.from && o.side === e.side && TD.ENEMIES[o.type].gun) { o.ofUntil = t + E.cmd.fire.time; o.ftw = null; }
+        st.fx.push({ k: "openfire", x1: e.x, y1: e.y, x2: 0, y2: 0, until: t + 1.5 });
+      }
+      if (e.buT <= 0) {
+        e.buT = E.cmd.backup.every;
+        const routes = st.pvp ? st.map.routes.map((_, i) => i) : tdOpenRoutes(st, Math.max(1, st.wave));
+        const ri = routes[Math.floor(st.r() * routes.length)];
+        const mult = e.maxHp / E.hp;
+        E.cmd.backup.units.forEach((ty) => tdSpawnAt(st, ty, e.side, e.from, ri, mult));
+        const c0 = st.map.routes[ri].cells[0];
+        st.fx.push({ k: "backup", x1: tdWX(st, e.side, c0[0]) + 0.5, y1: c0[1] + 0.5, x2: 0, y2: 0, until: t + 1.5 });
       }
     }
     // Gunner stun / Saboteur bomb: switch off a tower of the base they attack
@@ -5426,6 +5527,16 @@ function tdStep(st, dt) {
   // towers
   for (const tw of st.towers) {
     const T = TD.TOWERS[tw.type];
+    if (tw.dead) continue;
+    // Rifleman level 4+: heals the towers around it (passive, works even when stunned)
+    if (T.heal && tw.lvl >= T.heal.from) {
+      tw.ht = (tw.ht ?? T.heal.every) - dt;
+      if (tw.ht <= 0) {
+        tw.ht += T.heal.every;
+        for (const o of st.towers) if (!o.dead && o.side === tw.side && Math.hypot(o.lx - tw.lx, o.ly - tw.ly) <= T.heal.range && o.hp < o.maxHp) o.hp = Math.min(o.maxHp, o.hp + o.maxHp * T.heal.pct);
+        st.fx.push({ k: "heal", x1: tw.wx, y1: tw.wy, x2: T.heal.range, y2: 0, until: t + 0.4 });
+      }
+    }
     if ((tw.stun || 0) > t) continue;   // stunned / sabotaged
     if (T.every && (st.pvp ? st.started : st.waveOn || st.enemies.some((x) => x.side === 0))) {   // Barracks
       tw.bt = (tw.bt ?? T.every[tw.lvl]) - dt;
@@ -5476,6 +5587,7 @@ function tdStep(st, dt) {
     }
   }
   st.enemies = st.enemies.filter((e) => !e.dead);
+  if (st.towers.some((x) => x.dead)) st.towers = st.towers.filter((x) => !x.dead);
   st.fx = st.fx.filter((f) => f.until > t);
   // waves end (solo)
   if (!st.pvp && st.waveOn && !st.queue.length && !st.enemies.some((x) => x.side === 0)) {
@@ -5490,27 +5602,30 @@ function tdStep(st, dt) {
     st.winner = !st.pvp ? -1 : st.lives[0] <= 0 && st.lives[1] <= 0 ? -1 : st.lives[0] <= 0 ? 1 : 0;
   }
 }
+// solo: enemies that can spawn in a wave, with their spawn chance. ENEMIES.x.solo = [spawn wave (first wave it can come), stop wave (first wave it can NOT come anymore, 0 = never), spawn chance (higher = more often)]
+function tdSoloPool(w) {
+  const pool = [];
+  for (const [k, E] of Object.entries(TD.ENEMIES)) {
+    if (!E.solo) continue;
+    const [from, to, chance] = E.solo;
+    if (w >= from && (!to || w < to) && chance > 0) pool.push([k, chance]);
+  }
+  return pool.length ? pool : [["recruit", 1]];
+}
 function tdStartWave(st) {
   if (st.pvp || st.over || st.queue.length) return false;
   const early = st.waveOn;
   st.wave++;
   const w = st.wave;
   const hpMult = 1 + 0.15 * (w - 1) + 0.012 * (w - 1) * (w - 1);
-  const pool = ["recruit", "scout"];
-  if (w >= 3) pool.push("heavy");
-  if (w >= 5) pool.push("jetpack");
-  if (w >= 6) pool.push("shielder");
-  if (w >= 7) pool.push("medic");
-  if (w >= 9) pool.push("tank");
-  if (w >= 7) pool.push("kamikaze");
-  if (w >= 8) pool.push("saboteur");
-  if (w >= 10) pool.push("gunner");
-  if (w >= 12) pool.push("captain");
+  const pool = tdSoloPool(w);
+  const totalW = pool.reduce((n, [, c]) => n + c, 0);
   let budget = 4 + w * 6 + w * w * 0.6;
   const list = [];
   if (w % 10 === 0) list.push("boss");
   while (budget > 0 && list.length < 80) {
-    const ty = pool[Math.floor(st.r() * pool.length)];
+    let roll = st.r() * totalW, ty = pool[0][0];
+    for (const [k, c] of pool) { roll -= c; if (roll < 0) { ty = k; break; } }
     budget -= TD.ENEMIES[ty].pts;
     list.push(ty);
   }
@@ -5533,7 +5648,7 @@ function tdApply(st, side, a) {
     if (st.money[side] < cost) return "Not enough money.";
     st.money[side] -= cost;
     const lx = a.x | 0, ly = a.y | 0;
-    st.towers.push({ id: st.nextId++, side, type: a.type, lvl: 0, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: cost, bt: T.every ? T.every[0] : 0, bi: 0 });
+    st.towers.push({ id: st.nextId++, side, type: a.type, lvl: 0, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: cost, bt: T.every ? T.every[0] : 0, bi: 0, hp: T.hp[0], maxHp: T.hp[0] });
     return null;
   }
   const tw = st.towers.find((x) => x.id === a.id && x.side === side);
@@ -5544,6 +5659,7 @@ function tdApply(st, side, a) {
     const c = tdUpCost(st, T, tw.lvl);
     if (st.money[side] < c) return "Not enough money.";
     st.money[side] -= c; tw.spent += c; tw.lvl++;
+    tw.hp += T.hp[tw.lvl] - tw.maxHp; tw.maxHp = T.hp[tw.lvl];
     return null;
   }
   if (a.a === "sell") {
@@ -5579,7 +5695,7 @@ function tdSnap(st) {
   const r1 = (v) => Math.round(v * 20);
   return JSON.stringify({
     t: Math.round(st.t * 10), m: st.money.map(Math.floor), l: st.lives, o: st.over ? 1 : 0, w: st.winner,
-    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0]),
+    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0, Math.max(1, Math.round(x.hp / x.maxHp * 100))]),
     e: st.enemies.slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
     ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
@@ -5729,6 +5845,8 @@ function tdDraw(cv, st, V, o) {
     ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText(T.icon, px, py + 1);
     for (let i = 0; i < tw.lvl; i++) { ctx.fillStyle = "#ffe000"; ctx.fillRect(px - ts * 0.38 + i * ts * 0.19, py + ts * 0.25, ts * 0.14, ts * 0.13); }
     if (T.dmg && tdBoost(st, V.towers, tw)) { ctx.fillStyle = "#ff9000"; ctx.font = "bold " + Math.floor(ts * 0.38) + "px sans-serif"; ctx.fillText("▲", px + ts * 0.28, py - ts * 0.26); }
+    const hpF = tw.hpF ?? (tw.maxHp ? tw.hp / tw.maxHp : 1);
+    if (hpF < 0.999) { ctx.fillStyle = "#000"; ctx.fillRect(px - ts * 0.42, py - ts * 0.55, ts * 0.84, 3); ctx.fillStyle = hpF > 0.5 ? "#20e020" : hpF > 0.25 ? "#e0c000" : "#e02020"; ctx.fillRect(px - ts * 0.42, py - ts * 0.55, ts * 0.84 * Math.max(0, hpF), 3); }
     if (tw.stunned) {
       ctx.fillStyle = "rgba(0,0,0,.45)"; ctx.fillRect(px - ts * 0.42, py - ts * 0.42, ts * 0.84, ts * 0.84);
       ctx.font = Math.floor(ts * 0.55) + "px sans-serif"; ctx.fillText(performance.now() % 400 < 200 ? "💫" : "⚡", px + ts * 0.25, py - ts * 0.3);
@@ -5747,9 +5865,10 @@ function tdDraw(cv, st, V, o) {
     const px = SX(e.x), py = SY(e.y), r = Math.max(2, E.r * ts);
     if (e.type === "jetpack" || e.type === "boss") {
       ctx.font = Math.floor(r * 2.3) + "px sans-serif"; ctx.fillText(TD.ICON[e.type], px, py);
-    } else if (e.type === "tank") {
+    } else if (e.type === "tank" || e.type === "bulldozer") {
       ctx.fillStyle = E.color; ctx.fillRect(px - r, py - r, r * 2, r * 2); ctx.strokeStyle = "#000"; ctx.strokeRect(px - r + 0.5, py - r + 0.5, r * 2 - 1, r * 2 - 1);
       ctx.fillStyle = "#3a2410"; ctx.fillRect(px - r * 0.3, py - r * 0.3, r * 0.6, r * 0.6);
+      if (e.type === "bulldozer") { ctx.fillStyle = "#606060"; ctx.fillRect(px - r * 1.15, py - r, r * 0.3, r * 2); }
     } else {
       ctx.fillStyle = E.color; ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = "#000"; ctx.lineWidth = 1; ctx.stroke();
@@ -5760,6 +5879,12 @@ function tdDraw(cv, st, V, o) {
       if (e.type === "saboteur") { ctx.fillStyle = "#ff8000"; ctx.fillRect(px - r * 0.35, py - r * 0.35, r * 0.7, r * 0.7); }
       if (e.type === "captain") { ctx.font = Math.floor(r * 1.3) + "px sans-serif"; ctx.fillText("⭐", px, py + 1); }
       if (e.type === "kamikaze") { ctx.fillStyle = "#ffe000"; ctx.beginPath(); ctx.arc(px, py, r * 0.45, 0, Math.PI * 2); ctx.fill(); }
+      if (e.type === "trooper") { ctx.fillStyle = "#0c3010"; ctx.fillRect(px - r * 0.7, py - r * 0.9, r * 1.4, r * 0.45); }
+      if (e.type === "runner") { ctx.fillStyle = "#804000"; ctx.fillRect(px - r * 0.8, py - r * 0.12, r * 1.6, r * 0.24); }
+      if (e.type === "rifleman") { ctx.fillStyle = "#000"; ctx.fillRect(px, py - r * 0.15, r * 1.6, r * 0.3); }
+      if (e.type === "eshotgun") { ctx.fillStyle = "#000"; ctx.fillRect(px, py - r * 0.25, r * 1.2, r * 0.5); }
+      if (e.type === "esniper") { ctx.fillStyle = "#000"; ctx.fillRect(px, py - r * 0.1, r * 2, r * 0.2); ctx.fillRect(px + r * 0.6, py - r * 0.4, r * 0.3, r * 0.3); }
+      if (e.type === "eofficer") { ctx.font = Math.floor(r * 1.3) + "px sans-serif"; ctx.fillText("📣", px, py + 1); }
       if (E.merc) {
         ctx.fillStyle = "#ffffff"; ctx.fillRect(px - r * 0.5, py - r * 0.9, r, r * 0.35);   // white cap = mercenary
         if (e.type === "m_recruit") { ctx.fillStyle = "#e0e0e0"; ctx.fillRect(px + r * 0.3, py - r * 0.1, r * 0.9, r * 0.2); }
@@ -5778,9 +5903,15 @@ function tdDraw(cv, st, V, o) {
     const a = SX(f.x1), b = SY(f.y1);
     if (f.k === "boom") { ctx.strokeStyle = "#ff9020"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); continue; }
     if (f.k === "base") { ctx.fillStyle = "rgba(255,0,0,.5)"; ctx.beginPath(); ctx.arc(a, b, ts * 0.8, 0, Math.PI * 2); ctx.fill(); continue; }
+    if (f.k === "heal") { ctx.strokeStyle = "rgba(80,255,120,.8)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); ctx.font = Math.floor(ts * 0.5) + "px sans-serif"; ctx.fillText("➕", a, b - ts * 0.6); continue; }
+    if (f.k === "openfire" || f.k === "backup") {
+      const txt = f.k === "openfire" ? "📣 OPEN FIRE!" : "📣 BACK UP!";
+      ctx.font = "bold " + Math.max(10, Math.floor(ts * 0.55)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.7); ctx.fillStyle = f.k === "openfire" ? "#ff5030" : "#ffe000"; ctx.fillText(txt, a, b - ts * 0.7);
+      continue;
+    }
     if (f.k === "hit") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("💥", a, b); continue; }
     const c = SX(f.x2), d = SY(f.y2);
-    ctx.strokeStyle = { gunner: "#ffa040", gun: "#ffff60", sniper: "#ffffff", shotgun: "#ffd080", rifle: "#ffff90", riot: "#c0d0ff", knife: "#e0e0e0", throw: "#a06030", zap: "#d0a0ff" }[f.k] || "#fff";
+    ctx.strokeStyle = { gunner: "#ffa040", gun: "#ffff60", sniper: "#ffffff", shotgun: "#ffd080", rifle: "#ffff90", riot: "#c0d0ff", knife: "#e0e0e0", throw: "#a06030", zap: "#d0a0ff", gunner: "#ffa040" }[f.k] || "#fff";
     ctx.lineWidth = f.k === "sniper" || f.k === "riot" || f.k === "knife" ? 2 : 1;
     ctx.beginPath(); ctx.moveTo(a, b);
     if (f.k === "zap") { const n = 4; for (let i = 1; i < n; i++) ctx.lineTo(a + (c - a) * i / n + (Math.random() - 0.5) * ts * 0.4, b + (d - b) * i / n + (Math.random() - 0.5) * ts * 0.4); }
@@ -5862,6 +5993,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     for (const [ty, b] of Object.entries(tbtn)) { b.classList.toggle("on", ui.buildType === ty); b.disabled = money < tdCost(st, TD.TOWERS[ty]); b.hidden = st.pvp && ty === "money"; }
     info.replaceChildren();
     const tw = ui.selId != null ? V.towers.find((x) => x.id === ui.selId) : null;
+    if (!tw && ui.twWin?.w.isConnected) { const w_ = ui.twWin; ui.twWin = null; w_.onClosed = null; w_.close(); }
     if (tw) {
       const T = TD.TOWERS[tw.type];
       const mine = canAct && tw.side === side;
@@ -5872,22 +6004,13 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
         : T.every ? "Sends " + T.units[lv].map((u) => TD.ICON[u] + " " + TD.ENEMIES[u].name).join(", ") + " (one every " + T.every[lv] + " s" + (T.hpUp[lv] > 1 ? ", HP x" + T.hpUp[lv] : "") + ")" + (st.pvp ? " to attack the other base" : " as allies")
         : "Income: +" + T.income[lv] + " 💰 every wave";
       info.append(el("b", null, T.icon + " " + T.name + " (level " + (lv + 1) + "/" + (tdMaxLvl(T) + 1) + ")"), el("span", "dim", "  " + stats));
-      if (mine) {
-        if (lv < tdMaxLvl(T)) {
-          const uc = tdUpCost(st, T, lv);
-          const u = el("button", null, "⬆ Upgrade (💰" + uc + ")"); u.type = "button"; u.disabled = money < uc;
-          u.onclick = () => send({ a: "up", id: tw.id });
-          info.append(u);
-        }
-        const spent = tw.spent ?? (tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lv).reduce((a, b) => a + b, 0));
-        const s = el("button", null, "Sell (+💰" + Math.floor(spent * 0.7) + ")"); s.type = "button";
-        s.onclick = () => { send({ a: "sell", id: tw.id }); ui.selId = null; };
-        info.append(s);
-      }
+      const det = el("button", null, "🔎 Details / upgrade"); det.type = "button"; det.onclick = () => { ui.twClosedFor = null; openTowerWin(tw); }; info.append(det);
+      if (ui.twWin?.w.isConnected) ui.twWin.show(tw, mine, money);
+      else if (ui.twClosedFor !== tw.id) openTowerWin(tw);
     } else if (ui.buildType) {
       const T = TD.TOWERS[ui.buildType];
       info.append(el("b", null, T.icon + " " + T.name + " 💰" + tdCost(st, T)), el("span", "dim", "  " + T.desc + "  Click a green tile to build. Right-click to stop."));
-    } else if (canAct) info.append(el("span", "dim", "Pick a tower below, then click on the grass. Click a tower to upgrade or sell it."));
+    } else if (canAct) info.append(el("span", "dim", "Pick a tower below, then click on the grass. Click a tower to see its stats and upgrade it."));
     else info.append(el("span", "dim", "👀 You are watching."));
     if (ui.sqQueue) {
       const { c, t, n, e } = squadCost();
@@ -5920,7 +6043,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     if (!c) { ui.selId = null; refreshUI(); return; }
     ui.hover = c;
     const tw = ui.V.towers.find((x) => x.side === c.side && x.lx === c.x && x.ly === c.y);
-    if (tw) { ui.selId = tw.id; ui.buildType = null; refreshUI(); return; }
+    if (tw) { ui.selId = tw.id; ui.buildType = null; ui.twClosedFor = null; refreshUI(); return; }
     if (canAct && ui.buildType && c.side === side) {
       if (!tdCanBuild(st, side, c.x, c.y) && !st.pvp) { toast("You can't build on the path."); return; }
       send({ a: "build", type: ui.buildType, x: c.x, y: c.y });
@@ -5939,7 +6062,64 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
   }
   raf = requestAnimationFrame(frame);
   let uiT = setInterval(refreshUI, 250);
-  const prevClosed = () => { cancelAnimationFrame(raf); clearInterval(uiT); };
+  // tower window: stats, DPS, what the next level gives, upgrade / sell
+  function openTowerWin(tw0) {
+    const tw_ = openWindow("Tower", "🏰", { key: key + "-tower" });
+    tw_.w.classList.add("tdtwwin");
+    const gr = win.w.getBoundingClientRect();
+    if (!tw_.placed && innerWidth > 760) { tw_.placed = true; const out = gr.right + 330 < innerWidth; tw_.w.style.left = (out ? gr.right + 6 : Math.max(8, gr.right - 336)) + "px"; tw_.w.style.top = Math.max(8, gr.top + (out ? 0 : 130)) + "px"; }
+    let sig = "";
+    tw_.onClosed = () => { if (ui.selId != null) ui.twClosedFor = ui.selId; ui.twWin = null; };
+    tw_.show = (tw, mine, money) => {
+      const T = TD.TOWERS[tw.type], lv = tw.lvl, max = tdMaxLvl(T);
+      const bo = T.dmg ? tdBoost(st, ui.V.towers, tw) : 0;
+      const uc = lv < max ? tdUpCost(st, T, lv) : 0;
+      const spent = tw.spent ?? (tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lv).reduce((a, b) => a + b, 0));
+      const k = [tw.id, lv, bo, mine, lv < max && money >= uc, tw.stunned, Math.round((tw.hp ?? (tw.hpF ?? 1) * T.hp[lv]) * 10)].join("|");
+      if (k === sig) return;
+      sig = k;
+      tw_.setTitle(T.name + " - level " + (lv + 1) + "/" + (max + 1));
+      const cur = tdTowerStats(st, T, lv, bo), nxt = lv < max ? tdTowerStats(st, T, lv + 1, bo) : null;
+      const box = el("div", "tdtw");
+      const head = el("div", "tdtwh");
+      head.append(el("span", "ti", T.icon), el("div", null));
+      head.lastChild.append(el("b", null, T.name), el("div", "tdpips", "★".repeat(lv + 1) + "☆".repeat(max - lv)));
+      box.append(head, el("div", "hint", T.desc));
+      if (tw.stunned) box.append(el("div", "tdstun", "💫 Stunned right now!"));
+      const hpNow = tw.hp ?? (tw.hpF ?? 1) * T.hp[lv], hpF = hpNow / T.hp[lv];
+      const hb = el("div", "pvpbar sunken tdhpbar"); const hf = el("div", "fill"); hf.style.width = Math.max(0, hpF * 100) + "%"; hf.style.background = hpF > 0.5 ? "#20b020" : hpF > 0.25 ? "#d0a000" : "#d02020"; hb.append(hf);
+      box.append(el("div", null, "❤ HP " + (Math.round(hpNow * 10) / 10) + " / " + T.hp[lv]), hb);
+      if (cur.dps != null) box.append(el("div", "tddps", "⚔ DPS: " + cur.dps));
+      const tbl = el("table", "tdtwt sunken");
+      const hr = el("tr"); hr.append(el("th", null, ""), el("th", null, "Now"), el("th", null, nxt ? "Level " + (lv + 2) : "")); tbl.append(hr);
+      cur.rows.forEach(([lab, val, num], i) => {
+        const r = el("tr");
+        const n = nxt && nxt.rows[i];
+        const up = n && String(n[1]) !== String(val);
+        const c3 = el("td", up ? "up" : "same", nxt ? (up ? "→ " + n[1] : "=") : "");
+        r.append(el("td", "lab", lab), el("td", null, String(val)), c3);
+        tbl.append(r);
+      });
+      box.append(tbl);
+      if (nxt) {
+        const gains = cur.rows.map((r, i) => [r, nxt.rows[i]]).filter(([a, b]) => b && String(a[1]) !== String(b[1])).map(([a, b]) => a[0] + " " + a[1] + " → " + b[1]);
+        box.append(el("div", "tdnext", "⬆ Next upgrade (💰" + uc + "): " + (gains.length ? gains.join(" · ") : "no change")));
+      } else box.append(el("div", "tdnext max", "★ MAX LEVEL"));
+      const btns = el("div", "wbuttons");
+      if (mine) {
+        if (nxt) { const u = el("button", "msgo", "⬆ Upgrade (💰" + uc + ")"); u.type = "button"; u.disabled = money < uc; u.onclick = () => send({ a: "up", id: tw.id }); btns.append(u); }
+        const sl = el("button", null, "Sell (+💰" + Math.floor(spent * 0.7) + ")"); sl.type = "button";
+        sl.onclick = () => { send({ a: "sell", id: tw.id }); ui.selId = null; tw_.close(); };
+        btns.append(sl);
+      }
+      const cl = el("button", null, "Close"); cl.type = "button"; cl.onclick = () => tw_.close(); btns.append(cl);
+      box.append(btns);
+      tw_.content.replaceChildren(box);
+    };
+    ui.twWin = tw_;
+    tw_.show(tw0, canAct && tw0.side === side, Math.floor(ui.V?.money[side] || 0));
+  }
+  const prevClosed = () => { cancelAnimationFrame(raf); clearInterval(uiT); ui.twWin?.close(); };
   win.onClosed = prevClosed;
   return { win, top, ui, refreshUI, cv };
 }
@@ -5986,6 +6166,23 @@ function openTdLoadout() {
   refresh();
 }
 
+function tdEnemyWin(w) {
+  const win = openWindow("Enemies - wave " + w, "👾", { key: "td-enemies" });
+  const pool = new Map(tdSoloPool(w));
+  const total = [...pool.values()].reduce((a, b) => a + b, 0);
+  const t = el("table", "tdtwt tdenw sunken");
+  const hr = el("tr"); ["", "Enemy", "HP", "Spawn wave", "Stop wave", "Chance", "Now"].forEach((h) => hr.append(el("th", null, h))); t.append(hr);
+  for (const [k, E] of Object.entries(TD.ENEMIES)) {
+    if (!E.solo) continue;
+    const [a, b, c] = E.solo, now = pool.get(k);
+    const r = el("tr"); if (!now) r.style.color = "#999";
+    r.append(el("td", null, TD.ICON[k]), el("td", null, E.name), el("td", null, String(E.hp)), el("td", null, "wave " + a), el("td", null, b ? "wave " + b : "never"), el("td", null, String(c)), el("td", null, now ? Math.round(now / total * 100) + "%" : "-"));
+    r.title = E.desc || "";
+    t.append(r);
+  }
+  win.content.append(el("div", "hint", "Wave " + w + ": what each spawned enemy can be. Chance = weight (higher = more often). 👑 Boss comes every 10 waves. HP goes up every wave."), t);
+}
+
 /* ----- SOLO ----- */
 function openTdSolo() {
   const key = "td-solo";
@@ -6000,7 +6197,9 @@ function openTdSolo() {
   const spB = el("button", null, "⏩ x1"); spB.type = "button";
   const pB = el("button", null, "⏸"); pB.type = "button"; pB.title = "Pause";
   const newB = el("button", null, "🗺 New map"); newB.type = "button";
-  top.append(stats, nextB, spB, pB, newB);
+  const enB = el("button", null, "👾 Enemies"); enB.type = "button"; enB.title = "Which enemies can come in the next wave";
+  enB.onclick = () => tdEnemyWin(st.waveOn || st.queue.length ? st.wave : st.wave + 1);
+  top.append(stats, nextB, spB, pB, enB, newB);
   nextB.onclick = () => {
     const before = tdOpenCount(st, st.wave);
     if (!tdStartWave(st)) { toast("Wait until all the enemies of this wave are out."); return; }
@@ -6254,7 +6453,7 @@ function openTd(gid) {
     const k = Math.min(1, (performance.now() - snapAt) / 200);
     return {
       money: snap.m, lives: snap.l, eco: snap.ec || [0, 0], sq: snap.sq || [[], []], it: snap.it, at: snap.at || [0, 0],
-      towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn })),
+      towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn, hp]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn, hpF: (hp ?? 100) / 100 })),
       enemies: snap.e.map(([id, ti, x, y, hp, slow, sd]) => {
         const c = curPos.get(id), p = prevPos.get(id) || c;
         return { id, type: TD.ETYPES[ti], x: p[0] + (c[0] - p[0]) * k, y: p[1] + (c[1] - p[1]) * k, hp: hp / 100, slow: !!slow, side: sd };
@@ -6300,7 +6499,7 @@ function tdRestore(st, s) {
   try {
     const v = JSON.parse(s);
     st.t = (v.t || 0) / 10; st.money = v.m; st.lives = v.l; if (v.ec) st.eco = v.ec;
-    st.towers = v.tw.map(([id, side, ti, lvl, lx, ly]) => { const type = TD.TTYPES[ti], T = TD.TOWERS[type]; return { id, side, type, lvl, lx, ly, wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lvl).reduce((a, b) => a + b, 0) }; });
+    st.towers = v.tw.map(([id, side, ti, lvl, lx, ly, , hpp]) => { const type = TD.TTYPES[ti], T = TD.TOWERS[type]; return { id, side, type, lvl, lx, ly, hp: T.hp[lvl] * (hpp ?? 100) / 100, maxHp: T.hp[lvl], wx: tdWX(st, side, lx) + 0.5, wy: ly + 0.5, cd: 0, spent: tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lvl).reduce((a, b) => a + b, 0) }; });
     st.nextId = Math.max(1, ...st.towers.map((x) => x.id), ...v.e.map((e) => e[0])) + 1;
   } catch {}
 }
