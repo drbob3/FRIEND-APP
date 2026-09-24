@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UtFobm2lZ2ZhxRIBaFLeTfLcLhopAnb2Qf0eezCo96c=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Vmu3RdBsM3Z+/4s56LNMCkCaWW7PVQV4ARMPMkLJgaM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -931,7 +931,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.7";
+const APP_VERSION = "10.8";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -1416,7 +1416,7 @@ $("forgotBtn").addEventListener("click", async (e) => {
     return;
   }
   if (!USER_RE.test(u)) { $("liErr").textContent = "Type your username (or your email) above first, then click \"I forgot my password\"."; $("liUser").focus(); return; }
-  const ok = await dialog({ title: "🔑 I forgot my password", message: "Send a password reset for \"" + u + "\"?\n\n(If you added your own email in Settings, type your EMAIL above instead, and the reset comes straight to you.)\n\nThe reset email goes to the site's head admin. The admin will send you the link here (in the help messages, on this device). You click it and choose a new password yourself.", okText: "Send the reset" });
+  const ok = await dialog({ title: "🔑 I forgot my password", message: "Send a password reset for \"" + u + "\"?\n\n(If you added your own email in Settings, type your EMAIL above instead, and the reset comes straight to you.)\n\nThe reset email goes to the site's head admin. The admin will send you the link here (in the help messages, on this device). You click it and choose a new password yourself.\n\n⚠ Accounts made before v10.6 that were never moved can't get the email. If the admin gets nothing, log in once with your password (that moves your account) or ask the admin.", okText: "Send the reset" });
   if (!ok) return;
   try {
     await A.sendPasswordResetEmail(auth, loginEmail(u));
@@ -1509,7 +1509,11 @@ $("loginForm").addEventListener("submit", async (e) => {
     const tries = byMail ? [u] : [savedEmail(u), loginEmail(u), oldEmail(u)].filter(Boolean);
     let last = null;
     for (const mail of tries) {
-      try { await A.signInWithEmailAndPassword(auth, mail, pw); last = null; break; }
+      try {
+        await A.signInWithEmailAndPassword(auth, mail, pw); last = null;
+        if (mail === oldEmail(u) && A.verifyBeforeUpdateEmail) moveOldAccount(auth.currentUser, u);
+        break;
+      }
       catch (e1) {
         last = e1;
         if (!/invalid-credential|user-not-found|wrong-password|invalid-email/.test(e1?.code || "")) throw e1;
@@ -1762,13 +1766,21 @@ function openSupportThread(uid) {
     try { await D.set(R("support/" + uid), null); win.close(); } catch (e) { showBanner("Can't delete: " + authError(e)); }
   };
 }
+// Old accounts (made before v10.6) log in with <name>@friend-app-cc816.firebaseapp.com: nobody can receive a reset there.
+// Moving them to hangoutchatadmin+<name>@gmail.com needs a FRESH login (just typed the password), so it runs at log in.
+const isOldAccount = (user) => !!(user && !user.isAnonymous && user.email && user.email.endsWith("@" + EMAIL_DOMAIN));
+async function moveOldAccount(user, name) {
+  try {
+    await A.verifyBeforeUpdateEmail(user, loginEmail(name));
+    store("mail-mig-" + user.uid, String(Date.now()));
+    toast("📧 Your account is being moved to the new email system (the admin confirms it).");
+  } catch (e) { logError("Email move: " + (e?.code || e?.message || e)); }
+}
 function migrateLoginEmail() {
   const u = auth.currentUser;
-  if (!u || u.isAnonymous || !u.email || !u.email.endsWith("@" + EMAIL_DOMAIN) || !A.verifyBeforeUpdateEmail) return;
-  const k = "mail-mig-" + u.uid;
-  if (store(k)) return;
-  store(k, "1");
-  A.verifyBeforeUpdateEmail(u, loginEmail(S.me.name)).catch((e) => { store(k, ""); logError("Email move: " + e.message); });
+  if (!isOldAccount(u) || !S.me) return;
+  if (store("mail-mig-" + u.uid)) { showBanner("Your account move is waiting: the head admin must click the \"verify\" link in " + RESET_BOX + "@gmail.com (check Spam). Then log in again."); return; }
+  showBanner("Your account uses the OLD login: \"I forgot my password\" can't work for you yet. Fix: ⚙ Settings → 📧 My email → \"Move my account\" (or log out and log in again).");
 }
 function syncOwnEmail() {
   const u = auth.currentUser;
@@ -2585,6 +2597,21 @@ function emailBox(u) {
     } catch (e) { msg.textContent = /already-in-use/.test(e?.code || "") ? "This email is already used by another account." : authError(e); }
   };
   fs.append(now1, mail, pw, msg, go);
+  if (isOldAccount(user)) {
+    const old = el("div", "hint", "⚠ Your account still uses the OLD login (made before v10.6), so \"I forgot my password\" can't reach anyone. Type your password above, then click:");
+    old.style.color = "#a00000";
+    const mv = el("button", null, "📧 Move my account (resets go to the head admin)"); mv.type = "button";
+    mv.onclick = async () => {
+      if (!pw.value) { msg.style.color = "#a00000"; msg.textContent = "Type your password above first."; pw.focus(); return; }
+      if (!(await reauth())) return;
+      try {
+        await A.verifyBeforeUpdateEmail(user, loginEmail(u.name));
+        msg.style.color = "#006000"; msg.textContent = "📨 Sent! The head admin must click the link in " + RESET_BOX + "@gmail.com. After that, log in again with your username.";
+        pw.value = "";
+      } catch (e) { msg.style.color = "#a00000"; msg.textContent = authError(e); }
+    };
+    fs.append(old, mv);
+  }
   if (mine) {
     const rm = el("button", null, "Remove my email"); rm.type = "button"; rm.style.marginLeft = "6px";
     rm.onclick = async () => {
