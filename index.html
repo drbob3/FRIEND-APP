@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-8Wtd+QzwmTulOuTiTVtUDo5Ljs41lAp6V3Hc5t7lOG8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-g2+PZ8kb+JlNY0mACPo69SiFtOJOAsaBnxLEqpqwNxI=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -970,7 +970,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.28";
+const APP_VERSION = "10.30";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5145,11 +5145,11 @@ const TD = {
     grenade:  { name: "Grenader", icon: "🧨", color: "#5a3a22", hp: [10, 12, 14, 16, 19], cost: 80, up: [70, 110, 160, 220], range: [2.3, 2.5, 2.7, 2.9, 3.1], dmg: [2, 3, 3, 4, 6], splash: [1.1, 1.2, 1.3, 1.5, 1.7], rate: [1.6, 1.5, 1.4, 1.3, 1.2], ground: true, desc: "Throws grenades that blow up groups. Ground only." },
     officer:  { name: "Officer", icon: "📣", color: "#b08a10", hp: [15, 18, 22], cost: 120, up: [100, 180], range: [2.3, 2.6, 3], boost: [1, 1, 2], desc: "Doesn't shoot. Towers around him hit harder (+damage on every hit). Max level 3." },
     riot:     { name: "Riot Guard", icon: "🛡️", color: "#304060", hp: [20, 25, 30, 36, 45], cost: 70, up: [60, 100, 140, 200], range: [1.2, 1.3, 1.4, 1.5, 1.6], dmg: [3, 4, 5, 7, 9], rate: [0.9, 0.8, 0.8, 0.7, 0.6], stunRes: [0.5, 0.4, 0.3, 0.2, 0], ground: true, desc: "Melee: build it right next to the road. Hits hard up close. Stun resistant (Gun Man / Saboteur stuns are shorter, level 5 = immune)." },
-    barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", hp: [25, 30, 35, 40, 45, 50, 55, 60], cost: 150, up: [250, 400, 600, 850, 1150, 1500, 2000], pvpCost: 450, pvpUp: [750, 1200, 1800, 2550, 3450, 4500, 6000],
+    barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", hp: [25, 30, 35, 40, 45, 50, 55, 60], cost: 150, maxCount: [3, 2], up: [250, 400, 600, 850, 1150, 1500, 2000], pvpCost: 450, pvpUp: [750, 1200, 1800, 2550, 3450, 4500, 6000],
       every: [12, 11, 10, 9, 8, 7.5, 7, 6], hpUp: [1, 1, 1, 1, 1, 1, 1, 1],
       units: [["m_recruit"], ["m_recruit", "m_gun"], ["m_recruit", "m_gun", "m_demo"], ["m_recruit", "m_gun", "m_demo", "m_recon"], ["m_recruit", "m_gun", "m_demo", "m_recon", "m_shotgun"],
         ["m_riot", "m_rifle", "m_demo", "m_recon", "m_shotgun"], ["m_riot", "m_rifle", "m_rpg", "m_sniper", "m_shotgun"], ["m_riot", "m_rifle", "m_rpg", "m_sniper", "m_bulldozer"]],
-      desc: "Doesn't shoot. Sends mercenaries by itself (8 levels). New units at levels 2-5 (Gun Man, Demo, Recon, Shotgunner). Levels 6-8 upgrade them: Recruit → Riot Guard, Gun Man → Rifleman, Demo → RPG, Recon → Sniper, Shotgunner → Bulldozer. Solo: they fight the enemies. PvP: they attack the other base." },
+      desc: "Doesn't shoot. Max 3 in solo, 2 in PvP. Sends mercenaries by itself (8 levels). New units at levels 2-5 (Gun Man, Demo, Recon, Shotgunner). Levels 6-8 upgrade them: Recruit → Riot Guard, Gun Man → Rifleman, Demo → RPG, Recon → Sniper, Shotgunner → Bulldozer. Solo: they fight the enemies. PvP: they attack the other base." },
     medic:    { name: "Medic", icon: "⛑️", color: "#e8e8e8", hp: [10, 12, 14, 16, 18], cost: 90, up: [70, 110, 150, 200], healGun: { heal: [1, 1, 2, 2, 3], rate: [2, 1.8, 1.6, 1.4, 1.2], range: [2.5, 2.7, 3, 3.2, 3.5] }, desc: "Can't attack. Shoots heal darts at hurt towers around (the most hurt first)." },
     trooperT: { name: "Trooper", icon: "💂", color: "#3a4a2a", hp: [28, 32, 38], cost: 0, up: [150, 250], evolved: true, range: [3.4, 3.6, 3.8], dmg: [3, 3, 4], burst: [6, 7, 8], rate: [1.2, 1.1, 1], ground: true, desc: "Evolved Recruit Tower (Officer path): SMG bursts of 6 shots. Ground only." },
     paramedic:{ name: "Paramedic", icon: "🚑", color: "#c04040", hp: [24, 28, 32], cost: 0, up: [150, 250], evolved: true, range: [3.3, 3.5, 3.7], dmg: [3, 3, 4], rate: [0.5, 0.45, 0.4], ground: true, healGun: { heal: [1, 2, 2], rate: [1, 0.9, 0.8], range: [3, 3.3, 3.6] }, desc: "Evolved Recruit Tower (Medic path): shoots enemies, and when no enemy is in range it shoots heal darts at hurt towers." },
@@ -6149,6 +6149,7 @@ function tdApply(st, side, a) {
     if (!T || T.evolved || (st.pvp && a.type === "money")) return "?";
     if (!tdCanBuild(st, side, a.x | 0, a.y | 0, a.type)) return st.map.cliffs.has((a.x | 0) + "," + (a.y | 0)) ? "Only Rifleman and Sniper can go on cliffs." : "You can't build here.";
     const cost = tdCost(st, T);
+    if (T.maxCount) { const mx = st.pvp ? T.maxCount[1] : T.maxCount[0]; if (st.towers.filter((x) => x.side === side && x.type === a.type && !x.dead).length >= mx) return "Max " + mx + " " + T.name + (mx > 1 && !T.name.endsWith("s") ? "s" : "") + (st.pvp ? " in PvP." : " in solo."); }
     if (st.money[side] < cost) return "Not enough money.";
     st.money[side] -= cost;
     const lx = a.x | 0, ly = a.y | 0;
@@ -6565,7 +6566,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     const V = ui.V;
     if (!V) return;
     const money = Math.floor(V.money[side] || 0);
-    for (const [ty, b] of Object.entries(tbtn)) { b.classList.toggle("on", ui.buildType === ty); b.disabled = money < tdCost(st, TD.TOWERS[ty]); b.hidden = st.pvp && ty === "money"; }
+    for (const [ty, b] of Object.entries(tbtn)) { b.classList.toggle("on", ui.buildType === ty); const T_ = TD.TOWERS[ty], mx_ = T_.maxCount ? (st.pvp ? T_.maxCount[1] : T_.maxCount[0]) : 0; b.disabled = money < tdCost(st, T_) || (mx_ && V.towers.filter((x) => x.side === side && x.type === ty).length >= mx_); b.hidden = st.pvp && ty === "money"; }
     info.replaceChildren();
     const tw = ui.selId != null ? V.towers.find((x) => x.id === ui.selId) : null;
     if (!tw && ui.twWin?.w.isConnected) { const w_ = ui.twWin; ui.twWin = null; w_.onClosed = null; w_.close(); }
@@ -6835,7 +6836,12 @@ function openTdSolo() {
   const newB = el("button", null, "🗺 New map"); newB.type = "button";
   const enB = el("button", null, "👾 Enemies"); enB.type = "button"; enB.title = "Which enemies can come in the next wave";
   enB.onclick = () => tdEnemyWin(st.waveOn || st.queue.length ? st.wave : st.wave + 1);
-  top.append(stats, nextB, spB, pB, enB, newB);
+  let auto = store("td-auto") === "1", autoT = 0;
+  const auB = el("button", null, ""); auB.type = "button"; auB.title = "When all the enemies of a wave are dead, the next wave starts by itself (2 s later)";
+  const auTxt = () => { auB.textContent = auto ? "🔁 Auto: ON" : "🔁 Auto: off"; auB.classList.toggle("on", auto); };
+  auB.onclick = () => { auto = !auto; store("td-auto", auto ? "1" : "0"); autoT = 0; auTxt(); };
+  auTxt();
+  top.append(stats, nextB, auB, spB, pB, enB, newB);
   nextB.onclick = () => {
     if (!tdStartWave(st)) { toast("Wait until all the enemies of this wave are out."); return; }
     if (st.newPaths) toast("🛣 New path open! It stays open from now on.");
@@ -6860,6 +6866,11 @@ function openTdSolo() {
       acc += dt * speed;
       let n = 0;
       while (acc >= TD.STEP && n++ < 120) { tdStep(st, TD.STEP); acc -= TD.STEP; }
+      // auto start: all enemies of the wave are gone -> next wave after 2 s
+      if (auto && st.wave > 0 && !st.waveOn && !st.queue.length && !st.over) {
+        autoT += dt * speed;
+        if (autoT >= 2) { autoT = 0; if (tdStartWave(st) && st.newPaths) toast("🛣 New path open! It stays open from now on."); }
+      } else autoT = 0;
     }
     stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.map.routes.length + (tdNextPathIn(st, st.waveOn ? st.wave : st.wave + 1) ? " (next in " + tdNextPathIn(st, st.waveOn ? st.wave : st.wave + 1) + ")" : "") + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
     nextB.textContent = st.wave === 0 ? "▶ Start wave 1" : st.waveOn ? "▶ Call wave " + (st.wave + 1) + " early (+💰)" : "▶ Wave " + (st.wave + 1);
