@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-uTIT7LQhRc5bPECwEg3PYfGApOqpBDd2+OIqsNhLdhI=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Ty22ZC7/qd+bl+PMBU808EigrZk0G4WSgK+RN1BSWqY=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -965,7 +965,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.23";
+const APP_VERSION = "10.24";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5421,7 +5421,7 @@ function tdNewState({ seed, pvp, linked }) {
   if (!pvp) {
     st.unlock = map.routes.map((_, i) => i);
     for (let i = st.unlock.length - 1; i > 0; i--) { const j = Math.floor(st.r() * (i + 1)); [st.unlock[i], st.unlock[j]] = [st.unlock[j], st.unlock[i]]; }
-    st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1);
+    st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1); st.next = tdPlanWave(st, 1);
   }
   return st;
 }
@@ -5511,12 +5511,12 @@ function tdCanBuild(st, side, x, y, type) {
   return !st.towers.some((t) => t.side === side && t.lx === x && t.ly === y);
 }
 // spawn an enemy that attacks `side`'s base. from = sender side (PvP, starts in the sender's base) or -1 (solo waves)
-function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
+function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1, cells = null) {
   const E = TD.ENEMIES[type];
   let start, path;
   if (!st.pvp) {
     const rt = st.map.routes[routeIdx >= 0 ? routeIdx : st.plan[0]];
-    const pts = rt.cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
+    const pts = (cells || rt.cells).map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
     start = [st.W + 0.2, st.map.entries[rt.entry].y + 0.5]; path = E.air ? tdFlyRoute(st, side, rt.cells[0][0], rt.cells[0][1]) : pts;
   } else {
     const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : tdPickRoute(st, from);
@@ -5639,7 +5639,7 @@ function tdStep(st, dt) {
   st.t += dt;
   const t = st.t;
   // solo wave queue
-  while (st.queue.length && st.queue[0].at <= t) { const q = st.queue.shift(); tdSpawn(st, q.type, 0, -1, 0, q.hp, q.route); }
+  while (st.queue.length && st.queue[0].at <= t) { const q = st.queue.shift(); tdSpawn(st, q.type, 0, -1, 0, q.hp, q.route, q.cells); }
   // PvP: squads + free units from the base + eco income
   if (st.pvp) {
     for (const side of [0, 1]) {
@@ -5992,19 +5992,41 @@ function tdSoloPool(w) {
 }
 // most enemies of one type in a single group (solo)
 function tdGroupMax(ty, w) {
-  if (["captain", "eofficer", "medic", "shielder", "saboteur", "kamikaze"].includes(ty)) return 1;
+  if (["captain", "eofficer", "medic", "shielder", "saboteur", "kamikaze", "tank"].includes(ty)) return 1;
   if (ty === "jetpack") return 3 + Math.floor(Math.max(0, w - TD.ENEMIES.jetpack.solo[0]) / 2);
+  // combat units (enemies with a gun): 1 when they first come, +1 every 2 waves
+  if (TD.ENEMIES[ty].gun) return 1 + Math.floor(Math.max(0, w - TD.ENEMIES[ty].solo[0]) / 2);
   return 99;
 }
-function tdStartWave(st) {
-  if (st.pvp || st.over || st.queue.length) return false;
-  const early = st.waveOn;
-  st.wave++;
-  const w = st.wave;
+// a group's road: starts on one path, and at a crossing with another OPEN path it may switch (15% per crossing, max 2 switches)
+function tdBuildPath(st, r0, open) {
+  const R = st.map.routes;
+  if (!st.map.cross) {
+    st.map.cross = new Map();
+    R.forEach((rt, ri) => rt.cells.forEach(([x, y], j) => { const k = x + "," + y; if (!st.map.cross.has(k)) st.map.cross.set(k, []); st.map.cross.get(k).push([ri, j]); }));
+  }
+  const out = [], seen = new Set(), used = [r0];
+  let ri = r0, i = 0, sw = 0;
+  while (i < R[ri].cells.length) {
+    const c = R[ri].cells[i], k = c[0] + "," + c[1];
+    out.push(c); seen.add(k);
+    if (sw < 2 && i > 0 && i < R[ri].cells.length - 2) {
+      const nx = R[ri].cells[i + 1];
+      const opts = (st.map.cross.get(k) || []).filter(([r2, j]) => r2 !== ri && open.includes(r2) && j < R[r2].cells.length - 2
+        && (R[r2].cells[j + 1][0] !== nx[0] || R[r2].cells[j + 1][1] !== nx[1])
+        && !R[r2].cells.slice(j + 1).some(([x, y]) => seen.has(x + "," + y)));
+      if (opts.length && st.r() < 0.15) { const [r2, j] = opts[Math.floor(st.r() * opts.length)]; ri = r2; i = j + 1; sw++; used.push(r2); continue; }
+    }
+    i++;
+  }
+  return { cells: out, routes: used };
+}
+// plan wave w in advance: groups, their paths (with switches) and spawn times
+function tdPlanWave(st, w) {
   const hpMult = 1 + 0.15 * (w - 1) + 0.012 * (w - 1) * (w - 1);
   const pool = tdSoloPool(w);
   const totalW = pool.reduce((n, [, c]) => n + c, 0);
-  // a wave = groups. A group = one enemy type, spawned X times with a small gap, on one path.
+  // a wave = groups. A group = one enemy type, spawned X times with the same gap, on one road.
   // Several groups run at the same time (max = open paths + 1), each on its own path when possible.
   let budget = 4 + w * 6 + w * w * 0.6;
   const groups = [];
@@ -6020,15 +6042,13 @@ function tdStartWave(st) {
     groups.push({ type: ty, n });
   }
   const gap = Math.max(0.25, 1.8 * Math.pow(0.93, w - 1));   // time between two enemies of a group: long early, shorter later
-  const open = st.plan;
-  st.newPaths = open.filter((ri) => !st.used.has(ri)).length && w > 1;
-  st.cur = open; open.forEach((ri) => st.used.add(ri));
-  st.plan = tdPickPlan(st, w + 1);
-  const lanes = new Array(Math.min(groups.length, open.length + 1)).fill(st.t + 0.5);
+  const open = tdPickPlan(st, w);
+  const lanes = new Array(Math.min(groups.length, open.length + 1)).fill(0);
   const busy = new Map();   // path -> time it is free again
   const onEntry = [];       // [entry, type, start, end]: 2 groups of the same type never share an entry at the same time
   const clash = (ri, ty, a, b) => onEntry.some(([en, t2, s2, e2]) => en === st.map.routes[ri].entry && t2 === ty && a < e2 && b > s2);
   const pause = Math.max(1, 3 - w * 0.12);   // pause between two groups of a lane (longer early)
+  const items = [], paths = [];
   groups.forEach((g) => {
     let li = 0; for (let i = 1; i < lanes.length; i++) if (lanes[i] < lanes[li]) li = i;
     let start = lanes[li];
@@ -6043,13 +6063,32 @@ function tdStartWave(st) {
     const free = ok.filter((ri) => (busy.get(ri) || 0) <= start);
     const choice = free.length ? free : ok;
     const route = choice[Math.floor(st.r() * choice.length)];
-    for (let k = 0; k < g.n; k++) st.queue.push({ at: start + k * (g.type === "boss" ? 2 : gap), type: g.type, route, hp: hpMult });
+    const P = tdBuildPath(st, route, open);
+    paths.push(P);
+    for (let k = 0; k < g.n; k++) items.push({ rel: start + k * (g.type === "boss" ? 2 : gap), type: g.type, route, cells: P.cells, hp: hpMult });
     const end = start + len;
     busy.set(route, end);
     onEntry.push([st.map.routes[route].entry, g.type, start, end]);
     lanes[li] = end + pause + st.r() * 1.5;
   });
+  // unique roads for the preview arrows
+  const uniq = new Map();
+  for (const P of paths) { const k = P.cells.map((c) => c.join(",")).join(";"); if (!uniq.has(k)) uniq.set(k, P); }
+  return { w, items, paths: [...uniq.values()] };
+}
+function tdStartWave(st) {
+  if (st.pvp || st.over || st.queue.length) return false;
+  const early = st.waveOn;
+  st.wave++;
+  const w = st.wave;
+  if (!st.next || st.next.w !== w) st.next = tdPlanWave(st, w);
+  const open = st.plan;
+  st.newPaths = open.filter((ri) => !st.used.has(ri)).length && w > 1;
+  st.cur = open; open.forEach((ri) => st.used.add(ri));
+  for (const it of st.next.items) st.queue.push({ at: st.t + 0.5 + it.rel, type: it.type, route: it.route, cells: it.cells, hp: it.hp });
   st.queue.sort((a, b) => a.at - b.at);
+  st.plan = tdPickPlan(st, w + 1);
+  st.next = tdPlanWave(st, w + 1);
   st.waveOn = true;
   if (early) st.money[0] += 10 + w;
   return true;
@@ -6273,15 +6312,17 @@ function tdDraw(cv, st, V, o) {
   if (openR && !st.waveOn && !st.over) {
     const isNew = (ri) => st.wave > 0 && !st.used.has(ri);
     const tnow = performance.now() / 1000;
-    for (const ri of openR) {
-      const pts = st.map.routes[ri].cells.map(([x, y]) => [x + 0.5, y + 0.5]);
+    const roads = st.next && st.next.w === st.wave + 1 ? st.next.paths : openR.map((ri) => ({ cells: st.map.routes[ri].cells, routes: [ri] }));
+    for (const [pi, P] of roads.entries()) {
+      const ri = P.routes[0], newRoad = P.routes.some(isNew), switched = P.routes.length > 1;
+      const pts = P.cells.map(([x, y]) => [x + 0.5, y + 0.5]);
       const len = pts.length - 1;
       for (let a = 0; a < 3; a++) {
-        let d = (tnow * 2.2 + a * len / 3 + ri * 1.7) % len;
+        let d = (tnow * 2.2 + a * len / 3 + pi * 1.7) % len;
         const i = Math.floor(d), f = d - i, [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
         const px = SX(x1 + (x2 - x1) * f), py = SY(y1 + (y2 - y1) * f), ang = Math.atan2(y2 - y1, (x2 - x1) * (flip ? -1 : 1)), r = ts * 0.3;
         ctx.save(); ctx.translate(px, py); ctx.rotate(ang); ctx.globalAlpha = 0.75;
-        ctx.fillStyle = isNew(ri) ? "#ffe000" : "#ff4040"; ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
+        ctx.fillStyle = newRoad ? "#ffe000" : switched ? "#ff9000" : "#ff4040"; ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(r * 1.2, 0); ctx.lineTo(-r * 0.8, -r * 0.8); ctx.lineTo(-r * 0.3, 0); ctx.lineTo(-r * 0.8, r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.restore();
       }
