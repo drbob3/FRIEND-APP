@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qaRmyKUhRQwCs+K/4oRsU39dRghfG5exuoMrJ4k7bRg=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-8Wtd+QzwmTulOuTiTVtUDo5Ljs41lAp6V3Hc5t7lOG8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -970,7 +970,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.26";
+const APP_VERSION = "10.28";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5171,7 +5171,7 @@ const TD = {
     medic:    { name: "Medic", color: "#f4f4f4", hp: 6, speed: 0.52, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 1, solo: [7, 0, 3], pts: 3, desc: "Heals the enemies around (+1 HP every 2 s)." },
     jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 0.75, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, solo: [5, 0, 4], pts: 3, desc: "Flies: jumps up to 5 tiles at a time and can switch to another path. Only Rifleman, Sniper and gun mercs can hit it." },
     tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.3, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, solo: [9, 0, 3], big: true, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
-    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.56, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, solo: [10, 0, 3], pts: 4, gun: { range: 2.5, dmg: 1, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
+    gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.56, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, solo: [10, 0, 3], pts: 4, gun: { range: 2.5, dmg: 1, every: 2 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 2 s). Every 15 s it stuns a tower for 3 s." },
     saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.68, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, solo: [8, 0, 3], pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
     captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.52, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, solo: [12, 0, 2], pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
     kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 0.98, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, solo: [7, 0, 3], pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
@@ -5188,9 +5188,9 @@ const TD = {
     trooper:   { name: "Trooper", color: "#206a28", hp: 10, speed: 0.6, reward: 10, life: 1, power: 0, cost: 30, spawn: 0.9, eco: 1, r: 0.27, solo: [8, 0, 6], worker: true, pts: 2, desc: "A Recruit but way stronger. Worker: can pull levers and use sentry nests." },
     runner:    { name: "Runner", color: "#f0a000", hp: 6, speed: 1.2, reward: 8, life: 1, power: 0, cost: 30, spawn: 0.6, eco: 1, r: 0.21, solo: [9, 0, 5], pts: 2, desc: "A Scout but better: faster and tougher." },
     bulldozer: { name: "Bulldozer", color: "#c09020", hp: 40, armor: 1, speed: 0.41, reward: 25, life: 3, power: 0, cost: 75, spawn: 2, eco: 1, r: 0.36, solo: [12, 0, 3], big: true, pts: 6, desc: "A Heavy but better: huge HP and armor. Takes 3 ❤." },
-    rifleman:  { name: "Rifleman", color: "#3a5a20", hp: 14, speed: 0.56, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.4, eco: -2, r: 0.27, solo: [13, 0, 3], worker: true, pts: 5, gun: { range: 3, dmg: 1, every: 2, burst: 3 }, desc: "A Gun Man but better: fires 3 quick shots at your units and towers. Worker: can pull levers and use sentry nests." },
-    eshotgun:  { name: "Shotgunner", color: "#8a4a1a", hp: 12, speed: 0.56, reward: 14, life: 1, power: 0, cost: 60, spawn: 1.3, eco: -2, r: 0.27, solo: [11, 0, 3], pts: 4, gun: { range: 1.9, dmg: 1, every: 1.6, pellets: 3, fx: "shotgun" }, desc: "Close range: a spray of 3 pellets at your units and towers." },
-    esniper:   { name: "Sniper", color: "#1a3a1a", hp: 8, speed: 0.52, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.5, eco: -2, r: 0.25, solo: [14, 0, 2], pts: 5, gun: { range: 5, dmg: 3, every: 3, fx: "sniper" }, desc: "Shoots your units and towers from very far (3 damage)." },
+    rifleman:  { name: "Rifleman", color: "#3a5a20", hp: 14, speed: 0.56, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.4, eco: -2, r: 0.27, solo: [13, 0, 3], worker: true, pts: 5, gun: { range: 3, dmg: 1, every: 3.5, burst: 3, bgap: 0.35 }, desc: "A Gun Man but better: fires 3 quick shots at your units and towers. Worker: can pull levers and use sentry nests." },
+    eshotgun:  { name: "Shotgunner", color: "#8a4a1a", hp: 12, speed: 0.56, reward: 14, life: 1, power: 0, cost: 60, spawn: 1.3, eco: -2, r: 0.27, solo: [11, 0, 3], pts: 4, gun: { range: 1.9, dmg: 1, every: 2.8, pellets: 3, fx: "shotgun" }, desc: "Close range: a spray of 3 pellets at your units and towers." },
+    esniper:   { name: "Sniper", color: "#1a3a1a", hp: 8, speed: 0.52, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.5, eco: -2, r: 0.25, solo: [14, 0, 2], pts: 5, gun: { range: 5, dmg: 3, every: 5, fx: "sniper" }, desc: "Shoots your units and towers from very far (3 damage)." },
     eofficer:  { name: "Officer", color: "#d0a000", hp: 20, speed: 0.49, reward: 40, life: 2, power: 0, cost: 150, spawn: 3, eco: -4, r: 0.3, solo: [15, 0, 1], pts: 10, gun: { range: 2.5, dmg: 1, every: 1 },
       cmd: { fire: { first: 4, every: 20, time: 6 }, backup: { first: 10, every: 30, units: ["trooper", "rifleman", "trooper"] } },
       desc: "Very rare. OPEN FIRE: every enemy with a gun stops and shoots your towers for 6 s. BACK UP: calls 3 soldiers from a random entry." },
@@ -5730,7 +5730,7 @@ function tdStep(st, dt) {
         if (tg || fire) holding = true;
         if (e.gcd <= 0) {
           const fast = e.buff ? 1.2 : 1;
-          if (WP.burst) { e.shots = (e.shots || 0) + 1; if (e.shots >= WP.burst) { e.shots = 0; e.gcd = WP.every / fast; } else e.gcd = 0.15; }
+          if (WP.burst) { e.shots = (e.shots || 0) + 1; if (e.shots >= WP.burst) { e.shots = 0; e.gcd = WP.every / fast; } else e.gcd = WP.bgap || 0.15; }
           else e.gcd = WP.every / fast;
           if (fire && e.ftw) e.ftw = null;   // next shot: another random tower
           const hurt = (o, d = WP.dmg) => { o.hp -= d; if (o.hp <= 0 && !o.dead) { o.dead = true; if (e.from >= 0) st.money[e.from] += Math.floor(TD.ENEMIES[o.type].reward / 2); } };
@@ -6058,7 +6058,7 @@ function tdBuildPath(st, r0, open) {
 }
 // plan wave w in advance: groups, their paths (with switches) and spawn times
 function tdPlanWave(st, w) {
-  const hpMult = 1 + 0.15 * (w - 1) + 0.012 * (w - 1) * (w - 1);
+  const hpMult = 1;   // enemies keep the same HP every wave
   const pool = tdSoloPool(w);
   const totalW = pool.reduce((n, [, c]) => n + c, 0);
   // a wave = groups. A group = one enemy type, spawned X times with the same gap, on one road.
@@ -6774,7 +6774,7 @@ function tdEnemyWin(w) {
     r.title = E.desc || "";
     t.append(r);
   }
-  win.content.append(el("div", "hint", "Wave " + w + ": what each spawned enemy can be. Chance = weight (higher = more often). 👑 Boss comes every 10 waves. HP goes up every wave."), t);
+  win.content.append(el("div", "hint", "Wave " + w + ": what each spawned enemy can be. Chance = weight (higher = more often). 👑 Boss comes every 10 waves. Enemies keep the same HP every wave."), t);
 }
 
 function tdDeckIcons() { return tdDeck().map((ty) => TD.ICON[ty]).join(" "); }
