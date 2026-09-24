@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-H9Q5WuP48gzgVW5PIPB6GBUkf+t3DtQmI+hcgczbRuw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gnYSZsOC/9fr/Y4bb8UOVP9s3wBJQHGoVtDhCi/d9oE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -957,7 +957,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.14";
+const APP_VERSION = "10.16";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5045,10 +5045,10 @@ function cleanOldGames() {
 const TD = {
   W: 24, H: 15, L: 6, SOLO_W: 28, SOLO_H: 16, STEP: 0.05,
   TOWERS: {
-    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", hp: [10, 12, 14, 16, 20], cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], air: 0.5, ground: true, desc: "Cheap basic gun. Can hit flyers (weak)." },
-    shotgun:  { name: "Shotgunner", icon: "🎇", color: "#8a5a2a", hp: [12, 14, 16, 19, 22], cost: 70, up: [50, 90, 130, 180], range: [1.8, 1.9, 2, 2.1, 2.3], dmg: [1, 1, 1, 1, 1], pellets: [3, 4, 4, 5, 6], cone: 0.45, rate: [1.4, 1.3, 1.1, 1.1, 1], air: 0.5, ground: true, desc: "Close range. Each shot is a spray of pellets in a cone: great against groups or one big enemy up close." },
-    rifle:    { name: "Rifleman", icon: "🎖️", color: "#4a6a3a", hp: [10, 12, 14, 17, 20], cost: 80, up: [60, 100, 150, 200], range: [3, 3.2, 3.4, 3.6, 3.8], dmg: [1, 1, 1, 2, 2], burst: [3, 3, 4, 4, 5], rate: [2, 1.8, 1.8, 1.8, 1.6], air: 1, ground: true, heal: { from: 3, range: 1.8, pct: 0.005, every: 5 }, desc: "Fires 3 quick shots, then reloads. Hits flyers well. Level 4+: heals towers around it (0.5% HP every 5 s)." },
-    sniper:   { name: "Sniper", icon: "🎯", color: "#2e602e", hp: [8, 9, 11, 13, 15], cost: 120, up: [90, 140, 200, 260], range: [5, 5.5, 6, 6.6, 7.2], dmg: [4, 6, 8, 11, 15], rate: [2, 1.9, 1.8, 1.6, 1.5], pierce: true, air: 1, ground: true, desc: "Very long range, big hits. Pierces armor." },
+    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", hp: [10, 12, 14, 16, 20], cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], ground: true, desc: "Cheap basic gun. Ground only (can't hit flyers)." },
+    shotgun:  { name: "Shotgunner", icon: "🎇", color: "#8a5a2a", hp: [12, 14, 16, 19, 22], cost: 70, up: [50, 90, 130, 180], range: [1.8, 1.9, 2, 2.1, 2.3], dmg: [1, 1, 1, 1, 1], pellets: [3, 4, 4, 5, 6], cone: 0.45, rate: [1.4, 1.3, 1.1, 1.1, 1], ground: true, desc: "Ground only. Close range. Each shot is a spray of pellets in a cone: great against groups or one big enemy up close." },
+    rifle:    { name: "Rifleman", icon: "🎖️", color: "#4a6a3a", hp: [10, 12, 14, 17, 20], cost: 80, up: [60, 100, 150, 200], range: [3, 3.2, 3.4, 3.6, 3.8], dmg: [1, 1, 1, 2, 2], burst: [3, 3, 4, 4, 5], rate: [2, 1.8, 1.8, 1.8, 1.6], air: 1, ground: true, cliff: true, heal: { from: 3, range: 1.8, pct: 0.005, every: 5 }, desc: "Fires 3 quick shots, then reloads. Hits flyers well. Level 4+: heals towers around it (0.5% HP every 5 s). Can go on cliffs (+15% range)." },
+    sniper:   { name: "Sniper", icon: "🎯", color: "#2e602e", hp: [8, 9, 11, 13, 15], cost: 120, up: [90, 140, 200, 260], range: [5, 5.5, 6, 6.6, 7.2], dmg: [4, 6, 8, 11, 15], rate: [2, 1.9, 1.8, 1.6, 1.5], pierce: true, cliff: true, air: 1, ground: true, desc: "Very long range, big hits. Pierces armor. Can go on cliffs (+15% range)." },
     grenade:  { name: "Grenader", icon: "🧨", color: "#5a3a22", hp: [10, 12, 14, 16, 19], cost: 80, up: [70, 110, 160, 220], range: [2.3, 2.5, 2.7, 2.9, 3.1], dmg: [2, 3, 3, 4, 6], splash: [1.1, 1.2, 1.3, 1.5, 1.7], rate: [1.6, 1.5, 1.4, 1.3, 1.2], ground: true, desc: "Throws grenades that blow up groups. Ground only." },
     officer:  { name: "Officer", icon: "📣", color: "#b08a10", hp: [15, 18, 22], cost: 120, up: [100, 180], range: [2.3, 2.6, 3], boost: [1, 1, 2], desc: "Doesn't shoot. Towers around him hit harder (+damage on every hit). Max level 3." },
     riot:     { name: "Riot Guard", icon: "🛡️", color: "#304060", hp: [20, 25, 30, 36, 45], cost: 70, up: [60, 100, 140, 200], range: [1.2, 1.3, 1.4, 1.5, 1.6], dmg: [3, 4, 5, 7, 9], rate: [0.9, 0.8, 0.8, 0.7, 0.6], stunRes: [0.5, 0.4, 0.3, 0.2, 0], ground: true, desc: "Melee: build it right next to the road. Hits hard up close. Stun resistant (Gun Man / Saboteur stuns are shorter, level 5 = immune)." },
@@ -5060,31 +5060,31 @@ const TD = {
   PICKS: ["gun", "shotgun", "rifle", "sniper", "grenade", "officer", "riot", "barracks"],
   LOADOUT: 6,
   ENEMIES: {
-    recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.6, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, solo: [1, 21, 10], pts: 1, desc: "Simple basic enemy." },
+    recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.6, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, solo: [1, 21, 10], worker: true, pts: 1, desc: "Simple basic enemy. Worker: can pull levers and use sentry nests." },
     scout:    { name: "Scout", color: "#e0c020", hp: 2, speed: 1.01, reward: 4, life: 1, power: 4, cost: 15, spawn: 0.5, eco: 1, r: 0.2, solo: [1, 26, 7], pts: 1, desc: "Runs faster." },
     heavy:    { name: "Heavy", color: "#28408a", hp: 14, speed: 0.41, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, solo: [3, 0, 6], pts: 3, desc: "A bit slow, lots of HP." },
     shielder: { name: "Shielder", color: "#8a8a8a", hp: 24, armor: 1, speed: 0.45, rush: 1.05, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, solo: [6, 0, 4], pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
     medic:    { name: "Medic", color: "#f4f4f4", hp: 6, speed: 0.52, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 1, solo: [7, 0, 3], pts: 3, desc: "Heals the enemies around (+1 HP every 2 s)." },
-    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 0.75, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, solo: [5, 0, 4], pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
-    tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.3, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, solo: [9, 0, 3], pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
+    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 5, speed: 0.75, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, solo: [5, 0, 4], pts: 3, desc: "Flies: jumps up to 5 tiles at a time and can switch to another path. Only Rifleman, Sniper and gun mercs can hit it." },
+    tank:     { name: "Tank", color: "#6b4a2a", hp: 36, armor: 1, speed: 0.3, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, solo: [9, 0, 3], big: true, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
     gunner:   { name: "Gun Man", color: "#2f5a2a", hp: 8, speed: 0.56, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, solo: [10, 0, 3], pts: 4, gun: { range: 2.5, dmg: 1, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Stops walking when an enemy unit is in range and shoots it (every 1 s). Every 15 s it stuns a tower for 3 s." },
     saboteur: { name: "Saboteur", color: "#303030", hp: 5, speed: 0.68, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, solo: [8, 0, 3], pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
     captain:  { name: "Captain", color: "#b08a10", hp: 10, speed: 0.52, reward: 14, life: 1, power: 10, cost: 60, spawn: 1.5, eco: -2, r: 0.28, solo: [12, 0, 2], pts: 4, aura: 2, desc: "Allies around him walk 20% faster and shoot 20% faster." },
     kamikaze: { name: "Kamikaze", color: "#d02020", hp: 4, speed: 0.98, reward: 6, life: 1, power: 0, cost: 35, spawn: 0.8, eco: -1, r: 0.22, solo: [7, 0, 3], pts: 2, boom: { range: 0.8, radius: 1.3, dmg: 6 }, desc: "Runs fast and explodes on the first group of enemy units it meets." },
-    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 9, speed: 0.6, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1.1, dmg: 1, every: 0.5, fx: "knife" }, desc: "Mercenary with a knife: stabs enemies from a bit far." },
+    m_recruit: { name: "Recruit Merc", color: "#3a70d0", hp: 9, speed: 0.6, reward: 5, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.25, pts: 0, merc: true, gun: { range: 1.1, dmg: 1, every: 0.5, fx: "knife", ground: true }, desc: "Mercenary with a knife: stabs enemies from a bit far (not flyers)." },
     m_gun:     { name: "Gun Man Merc", color: "#2a50a0", hp: 12, speed: 0.56, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 1, every: 0.7 }, desc: "Mercenary: stops and shoots enemy units in range." },
     m_rifle:   { name: "Rifleman Merc", color: "#1a3a80", hp: 15, speed: 0.56, reward: 12, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 3.2, dmg: 1, every: 1.5, burst: 3 }, desc: "Mercenary: fires 3 quick shots, then reloads." },
     m_demo:    { name: "Demo Merc", color: "#5a4ab0", hp: 9, speed: 0.52, reward: 10, life: 1, power: 0, cost: 0, spawn: 0, eco: 0, r: 0.27, pts: 0, merc: true, gun: { range: 2.7, dmg: 3, every: 2.2, splash: 1.1, ground: true, fx: "throw" }, desc: "Mercenary: throws dynamite at groups (ground only)." },
-    trooper:   { name: "Trooper", color: "#206a28", hp: 10, speed: 0.6, reward: 10, life: 1, power: 0, cost: 30, spawn: 0.9, eco: 1, r: 0.27, solo: [8, 0, 6], pts: 2, desc: "A Recruit but way stronger." },
+    trooper:   { name: "Trooper", color: "#206a28", hp: 10, speed: 0.6, reward: 10, life: 1, power: 0, cost: 30, spawn: 0.9, eco: 1, r: 0.27, solo: [8, 0, 6], worker: true, pts: 2, desc: "A Recruit but way stronger. Worker: can pull levers and use sentry nests." },
     runner:    { name: "Runner", color: "#f0a000", hp: 6, speed: 1.2, reward: 8, life: 1, power: 0, cost: 30, spawn: 0.6, eco: 1, r: 0.21, solo: [9, 0, 5], pts: 2, desc: "A Scout but better: faster and tougher." },
-    bulldozer: { name: "Bulldozer", color: "#c09020", hp: 40, armor: 1, speed: 0.41, reward: 25, life: 3, power: 0, cost: 75, spawn: 2, eco: 1, r: 0.36, solo: [12, 0, 3], pts: 6, desc: "A Heavy but better: huge HP and armor. Takes 3 ❤." },
-    rifleman:  { name: "Rifleman", color: "#3a5a20", hp: 14, speed: 0.56, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.4, eco: -2, r: 0.27, solo: [13, 0, 3], pts: 5, gun: { range: 3, dmg: 1, every: 2, burst: 3 }, desc: "A Gun Man but better: fires 3 quick shots at your units and towers." },
+    bulldozer: { name: "Bulldozer", color: "#c09020", hp: 40, armor: 1, speed: 0.41, reward: 25, life: 3, power: 0, cost: 75, spawn: 2, eco: 1, r: 0.36, solo: [12, 0, 3], big: true, pts: 6, desc: "A Heavy but better: huge HP and armor. Takes 3 ❤." },
+    rifleman:  { name: "Rifleman", color: "#3a5a20", hp: 14, speed: 0.56, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.4, eco: -2, r: 0.27, solo: [13, 0, 3], worker: true, pts: 5, gun: { range: 3, dmg: 1, every: 2, burst: 3 }, desc: "A Gun Man but better: fires 3 quick shots at your units and towers. Worker: can pull levers and use sentry nests." },
     eshotgun:  { name: "Shotgunner", color: "#8a4a1a", hp: 12, speed: 0.56, reward: 14, life: 1, power: 0, cost: 60, spawn: 1.3, eco: -2, r: 0.27, solo: [11, 0, 3], pts: 4, gun: { range: 1.9, dmg: 1, every: 1.6, pellets: 3, fx: "shotgun" }, desc: "Close range: a spray of 3 pellets at your units and towers." },
     esniper:   { name: "Sniper", color: "#1a3a1a", hp: 8, speed: 0.52, reward: 16, life: 1, power: 0, cost: 70, spawn: 1.5, eco: -2, r: 0.25, solo: [14, 0, 2], pts: 5, gun: { range: 5, dmg: 3, every: 3, fx: "sniper" }, desc: "Shoots your units and towers from very far (3 damage)." },
     eofficer:  { name: "Officer", color: "#d0a000", hp: 20, speed: 0.49, reward: 40, life: 2, power: 0, cost: 150, spawn: 3, eco: -4, r: 0.3, solo: [15, 0, 1], pts: 10, gun: { range: 2.5, dmg: 1, every: 1 },
       cmd: { fire: { first: 4, every: 20, time: 6 }, backup: { first: 10, every: 30, units: ["trooper", "rifleman", "trooper"] } },
       desc: "Very rare. OPEN FIRE: every enemy with a gun stops and shoots your towers for 6 s. BACK UP: calls 3 soldiers from a random entry." },
-    boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.26, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, pts: 0 },
+    boss:     { name: "Boss", color: "#8000a0", hp: 120, armor: 2, speed: 0.26, reward: 120, life: 10, power: 120, cost: 0, spawn: 0, eco: 0, r: 0.45, big: true, pts: 0 },
   },
   ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑", trooper: "💂", runner: "🏃", bulldozer: "🚜", rifleman: "🎖️", eshotgun: "🎇", esniper: "🎯", eofficer: "📣", m_recruit: "🔪", m_gun: "🔫", m_rifle: "🎖️", m_demo: "🧨" },
   SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze", "trooper", "runner", "bulldozer", "rifleman", "eshotgun", "esniper", "eofficer"],
@@ -5172,6 +5172,116 @@ function tdGenMap(seed, W, H, nEnt = 2, perEnt = 1) {
   }
   return best || tdGenMap(seed + 1, W, H, nEnt, perEnt);
 }
+// cliffs (only Rifleman / Sniper, +15% range), a door shortcut with its lever, gunner sentry nests
+function tdDecorate(map, seed) {
+  const r = rng((seed ^ 0xC11FF) >>> 0), W = map.W, H = map.H;
+  const K = (x, y) => x + "," + y;
+  const N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const inB = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+  const nearBase = (x, y) => Math.abs(x - map.base.x) <= 1 && Math.abs(y - map.base.y) <= 1;
+  const grass = (x, y) => inB(x, y) && !map.path.has(K(x, y)) && !nearBase(x, y);
+  const pathN = (x, y) => N4.filter(([dx, dy]) => map.path.has(K(x + dx, y + dy))).map(([dx, dy]) => K(x + dx, y + dy));
+  map.block = new Set(); map.cliffs = new Set(); map.nests = []; map.door = null;
+  // door shortcut: a route that makes a long detour; link two of its cells with a short road through the grass
+  let best = null;
+  map.routes.forEach((rt, ri) => {
+    const cs = rt.cells;
+    for (let i = 3; i < cs.length - 6; i++) for (let j = i + 8; j < cs.length - 3; j++) {
+      const [ax, ay] = cs[i], [bx, by] = cs[j];
+      const man = Math.abs(ax - bx) + Math.abs(ay - by);
+      if (man < 2 || man > 12 || j - i - man < 5) continue;
+      for (const hFirst of [true, false]) {
+        const mid = [];
+        let x = ax, y = ay;
+        const stepH = () => { while (x !== bx) { x += Math.sign(bx - x); mid.push([x, y]); } };
+        const stepV = () => { while (y !== by) { y += Math.sign(by - y); mid.push([x, y]); } };
+        if (hFirst) { stepH(); stepV(); } else { stepV(); stepH(); }
+        mid.pop();   // last one is B
+        if (!mid.length) continue;
+        let ok = true;
+        mid.forEach(([mx, my], k) => {
+          if (!ok) return;
+          if (!grass(mx, my)) { ok = false; return; }
+          const allow = new Set([k === 0 ? K(ax, ay) : "", k === mid.length - 1 ? K(bx, by) : ""]);
+          if (pathN(mx, my).some((c) => !allow.has(c))) ok = false;
+        });
+        if (!ok) continue;
+        const save = j - i - (mid.length + 1);
+        if (!best || save > best.save) best = { ri, a: i, b: j, cells: mid, save };
+      }
+    }
+  });
+  if (best && best.save >= 5) {
+    const rt = map.routes[best.ri];
+    const sc = new Set(best.cells.map(([x, y]) => K(x, y)));
+    // lever: grass next to the road a few tiles before the junction
+    let lever = null;
+    for (let i = best.a - 2; i >= Math.max(1, best.a - 7) && !lever; i--) {
+      const [cx, cy] = rt.cells[i];
+      for (const [dx, dy] of N4) {
+        const x = cx + dx, y = cy + dy;
+        if (grass(x, y) && !sc.has(K(x, y)) && !N4.some(([ex, ey]) => sc.has(K(x + ex, y + ey)))) { lever = [x, y]; break; }
+      }
+    }
+    if (lever) {
+      map.door = { ri: best.ri, A: rt.cells[best.a], B: rt.cells[best.b], cells: best.cells, lever };
+      best.cells.forEach(([x, y]) => { map.path.add(K(x, y)); map.block.add(K(x, y)); });
+      map.block.add(K(...lever));
+    }
+  }
+  // sentry nests: grass next to a road, far from each other
+  const cand = [];
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (grass(x, y) && !map.block.has(K(x, y)) && x > 3 && x < W - 3 && pathN(x, y).length) cand.push([x, y]);
+  for (let k = 0; k < 40 && map.nests.length < 2 && cand.length; k++) {
+    const [x, y] = cand[Math.floor(r() * cand.length)];
+    if (map.nests.some(([a, b]) => Math.hypot(a - x, b - y) < 7)) continue;
+    if (map.block.has(K(x, y)) || N4.some(([dx, dy]) => map.block.has(K(x + dx, y + dy)))) continue;
+    map.nests.push([x, y]); map.block.add(K(x, y));
+  }
+  // cliffs: a few smooth "mountain" blobs on the grass
+  const want = Math.round(W * H * 0.07);
+  for (let k = 0; k < 30 && map.cliffs.size < want; k++) {
+    const cx = 2 + Math.floor(r() * (W - 4)), cy = 1 + Math.floor(r() * (H - 2));
+    if (!grass(cx, cy) || map.block.has(K(cx, cy))) continue;
+    const rx = 1.3 + r() * 1.6, ry = 1 + r() * 1.3;
+    for (let y = Math.floor(cy - ry - 1); y <= cy + ry + 1; y++) for (let x = Math.floor(cx - rx - 1); x <= cx + rx + 1; x++) {
+      const v = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2;
+      if (v <= 1 + (r() - 0.5) * 0.3 && grass(x, y) && !map.block.has(K(x, y))) map.cliffs.add(K(x, y));
+    }
+  }
+  // smooth: no lonely rocks, fill small holes
+  for (let pass = 0; pass < 2; pass++) {
+    for (const c of [...map.cliffs]) { const [x, y] = c.split(",").map(Number); if (N4.filter(([dx, dy]) => map.cliffs.has(K(x + dx, y + dy))).length < 2) map.cliffs.delete(c); }
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (grass(x, y) && !map.block.has(K(x, y)) && !map.cliffs.has(K(x, y)) && N4.filter(([dx, dy]) => map.cliffs.has(K(x + dx, y + dy))).length >= 3) map.cliffs.add(K(x, y));
+  }
+  // flyers: distance to the base along any road
+  map.fdist = new Map([[K(map.base.x, map.base.y), 0]]);
+  const q = [[map.base.x, map.base.y]];
+  while (q.length) {
+    const [x, y] = q.shift(), d = map.fdist.get(K(x, y));
+    for (const [dx, dy] of N4) { const k = K(x + dx, y + dy); if (map.path.has(k) && !map.fdist.has(k) && !(map.door && map.door.cells.some(([a, b]) => K(a, b) === k))) { map.fdist.set(k, d + 1); q.push([x + dx, y + dy]); } }
+  }
+  map.fcells = [...map.fdist.keys()].map((k) => k.split(",").map(Number));
+  return map;
+}
+const tdOnCliff = (st, tw) => st.map.cliffs.has(tw.lx + "," + tw.ly);
+const tdRangeOf = (st, tw, T) => T.range[tw.lvl] * (tdOnCliff(st, tw) ? 1.15 : 1);
+// solo flyer: from a road cell, jump (max 5 tiles) to the road cell (any path) closest to the base
+function tdFlyRoute(st, side, sx, sy) {
+  const out = [];
+  let cx = sx, cy = sy, cd = st.map.fdist.get(sx + "," + sy) ?? 999;
+  for (let g = 0; g < 100 && cd > 0; g++) {
+    let b = null, bd = cd;
+    for (const [x, y] of st.map.fcells) {
+      const d = st.map.fdist.get(x + "," + y), h = Math.hypot(x - cx, y - cy);
+      if (h <= 5 && (d < bd || (d === bd && b && h < Math.hypot(b[0] - cx, b[1] - cy)))) { bd = d; b = [x, y]; }
+    }
+    if (!b) break;
+    cx = b[0]; cy = b[1]; cd = bd;
+    out.push([tdWX(st, side, cx) + 0.5, cy + 0.5]);
+  }
+  return out;
+}
 // PvP: the full way of an enemy sent by `from` on route `ri` (own base -> own entry -> lane -> their entry -> their base)
 function tdRoutePts(st, from, ri) {
   const route = st.map.routes[ri];
@@ -5184,24 +5294,27 @@ const TD_ROUTE_COLORS = ["#ff3030", "#ffd000", "#30d0ff", "#ff60ff", "#60ff60", 
 /* ----- state ----- */
 function tdNewState({ seed, pvp, linked }) {
   const W = pvp ? TD.W : TD.SOLO_W, H = pvp ? TD.H : TD.SOLO_H, L = pvp ? TD.L : 0;
-  const map = tdGenMap(seed, W, H, 3, 2);
+  const map = tdDecorate(tdGenMap(seed, W, H, 3, 2), seed);
   const st = {
     seed, pvp: !!pvp, linked: !!(pvp && linked), W, H, L, map, X1: W + L, totalW: pvp ? 2 * W + L : W,
     t: 0, towers: [], enemies: [], fx: [], nextId: 1, money: [pvp ? 200 : 250, pvp ? 200 : 0], lives: [20, 20], eco: [TD.ECO_START, TD.ECO_START],
     wave: 0, waveOn: false, queue: [], squads: [[], []], spawnQ: [[], []], autoT: [TD.AUTO_EVERY, TD.AUTO_EVERY], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
+    doorT: [0, 0], nestBy: [[], []],
   };
-  if (!pvp) {   // solo: paths open one by one (one entry at a time first)
-    const byEnt = [0, 1, 2].map((ei) => map.routes.map((r, i) => (r.entry === ei ? i : -1)).filter((i) => i >= 0));
-    const first = seed % 3, order = [];
-    for (let k = 0; k < 3; k++) for (let e = 0; e < 3; e++) { const ri = byEnt[(first + e) % 3][k]; if (ri !== undefined) order.push(ri); }
-    st.order = order;
-  }
+  if (!pvp) { st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1); }
   return st;
 }
 // solo: how many paths are open for a wave (1 path for waves 1-5, +1 every 5 waves)
 const TD_PATH_EVERY = 5;
-function tdOpenCount(st, wave) { return Math.min(st.order.length, 1 + Math.floor(Math.max(0, wave - 1) / TD_PATH_EVERY)); }
-function tdOpenRoutes(st, wave = st.waveOn || st.queue.length ? st.wave : st.wave + 1) { return st.order.slice(0, tdOpenCount(st, wave)); }
+function tdOpenCount(st, wave) { return Math.min(st.map.routes.length, 1 + Math.floor(Math.max(0, wave - 1) / TD_PATH_EVERY)); }
+// every path can be used: pick at random which ones the wave will use (more paths later)
+function tdPickPlan(st, wave) {
+  const all = st.map.routes.map((_, i) => i);
+  for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(st.r() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+  return all.slice(0, tdOpenCount(st, wave)).sort((a, b) => a - b);
+}
+// paths used by the running wave, or planned for the next one
+function tdOpenRoutes(st) { return (st.waveOn || st.queue.length) && st.cur.length ? st.cur : st.plan; }
 const tdCost = (st, T) => (st.pvp && T.pvpCost) || T.cost;
 const tdUpCost = (st, T, lv) => ((st.pvp && T.pvpUp) || T.up)[lv];
 const tdMaxLvl = (T) => T.up.length;   // last level index (0-based)
@@ -5217,7 +5330,7 @@ function tdBoost(st, towers, tw) {
   return b;
 }
 // stats of a tower at a level: [label, value, number-for-compare] rows + DPS
-function tdTowerStats(st, T, lv, boost = 0) {
+function tdTowerStats(st, T, lv, boost = 0, cliff = false) {
   const rows = [["Max HP", T.hp[lv], T.hp[lv]]];
   let dps = null;
   if (T.heal) rows.push(["Passive heal", lv >= T.heal.from ? "+" + T.heal.pct * 100 + "% HP / " + T.heal.every + " s (range " + T.heal.range + ")" : "unlocks at level " + (T.heal.from + 1), lv >= T.heal.from ? 1 : 0]);
@@ -5229,7 +5342,7 @@ function tdTowerStats(st, T, lv, boost = 0) {
     rows.push(["Damage", T.dmg[lv] + (boost ? " (+" + boost + " 📣)" : ""), T.dmg[lv]]);
     if (T.pellets) rows.push(["Pellets per shot", T.pellets[lv], T.pellets[lv]]);
     if (T.burst) rows.push(["Shots per burst", T.burst[lv], T.burst[lv]]);
-    rows.push(["Range", T.range[lv] + " tiles", T.range[lv]]);
+    rows.push(["Range", Math.round(T.range[lv] * (cliff ? 1.15 : 1) * 100) / 100 + " tiles" + (cliff ? " ⛰+15%" : ""), T.range[lv]]);
     rows.push([T.burst ? "Reload" : "Fires every", T.rate[lv] + " s", -T.rate[lv]]);
     if (T.splash) rows.push(["Blast size", T.splash[lv] + " tiles", T.splash[lv]]);
     if (T.stunRes) rows.push(["Stuns last", T.stunRes[lv] ? Math.round(T.stunRes[lv] * 100) + "%" : "immune", -T.stunRes[lv]]);
@@ -5263,9 +5376,10 @@ function tdLocal(st, wx, wy) {   // world point -> { side, x, y } (local cell) o
   return null;
 }
 function tdBaseCenter(st, side) { return [tdWX(st, side, st.map.base.x) + 0.5, st.map.base.y + 0.5]; }
-function tdCanBuild(st, side, x, y) {
+function tdCanBuild(st, side, x, y, type) {
   if (x < 0 || y < 0 || x >= st.W || y >= st.H) return false;
-  if (st.map.path.has(x + "," + y)) return false;
+  if (st.map.path.has(x + "," + y) || st.map.block.has(x + "," + y)) return false;
+  if (st.map.cliffs.has(x + "," + y) && !TD.TOWERS[type]?.cliff) return false;
   if (x === st.map.base.x && y === st.map.base.y) return false;
   return !st.towers.some((t) => t.side === side && t.lx === x && t.ly === y);
 }
@@ -5274,9 +5388,9 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
   const E = TD.ENEMIES[type];
   let start, path;
   if (!st.pvp) {
-    const rt = st.map.routes[routeIdx >= 0 ? routeIdx : st.order[0]];
+    const rt = st.map.routes[routeIdx >= 0 ? routeIdx : st.plan[0]];
     const pts = rt.cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
-    start = [st.W + 0.2, st.map.entries[rt.entry].y + 0.5]; path = E.air ? tdFlyPath([start, ...pts]) : pts;
+    start = [st.W + 0.2, st.map.entries[rt.entry].y + 0.5]; path = E.air ? tdFlyRoute(st, side, rt.cells[0][0], rt.cells[0][1]) : pts;
   } else {
     const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : tdPickRoute(st, from);
     start = tdBaseCenter(st, from);
@@ -5297,6 +5411,16 @@ function tdSpawnAt(st, type, side, from, ri, hpMult = 1) {
   st.enemies.push({ id: st.nextId++, type, side, from, x: pts[0][0], y: pts[0][1], path: E.air ? tdFlyPath(pts) : pts.slice(1), idx: 0, hp, maxHp: hp, armor: E.armor || 0,
     speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: !!E.air, dead: false });
 }
+// open door: ground enemies (not the big ones) arriving at the junction may take the shortcut
+function tdDoorTake(st, e) {
+  const D = st.map.door, W = (c) => [tdWX(st, e.side, c[0]) + 0.5, c[1] + 0.5];
+  const [ax, ay] = W(D.A);
+  if (Math.abs(e.x - ax) > 0.01 || Math.abs(e.y - ay) > 0.01 || TD.ENEMIES[e.type].big || st.r() > 0.75) return;
+  const [bx, by] = W(D.B);
+  const j = e.path.findIndex((q, i) => i >= e.idx && Math.abs(q[0] - bx) < 0.01 && Math.abs(q[1] - by) < 0.01);
+  if (j < 0) return;
+  e.path = [...e.path.slice(0, e.idx), ...D.cells.map(W), ...e.path.slice(j)];
+}
 function tdHurtTower(st, tw, dmg) {
   if (tw.dead) return;
   tw.hp -= dmg;
@@ -5305,7 +5429,7 @@ function tdHurtTower(st, tw, dmg) {
 // solo: an ally from a Barracks walks from the base towards an entry and fights the enemies
 function tdSpawnAlly(st, type, hpMult = 1) {
   const E = TD.ENEMIES[type];
-  const open = tdOpenRoutes(st, Math.max(1, st.wave));
+  const open = tdOpenRoutes(st);
   const rt = st.map.routes[open[Math.floor(st.r() * open.length)]];
   const path = rt.cells.slice().reverse().map(([x, y]) => [tdWX(st, 0, x) + 0.5, y + 0.5]);
   const hp = Math.round(E.hp * hpMult);
@@ -5313,7 +5437,7 @@ function tdSpawnAlly(st, type, hpMult = 1) {
     speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: false, dead: false });
 }
 // Jet Pack: follows the road but cuts across the grass, max 3 tiles per jump
-function tdFlyPath(raw, hop = 3) {
+function tdFlyPath(raw, hop = 5) {
   const pts = [raw[0]];   // cut long straight parts into 1-tile steps first
   for (let i = 1; i < raw.length; i++) {
     const [ax, ay] = raw[i - 1], [bx, by] = raw[i], n = Math.ceil(Math.hypot(bx - ax, by - ay));
@@ -5438,7 +5562,7 @@ function tdStep(st, dt) {
       }
       if (e.buT <= 0) {
         e.buT = E.cmd.backup.every;
-        const routes = st.pvp ? st.map.routes.map((_, i) => i) : tdOpenRoutes(st, Math.max(1, st.wave));
+        const routes = st.pvp ? st.map.routes.map((_, i) => i) : tdOpenRoutes(st);
         const ri = routes[Math.floor(st.r() * routes.length)];
         const mult = e.maxHp / E.hp;
         E.cmd.backup.units.forEach((ty) => tdSpawnAt(st, ty, e.side, e.from, ri, mult));
@@ -5471,6 +5595,61 @@ function tdStep(st, dt) {
       }
     }
     let blocked = holding;
+    // enemy spots
+    if (e.side >= 0 && !e.air) {
+      const M = st.map;
+      // lever: workers (Recruit / Trooper / Rifleman) stop and pull it -> the door opens a shortcut for 25 s
+      if (E.worker && M.door && !e.pulled && (st.doorT[e.side] || 0) <= t) {
+        const lx = tdWX(st, e.side, M.door.lever[0]) + 0.5, ly = M.door.lever[1] + 0.5;
+        if (Math.hypot(lx - e.x, ly - e.y) < 1.1) {
+          blocked = true;
+          e.pull = (e.pull || 0) + dt;
+          if (Math.floor((e.pull - dt) * 3) !== Math.floor(e.pull * 3)) st.fx.push({ k: "lever", x1: lx, y1: ly, x2: e.pull / 2.5, y2: 0, until: t + 0.35 });
+          if (e.pull >= 2.5) { e.pulled = true; st.doorT[e.side] = t + 25; const [dx, dy] = M.door.cells[0]; st.fx.push({ k: "dooropen", x1: tdWX(st, e.side, dx) + 0.5, y1: dy + 0.5, x2: 0, y2: 0, until: t + 1.8 }); }
+        }
+      } else if (E.worker && (st.doorT[e.side] || 0) > t) e.pulled = true;
+      // sentry nest: a worker (Recruit / Trooper / Rifleman) jumps in and machine-guns the towers around (10 bullets, reload, stun every 10)
+      if (E.worker && M.nests.length && !e.nest && !e.nestDone) {
+        M.nests.forEach(([nx, ny], i) => {
+          if (e.nest) return;
+          const sx = tdWX(st, e.side, nx) + 0.5, sy = ny + 0.5;
+          if (Math.hypot(sx - e.x, sy - e.y) > 1.2 || (e.nestTried ||= {})[i]) return;
+          e.nestTried[i] = true;
+          const by = st.nestBy[e.side][i];
+          if (by && st.enemies.some((o) => o.id === by && !o.dead && o.nest)) return;
+          if (st.r() < 0.6) { e.nest = { i, sx, sy, rx: e.x, ry: e.y, until: t + 30, ammo: 10, cd: 0.5, shots: 0, out: false }; st.nestBy[e.side][i] = e.id; }
+        });
+      }
+      if (e.nest) {
+        const N = e.nest;
+        const gx = N.out ? N.rx : N.sx, gy = N.out ? N.ry : N.sy, d = Math.hypot(gx - e.x, gy - e.y), mv = e.speed * dt;
+        if (d > 0.02) { e.x += (gx - e.x) / d * Math.min(d, mv); e.y += (gy - e.y) / d * Math.min(d, mv); }
+        else if (N.out) { e.nest = null; e.nestDone = true; }
+        else {
+          const inR = st.towers.filter((tw) => !tw.dead && tw.side === e.side && Math.hypot(tw.wx - e.x, tw.wy - e.y) <= 3.5);
+          if (!inR.length || t > N.until) N.out = true;
+          else {
+            N.cd -= dt;
+            if (N.cd <= 0) {
+              if (N.ammo <= 0) { N.ammo = 10; N.cd = 0.35; }
+              else {
+                const tw = inR[Math.floor(st.r() * inR.length)];
+                tdHurtTower(st, tw, 1);
+                st.fx.push({ k: "gunner", x1: e.x, y1: e.y, x2: tw.wx, y2: tw.wy, until: t + 0.06 });
+                N.ammo--; N.shots++;
+                if (N.shots % 10 === 0) {
+                  const tw2 = inR[Math.floor(st.r() * inR.length)], rs = TD.TOWERS[tw2.type].stunRes;
+                  if (!rs || rs[tw2.lvl] > 0) { tw2.stun = Math.max(tw2.stun || 0, t + 3 * (rs ? rs[tw2.lvl] : 1)); st.fx.push({ k: "zap", x1: e.x, y1: e.y, x2: tw2.wx, y2: tw2.wy, until: t + 0.3 }); }
+                }
+                N.cd = N.ammo > 0 ? 0.35 : 3;   // reload
+                if (N.ammo <= 0) st.fx.push({ k: "reload", x1: e.x, y1: e.y, x2: 0, y2: 0, until: t + 1.2 });
+              }
+            }
+          }
+        }
+        continue;
+      }
+    }
     // touch fight: both lose HP equal to the other one's HP (the weaker one dies, the stronger one keeps the rest)
     if (fights && !e.air) {
       let foe = null, fd = 0.6;
@@ -5514,7 +5693,7 @@ function tdStep(st, dt) {
     while (move > 0 && e.idx < e.path.length) {
       const [tx, ty] = e.path[e.idx];
       const dx = tx - e.x, dy = ty - e.y, d = Math.hypot(dx, dy);
-      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; }
+      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; if (st.map.door && e.side >= 0 && !e.air && (st.doorT[e.side] || 0) > t) tdDoorTake(st, e); }
       else { e.x += dx / d * move; e.y += dy / d * move; e.dist += move; move = 0; }
     }
     if (e.idx >= e.path.length) {
@@ -5552,7 +5731,7 @@ function tdStep(st, dt) {
     if (!T.dmg) continue;
     tw.cd -= dt;
     if (tw.cd > 0) continue;
-    const range = T.range[tw.lvl], cx = tw.wx, cy = tw.wy;
+    const range = tdRangeOf(st, tw, T), cx = tw.wx, cy = tw.wy;
     const canHit = (e) => !e.dead && e.side === tw.side && tdInMap(st, tw.side, e.x) && (e.air ? !!T.air : !!T.ground) && Math.hypot(e.x - cx, e.y - cy) <= range;
     let target = null;
     for (const e of st.enemies) if (canHit(e) && (!target || e.dist > target.dist)) target = e;
@@ -5631,7 +5810,10 @@ function tdStartWave(st) {
   }
   const gap = Math.max(0.3, 0.75 * Math.pow(0.97, w));
   let at = st.t + 0.5;
-  const open = tdOpenRoutes(st, w);
+  const open = st.plan;
+  st.newPaths = open.filter((ri) => !st.used.has(ri)).length && w > 1;
+  st.cur = open; open.forEach((ri) => st.used.add(ri));
+  st.plan = tdPickPlan(st, w + 1);
   for (const ty of list) { st.queue.push({ at, type: ty, route: open[Math.floor(st.r() * open.length)], hp: hpMult }); at += ty === "boss" ? 2 : gap; }
   st.waveOn = true;
   if (early) st.money[0] += 10 + w;
@@ -5643,7 +5825,7 @@ function tdApply(st, side, a) {
   if (a.a === "build") {
     const T = TD.TOWERS[a.type];
     if (!T || (st.pvp && a.type === "money")) return "?";
-    if (!tdCanBuild(st, side, a.x | 0, a.y | 0)) return "You can't build here.";
+    if (!tdCanBuild(st, side, a.x | 0, a.y | 0, a.type)) return st.map.cliffs.has((a.x | 0) + "," + (a.y | 0)) ? "Only Rifleman and Sniper can go on cliffs." : "You can't build here.";
     const cost = tdCost(st, T);
     if (st.money[side] < cost) return "Not enough money.";
     st.money[side] -= cost;
@@ -5698,7 +5880,7 @@ function tdSnap(st) {
     tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0, Math.max(1, Math.round(x.hp / x.maxHp * 100))]),
     e: st.enemies.slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
-    ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
+    dr: st.doorT.map((x) => (x > st.t ? 1 : 0)), ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   });
 }
 function tdSquadInfo(st) {   // per side: [[progress %, units], ...]
@@ -5708,7 +5890,7 @@ function tdView(st) {   // live state -> what we draw
   return {
     towers: st.towers.map((x) => ({ ...x, stunned: (x.stun || 0) > st.t })), money: st.money, lives: st.lives, t: st.t,
     enemies: st.enemies.map((e) => ({ id: e.id, type: e.type, x: e.x, y: e.y, hp: e.hp / e.maxHp, slow: e.slowUntil > st.t, side: e.side })),
-    fx: st.fx, eco: st.eco, sq: st.pvp ? tdSquadInfo(st) : [[], []], it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
+    door: st.doorT.map((x) => x > st.t), fx: st.fx, eco: st.eco, sq: st.pvp ? tdSquadInfo(st) : [[], []], it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   };
 }
 
@@ -5734,10 +5916,10 @@ function tdDraw(cv, st, V, o) {
   ctx.fillStyle = "#2f4a2a"; ctx.fillRect(0, 0, cw, ch);
   // solo: which paths are open for the current / next wave
   let openCells = null, openR = null;
-  if (!st.pvp && st.order) {
+  if (!st.pvp && st.plan) {
     openR = tdOpenRoutes(st);
     const key = openR.join(",");
-    if (st._ock !== key) { st._ock = key; st._oc = new Set(openR.flatMap((ri) => st.map.routes[ri].cells.map(([a, b]) => a + "," + b))); }
+    if (st._ock !== key) { st._ock = key; st._oc = new Set(openR.flatMap((ri) => st.map.routes[ri].cells.map(([a, b]) => a + "," + b))); if (st.map.door && openR.includes(st.map.door.ri)) st.map.door.cells.forEach(([a, b]) => st._oc.add(a + "," + b)); }
     openCells = st._oc;
   }
   // maps
@@ -5748,11 +5930,44 @@ function tdDraw(cv, st, V, o) {
       const px = SX(flip ? wx + 1 : wx), py = SY(y);
       const onPath = st.map.path.has(x + "," + y);
       const closed = onPath && openCells && !openCells.has(x + "," + y);
-      ctx.fillStyle = closed ? ((x + y) % 2 ? "#8f8a78" : "#878270") : onPath ? ((x + y) % 2 ? "#d6bd86" : "#cdb37c") : ((x + y) % 2 ? "#5f9e45" : "#57953f");
+      const short = onPath && st.map.door && st.map.door.cells.some(([a, b]) => a === x && b === y);
+      ctx.fillStyle = short && !closed ? ((x + y) % 2 ? "#b0a080" : "#a89878") : closed ? ((x + y) % 2 ? "#8f8a78" : "#878270") : onPath ? ((x + y) % 2 ? "#d6bd86" : "#cdb37c") : ((x + y) % 2 ? "#5f9e45" : "#57953f");
       ctx.fillRect(px, py, ts, ts);
       if (!onPath && o.hover && o.hover.side === side && o.hover.x === x && o.hover.y === y && o.buildType && side === o.side) {
-        ctx.strokeStyle = tdCanBuild(st, side, x, y) ? "#ffffff" : "#ff3030"; ctx.lineWidth = 2; ctx.strokeRect(px + 1, py + 1, ts - 2, ts - 2);
+        ctx.strokeStyle = tdCanBuild(st, side, x, y, o.buildType) ? "#ffffff" : "#ff3030"; ctx.lineWidth = 2; ctx.strokeRect(px + 1, py + 1, ts - 2, ts - 2);
       }
+    }
+    // cliffs (mountains)
+    const M = st.map, isC = (x, y) => M.cliffs.has(x + "," + y);
+    for (const c of M.cliffs) {
+      const [x, y] = c.split(",").map(Number);
+      const px = SX(flip ? tdWX(st, side, x) + 1 : tdWX(st, side, x)), py = SY(y);
+      ctx.fillStyle = (x + y) % 2 ? "#8c7b62" : "#85745b"; ctx.fillRect(px, py, ts, ts);
+      const inner = isC(x - 1, y) && isC(x + 1, y) && isC(x, y - 1) && isC(x, y + 1);
+      ctx.fillStyle = "#6b5b45"; ctx.beginPath(); ctx.moveTo(px + ts * 0.12, py + ts * 0.85); ctx.lineTo(px + ts * 0.5, py + ts * 0.18); ctx.lineTo(px + ts * 0.88, py + ts * 0.85); ctx.fill();
+      ctx.fillStyle = inner ? "#f4f4f4" : "#a89878"; ctx.beginPath(); ctx.moveTo(px + ts * 0.36, py + ts * 0.42); ctx.lineTo(px + ts * 0.5, py + ts * 0.18); ctx.lineTo(px + ts * 0.64, py + ts * 0.42); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.35)"; if (!isC(x, y - 1)) ctx.fillRect(px, py, ts, 2);
+      ctx.fillStyle = "rgba(0,0,0,.4)"; if (!isC(x, y + 1)) ctx.fillRect(px, py + ts - 3, ts, 3);
+      if (!isC(x + (flip ? -1 : 1), y)) ctx.fillRect(px + ts - 2, py, 2, ts);
+    }
+    // sentry nests (sandbags)
+    for (const [x, y] of M.nests) {
+      const px = SX(tdWX(st, side, x) + 0.5), py = SY(y + 0.5);
+      ctx.fillStyle = "#b09860"; ctx.strokeStyle = "#5a4a20"; ctx.lineWidth = 1;
+      for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2; ctx.beginPath(); ctx.ellipse(px + Math.cos(a) * ts * 0.32, py + Math.sin(a) * ts * 0.32, ts * 0.16, ts * 0.11, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+      ctx.fillStyle = "#303030"; ctx.fillRect(px - ts * 0.05, py - ts * 0.05, ts * 0.3, ts * 0.1);
+    }
+    // door shortcut + lever
+    if (M.door) {
+      const open = (V.door || [])[side];
+      const [dx, dy] = M.door.cells[0];
+      const px = SX(tdWX(st, side, dx) + 0.5), py = SY(dy + 0.5);
+      if (!open) { ctx.fillStyle = "#6a4020"; ctx.fillRect(px - ts * 0.45, py - ts * 0.45, ts * 0.9, ts * 0.9); ctx.strokeStyle = "#301808"; ctx.lineWidth = 2; ctx.strokeRect(px - ts * 0.45, py - ts * 0.45, ts * 0.9, ts * 0.9); ctx.beginPath(); ctx.moveTo(px - ts * 0.45, py - ts * 0.45); ctx.lineTo(px + ts * 0.45, py + ts * 0.45); ctx.moveTo(px + ts * 0.45, py - ts * 0.45); ctx.lineTo(px - ts * 0.45, py + ts * 0.45); ctx.stroke(); }
+      else { ctx.strokeStyle = "#6a4020"; ctx.lineWidth = 3; ctx.strokeRect(px - ts * 0.45, py - ts * 0.45, ts * 0.9, ts * 0.9); }
+      const [lx, ly] = M.door.lever;
+      const qx = SX(tdWX(st, side, lx) + 0.5), qy = SY(ly + 0.5);
+      ctx.fillStyle = "#505050"; ctx.fillRect(qx - ts * 0.3, qy + ts * 0.1, ts * 0.6, ts * 0.22);
+      ctx.strokeStyle = open ? "#20c020" : "#d02020"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(qx, qy + ts * 0.15); ctx.lineTo(qx + (open ? 1 : -1) * ts * 0.25, qy - ts * 0.3); ctx.stroke();
     }
     // base
     const [bx, by] = tdBaseCenter(st, side);
@@ -5810,7 +6025,7 @@ function tdDraw(cv, st, V, o) {
   }
   // solo: "arrow enemies" walk the open paths between waves to show where the next wave goes
   if (openR && !st.waveOn && !st.over) {
-    const nextW = st.wave + 1, newRi = tdOpenCount(st, nextW) > tdOpenCount(st, st.wave) || st.wave === 0 ? openR[openR.length - 1] : -1;
+    const isNew = (ri) => st.wave > 0 && !st.used.has(ri);
     const tnow = performance.now() / 1000;
     for (const ri of openR) {
       const pts = st.map.routes[ri].cells.map(([x, y]) => [x + 0.5, y + 0.5]);
@@ -5820,11 +6035,11 @@ function tdDraw(cv, st, V, o) {
         const i = Math.floor(d), f = d - i, [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
         const px = SX(x1 + (x2 - x1) * f), py = SY(y1 + (y2 - y1) * f), ang = Math.atan2(y2 - y1, (x2 - x1) * (flip ? -1 : 1)), r = ts * 0.3;
         ctx.save(); ctx.translate(px, py); ctx.rotate(ang); ctx.globalAlpha = 0.75;
-        ctx.fillStyle = ri === newRi ? "#ffe000" : "#ff4040"; ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
+        ctx.fillStyle = isNew(ri) ? "#ffe000" : "#ff4040"; ctx.strokeStyle = "#000"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(r * 1.2, 0); ctx.lineTo(-r * 0.8, -r * 0.8); ctx.lineTo(-r * 0.3, 0); ctx.lineTo(-r * 0.8, r * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.restore();
       }
-      if (ri === newRi && st.wave > 0) {
+      if (isNew(ri)) {
         const e = st.map.entries[st.map.routes[ri].entry];
         ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.45)) + "px Tahoma, sans-serif"; ctx.textAlign = "right";
         ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText("NEW PATH!", SX(st.W - 0.6), SY(e.y + 0.5)); ctx.fillStyle = "#ffe000"; ctx.fillText("NEW PATH!", SX(st.W - 0.6), SY(e.y + 0.5));
@@ -5852,12 +6067,12 @@ function tdDraw(cv, st, V, o) {
       ctx.font = Math.floor(ts * 0.55) + "px sans-serif"; ctx.fillText(performance.now() % 400 < 200 ? "💫" : "⚡", px + ts * 0.25, py - ts * 0.3);
     }
     if (o.selId === tw.id && T.range) {
-      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, T.range[tw.lvl] * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, (T.range ? tdRangeOf(st, tw, T) : 0) * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
     }
   }
   if (o.hover && o.buildType && TD.TOWERS[o.buildType].range && o.hover.side === o.side) {
     const px = SX(tdWX(st, o.hover.side, o.hover.x) + 0.5), py = SY(o.hover.y + 0.5);
-    ctx.strokeStyle = "rgba(255,255,255,.6)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, TD.TOWERS[o.buildType].range[0] * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = "rgba(255,255,255,.6)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, TD.TOWERS[o.buildType].range[0] * (st.map.cliffs.has(o.hover.x + "," + o.hover.y) ? 1.15 : 1) * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
   }
   // enemies
   for (const e of V.enemies) {
@@ -5907,6 +6122,12 @@ function tdDraw(cv, st, V, o) {
     if (f.k === "openfire" || f.k === "backup") {
       const txt = f.k === "openfire" ? "📣 OPEN FIRE!" : "📣 BACK UP!";
       ctx.font = "bold " + Math.max(10, Math.floor(ts * 0.55)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.7); ctx.fillStyle = f.k === "openfire" ? "#ff5030" : "#ffe000"; ctx.fillText(txt, a, b - ts * 0.7);
+      continue;
+    }
+    if (f.k === "lever") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("🔧", a, b - ts * 0.6); ctx.fillStyle = "#000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8, 4); ctx.fillStyle = "#ffe000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8 * Math.min(1, f.x2), 4); continue; }
+    if (f.k === "dooropen" || f.k === "reload") {
+      const txt = f.k === "dooropen" ? "🚪 DOOR OPEN!" : "reload...";
+      ctx.font = "bold " + Math.max(9, Math.floor(ts * (f.k === "reload" ? 0.4 : 0.55))) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.7); ctx.fillStyle = f.k === "reload" ? "#ffffff" : "#ff9000"; ctx.fillText(txt, a, b - ts * 0.7);
       continue;
     }
     if (f.k === "hit") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("💥", a, b); continue; }
@@ -6045,7 +6266,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     const tw = ui.V.towers.find((x) => x.side === c.side && x.lx === c.x && x.ly === c.y);
     if (tw) { ui.selId = tw.id; ui.buildType = null; ui.twClosedFor = null; refreshUI(); return; }
     if (canAct && ui.buildType && c.side === side) {
-      if (!tdCanBuild(st, side, c.x, c.y) && !st.pvp) { toast("You can't build on the path."); return; }
+      if (!tdCanBuild(st, side, c.x, c.y, ui.buildType) && !st.pvp) { toast(st.map.cliffs.has(c.x + "," + c.y) ? "Only Rifleman and Sniper can go on cliffs." : "You can't build here."); return; }
       send({ a: "build", type: ui.buildType, x: c.x, y: c.y });
       return;
     }
@@ -6079,7 +6300,8 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       if (k === sig) return;
       sig = k;
       tw_.setTitle(T.name + " - level " + (lv + 1) + "/" + (max + 1));
-      const cur = tdTowerStats(st, T, lv, bo), nxt = lv < max ? tdTowerStats(st, T, lv + 1, bo) : null;
+      const onCl = tdOnCliff(st, tw);
+      const cur = tdTowerStats(st, T, lv, bo, onCl), nxt = lv < max ? tdTowerStats(st, T, lv + 1, bo, onCl) : null;
       const box = el("div", "tdtw");
       const head = el("div", "tdtwh");
       head.append(el("span", "ti", T.icon), el("div", null));
@@ -6201,9 +6423,8 @@ function openTdSolo() {
   enB.onclick = () => tdEnemyWin(st.waveOn || st.queue.length ? st.wave : st.wave + 1);
   top.append(stats, nextB, spB, pB, enB, newB);
   nextB.onclick = () => {
-    const before = tdOpenCount(st, st.wave);
     if (!tdStartWave(st)) { toast("Wait until all the enemies of this wave are out."); return; }
-    if (st.wave > 1 && tdOpenCount(st, st.wave) > before) toast("🛣 A new path is open! Enemies can come from it now.");
+    if (st.newPaths) toast("🛣 New path! Enemies come from a road they never used before.");
   };
   spB.onclick = () => { speed = speed === 1 ? 2 : speed === 2 ? 3 : 1; spB.textContent = "⏩ x" + speed; };
   pB.onclick = () => { paused = !paused; pB.textContent = paused ? "▶" : "⏸"; ui.overlay = paused ? "PAUSE" : ""; };
@@ -6226,7 +6447,7 @@ function openTdSolo() {
       let n = 0;
       while (acc >= TD.STEP && n++ < 120) { tdStep(st, TD.STEP); acc -= TD.STEP; }
     }
-    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.order.length + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
+    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.map.routes.length + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
     nextB.textContent = st.wave === 0 ? "▶ Start wave 1" : st.waveOn ? "▶ Call wave " + (st.wave + 1) + " early (+💰)" : "▶ Wave " + (st.wave + 1);
     nextB.disabled = st.over || st.queue.length > 0;
     newB.hidden = st.wave > 0 && !st.over;
@@ -6427,7 +6648,7 @@ function openTd(gid) {
     if (role === "host") { const err = tdApply(st, 0, a); if (err) toast(err); game.refreshUI(); return; }
     if (role !== "guest") return;
     if (a.a === "build" && snap) {
-      if (!tdCanBuild({ ...st, towers: game.ui.V.towers }, 1, a.x, a.y)) { toast("You can't build here."); return; }
+      if (!tdCanBuild({ ...st, towers: game.ui.V.towers }, 1, a.x, a.y, a.type)) { toast("You can't build here."); return; }
     }
     pending.push(a);
     if (!sendT) sendT = setTimeout(flush, 120);
@@ -6452,7 +6673,7 @@ function openTd(gid) {
     if (!snap) return { towers: [], enemies: [], fx: [], money: [0, 0], lives: [20, 20], eco: [0, 0], sq: [[], []], it: 7, at: [0, 0] };
     const k = Math.min(1, (performance.now() - snapAt) / 200);
     return {
-      money: snap.m, lives: snap.l, eco: snap.ec || [0, 0], sq: snap.sq || [[], []], it: snap.it, at: snap.at || [0, 0],
+      money: snap.m, lives: snap.l, door: (snap.dr || [0, 0]).map(Boolean), eco: snap.ec || [0, 0], sq: snap.sq || [[], []], it: snap.it, at: snap.at || [0, 0],
       towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn, hp]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn, hpF: (hp ?? 100) / 100 })),
       enemies: snap.e.map(([id, ti, x, y, hp, slow, sd]) => {
         const c = curPos.get(id), p = prevPos.get(id) || c;
