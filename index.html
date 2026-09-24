@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-JsHGRF/G7ha9Z6wgCc71Z1oNWOPubl8ZDruMW4kmuMo=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-JuomHTTpLdYHIzXGqBvO4exbOirZSTJHOdkud122tVw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -577,6 +577,7 @@
   .tdtwt td.up { color: #007000; font-weight: bold; }
   .tdtwt td.same { color: #999; }
   .tdhpbar { height: 10px; }
+  .tdevo { background: #fff8d8; border: 1px solid #c0a040; padding: 3px 5px; display: flex; flex-direction: column; gap: 2px; }
   .tdnext { background: #e8ffe0; border: 1px solid #60a040; padding: 3px 5px; }
   .tdnext.max { background: #fff4b8; border-color: #b08000; font-weight: bold; text-align: center; }
   .tdenw td, .tdenw th { padding: 1px 6px; }
@@ -957,7 +958,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.17";
+const APP_VERSION = "10.18";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -5045,7 +5046,7 @@ function cleanOldGames() {
 const TD = {
   W: 24, H: 15, L: 6, SOLO_W: 28, SOLO_H: 16, STEP: 0.05,
   TOWERS: {
-    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", hp: [10, 12, 14, 16, 20], cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], ground: true, desc: "Cheap basic gun. Ground only (can't hit flyers)." },
+    gun:      { name: "Recruit Tower", icon: "🔫", color: "#707070", hp: [10, 12, 14, 16, 20], cost: 50, up: [40, 70, 110, 160], range: [2.5, 2.7, 2.9, 3.1, 3.3], dmg: [1, 1, 2, 2, 3], rate: [0.75, 0.6, 0.7, 0.6, 0.5], ground: true, desc: "Cheap basic gun. Ground only (can't hit flyers). At max level with 500 damage dealt it evolves: Officer in range → Trooper, Medic in range → Paramedic." },
     shotgun:  { name: "Shotgunner", icon: "🎇", color: "#8a5a2a", hp: [12, 14, 16, 19, 22], cost: 70, up: [50, 90, 130, 180], range: [1.8, 1.9, 2, 2.1, 2.3], dmg: [1, 1, 1, 1, 1], pellets: [3, 4, 4, 5, 6], cone: 0.45, rate: [1.4, 1.3, 1.1, 1.1, 1], ground: true, desc: "Ground only. Close range. Each shot is a spray of pellets in a cone: great against groups or one big enemy up close." },
     rifle:    { name: "Rifleman", icon: "🎖️", color: "#4a6a3a", hp: [10, 12, 14, 17, 20], cost: 80, up: [60, 100, 150, 200], range: [3, 3.2, 3.4, 3.6, 3.8], dmg: [1, 1, 1, 2, 2], burst: [3, 3, 4, 4, 5], rate: [2, 1.8, 1.8, 1.8, 1.6], air: 1, ground: true, cliff: true, heal: { from: 3, range: 1.8, pct: 0.005, every: 5 }, desc: "Fires 3 quick shots, then reloads. Hits flyers well. Level 4+: heals towers around it (0.5% HP every 5 s). Can go on cliffs (+15% range)." },
     sniper:   { name: "Sniper", icon: "🎯", color: "#2e602e", hp: [8, 9, 11, 13, 15], cost: 120, up: [90, 140, 200, 260], range: [5, 5.5, 6, 6.6, 7.2], dmg: [4, 6, 8, 11, 15], rate: [2, 1.9, 1.8, 1.6, 1.5], pierce: true, cliff: true, air: 1, ground: true, desc: "Very long range, big hits. Pierces armor. Can go on cliffs (+15% range)." },
@@ -5055,9 +5056,13 @@ const TD = {
     barracks: { name: "Barracks", icon: "⛺", color: "#7a5a30", hp: [25, 30, 35, 40, 50], cost: 150, up: [120, 160, 200, 260], pvpCost: 450, pvpUp: [300, 400, 500, 650], every: [12, 11, 10, 9, 8], hpUp: [1, 1, 1, 1.25, 1.5],
       units: [["m_recruit"], ["m_recruit", "m_gun"], ["m_recruit", "m_gun", "m_demo"], ["m_recruit", "m_rifle", "m_demo"], ["m_recruit", "m_rifle", "m_demo"]],
       desc: "Doesn't shoot. Sends mercenaries by itself: Recruit Merc (knife), then Gun Man Merc, then Demo Merc. Level 4: Gun Man becomes Rifleman. Levels 4-5: tougher mercs. Solo: they fight the enemies. PvP: they attack the other base." },
+    medic:    { name: "Medic", icon: "⛑️", color: "#e8e8e8", hp: [10, 12, 14, 16, 18], cost: 90, up: [70, 110, 150, 200], healGun: { heal: [1, 1, 2, 2, 3], rate: [2, 1.8, 1.6, 1.4, 1.2], range: [2.5, 2.7, 3, 3.2, 3.5] }, desc: "Can't attack. Shoots heal darts at hurt towers around (the most hurt first)." },
+    trooperT: { name: "Trooper", icon: "💂", color: "#3a4a2a", hp: [28], cost: 0, up: [], evolved: true, range: [3.4], dmg: [3], burst: [6], rate: [1.2], ground: true, desc: "Evolved Recruit Tower (Officer path): SMG bursts of 6 shots. Ground only." },
+    paramedic:{ name: "Paramedic", icon: "🚑", color: "#c04040", hp: [24], cost: 0, up: [], evolved: true, range: [3.3], dmg: [3], rate: [0.5], ground: true, healGun: { heal: [1], rate: [1], range: [3] }, desc: "Evolved Recruit Tower (Medic path): shoots enemies, and when no enemy is in range it shoots heal darts at hurt towers." },
     money:    { name: "Money", icon: "💰", color: "#b09020", hp: [15, 18, 22], cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only, always available)." },
   },
-  PICKS: ["gun", "shotgun", "rifle", "sniper", "grenade", "officer", "riot", "barracks"],
+  PICKS: ["gun", "shotgun", "rifle", "sniper", "grenade", "officer", "riot", "barracks", "medic"],
+  EVOLVE_DMG: 500,
   LOADOUT: 6,
   ENEMIES: {
     recruit:  { name: "Recruit", color: "#3aa040", hp: 4, speed: 0.6, reward: 5, life: 1, power: 8, cost: 12, spawn: 0.6, eco: 1, r: 0.25, solo: [1, 21, 10], worker: true, pts: 1, desc: "Simple basic enemy. Worker: can pull levers and use sentry nests." },
@@ -5183,7 +5188,7 @@ function tdDecorate(map, seed) {
   const pathN = (x, y) => N4.filter(([dx, dy]) => map.path.has(K(x + dx, y + dy))).map(([dx, dy]) => K(x + dx, y + dy));
   map.block = new Set(); map.cliffs = new Set(); map.nests = []; map.door = null;
   // door shortcut: a route that makes a long detour; link two of its cells with a short road through the grass
-  let best = null;
+  const cands = [];
   map.routes.forEach((rt, ri) => {
     const cs = rt.cells;
     for (let i = 3; i < cs.length - 6; i++) for (let j = i + 8; j < cs.length - 3; j++) {
@@ -5207,20 +5212,28 @@ function tdDecorate(map, seed) {
         });
         if (!ok) continue;
         const save = j - i - (mid.length + 1);
-        if (!best || save > best.save) best = { ri, a: i, b: j, cells: mid, save };
+        cands.push({ ri, a: i, b: j, cells: mid, save });
       }
     }
   });
-  if (best && best.save >= 5) {
+  cands.sort((p, q) => q.save - p.save);
+  for (const best of cands) {
+    if (best.save < 5 || map.door) break;
     const rt = map.routes[best.ri];
     const sc = new Set(best.cells.map(([x, y]) => K(x, y)));
     // lever: grass next to the road a few tiles before the junction
     let lever = null;
-    for (let i = best.a - 2; i >= Math.max(1, best.a - 7) && !lever; i--) {
+    // lever: far back on the road before the door (10-18 tiles, else at least 6), never right next to the door
+    const tryIdx = [];
+    for (let i = best.a - 10; i >= Math.max(1, best.a - 18); i--) tryIdx.push(i);
+    for (let i = best.a - 6; i > best.a - 10 && i >= 1; i--) tryIdx.push(i);
+    const [ax0, ay0] = rt.cells[best.a];
+    for (const i of tryIdx) {
+      if (lever) break;
       const [cx, cy] = rt.cells[i];
       for (const [dx, dy] of N4) {
         const x = cx + dx, y = cy + dy;
-        if (grass(x, y) && !sc.has(K(x, y)) && !N4.some(([ex, ey]) => sc.has(K(x + ex, y + ey)))) { lever = [x, y]; break; }
+        if (grass(x, y) && !sc.has(K(x, y)) && Math.hypot(x - ax0, y - ay0) >= 4 && !best.cells.some(([qx, qy]) => Math.hypot(qx - x, qy - y) < 4)) { lever = [x, y]; break; }
       }
     }
     if (lever) {
@@ -5238,8 +5251,8 @@ function tdDecorate(map, seed) {
     if (map.block.has(K(x, y)) || N4.some(([dx, dy]) => map.block.has(K(x + dx, y + dy)))) continue;
     map.nests.push([x, y]); map.block.add(K(x, y));
   }
-  // rare spots: watchtower (35% of maps), supply crate (40%), tunnel (30%)
-  map.watch = []; map.crates = []; map.tunnel = null;
+  // rare spots: watchtower (35% of maps), supply crate (40%)
+  map.watch = []; map.crates = [];
   const freeSpot = () => {
     for (let k = 0; k < 60; k++) {
       const [x, y] = cand[Math.floor(r() * cand.length)] || [];
@@ -5251,17 +5264,6 @@ function tdDecorate(map, seed) {
   };
   if (r() < 0.35) { const c = freeSpot(); if (c) { map.watch.push(c); map.block.add(K(...c)); } }
   if (r() < 0.4) { const c = freeSpot(); if (c) { map.crates.push(c); map.block.add(K(...c)); } }
-  if (r() < 0.3) {
-    for (let k = 0; k < 30 && !map.tunnel; k++) {
-      const ri = Math.floor(r() * map.routes.length), cs = map.routes[ri].cells;
-      if (cs.length < 20) continue;
-      const i = 3 + Math.floor(r() * (cs.length - 16)), j = i + 8 + Math.floor(r() * 6);
-      if (j >= cs.length - 3) continue;
-      const bad = (c) => map.door && [map.door.A, map.door.B].some((q) => q[0] === c[0] && q[1] === c[1]);
-      if (bad(cs[i]) || bad(cs[j])) continue;
-      map.tunnel = { ri, A: cs[i], B: cs[j] };
-    }
-  }
   // cliffs: a few smooth "mountain" blobs on the grass
   const want = Math.round(W * H * 0.07);
   for (let k = 0; k < 30 && map.cliffs.size < want; k++) {
@@ -5382,6 +5384,13 @@ function tdTowerStats(st, T, lv, boost = 0, cliff = false) {
   } else if (T.income) {
     rows.push(["Money every wave", "+" + T.income[lv] + " 💰", T.income[lv]]);
   }
+  if (T.healGun) {
+    const H = T.healGun;
+    rows.push(["Heal per dart", "+" + H.heal[lv] + " HP", H.heal[lv]]);
+    rows.push(["Heal every", H.rate[lv] + " s", -H.rate[lv]]);
+    rows.push(["Heal range", H.range[lv] + " tiles", H.range[lv]]);
+    if (T.dmg) rows.push(["Heals when", "no enemy in range", 0]);
+  }
   return { rows, dps };
 }
 // the player's 6 picked towers (saved in this browser)
@@ -5445,18 +5454,32 @@ function tdDoorTake(st, e) {
   if (j < 0) return;
   e.path = [...e.path.slice(0, e.idx), ...D.cells.map(W), ...e.path.slice(j)];
 }
-// tunnel: a worker reaching the entrance may go in (70%) and come out at the exit a bit faster
-function tdTunnelTake(st, e) {
-  const Tn = st.map.tunnel, W = (c) => [tdWX(st, e.side, c[0]) + 0.5, c[1] + 0.5];
-  const [ax, ay] = W(Tn.A);
-  if (Math.abs(e.x - ax) > 0.01 || Math.abs(e.y - ay) > 0.01 || e.tunDone || st.r() > 0.7) return false;
-  const [bx, by] = W(Tn.B);
-  const j = e.path.findIndex((q, i) => i >= e.idx && Math.abs(q[0] - bx) < 0.01 && Math.abs(q[1] - by) < 0.01);
-  if (j < 0) return false;
-  e.tunDone = true; e.hidden = true;
-  e.tun = { j, until: st.t + Math.max(1.5, (j - e.idx + 1) * 0.6 / e.speed) };
-  st.fx.push({ k: "tunnel", x1: ax, y1: ay, x2: 0, y2: 0, until: st.t + 0.8 });
-  return true;
+// Medic / Paramedic: shoot a heal dart at the most hurt tower in range (not itself)
+function tdHealShot(st, tw, T, dt) {
+  const H = T.healGun, lv = tw.lvl;
+  tw.hcd = (tw.hcd ?? 0) - dt;
+  if (tw.hcd > 0) return;
+  let best = null, bf = 1;
+  for (const o of st.towers) {
+    if (o === tw || o.dead || o.side !== tw.side || o.hp >= o.maxHp) continue;
+    if (Math.hypot(o.lx - tw.lx, o.ly - tw.ly) > H.range[lv]) continue;
+    const f = o.hp / o.maxHp;
+    if (f < bf) { bf = f; best = o; }
+  }
+  if (!best) return;
+  tw.hcd = H.rate[lv];
+  best.hp = Math.min(best.maxHp, best.hp + H.heal[lv]);
+  st.fx.push({ k: "healshot", x1: tw.wx, y1: tw.wy, x2: best.wx, y2: best.wy, until: st.t + 0.15 });
+}
+// which evolution a Recruit Tower can take: the closest Officer or Medic whose range covers it
+function tdEvolveBy(st, tw) {
+  let best = null, bd = Infinity;
+  for (const o of st.towers) {
+    if (o.dead || o.side !== tw.side || (o.type !== "officer" && o.type !== "medic")) continue;
+    const O = TD.TOWERS[o.type], r = o.type === "officer" ? O.range[o.lvl] : O.healGun.range[o.lvl], d = Math.hypot(o.lx - tw.lx, o.ly - tw.ly);
+    if (d <= r + 0.01 && d < bd) { bd = d; best = o.type === "officer" ? "trooperT" : "paramedic"; }
+  }
+  return best;
 }
 function tdHurtTower(st, tw, dmg) {
   if (tw.dead) return;
@@ -5509,8 +5532,10 @@ function tdHit(st, e, dmg, pierce, byTowerSide) {
   if (e.dead) return;
   if (dmg <= 0) return;
   const d = pierce ? dmg : Math.max(1, dmg - e.armor);
+  const done = Math.min(d, Math.max(0, e.hp));
   e.hp -= d;
   if (e.hp <= 0) { e.dead = true; if (byTowerSide >= 0) st.money[byTowerSide] += TD.ENEMIES[e.type].reward; }
+  return done;
 }
 function tdStep(st, dt) {
   if (st.over) return;
@@ -5548,13 +5573,6 @@ function tdStep(st, dt) {
   // enemies
   for (const e of st.enemies) {
     if (e.dead) continue;
-    if (e.tun) {   // inside a tunnel: can't be seen or hit, pops out at the exit
-      if (t < e.tun.until) continue;
-      const [qx, qy] = e.path[e.tun.j];
-      e.x = qx; e.y = qy; e.idx = e.tun.j + 1; e.hidden = false; e.tun = null;
-      st.fx.push({ k: "tunnel", x1: qx, y1: qy, x2: 0, y2: 0, until: t + 0.8 });
-      continue;
-    }
     const E = TD.ENEMIES[e.type];
     if (E.heal) { e.hcd = (e.hcd ?? 2) - dt; if (e.hcd <= 0) { e.hcd += 2; for (const o of st.enemies) if (o !== e && !o.dead && o.from === e.from && o.side === e.side && Math.hypot(o.x - e.x, o.y - e.y) < 1.5) o.hp = Math.min(o.maxHp, o.hp + E.heal); } }
     const fights = st.linked || !st.pvp;   // PvP linked maps, or solo (allies from Barracks vs enemies)
@@ -5763,7 +5781,7 @@ function tdStep(st, dt) {
     while (move > 0 && e.idx < e.path.length) {
       const [tx, ty] = e.path[e.idx];
       const dx = tx - e.x, dy = ty - e.y, d = Math.hypot(dx, dy);
-      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; if (st.map.door && e.side >= 0 && !e.air && (st.doorT[e.side] || 0) > t) tdDoorTake(st, e); if (st.map.tunnel && e.side >= 0 && E.worker && !e.air && tdTunnelTake(st, e)) { move = 0; break; } }
+      if (d <= move) { e.x = tx; e.y = ty; move -= d; e.dist += d; e.idx++; if (st.map.door && e.side >= 0 && !e.air && (st.doorT[e.side] || 0) > t) tdDoorTake(st, e); }
       else { e.x += dx / d * move; e.y += dy / d * move; e.dist += move; move = 0; }
     }
     if (e.idx >= e.path.length) {
@@ -5798,14 +5816,25 @@ function tdStep(st, dt) {
       }
       continue;
     }
+    // Recruit Tower evolution: max level + 500 damage + Officer (-> Trooper) or Medic (-> Paramedic) covering it
+    if (tw.type === "gun" && tw.lvl === tdMaxLvl(T) && (tw.dmgDone || 0) >= TD.EVOLVE_DMG) {
+      const ev = tdEvolveBy(st, tw);
+      if (ev) {
+        const N = TD.TOWERS[ev];
+        tw.type = ev; tw.lvl = 0; tw.hp = tw.maxHp = N.hp[0]; tw.cd = 0; tw.shots = 0;
+        st.fx.push({ k: "evolve", x1: tw.wx, y1: tw.wy, x2: 0, y2: ev === "trooperT" ? 1 : 2, until: t + 2 });
+        continue;
+      }
+    }
+    if (T.healGun && !T.dmg) { tdHealShot(st, tw, T, dt); continue; }
     if (!T.dmg) continue;
     tw.cd -= dt;
-    if (tw.cd > 0) continue;
+    if (tw.cd > 0) { if (T.healGun) tdHealShot(st, tw, T, dt); continue; }
     const range = tdRangeOf(st, tw, T), cx = tw.wx, cy = tw.wy;
     const canHit = (e) => !e.dead && !e.hidden && e.side === tw.side && tdInMap(st, tw.side, e.x) && (e.air ? !!T.air : !!T.ground) && Math.hypot(e.x - cx, e.y - cy) <= range;
     let target = null;
     for (const e of st.enemies) if (canHit(e) && (!target || e.dist > target.dist)) target = e;
-    if (!target) continue;
+    if (!target) { if (T.healGun) tdHealShot(st, tw, T, dt); continue; }
     const base = T.dmg[tw.lvl] + tdBoost(st, st.towers, tw);
     const dmgOn = (e) => Math.ceil(base * (e.air ? T.air || 0 : 1));
     if (T.burst) { tw.shots = (tw.shots || 0) + 1; if (tw.shots >= T.burst[tw.lvl]) { tw.shots = 0; tw.cd = T.rate[tw.lvl]; } else tw.cd = 0.15; }
@@ -5831,7 +5860,7 @@ function tdStep(st, dt) {
       tdHit(st, target, dmgOn(target), false, tw.side);
       st.fx.push({ k: "riot", x1: cx, y1: cy, x2: target.x, y2: target.y, until: t + 0.15 });
     } else {
-      tdHit(st, target, dmgOn(target), !!T.pierce, tw.side);
+      tw.dmgDone = (tw.dmgDone || 0) + (tdHit(st, target, dmgOn(target), !!T.pierce, tw.side) || 0);
       st.fx.push({ k: tw.type, x1: cx, y1: cy, x2: target.x, y2: target.y, until: t + (tw.type === "sniper" ? 0.2 : 0.08) });
     }
   }
@@ -5894,7 +5923,7 @@ function tdApply(st, side, a) {
   if (st.over || !a) return "Game over";
   if (a.a === "build") {
     const T = TD.TOWERS[a.type];
-    if (!T || (st.pvp && a.type === "money")) return "?";
+    if (!T || T.evolved || (st.pvp && a.type === "money")) return "?";
     if (!tdCanBuild(st, side, a.x | 0, a.y | 0, a.type)) return st.map.cliffs.has((a.x | 0) + "," + (a.y | 0)) ? "Only Rifleman and Sniper can go on cliffs." : "You can't build here.";
     const cost = tdCost(st, T);
     if (st.money[side] < cost) return "Not enough money.";
@@ -5947,7 +5976,7 @@ function tdSnap(st) {
   const r1 = (v) => Math.round(v * 20);
   return JSON.stringify({
     t: Math.round(st.t * 10), m: st.money.map(Math.floor), l: st.lives, o: st.over ? 1 : 0, w: st.winner,
-    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0, Math.max(1, Math.round(x.hp / x.maxHp * 100))]),
+    tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0, Math.max(1, Math.round(x.hp / x.maxHp * 100)), Math.floor(x.dmgDone || 0)]),
     e: st.enemies.filter((e) => !e.hidden).slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
     dr: st.doorT.map((x) => (x > st.t ? 1 : 0)), ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
@@ -6020,7 +6049,7 @@ function tdDraw(cv, st, V, o) {
       ctx.fillStyle = "rgba(0,0,0,.4)"; if (!isC(x, y + 1)) ctx.fillRect(px, py + ts - 3, ts, 3);
       if (!isC(x + (flip ? -1 : 1), y)) ctx.fillRect(px + ts - 2, py, 2, ts);
     }
-    // watchtower, supply crate, tunnel
+    // watchtower, supply crate
     for (const [x, y] of M.watch) {
       const px = SX(tdWX(st, side, x) + 0.5), py = SY(y + 0.5);
       ctx.strokeStyle = "#5a3a18"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px - ts * 0.35, py + ts * 0.45); ctx.lineTo(px - ts * 0.2, py - ts * 0.15); ctx.moveTo(px + ts * 0.35, py + ts * 0.45); ctx.lineTo(px + ts * 0.2, py - ts * 0.15); ctx.moveTo(px - ts * 0.3, py + ts * 0.15); ctx.lineTo(px + ts * 0.3, py + ts * 0.15); ctx.stroke();
@@ -6030,12 +6059,6 @@ function tdDraw(cv, st, V, o) {
       const px = SX(tdWX(st, side, x) + 0.5), py = SY(y + 0.5);
       ctx.fillStyle = "#a07030"; ctx.fillRect(px - ts * 0.32, py - ts * 0.28, ts * 0.64, ts * 0.56); ctx.strokeStyle = "#4a3010"; ctx.lineWidth = 1; ctx.strokeRect(px - ts * 0.32 + 0.5, py - ts * 0.28 + 0.5, ts * 0.64, ts * 0.56);
       ctx.fillStyle = "#e02020"; ctx.fillRect(px - ts * 0.06, py - ts * 0.2, ts * 0.12, ts * 0.4); ctx.fillRect(px - ts * 0.2, py - ts * 0.06, ts * 0.4, ts * 0.12);
-    }
-    if (M.tunnel) for (const [c, lab] of [[M.tunnel.A, "IN"], [M.tunnel.B, "OUT"]]) {
-      const px = SX(tdWX(st, side, c[0]) + 0.5), py = SY(c[1] + 0.5);
-      ctx.fillStyle = "#1a1208"; ctx.beginPath(); ctx.ellipse(px, py, ts * 0.42, ts * 0.3, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "#6a5030"; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = "#e0d0a0"; ctx.font = "bold " + Math.max(7, Math.floor(ts * 0.28)) + "px Tahoma, sans-serif"; ctx.fillText(lab, px, py + 1);
     }
     // sentry nests (sandbags)
     for (const [x, y] of M.nests) {
@@ -6146,6 +6169,7 @@ function tdDraw(cv, st, V, o) {
     ctx.strokeStyle = "#000"; ctx.beginPath(); ctx.moveTo(px + ts * 0.42, py - ts * 0.42); ctx.lineTo(px + ts * 0.42, py + ts * 0.42); ctx.lineTo(px - ts * 0.42, py + ts * 0.42); ctx.stroke();
     ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText(T.icon, px, py + 1);
     for (let i = 0; i < tw.lvl; i++) { ctx.fillStyle = "#ffe000"; ctx.fillRect(px - ts * 0.38 + i * ts * 0.19, py + ts * 0.25, ts * 0.14, ts * 0.13); }
+    if (T.evolved) { ctx.font = Math.floor(ts * 0.38) + "px sans-serif"; ctx.fillText("⭐", px - ts * 0.28, py - ts * 0.26); }
     if (T.dmg && tdBoost(st, V.towers, tw)) { ctx.fillStyle = "#ff9000"; ctx.font = "bold " + Math.floor(ts * 0.38) + "px sans-serif"; ctx.fillText("▲", px + ts * 0.28, py - ts * 0.26); }
     const hpF = tw.hpF ?? (tw.maxHp ? tw.hp / tw.maxHp : 1);
     if (hpF < 0.999) { ctx.fillStyle = "#000"; ctx.fillRect(px - ts * 0.42, py - ts * 0.55, ts * 0.84, 3); ctx.fillStyle = hpF > 0.5 ? "#20e020" : hpF > 0.25 ? "#e0c000" : "#e02020"; ctx.fillRect(px - ts * 0.42, py - ts * 0.55, ts * 0.84 * Math.max(0, hpF), 3); }
@@ -6211,9 +6235,10 @@ function tdDraw(cv, st, V, o) {
       ctx.font = "bold " + Math.max(10, Math.floor(ts * 0.55)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.7); ctx.fillStyle = f.k === "openfire" ? "#ff5030" : "#ffe000"; ctx.fillText(txt, a, b - ts * 0.7);
       continue;
     }
+    if (f.k === "healshot") { ctx.strokeStyle = "#40ff80"; ctx.lineWidth = 2; ctx.setLineDash([3, 2]); ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(SX(f.x2), SY(f.y2)); ctx.stroke(); ctx.setLineDash([]); ctx.font = Math.floor(ts * 0.45) + "px sans-serif"; ctx.fillText("➕", SX(f.x2), SY(f.y2) - ts * 0.5); continue; }
+    if (f.k === "evolve") { const txt = f.y2 === 1 ? "⭐ TROOPER!" : "⭐ PARAMEDIC!"; ctx.font = "bold " + Math.max(10, Math.floor(ts * 0.6)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(txt, a, b - ts * 0.8); ctx.fillStyle = "#ffe000"; ctx.fillText(txt, a, b - ts * 0.8); continue; }
     if (f.k === "crate") { ctx.strokeStyle = "rgba(80,255,120,.8)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); ctx.font = "bold " + Math.max(9, Math.floor(ts * 0.5)) + "px Tahoma, sans-serif"; ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText("📦 SUPPLIES! +3 HP", a, b - ts * 0.7); ctx.fillStyle = "#60ff80"; ctx.fillText("📦 SUPPLIES! +3 HP", a, b - ts * 0.7); continue; }
     if (f.k === "watchup") { ctx.strokeStyle = "rgba(255,200,40,.6)"; ctx.setLineDash([3, 3]); ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(a, b, f.x2 * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); ctx.font = Math.floor(ts * 0.5) + "px sans-serif"; ctx.fillText("🔭", a, b - ts * 0.6); continue; }
-    if (f.k === "tunnel") { ctx.fillStyle = "rgba(120,90,40,.7)"; ctx.beginPath(); ctx.arc(a, b, ts * 0.5, 0, Math.PI * 2); ctx.fill(); continue; }
     if (f.k === "lever") { ctx.font = Math.floor(ts * 0.6) + "px sans-serif"; ctx.fillText("🔧", a, b - ts * 0.6); ctx.fillStyle = "#000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8, 4); ctx.fillStyle = "#ffe000"; ctx.fillRect(a - ts * 0.4, b - ts * 0.35, ts * 0.8 * Math.min(1, f.x2), 4); continue; }
     if (f.k === "dooropen" || f.k === "reload") {
       const txt = f.k === "dooropen" ? "🚪 DOOR OPEN!" : "reload...";
@@ -6386,7 +6411,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       const bo = T.dmg ? tdBoost(st, ui.V.towers, tw) : 0;
       const uc = lv < max ? tdUpCost(st, T, lv) : 0;
       const spent = tw.spent ?? (tdCost(st, T) + ((st.pvp && T.pvpUp) || T.up).slice(0, lv).reduce((a, b) => a + b, 0));
-      const k = [tw.id, lv, bo, mine, lv < max && money >= uc, tw.stunned, Math.round((tw.hp ?? (tw.hpF ?? 1) * T.hp[lv]) * 10)].join("|");
+      const k = [tw.id, tw.type, Math.floor((tw.dmgDone || 0) / 10), lv, bo, mine, lv < max && money >= uc, tw.stunned, Math.round((tw.hp ?? (tw.hpF ?? 1) * T.hp[lv]) * 10)].join("|");
       if (k === sig) return;
       sig = k;
       tw_.setTitle(T.name + " - level " + (lv + 1) + "/" + (max + 1));
@@ -6397,6 +6422,13 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       head.append(el("span", "ti", T.icon), el("div", null));
       head.lastChild.append(el("b", null, T.name), el("div", "tdpips", "★".repeat(lv + 1) + "☆".repeat(max - lv)));
       box.append(head, el("div", "hint", T.desc));
+      if (tw.type === "gun") {
+        const dd = Math.floor(tw.dmgDone || 0), E_ = TD.EVOLVE_DMG, ok = lv === max, lvlTxt = ok ? "✔ max level" : "✖ needs max level";
+        const eb = el("div", "tdevo");
+        const bar = el("div", "pvpbar sunken tdhpbar"); const fl = el("div", "fill"); fl.style.width = Math.min(100, dd / E_ * 100) + "%"; fl.style.background = "#d0a000"; bar.append(fl);
+        eb.append(el("b", null, "⭐ Evolution: " + Math.min(dd, E_) + " / " + E_ + " damage · " + lvlTxt), bar, el("div", "hint", "Then: 📣 Officer covering it → 💂 Trooper (SMG) · ⛑️ Medic covering it → 🚑 Paramedic (shoots + heals)"));
+        box.append(eb);
+      }
       if (tw.stunned) box.append(el("div", "tdstun", "💫 Stunned right now!"));
       const hpNow = tw.hp ?? (tw.hpF ?? 1) * T.hp[lv], hpF = hpNow / T.hp[lv];
       const hb = el("div", "pvpbar sunken tdhpbar"); const hf = el("div", "fill"); hf.style.width = Math.max(0, hpF * 100) + "%"; hf.style.background = hpF > 0.5 ? "#20b020" : hpF > 0.25 ? "#d0a000" : "#d02020"; hb.append(hf);
@@ -6764,7 +6796,7 @@ function openTd(gid) {
     const k = Math.min(1, (performance.now() - snapAt) / 200);
     return {
       money: snap.m, lives: snap.l, door: (snap.dr || [0, 0]).map(Boolean), eco: snap.ec || [0, 0], sq: snap.sq || [[], []], it: snap.it, at: snap.at || [0, 0],
-      towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn, hp]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn, hpF: (hp ?? 100) / 100 })),
+      towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn, hp, dd]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn, hpF: (hp ?? 100) / 100, dmgDone: dd || 0 })),
       enemies: snap.e.map(([id, ti, x, y, hp, slow, sd]) => {
         const c = curPos.get(id), p = prevPos.get(id) || c;
         return { id, type: TD.ETYPES[ti], x: p[0] + (c[0] - p[0]) * k, y: p[1] + (c[1] - p[1]) * k, hp: hp / 100, slow: !!slow, side: sd };
