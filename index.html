@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-P4ex+55f2Vsv3z0ZJw+bTP6ERiPJHMv+ojeQZdvk4V8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-9oiWoKwTf79nPOCao6m96j2a9OZ/Tap882t1KXiwMO8=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -965,7 +965,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.19";
+const APP_VERSION = "10.20";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5141,8 +5141,8 @@ const TD = {
       units: [["m_recruit"], ["m_recruit", "m_gun"], ["m_recruit", "m_gun", "m_demo"], ["m_recruit", "m_rifle", "m_demo"], ["m_recruit", "m_rifle", "m_demo"]],
       desc: "Doesn't shoot. Sends mercenaries by itself: Recruit Merc (knife), then Gun Man Merc, then Demo Merc. Level 4: Gun Man becomes Rifleman. Levels 4-5: tougher mercs. Solo: they fight the enemies. PvP: they attack the other base." },
     medic:    { name: "Medic", icon: "⛑️", color: "#e8e8e8", hp: [10, 12, 14, 16, 18], cost: 90, up: [70, 110, 150, 200], healGun: { heal: [1, 1, 2, 2, 3], rate: [2, 1.8, 1.6, 1.4, 1.2], range: [2.5, 2.7, 3, 3.2, 3.5] }, desc: "Can't attack. Shoots heal darts at hurt towers around (the most hurt first)." },
-    trooperT: { name: "Trooper", icon: "💂", color: "#3a4a2a", hp: [28], cost: 0, up: [], evolved: true, range: [3.4], dmg: [3], burst: [6], rate: [1.2], ground: true, desc: "Evolved Recruit Tower (Officer path): SMG bursts of 6 shots. Ground only." },
-    paramedic:{ name: "Paramedic", icon: "🚑", color: "#c04040", hp: [24], cost: 0, up: [], evolved: true, range: [3.3], dmg: [3], rate: [0.5], ground: true, healGun: { heal: [1], rate: [1], range: [3] }, desc: "Evolved Recruit Tower (Medic path): shoots enemies, and when no enemy is in range it shoots heal darts at hurt towers." },
+    trooperT: { name: "Trooper", icon: "💂", color: "#3a4a2a", hp: [28, 32, 38], cost: 0, up: [150, 250], evolved: true, range: [3.4, 3.6, 3.8], dmg: [3, 3, 4], burst: [6, 7, 8], rate: [1.2, 1.1, 1], ground: true, desc: "Evolved Recruit Tower (Officer path): SMG bursts of 6 shots. Ground only." },
+    paramedic:{ name: "Paramedic", icon: "🚑", color: "#c04040", hp: [24, 28, 32], cost: 0, up: [150, 250], evolved: true, range: [3.3, 3.5, 3.7], dmg: [3, 3, 4], rate: [0.5, 0.45, 0.4], ground: true, healGun: { heal: [1, 2, 2], rate: [1, 0.9, 0.8], range: [3, 3.3, 3.6] }, desc: "Evolved Recruit Tower (Medic path): shoots enemies, and when no enemy is in range it shoots heal darts at hurt towers." },
     money:    { name: "Money", icon: "💰", color: "#b09020", hp: [15, 18, 22], cost: 100, up: [90, 150], income: [25, 45, 70], pvpIncome: [6, 11, 17], desc: "Doesn't shoot. Gives money every wave (solo only, always available)." },
   },
   PICKS: ["gun", "shotgun", "rifle", "sniper", "grenade", "officer", "riot", "barracks", "medic"],
@@ -5305,21 +5305,20 @@ function tdDecorate(map, seed) {
     if (best.save < 5 || map.door) break;
     const rt = map.routes[best.ri];
     const sc = new Set(best.cells.map(([x, y]) => K(x, y)));
-    // lever: grass next to the road a few tiles before the junction
     let lever = null;
-    // lever: far back on the road before the door (10-18 tiles, else at least 6), never right next to the door
-    const tryIdx = [];
-    for (let i = best.a - 10; i >= Math.max(1, best.a - 18); i--) tryIdx.push(i);
-    for (let i = best.a - 6; i > best.a - 10 && i >= 1; i--) tryIdx.push(i);
+    // lever: FAR from the door (8+ tiles), next to a road, and NOT on the road just before the door
     const [ax0, ay0] = rt.cells[best.a];
-    for (const i of tryIdx) {
-      if (lever) break;
-      const [cx, cy] = rt.cells[i];
-      for (const [dx, dy] of N4) {
-        const x = cx + dx, y = cy + dy;
-        if (grass(x, y) && !sc.has(K(x, y)) && Math.hypot(x - ax0, y - ay0) >= 4 && !best.cells.some(([qx, qy]) => Math.hypot(qx - x, qy - y) < 4)) { lever = [x, y]; break; }
-      }
+    const before = new Set(rt.cells.slice(Math.max(0, best.a - 20), best.a + 1).map(([x, y]) => K(x, y)));
+    const spots = [];
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (!grass(x, y) || sc.has(K(x, y)) || map.block.has(K(x, y))) continue;
+      const pn = pathN(x, y);
+      if (!pn.length || pn.some((c) => before.has(c))) continue;
+      const d = Math.hypot(x - ax0, y - ay0);
+      if (d < 8 || best.cells.some(([qx, qy]) => Math.hypot(qx - x, qy - y) < 8)) continue;
+      spots.push([x, y, d]);
     }
+    if (spots.length) { const far = spots.filter((q) => q[2] >= 10); const pool = far.length ? far : spots; const q = pool[Math.floor(r() * pool.length)]; lever = [q[0], q[1]]; }
     if (lever) {
       map.door = { ri: best.ri, A: rt.cells[best.a], B: rt.cells[best.b], cells: best.cells, lever };
       best.cells.forEach(([x, y]) => { map.path.add(K(x, y)); map.block.add(K(x, y)); });
@@ -5375,7 +5374,7 @@ function tdDecorate(map, seed) {
   return map;
 }
 const tdOnCliff = (st, tw) => st.map.cliffs.has(tw.lx + "," + tw.ly);
-const tdRangeOf = (st, tw, T) => T.range[tw.lvl] * (tdOnCliff(st, tw) ? 1.15 : 1);
+const tdRangeOf = (st, tw, T) => (T.range || T.healGun?.range || [0])[tw.lvl] * (tdOnCliff(st, tw) ? 1.15 : 1);
 // solo flyer: from a road cell, jump (max 5 tiles) to the road cell (any path) closest to the base
 function tdFlyRoute(st, side, sx, sy) {
   const out = [];
@@ -5411,19 +5410,22 @@ function tdNewState({ seed, pvp, linked }) {
     wave: 0, waveOn: false, queue: [], squads: [[], []], spawnQ: [[], []], autoT: [TD.AUTO_EVERY, TD.AUTO_EVERY], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
     doorT: [0, 0], nestBy: [[], []], crateT: [[], []],
   };
-  if (!pvp) { st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1); }
+  if (!pvp) {
+    st.unlock = map.routes.map((_, i) => i);
+    for (let i = st.unlock.length - 1; i > 0; i--) { const j = Math.floor(st.r() * (i + 1)); [st.unlock[i], st.unlock[j]] = [st.unlock[j], st.unlock[i]]; }
+    st.cur = []; st.used = new Set(); st.plan = tdPickPlan(st, 1);
+  }
   return st;
 }
 // solo: how many paths are open for a wave (1 path for waves 1-5, +1 every 5 waves)
 const TD_PATH_EVERY = 5;
-function tdOpenCount(st, wave) { return Math.min(st.map.routes.length, 1 + Math.floor(Math.max(0, wave - 1) / TD_PATH_EVERY)); }
-// every path can be used: pick at random which ones the wave will use (more paths later)
-function tdPickPlan(st, wave) {
-  const all = st.map.routes.map((_, i) => i);
-  for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(st.r() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
-  return all.slice(0, tdOpenCount(st, wave)).sort((a, b) => a - b);
-}
-// paths used by the running wave, or planned for the next one
+// wave where each new path opens: 1 path, +1 after 5 waves, then after 4, 3, 2, 1, 1...
+function tdUnlockWaves(n) { const out = [1]; let at = 1, gap = TD_PATH_EVERY; while (out.length < n) { at += gap; out.push(at); gap = Math.max(1, gap - 1); } return out; }
+function tdOpenCount(st, wave) { return tdUnlockWaves(st.map.routes.length).filter((w) => wave >= w).length || 1; }
+function tdNextPathIn(st, wave) { const w = tdUnlockWaves(st.map.routes.length).find((x) => x > wave); return w ? w - wave : 0; }
+// paths open for a wave: once a path opens it stays open (random order, no "main" path)
+function tdPickPlan(st, wave) { return st.unlock.slice(0, tdOpenCount(st, wave)).sort((a, b) => a - b); }
+// paths used by the running wave, or open for the next one
 function tdOpenRoutes(st) { return (st.waveOn || st.queue.length) && st.cur.length ? st.cur : st.plan; }
 const tdCost = (st, T) => (st.pvp && T.pvpCost) || T.cost;
 const tdUpCost = (st, T, lv) => ((st.pvp && T.pvpUp) || T.up)[lv];
@@ -5982,22 +5984,40 @@ function tdStartWave(st) {
   const hpMult = 1 + 0.15 * (w - 1) + 0.012 * (w - 1) * (w - 1);
   const pool = tdSoloPool(w);
   const totalW = pool.reduce((n, [, c]) => n + c, 0);
+  // a wave = groups. A group = one enemy type, spawned X times with a small gap, on one path.
+  // Several groups run at the same time (max = open paths + 1), each on its own path when possible.
   let budget = 4 + w * 6 + w * w * 0.6;
-  const list = [];
-  if (w % 10 === 0) list.push("boss");
-  while (budget > 0 && list.length < 80) {
+  const groups = [];
+  if (w % 10 === 0) groups.push({ type: "boss", n: 1 });
+  let total = 0;
+  while (budget > 0 && total < 80) {
     let roll = st.r() * totalW, ty = pool[0][0];
     for (const [k, c] of pool) { roll -= c; if (roll < 0) { ty = k; break; } }
-    budget -= TD.ENEMIES[ty].pts;
-    list.push(ty);
+    const pts = TD.ENEMIES[ty].pts;
+    const want = 2 + Math.floor(st.r() * (2 + w / 4));
+    const n = Math.max(1, Math.min(want, Math.ceil(budget / pts), 80 - total));
+    budget -= n * pts; total += n;
+    groups.push({ type: ty, n });
   }
-  const gap = Math.max(0.3, 0.75 * Math.pow(0.97, w));
-  let at = st.t + 0.5;
+  const gap = Math.max(0.25, 0.9 * Math.pow(0.95, w - 1));   // time between two enemies of a group (shorter later)
   const open = st.plan;
   st.newPaths = open.filter((ri) => !st.used.has(ri)).length && w > 1;
   st.cur = open; open.forEach((ri) => st.used.add(ri));
   st.plan = tdPickPlan(st, w + 1);
-  for (const ty of list) { st.queue.push({ at, type: ty, route: open[Math.floor(st.r() * open.length)], hp: hpMult }); at += ty === "boss" ? 2 : gap; }
+  const lanes = new Array(Math.min(groups.length, open.length + 1)).fill(st.t + 0.5);
+  const busy = new Map();   // path -> time it is free again
+  groups.forEach((g, gi) => {
+    let li = 0; for (let i = 1; i < lanes.length; i++) if (lanes[i] < lanes[li]) li = i;
+    const start = lanes[li];
+    const free = open.filter((ri) => (busy.get(ri) || 0) <= start);
+    const choice = free.length ? free : open;
+    const route = choice[Math.floor(st.r() * choice.length)];
+    for (let k = 0; k < g.n; k++) st.queue.push({ at: start + k * (g.type === "boss" ? 2 : gap), type: g.type, route, hp: hpMult });
+    const end = start + g.n * gap;
+    busy.set(route, end);
+    lanes[li] = end + 1 + st.r() * 1.5;
+  });
+  st.queue.sort((a, b) => a.at - b.at);
   st.waveOn = true;
   if (early) st.money[0] += 10 + w;
   return true;
@@ -6261,8 +6281,8 @@ function tdDraw(cv, st, V, o) {
       ctx.fillStyle = "rgba(0,0,0,.45)"; ctx.fillRect(px - ts * 0.42, py - ts * 0.42, ts * 0.84, ts * 0.84);
       ctx.font = Math.floor(ts * 0.55) + "px sans-serif"; ctx.fillText(performance.now() % 400 < 200 ? "💫" : "⚡", px + ts * 0.25, py - ts * 0.3);
     }
-    if (o.selId === tw.id && T.range) {
-      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, (T.range ? tdRangeOf(st, tw, T) : 0) * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+    if (o.selId === tw.id && (T.range || T.healGun)) {
+      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(px, py, tdRangeOf(st, tw, T) * ts, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
     }
   }
   if (o.hover && o.buildType && TD.TOWERS[o.buildType].range && o.hover.side === o.side) {
@@ -6422,7 +6442,8 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       const stats = T.dmg ? "Damage " + T.dmg[lv] + (bo ? " (+" + bo + " 📣)" : "") + (T.pellets ? " x " + T.pellets[lv] + " pellets" : "") + (T.burst ? " x " + T.burst[lv] + " shots" : "") + " · range " + T.range[lv] + " · " + (T.burst ? "reload " : "every ") + T.rate[lv] + " s" + (T.splash ? " · blast " + T.splash[lv] : "") + (T.stunRes ? " · stuns " + (T.stunRes[lv] ? "x" + T.stunRes[lv] : "immune") : "")
         : T.boost ? "Towers in range " + T.range[lv] + " get +" + T.boost[lv] + " damage per hit"
         : T.every ? "Sends " + T.units[lv].map((u) => TD.ICON[u] + " " + TD.ENEMIES[u].name).join(", ") + " (one every " + T.every[lv] + " s" + (T.hpUp[lv] > 1 ? ", HP x" + T.hpUp[lv] : "") + ")" + (st.pvp ? " to attack the other base" : " as allies")
-        : "Income: +" + T.income[lv] + " 💰 every wave";
+        : T.healGun ? "Heals +" + T.healGun.heal[lv] + " HP every " + T.healGun.rate[lv] + " s · range " + T.healGun.range[lv]
+        : T.income ? "Income: +" + T.income[lv] + " 💰 every wave" : "";
       info.append(el("b", null, T.icon + " " + T.name + " (level " + (lv + 1) + "/" + (tdMaxLvl(T) + 1) + ")"), el("span", "dim", "  " + stats));
       const det = el("button", null, "🔎 Details / upgrade"); det.type = "button"; det.onclick = () => { ui.twClosedFor = null; openTowerWin(tw); }; info.append(det);
       if (ui.twWin?.w.isConnected) ui.twWin.show(tw, mine, money);
@@ -6630,7 +6651,7 @@ function openTdSolo() {
   top.append(stats, nextB, spB, pB, enB, newB);
   nextB.onclick = () => {
     if (!tdStartWave(st)) { toast("Wait until all the enemies of this wave are out."); return; }
-    if (st.newPaths) toast("🛣 New path! Enemies come from a road they never used before.");
+    if (st.newPaths) toast("🛣 New path open! It stays open from now on.");
   };
   spB.onclick = () => { speed = speed === 1 ? 2 : speed === 2 ? 3 : 1; spB.textContent = "⏩ x" + speed; };
   pB.onclick = () => { paused = !paused; pB.textContent = paused ? "▶" : "⏸"; ui.overlay = paused ? "PAUSE" : ""; };
@@ -6653,7 +6674,7 @@ function openTdSolo() {
       let n = 0;
       while (acc >= TD.STEP && n++ < 120) { tdStep(st, TD.STEP); acc -= TD.STEP; }
     }
-    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.map.routes.length + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
+    stats.textContent = "❤ " + st.lives[0] + "/20   💰 " + Math.floor(st.money[0]) + "   🛣 Paths " + tdOpenRoutes(st).length + "/" + st.map.routes.length + (tdNextPathIn(st, st.waveOn ? st.wave : st.wave + 1) ? " (next in " + tdNextPathIn(st, st.waveOn ? st.wave : st.wave + 1) + ")" : "") + "   🌊 Wave " + st.wave + (st.waveOn ? " (" + (st.enemies.filter((x) => x.side === 0).length + st.queue.length) + " left)" : "");
     nextB.textContent = st.wave === 0 ? "▶ Start wave 1" : st.waveOn ? "▶ Call wave " + (st.wave + 1) + " early (+💰)" : "▶ Wave " + (st.wave + 1);
     nextB.disabled = st.over || st.queue.length > 0;
     newB.hidden = st.wave > 0 && !st.over;
