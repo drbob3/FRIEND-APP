@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Vmu3RdBsM3Z+/4s56LNMCkCaWW7PVQV4ARMPMkLJgaM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-LHO3Czod009GLkB1C/436FsvjqbAjHUIegBVwDGnnGU=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -864,16 +864,16 @@
       </div>
       <div class="raised">
         <form class="tabpanel" id="loginForm" data-panel="login">
-          <label class="f">Username (or your email)<input type="text" id="liUser" class="sunken" autocomplete="username" maxlength="80" required></label>
+          <label class="f">Username<input type="text" id="liUser" class="sunken" autocomplete="username" maxlength="80" required></label>
           <label class="f">Password<input type="password" id="liPass" class="sunken" autocomplete="current-password" required></label>
           <div class="err" id="liErr"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><a href="#" id="forgotBtn" style="font-size:12px">🔑 I forgot my password</a><button type="submit">Log in</button></div>
+          <div class="buttons"><button type="submit">Log in</button></div>
         </form>
         <form class="tabpanel" id="regForm" data-panel="register" hidden>
           <label class="f">Choose a username<input type="text" id="rgUser" class="sunken" autocomplete="username" maxlength="20" required>
             <span class="hint">3 to 20 characters: letters, numbers and _</span></label>
           <label class="f">Password<input type="password" id="rgPass" class="sunken" autocomplete="new-password" required></label>
-          <div class="hint" style="color:#a00000">⚠ Write your password down somewhere! If you forget it, use "🔑 I forgot my password" and the head admin will help you choose a new one.</div>
+          <div class="hint" style="color:#a00000">⚠ Write your password down somewhere! If you forget it, there is no way to get your account back.</div>
           <div class="meter" id="meter"><span></span><span></span><span></span><span></span></div>
           <div class="hint" id="meterText">At least 10 characters. Long phrases are best, e.g. "purple-tiger-eats-42-pizzas".</div>
           <label class="f">Confirm password<input type="password" id="rgPass2" class="sunken" autocomplete="new-password" required></label>
@@ -931,7 +931,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.8";
+const APP_VERSION = "10.9";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -1402,33 +1402,6 @@ async function sendHelpMessage(text, name) {
   if (name) upd["support/" + u.uid + "/name"] = name.slice(0, 24);
   await D.update(R("/"), upd);
 }
-$("forgotBtn").addEventListener("click", async (e) => {
-  e.preventDefault();
-  $("liErr").textContent = "";
-  const u = $("liUser").value.trim();
-  const own = u.includes("@") ? u : savedEmail(u);
-  if (own) {
-    if (!EMAIL_RE.test(own)) { $("liErr").textContent = "This email doesn't look right."; return; }
-    const ok1 = await dialog({ title: "🔑 I forgot my password", message: "Send a password reset email to:\n" + own + "\n\nOpen the email, click the link and choose a new password. (Check your Spam folder too.)", okText: "Send the reset" });
-    if (!ok1) return;
-    try { await A.sendPasswordResetEmail(auth, own); toast("🔑 Reset email sent to " + own + " — check your inbox!"); $("liErr").style.color = "#006000"; $("liErr").textContent = "✔ Reset email sent to " + own + ". If you don't get it, check that this is the email you added in Settings."; setTimeout(() => { $("liErr").style.color = ""; }, 15000); }
-    catch (err) { $("liErr").textContent = authError(err); logError("Reset: " + (err?.message || err)); }
-    return;
-  }
-  if (!USER_RE.test(u)) { $("liErr").textContent = "Type your username (or your email) above first, then click \"I forgot my password\"."; $("liUser").focus(); return; }
-  const ok = await dialog({ title: "🔑 I forgot my password", message: "Send a password reset for \"" + u + "\"?\n\n(If you added your own email in Settings, type your EMAIL above instead, and the reset comes straight to you.)\n\nThe reset email goes to the site's head admin. The admin will send you the link here (in the help messages, on this device). You click it and choose a new password yourself.\n\n⚠ Accounts made before v10.6 that were never moved can't get the email. If the admin gets nothing, log in once with your password (that moves your account) or ask the admin.", okText: "Send the reset" });
-  if (!ok) return;
-  try {
-    await A.sendPasswordResetEmail(auth, loginEmail(u));
-    await sendHelpMessage("🔑 I forgot my password. A reset email was sent for my username \"" + u + "\". Can you send me the link?", u);
-    $("supName").value = u;
-    selectLoginTab("support");
-    toast("🔑 Reset sent! Come back here later to get the link from the admin.");
-  } catch (err) {
-    $("liErr").textContent = /permission/i.test(err?.message || "") ? "Wait a little and try again." : authError(err);
-    logError("Reset: " + (err?.message || err));
-  }
-});
 $("supForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("supErr").textContent = "";
@@ -1506,12 +1479,12 @@ $("loginForm").addEventListener("submit", async (e) => {
     await A.setPersistence(auth, A.browserLocalPersistence);
     const pw = $("liPass").value;
     // try each possible login email for this account, in order
-    const tries = byMail ? [u] : [savedEmail(u), loginEmail(u), oldEmail(u)].filter(Boolean);
+    // accounts can have different login emails depending on when they were made: try them all, silently
+    const tries = byMail ? [u] : [...new Set([savedEmail(u), oldEmail(u), loginEmail(u)].filter(Boolean))];
     let last = null;
     for (const mail of tries) {
       try {
         await A.signInWithEmailAndPassword(auth, mail, pw); last = null;
-        if (mail === oldEmail(u) && A.verifyBeforeUpdateEmail) moveOldAccount(auth.currentUser, u);
         break;
       }
       catch (e1) {
@@ -1522,7 +1495,6 @@ $("loginForm").addEventListener("submit", async (e) => {
     if (last) throw last;
   } catch (err) {
     let m = authError(err);
-    if (!byMail && /invalid-credential|user-not-found|wrong-password/.test(err?.code || "")) m += "\nIf you added your own email, log in with your email instead.";
     $("liErr").textContent = m;
   }
 });
@@ -1539,7 +1511,7 @@ $("regForm").addEventListener("submit", async (e) => {
   try {
     await A.setPersistence(auth, A.browserLocalPersistence);
     // the old-style login may already use this name
-    await A.createUserWithEmailAndPassword(auth, loginEmail(u), p);
+    await A.createUserWithEmailAndPassword(auth, oldEmail(u), p);
   } catch (err) { pendingName = null; $("rgErr").textContent = authError(err); }
 });
 $("guestForm").addEventListener("submit", async (e) => {
@@ -1732,7 +1704,7 @@ function openSupportThread(uid) {
   const win = openWindow("Help chat - " + (t0?.name || "Someone"), "📨", { key: "sup-" + uid, narrow: true });
   const list = el("div", "suplist sunken");
   const ta = el("textarea", "sunken"); ta.rows = 3; ta.maxLength = 500; ta.placeholder = "Your answer (they see it on the log in page, on the device they wrote from)"; ta.style.width = "100%"; ta.style.boxSizing = "border-box"; ta.style.font = "13px Tahoma, sans-serif";
-  const info = el("div", "hint", "They are not logged in. 🔑 Forgot password? Open " + RESET_BOX + "@gmail.com, find the email \"Reset your password\" for " + RESET_BOX + "+THEIRNAME@gmail.com, copy the link and paste it here: they click it and choose a new password. (Or click it yourself, choose a password and tell them.)");
+  const info = el("div", "hint", "They are not logged in. Your reply shows up on their log in page (on the same device).");
   const btns = el("div", "wbuttons");
   const send = el("button", null, "Send ✉"); send.type = "button";
   const del = el("button", "danger", "🗑 Delete conversation"); del.type = "button";
@@ -1765,30 +1737,6 @@ function openSupportThread(uid) {
     if (!(await dialog({ title: "Delete conversation", message: "Delete this help conversation?", okText: "Delete" }))) return;
     try { await D.set(R("support/" + uid), null); win.close(); } catch (e) { showBanner("Can't delete: " + authError(e)); }
   };
-}
-// Old accounts (made before v10.6) log in with <name>@friend-app-cc816.firebaseapp.com: nobody can receive a reset there.
-// Moving them to hangoutchatadmin+<name>@gmail.com needs a FRESH login (just typed the password), so it runs at log in.
-const isOldAccount = (user) => !!(user && !user.isAnonymous && user.email && user.email.endsWith("@" + EMAIL_DOMAIN));
-async function moveOldAccount(user, name) {
-  try {
-    await A.verifyBeforeUpdateEmail(user, loginEmail(name));
-    store("mail-mig-" + user.uid, String(Date.now()));
-    toast("📧 Your account is being moved to the new email system (the admin confirms it).");
-  } catch (e) { logError("Email move: " + (e?.code || e?.message || e)); }
-}
-function migrateLoginEmail() {
-  const u = auth.currentUser;
-  if (!isOldAccount(u) || !S.me) return;
-  if (store("mail-mig-" + u.uid)) { showBanner("Your account move is waiting: the head admin must click the \"verify\" link in " + RESET_BOX + "@gmail.com (check Spam). Then log in again."); return; }
-  showBanner("Your account uses the OLD login: \"I forgot my password\" can't work for you yet. Fix: ⚙ Settings → 📧 My email → \"Move my account\" (or log out and log in again).");
-}
-function syncOwnEmail() {
-  const u = auth.currentUser;
-  if (!u || u.isAnonymous || !S.me) return;
-  const mine = isSiteEmail(u.email) ? null : u.email;
-  S.myEmail = mine;
-  if (mine) rememberEmail(S.me.name, mine);   // never erase: a new email may be waiting for its link click
-  D.set(R("emails/" + u.uid), mine).catch((e) => logError("Email save: " + e.message));
 }
 function startApp() {
   renderMe();
@@ -1871,8 +1819,6 @@ function startApp() {
     });
   }
   startGamesSub();
-  setTimeout(migrateLoginEmail, 4000);
-  setTimeout(syncOwnEmail, 1500);
   sub(R("warnings/" + S.me.uid), (s) => { S.warnings = s.val() || {}; showWarnings(); }, () => {});
   applyLoginAvail();
   boot();
@@ -2363,15 +2309,6 @@ function adminPersonItems(uid) {
     items.push("-");
     if (!u.guest && !u.deleted) items.push({ label: S.admins[uid] === true ? "👑 Remove admin" : "👑 Make admin", run: () => headSetAdmin(uid, S.admins[uid] !== true) });
     if (!u.deleted) items.push({ label: "👑 Send a warning (popup)...", run: () => headWarn(uid) });
-    if (!u.deleted && !u.guest) items.push({ label: "👑 Send a password reset email", run: async () => {
-      try {
-        let own = null;
-        try { own = (await D.get(R("emails/" + uid))).val(); } catch {}
-        if (own) { await A.sendPasswordResetEmail(auth, own); toast("🔑 Reset email sent to " + u.name + "'s own email."); }
-        else { await A.sendPasswordResetEmail(auth, loginEmail(u.name)); toast("🔑 Reset email sent to " + RESET_BOX + "@gmail.com (for " + u.name + ")."); }
-      }
-      catch (e) { showBanner("Can't send: " + authError(e)); }
-    } });
     if (!u.deleted && !u.guest) items.push({ label: "👑 Delete account...", danger: true, run: () => headDelete(uid) });
   }
   return items;
@@ -2555,78 +2492,12 @@ function openSettings() {
   };
   for (const x of [pOld, pNew, pNew2]) { x.style.width = "100%"; x.style.boxSizing = "border-box"; x.style.marginBottom = "4px"; }
   fsP.append(pOld, pNew, pNew2, pMsg, pBtn);
-  const fsE = emailBox(u);
   const fsX = el("fieldset"); fsX.append(el("legend", null, "Danger zone"));
   const delBtn = el("button", "danger", "Delete my account...");
   delBtn.onclick = () => deleteMyAccount(close);
   fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
-  content.append(fsI, fsB, fsC, soundBox(), btns, fsE, fsP, fsX);
+  content.append(fsI, fsB, fsC, soundBox(), btns, fsP, fsX);
   refresh();
-}
-function emailBox(u) {
-  const fs = el("fieldset"); fs.append(el("legend", null, "📧 My email"));
-  const user = auth.currentUser;
-  const mine = user && !isSiteEmail(user.email) ? user.email : null;
-  const now1 = el("div", "hint");
-  now1.style.color = mine ? "#006000" : "";
-  now1.textContent = mine ? "✔ Your email: " + mine + "\nIf you forget your password, the reset email comes straight to you. You can log in with your username (on this device) or with this email."
-    : "You have no email yet. If you forget your password, the reset goes to the head admin, who sends you the link.\nAdd your own email to get the reset yourself.";
-  now1.style.whiteSpace = "pre-line";
-  const mail = el("input", "sunken"); mail.type = "email"; mail.placeholder = mine ? "New email" : "Your email"; mail.autocomplete = "email";
-  const pw = el("input", "sunken"); pw.type = "password"; pw.placeholder = "Your password (to confirm)"; pw.autocomplete = "current-password";
-  for (const x of [mail, pw]) { x.style.width = "100%"; x.style.boxSizing = "border-box"; x.style.marginBottom = "4px"; }
-  const msg = el("div", "hint"); msg.style.whiteSpace = "pre-line";
-  const go = el("button", null, mine ? "Change my email" : "Add my email"); go.type = "button";
-  const reauth = async () => {
-    try { await A.reauthenticateWithCredential(user, A.EmailAuthProvider.credential(user.email, pw.value)); return true; }
-    catch { msg.style.color = "#a00000"; msg.textContent = "Wrong password."; return false; }
-  };
-  go.onclick = async () => {
-    msg.style.color = "#a00000";
-    const m = mail.value.trim();
-    if (!EMAIL_RE.test(m)) { msg.textContent = "Type a real email."; return; }
-    if (isSiteEmail(m) || m.toLowerCase().startsWith(RESET_BOX + "@")) { msg.textContent = "Use your own email, not the site's."; return; }
-    if (!pw.value) { msg.textContent = "Type your password too."; return; }
-    if (!(await reauth())) return;
-    try {
-      await A.verifyBeforeUpdateEmail(user, m);
-      msg.style.color = "#006000";
-      msg.textContent = "📨 We sent a link to " + m + ".\nOpen it and click the link. (Check Spam too.)\nAfter that, log in again: with your username on this device, or with your email anywhere.";
-      rememberEmail(u.name, m);   // so the username login still works on this device
-      mail.value = pw.value = "";
-    } catch (e) { msg.textContent = /already-in-use/.test(e?.code || "") ? "This email is already used by another account." : authError(e); }
-  };
-  fs.append(now1, mail, pw, msg, go);
-  if (isOldAccount(user)) {
-    const old = el("div", "hint", "⚠ Your account still uses the OLD login (made before v10.6), so \"I forgot my password\" can't reach anyone. Type your password above, then click:");
-    old.style.color = "#a00000";
-    const mv = el("button", null, "📧 Move my account (resets go to the head admin)"); mv.type = "button";
-    mv.onclick = async () => {
-      if (!pw.value) { msg.style.color = "#a00000"; msg.textContent = "Type your password above first."; pw.focus(); return; }
-      if (!(await reauth())) return;
-      try {
-        await A.verifyBeforeUpdateEmail(user, loginEmail(u.name));
-        msg.style.color = "#006000"; msg.textContent = "📨 Sent! The head admin must click the link in " + RESET_BOX + "@gmail.com. After that, log in again with your username.";
-        pw.value = "";
-      } catch (e) { msg.style.color = "#a00000"; msg.textContent = authError(e); }
-    };
-    fs.append(old, mv);
-  }
-  if (mine) {
-    const rm = el("button", null, "Remove my email"); rm.type = "button"; rm.style.marginLeft = "6px";
-    rm.onclick = async () => {
-      if (!pw.value) { msg.style.color = "#a00000"; msg.textContent = "Type your password above to remove your email."; pw.focus(); return; }
-      if (!(await reauth())) return;
-      try {
-        await A.verifyBeforeUpdateEmail(user, loginEmail(u.name));
-        msg.style.color = "#006000"; msg.textContent = "OK. The head admin must confirm it (a link goes to the admin's email). Until then, your email stays.";
-        pw.value = "";
-      } catch (e) { msg.style.color = "#a00000"; msg.textContent = authError(e); }
-    };
-    fs.append(rm);
-  }
-  fs.append(el("div", "hint", "🔒 Only you and the head admin can see your email."));
-  return fs;
 }
 function soundBox() {
   const fs = el("fieldset"); fs.append(el("legend", null, "🔔 Sounds"));
