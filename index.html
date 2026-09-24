@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-bFEJJ7kF4Tf3ITQAhwqPBA3cwAAEvC0EVxI3iNgdiGs=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-FCTLuZgoz68qhb9EfnGWMVbIX/4Fx48GEzP7MCnk/pE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -72,6 +72,21 @@
     padding: 0 !important;
   }
   span.ctl { cursor: default; }
+  .loginclosed { background: #ffe0e0; border: 2px solid #c00000; color: #a00000; font-weight: bold; padding: 6px 8px; margin-bottom: 8px; font-size: 12px; }
+  .supnote { background: #fff4b8; border: 2px solid #806000; padding: 5px 8px; margin-bottom: 8px; font-size: 12px; font-weight: bold; }
+  .supnote button { min-width: 0; padding: 1px 8px; margin-left: 6px; }
+  .suplink { text-align: center; margin-top: 6px; font-size: 12px; }
+  .suplist { background: #fff; max-height: 180px; min-height: 60px; overflow-y: auto; padding: 4px; margin: 6px 0; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+  .supmsg { padding: 3px 6px; max-width: 90%; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .supmsg.u { align-self: flex-end; background: #dde4ff; border: 1px solid #8090c0; }
+  .supmsg.a { align-self: flex-start; background: #fff4b8; border: 1px solid #b0a060; }
+  .supmsg .dim { color: #666; font-size: 10px; }
+  #supForm textarea { width: 100%; box-sizing: border-box; resize: vertical; font: 13px Tahoma, sans-serif; }
+  .suprow { display: flex; gap: 6px; align-items: center; padding: 3px 6px; border-bottom: 1px dotted #b0b0b0; cursor: pointer; font-size: 12px; }
+  .suprow:hover { background: #e8e8ff; }
+  .suprow.unread { font-weight: bold; background: #fff4b8; }
+  .suprow .dim { color: #555; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: normal; }
+  #pubLoginBtn.dot::after { content: " ●"; color: #e00000; }
   /* title bar symbols drawn in pixels, so they are always perfectly centered */
   .ctl { position: relative; }
   .ctl::before, .ctl::after { content: ""; position: absolute; left: 50%; top: 50%; box-sizing: border-box; }
@@ -733,6 +748,10 @@
           <legend>🚩 Reports <span id="reportsBadge" class="redbadge" hidden></span></legend>
           <div id="reportsBox"></div>
         </fieldset>
+        <fieldset class="span2">
+          <legend>📨 Help messages (from the log in page) <span id="supBadge" class="redbadge" hidden></span></legend>
+          <div class="list sunken" id="supAdminList"></div>
+        </fieldset>
         <fieldset>
           <legend id="onlineTitle">● Online now</legend>
           <div class="list sunken tall" id="onlineList"></div>
@@ -836,6 +855,8 @@
   <div class="dialog raised" style="max-width:380px">
     <div class="titlebar"><span>🔑</span><span class="t">Welcome to Hangout Chat</span><button type="button" class="ctl cclose" id="loginX" title="Back to the About page"></button></div>
     <div style="padding:10px 8px 8px">
+      <div class="loginclosed" id="loginClosed" hidden></div>
+      <div class="supnote" id="supNote" hidden>📨 The admin answered your message! <button type="button" id="supNoteBtn">Read it</button></div>
       <div class="tabs">
         <button type="button" data-tab="login" class="on">Log in</button>
         <button type="button" data-tab="register">Create account</button>
@@ -865,7 +886,16 @@
           <div class="err" id="gsErr"></div>
           <div style="display:flex;justify-content:flex-end"><button type="submit">Join as guest</button></div>
         </form>
+        <form class="tabpanel" id="supForm" data-panel="support" hidden>
+          <div class="hint">✉ Send a message to the admin (forgot your password, a problem, a question...). The answer shows up here, on this device.</div>
+          <div class="suplist sunken" id="supList"></div>
+          <label class="f">Your username (if you have one)<input type="text" id="supName" class="sunken" maxlength="24" autocomplete="off"></label>
+          <label class="f">Message<textarea id="supText" class="sunken" maxlength="500" rows="3"></textarea></label>
+          <div class="err" id="supErr"></div>
+          <div style="display:flex;justify-content:space-between"><button type="button" id="supBack">← Back</button><button type="submit">Send ✉</button></div>
+        </form>
       </div>
+      <div class="suplink"><a href="#" id="supOpen">✉ Forgot your password? Need help? Message the admin</a></div>
       <div style="margin-top:8px;text-align:center"><button type="button" id="loginBack">← Back to the About page</button></div>
     </div>
   </div>
@@ -892,7 +922,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.4";
+const APP_VERSION = "10.5";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -1298,10 +1328,81 @@ function iconNode(uid, fallback = {}, size = "") {
 }
 
 /* ========================= LOGIN UI ========================= */
-document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
-  document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
-  document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
-}));
+function selectLoginTab(t) {
+  document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x.dataset.tab === t));
+  document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== t));
+  $("supOpen").parentElement.hidden = t === "support";
+  if (t === "support") { renderSupport(); markSupportSeen(); }
+}
+document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => selectLoginTab(b.dataset.tab)));
+// guests / new accounts closed -> hide those tabs + red message
+function applyLoginAvail() {
+  const g = S.settings.guestsAllowed !== false, r = S.settings.signupsOpen !== false;
+  const tb = (t) => document.querySelector('.tabs button[data-tab="' + t + '"]');
+  tb("register").hidden = !r; tb("guest").hidden = !g;
+  const cur = document.querySelector(".tabs button.on")?.dataset.tab;
+  if ((cur === "register" && !r) || (cur === "guest" && !g)) selectLoginTab("login");
+  const parts = [];
+  if (!r) parts.push("Creating new accounts");
+  if (!g) parts.push("Joining as a guest");
+  $("loginClosed").hidden = !parts.length;
+  $("loginClosed").textContent = parts.length ? "🚫 " + parts.join(" and ") + (parts.length > 1 ? " are" : " is") + " closed right now. You can only log in with an existing account." : "";
+}
+/* ----- help messages to the admin (from the log in page, no account needed) ----- */
+let supportUid = null, supUnsub = null, supData = null, supportWanted = false;
+function supMsgs() { return Object.entries(supData?.msgs || {}).sort((a, b) => (a[1].ts || 0) - (b[1].ts || 0)); }
+function renderSupport() {
+  const list = $("supList");
+  list.replaceChildren();
+  const msgs = supMsgs();
+  if (!msgs.length) list.append(el("div", "dim", "No messages yet."));
+  for (const [, m] of msgs) {
+    const d = el("div", "supmsg " + (m.from === "a" ? "a" : "u"));
+    d.append(el("b", null, m.from === "a" ? "🛡 Admin: " : "You: "), m.text || "", el("span", "dim", "  " + fmtTime(m.ts)));
+    list.append(d);
+  }
+  list.scrollTop = list.scrollHeight;
+  if (supData?.name && !$("supName").value) $("supName").value = supData.name;
+  const last = msgs.length ? msgs[msgs.length - 1][1] : null;
+  const unread = !!last && last.from === "a" && (last.ts || 0) > (+store("sup-seen") || 0) && $("supForm").hidden;
+  $("supNote").hidden = !unread;
+  $("pubLoginBtn").classList.toggle("dot", unread);
+}
+function markSupportSeen() { const m = supMsgs(); if (m.length) store("sup-seen", String(m[m.length - 1][1].ts || 0)); renderSupport(); }
+function enterSupport(uid) {
+  if (supportUid === uid) return;
+  supportUid = uid;
+  if (supUnsub) supUnsub();
+  supUnsub = D.onValue(R("support/" + uid), (s) => { supData = s.val(); renderSupport(); if (!$("supForm").hidden) markSupportSeen(); }, () => {});
+}
+$("supOpen").addEventListener("click", (e) => { e.preventDefault(); selectLoginTab("support"); $("supText").focus(); });
+$("supBack").addEventListener("click", () => selectLoginTab("login"));
+$("supNoteBtn").addEventListener("click", () => { showLogin(); selectLoginTab("support"); });
+$("supForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("supErr").textContent = "";
+  const text = $("supText").value.trim().slice(0, 500);
+  if (!text) { $("supErr").textContent = "Write a message first."; return; }
+  try {
+    let u = auth.currentUser;
+    if (!u) {
+      supportWanted = true;
+      await A.setPersistence(auth, A.browserLocalPersistence);   // same device = you see the answer later
+      u = (await A.signInAnonymously(auth)).user;
+    }
+    enterSupport(u.uid);
+    const id = D.push(R("support/" + u.uid + "/msgs")).key;
+    const upd = { ["support/" + u.uid + "/msgs/" + id]: { from: "u", text, ts: now() }, ["support/" + u.uid + "/last"]: now(), ["rate/" + u.uid + "/sup"]: now() };
+    const nm = $("supName").value.trim().slice(0, 24);
+    if (nm) upd["support/" + u.uid + "/name"] = nm;
+    await D.update(R("/"), upd);
+    $("supText").value = "";
+    toast("✉ Message sent to the admin. Come back later on this device to see the answer.");
+  } catch (err) {
+    $("supErr").textContent = /permission/i.test(err?.message || "") ? "Wait a little before sending another message." : authError(err);
+    logError("Help message: " + (err?.message || err));
+  }
+});
 const COMMON = ["password", "123456", "qwerty", "azerty", "motdepasse", "iloveyou", "admin", "welcome", "letmein", "football", "soleil", "bonjour", "dragon", "monkey", "abc123", "111111", "000000", "sunshine", "princess", "master", "shadow", "superman", "batman", "pokemon", "minecraft", "fortnite", "roblox", "chocolat", "loulou", "doudou", "marseille", "paris", "hangout", "friend"];
 function passwordScore(pw, user) {
   const p = pw.toLowerCase();
@@ -1378,6 +1479,7 @@ $("guestForm").addEventListener("submit", async (e) => {
   try {
     await A.setPersistence(auth, A.browserSessionPersistence);   // closing the tab ends the guest forever
     await A.signInAnonymously(auth);
+    setTimeout(() => { if (!started && auth.currentUser) handleUser(auth.currentUser); }, 300);
   } catch (err) { pendingName = null; $("gsErr").textContent = authError(err); }
 });
 
@@ -1390,6 +1492,7 @@ function hideLogin() { if (!started) $("loginOverlay").classList.remove("show");
 $("pubLoginBtn").addEventListener("click", showLogin);
 $("loginX").addEventListener("click", hideLogin);
 $("loginBack").addEventListener("click", hideLogin);
+let pubSetUnsub = null;
 function startPublic() {
   $("main").hidden = false;
   $("main").classList.add("public");
@@ -1401,16 +1504,23 @@ function startPublic() {
   document.title = "Hangout Chat";
   renderAbout();
   if (!pubUnsub) pubUnsub = D.onValue(R("site/about"), (s) => { S.about = s.val(); if (!started) renderAbout(); }, (err) => logError("Read site/about: " + err.message));
+  if (!pubSetUnsub) pubSetUnsub = D.onValue(R("settings"), (s) => { if (!started) { S.settings = s.val() || {}; applyLoginAvail(); } }, () => {});
   const h = parseHash();
   if (h.room || h.game) showLogin();   // someone opened an invite / game link: they need to log in first
 }
-A.onAuthStateChanged(auth, async (user) => {
+A.onAuthStateChanged(auth, (user) => handleUser(user));
+let handling = false;
+async function handleUser(user) {
   if (!user) {
     if (started) { location.reload(); return; }
     startPublic();
     return;
   }
-  if (started) return;
+  if (started || handling) return;
+  handling = true;
+  try { await handleUser2(user); } finally { handling = false; }
+}
+async function handleUser2(user) {
   let hadProfile = true;
   try {
     const isGuest = user.isAnonymous;
@@ -1419,6 +1529,7 @@ A.onAuthStateChanged(auth, async (user) => {
     if (!profile || profile.deleted) {
       let name = pendingName;
       if (!isGuest && !name) name = (user.email || "user").split("@")[0];
+      if (!name && isGuest) { startPublic(); enterSupport(user.uid); return; }   // help-message session (no guest name): stay on the public page
       if (!name) { await A.signOut(auth); $("loginOverlay").classList.add("show"); return; }
       profile = { name, guest: isGuest, color: COLORS[Math.floor(Math.random() * 8)], created: Date.now() };
       profile.icon = isGuest ? "👤" : ICONS[Math.floor(Math.random() * 24)];
@@ -1438,13 +1549,14 @@ A.onAuthStateChanged(auth, async (user) => {
     let msg = authError(err);
     if (/allowed/i.test(msg)) msg = user.isAnonymous ? "Guests are turned off right now." : "New accounts are closed right now. Try again later.";
     $(user.isAnonymous ? "gsErr" : "rgErr").textContent = msg;
+    try { if ((await D.get(R("bans/" + user.uid))).exists()) msg = "⛔ This account was deleted or banned by an admin. Use \"Message the admin\" below if you think it's a mistake."; } catch {}
     $("liErr").textContent = msg;
     logError("Login: " + (err?.message || err));
     if (user.isAnonymous || !hadProfile) { try { await user.delete(); } catch {} }
     await A.signOut(auth).catch(() => {});
     $("loginOverlay").classList.add("show");
   }
-});
+}
 
 /* ========================= APP START ========================= */
 function sub(query, cb, onErr) {
@@ -1460,6 +1572,117 @@ function setLoc() {
   D.set(R("loc/" + S.me.uid), v).catch((e) => logError("Location: " + e.message));
 }
 
+const isHead = () => !!S.me && S.me.uid === OWNER_UID;
+function roleOf(uid) { return uid === OWNER_UID ? "HEAD ADMIN" : isAdminUid(uid) ? "admin" : null; }
+// warning popups from the head admin
+const warnShown = new Set();
+let warnBusy = false;
+async function showWarnings() {
+  if (warnBusy) return;
+  const next = Object.entries(S.warnings || {}).sort((a, b) => (a[1].ts || 0) - (b[1].ts || 0)).find(([id]) => !warnShown.has(id));
+  if (!next) return;
+  const [id, w] = next;
+  warnShown.add(id);
+  warnBusy = true;
+  beep([[440, 0, 0.15], [330, 0.18, 0.25]], "square", 0.08);
+  await dialog({ title: "⚠ WARNING from the HEAD ADMIN", message: (w.text || "") + "\n\n— " + (S.users[w.by]?.name || "Head admin") + ", " + fmtFull(w.ts), okText: "I understand", cancelText: null });
+  warnBusy = false;
+  D.set(R("warnings/" + S.me.uid + "/" + id), null).catch((e) => logError("Warning: " + e.message));
+  showWarnings();
+}
+async function headSetAdmin(uid, make) {
+  const ok = await dialog({ title: "👑 " + (make ? "Make admin" : "Remove admin"), message: (make ? "Make " : "Remove admin from ") + displayName(S.users[uid]) + "?" + (make ? "\nAdmins can ban, kick, delete messages, see reports and join any chat." : ""), okText: make ? "Make admin" : "Remove admin" });
+  if (!ok) return;
+  try { await D.set(R("admins/" + uid), make ? true : null); toast(make ? "⭐ " + uname(uid) + " is now an admin." : uname(uid) + " is not an admin anymore."); }
+  catch (e) { showBanner("Can't change admins: " + authError(e) + " (did you publish the new rules?)"); }
+}
+async function headWarn(uid) {
+  const box = el("div");
+  const ta = el("textarea", "sunken"); ta.maxLength = 300; ta.rows = 4; ta.placeholder = "Your warning (a popup will show on their screen)"; ta.style.width = "100%"; ta.style.font = "13px Tahoma, sans-serif";
+  box.append(ta);
+  const res = await dialog({ title: "⚠ Send a warning to " + displayName(S.users[uid]), okText: "Send warning", extra: { node: box, get: () => ta.value.trim() } });
+  if (!res) return;
+  try { await D.set(D.push(R("warnings/" + uid)), { text: res.slice(0, 300), by: S.me.uid, ts: now() }); toast("⚠ Warning sent. It pops up on their screen."); }
+  catch (e) { showBanner("Can't send the warning: " + authError(e) + " (did you publish the new rules?)"); }
+}
+async function headDelete(uid) {
+  const u = S.users[uid];
+  const ok = await dialog({ title: "👑 Delete account", message: "Delete the account " + displayName(u) + "?\n\n• They can't log in or write anymore (the account is closed + banned).\n• Their messages stay, shown as \"(deleted account)\".\n• Their username stays taken. To free it completely: Firebase console → Authentication → delete the user.", okText: "Delete account" });
+  if (!ok) return;
+  try {
+    const chats = (await D.get(R("userChats/" + uid))).val() || {};
+    const upd = { ["users/" + uid + "/deleted"]: true, ["bans/" + uid]: { ts: now(), by: S.me.uid }, ["userChats/" + uid]: null, ["status/" + uid]: null, ["loc/" + uid]: null };
+    if (S.admins[uid]) upd["admins/" + uid] = null;
+    for (const room of Object.keys(chats)) if (S.chats[room] && !S.chats[room].parent) upd["members/" + room + "/" + uid] = null;
+    await D.update(R("/"), upd);
+    toast("🗑 Account deleted.");
+  } catch (e) { showBanner("Can't delete: " + authError(e)); }
+}
+/* ----- admin side of the help messages ----- */
+let supWinRefresh = null;
+function supUnread(t) { const m = Object.values(t?.msgs || {}).sort((a, b) => (a.ts || 0) - (b.ts || 0)); const last = m[m.length - 1]; return !!last && last.from === "u" && (last.ts || 0) > (t.seen || 0); }
+function renderSupportAdmin() {
+  const box = $("supAdminList");
+  if (!box) return;
+  box.replaceChildren();
+  const list = Object.entries(S.support || {}).sort((a, b) => (b[1].last || 0) - (a[1].last || 0));
+  const n = list.filter(([, t]) => supUnread(t)).length;
+  $("supBadge").hidden = !n; $("supBadge").textContent = n;
+  updateAdminBadge();
+  if (!list.length) { box.append(el("div", "empty-row", "No help message.")); return; }
+  for (const [uid, t] of list) {
+    const m = Object.values(t.msgs || {}).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+    const last = m[m.length - 1];
+    const row = el("div", "suprow" + (supUnread(t) ? " unread" : ""));
+    row.append(el("span", null, (supUnread(t) ? "✉ " : "📨 ") + (t.name ? t.name : "Someone")), el("span", "dim", last ? (last.from === "a" ? "You: " : "") + last.text : ""), el("span", "dim", fmtAgo(t.last)));
+    row.style.maxWidth = "100%";
+    row.onclick = () => openSupportThread(uid);
+    box.append(row);
+  }
+}
+function updateAdminBadge() {
+  const n = (S.openReports || 0) + Object.values(S.support || {}).filter(supUnread).length;
+  $("adminTabBadge").hidden = !n; $("adminTabBadge").textContent = n;
+}
+function openSupportThread(uid) {
+  const t0 = S.support?.[uid];
+  const win = openWindow("Help chat - " + (t0?.name || "Someone"), "📨", { key: "sup-" + uid, narrow: true });
+  const list = el("div", "suplist sunken");
+  const ta = el("textarea", "sunken"); ta.rows = 3; ta.maxLength = 500; ta.placeholder = "Your answer (they see it on the log in page, on the device they wrote from)"; ta.style.width = "100%"; ta.style.boxSizing = "border-box"; ta.style.font = "13px Tahoma, sans-serif";
+  const info = el("div", "hint", "They are not logged in. Tip: if they forgot their password, it can't be recovered: they can make a new account (you can delete the old one: right-click their name → 👑 Delete account).");
+  const btns = el("div", "wbuttons");
+  const send = el("button", null, "Send ✉"); send.type = "button";
+  const del = el("button", "danger", "🗑 Delete conversation"); del.type = "button";
+  const cl = el("button", null, "Close"); cl.type = "button"; cl.onclick = () => win.close();
+  btns.append(del, send, cl);
+  win.content.append(info, list, ta, btns);
+  const paint = () => {
+    const t = S.support?.[uid];
+    list.replaceChildren();
+    if (!t) { list.append(el("div", "dim", "(conversation deleted)")); return; }
+    for (const m of Object.values(t.msgs || {}).sort((a, b) => (a.ts || 0) - (b.ts || 0))) {
+      const d = el("div", "supmsg " + (m.from === "a" ? "u" : "a"));
+      d.append(el("b", null, m.from === "a" ? "You: " : (t.name || "Them") + ": "), m.text || "", el("span", "dim", "  " + fmtFull(m.ts)));
+      list.append(d);
+    }
+    list.scrollTop = list.scrollHeight;
+    if (supUnread(t)) D.set(R("support/" + uid + "/seen"), now()).catch(() => {});
+  };
+  paint();
+  supWinRefresh = paint;
+  win.onClosed = () => { if (supWinRefresh === paint) supWinRefresh = null; };
+  send.onclick = async () => {
+    const text = ta.value.trim().slice(0, 500);
+    if (!text) return;
+    const id = D.push(R("support/" + uid + "/msgs")).key;
+    try { await D.update(R("/"), { ["support/" + uid + "/msgs/" + id]: { from: "a", text, ts: now(), by: S.me.uid }, ["support/" + uid + "/last"]: now(), ["support/" + uid + "/seen"]: now() }); ta.value = ""; }
+    catch (e) { showBanner("Can't answer: " + authError(e) + " (did you publish the new rules?)"); }
+  };
+  del.onclick = async () => {
+    if (!(await dialog({ title: "Delete conversation", message: "Delete this help conversation?", okText: "Delete" }))) return;
+    try { await D.set(R("support/" + uid), null); win.close(); } catch (e) { showBanner("Can't delete: " + authError(e)); }
+  };
+}
 function startApp() {
   renderMe();
   $("dirTabBtn").hidden = S.me.guest;
@@ -1541,6 +1764,8 @@ function startApp() {
     });
   }
   startGamesSub();
+  sub(R("warnings/" + S.me.uid), (s) => { S.warnings = s.val() || {}; showWarnings(); }, () => {});
+  applyLoginAvail();
   boot();
 }
 
@@ -2024,6 +2249,13 @@ function adminPersonItems(uid) {
   const items = ["-"];
   if (S.room && !isDM(S.room) && S.members[uid]) items.push({ label: "🔧 Kick from this chat", run: () => adminKick(uid) });
   if (uid !== OWNER_UID) items.push({ label: S.bans[uid] ? "🔧 Unban" : "🔧 Ban", danger: !S.bans[uid], run: () => adminBan(uid) });
+  if (isHead() && uid !== OWNER_UID) {
+    const u = S.users[uid];
+    items.push("-");
+    if (!u.guest && !u.deleted) items.push({ label: S.admins[uid] === true ? "👑 Remove admin" : "👑 Make admin", run: () => headSetAdmin(uid, S.admins[uid] !== true) });
+    if (!u.deleted) items.push({ label: "👑 Send a warning (popup)...", run: () => headWarn(uid) });
+    if (!u.deleted && !u.guest) items.push({ label: "👑 Delete account...", danger: true, run: () => headDelete(uid) });
+  }
   return items;
 }
 function menuHead(uid, fallback) {
@@ -2078,7 +2310,7 @@ async function openProfile(uid) {
   info.append(nameLine, st);
   head.append(iconNode(uid, {}, "big"), info);
   const rows = [
-    ["Type", u.deleted ? "Deleted account" : u.guest ? "Guest" : (isAdminUid(uid) ? "Account (admin)" : "Account")],
+    ["Type", u.deleted ? "Deleted account" : u.guest ? "Guest" : (uid === OWNER_UID ? "Account (HEAD ADMIN 👑)" : isAdminUid(uid) ? "Account (admin)" : "Account")],
     ["Member since", fmtDate(u.created)],
   ];
   if (S.friends[uid]) rows.push(["Friends since", fmtDate(S.friends[uid].since)]);
@@ -2238,13 +2470,24 @@ function startAdmin() {
     const before = S.reports;
     S.reports = s.val() || {};
     const open = Object.values(S.reports).filter((r) => r.status === "open").length;
-    for (const id of ["reportsBadge", "adminTabBadge"]) { $(id).hidden = !open; $(id).textContent = open; }
+    S.openReports = open;
+    $("reportsBadge").hidden = !open; $("reportsBadge").textContent = open;
+    updateAdminBadge();
     if (!first) for (const [k, r] of Object.entries(S.reports)) if (!before[k] && r.status === "open") toast("🚩 New report: " + (REASONS[r.reason] || r.reason));
     first = false;
     if (S.tab === "admin") renderReports();
     renderDebug();
   });
   syncAdminLoc();
+  let firstSup = true;
+  sub(R("support"), (s) => {
+    const before = S.support || {};
+    S.support = s.val() || {};
+    if (!firstSup) for (const [uid, t] of Object.entries(S.support)) if (supUnread(t) && (t.last || 0) > (before[uid]?.last || 0)) { toast("📨 New help message from " + (t.name || "someone") + " (Admin tab)"); pingSound(); }
+    firstSup = false;
+    renderSupportAdmin();
+    if (supWinRefresh) supWinRefresh();
+  }, () => {});
   usersReady.then(() => setTimeout(() => cleanGuests(true), 3000));
 }
 async function adminKick(uid) {
@@ -2466,7 +2709,7 @@ function renderMe() {
   if (!S.me) return;
   $("meIcon").replaceChildren(iconNode(S.me.uid));
   $("meName").textContent = S.me.name + (S.isAdmin ? " ⭐" : "");
-  $("meStatus").textContent = (S.connected ? "● online" : "○ offline") + (S.me.guest ? " · [GUEST]" : S.isAdmin ? " · admin" : "");
+  $("meStatus").textContent = (S.connected ? "● online" : "○ offline") + (S.me.guest ? " · [GUEST]" : isHead() ? " · HEAD ADMIN" : S.isAdmin ? " · admin" : "");
 }
 function isOnline(uid) { return !!S.status[uid]?.online; }
 function personRow(uid, extraText) {
@@ -2759,7 +3002,7 @@ function renderAdminLists() {
   if (!all.length) list.append(el("div", "empty-row", "No user found"));
   for (const uid of sortPeople(all).slice(0, 300)) {
     const u = S.users[uid];
-    const type = u.deleted ? "deleted" : u.guest ? "guest" : isAdminUid(uid) ? "admin" : "account";
+    const type = u.deleted ? "deleted" : u.guest ? "guest" : uid === OWNER_UID ? "HEAD ADMIN" : isAdminUid(uid) ? "admin" : "account";
     list.append(personRow(uid, type + " · since " + fmtDate(u.created)));
   }
 }
@@ -3195,7 +3438,7 @@ function setTab(t) {
   if (t === "games") { startGamesTabSubs(); renderGamesPage(); }
   updateTitleCount();
   if (t === "chat") { renderSide(); render(); markRead(); }
-  if (t === "admin") { renderReports(); renderAdminLists(); renderDebug(); loadAdminChats(); }
+  if (t === "admin") { renderSupportAdmin(); renderReports(); renderAdminLists(); renderDebug(); loadAdminChats(); }
 }
 document.querySelectorAll("#mainTabs button[data-t]").forEach((b) => b.addEventListener("click", () => { if (started) setTab(b.dataset.t); }));
 function formatDoc(doc, text) {
