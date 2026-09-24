@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-As8wCdIkUbCgHJdvvStNAKA4tkaj2Z8hFAQ0xdnbUgM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-RmqLf6Ms7c/9oKyfnJAZGWopCpeoqc4+KDXAXk4xUAE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -540,6 +540,9 @@
   .tdsqr button { min-width: 0; width: 22px; padding: 0; }
   .tdsqr .tdsqn { width: 20px; text-align: center; font-weight: bold; font-family: "Courier New", monospace; }
   .tdsqr .dim { color: #505000; font-size: 11px; }
+  .tdsqr .eco { font-size: 10px; font-weight: bold; padding: 0 3px; color: #fff; }
+  .tdsqr .eco.up { background: #208020; }
+  .tdsqr .eco.down { background: #b02020; }
   .tdsquad select { font: inherit; background: #fff; border-radius: 0; }
   .tdsqtot { flex: 1; font-size: 12px; }
   .tdsqq { display: flex; flex-direction: column; gap: 2px; }
@@ -790,7 +793,7 @@ const firebaseConfig = {
 };
 const EMAIL_DOMAIN = "friend-app-cc816.firebaseapp.com";   // usernames become <name>@this (never emailed)
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "9.6";
+const APP_VERSION = "10.0";
 // Anti-bot shield (Firebase App Check + reCAPTCHA v3). Paste your reCAPTCHA v3 SITE key here to turn it on.
 const APP_CHECK_SITE_KEY = "";
 const OWNER_UID = "9pEEVzDqUWX4wmOW3U1S6Q8wXo03";   // always admin (account FRIEND)
@@ -4289,7 +4292,7 @@ const TD = {
     heavy:    { name: "Heavy", color: "#28408a", hp: 150, speed: 0.55, reward: 12, life: 2, power: 18, cost: 35, spawn: 1.2, eco: 2, r: 0.32, pts: 3, desc: "A bit slow, lots of HP." },
     shielder: { name: "Shielder", color: "#8a8a8a", hp: 260, armor: 2, speed: 0.6, rush: 1.4, reward: 15, life: 2, power: 12, cost: 45, spawn: 1.5, eco: -1, r: 0.3, pts: 4, desc: "Lots of HP. Rushes to the front of the line, then keeps the speed of the fastest one there." },
     medic:    { name: "Medic", color: "#f4f4f4", hp: 70, speed: 0.7, reward: 10, life: 1, power: 4, cost: 40, spawn: 1.4, eco: -1, r: 0.25, heal: 6, pts: 3, desc: "Heals the enemies around." },
-    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies straight to the base." },
+    jetpack:  { name: "Jet Pack", color: "#c05010", hp: 50, speed: 1.0, reward: 9, life: 1, power: 0, cost: 40, spawn: 1.2, eco: -2, r: 0.25, air: true, pts: 3, desc: "Flies over the grass, but only jumps 3 tiles at a time (makes its own shortcut path)." },
     tank:     { name: "Tank", color: "#6b4a2a", hp: 400, armor: 6, speed: 0.4, reward: 25, life: 3, power: 40, cost: 80, spawn: 2.5, eco: -3, r: 0.36, pts: 7, desc: "Very strong, armored. Takes 3 ❤." },
     gunner:   { name: "Gunner", color: "#2f5a2a", hp: 90, speed: 0.75, reward: 12, life: 1, power: 6, cost: 55, spawn: 1.3, eco: -2, r: 0.27, pts: 4, gun: { range: 2.5, dmg: 8, every: 1 }, stun: { range: 2.5, time: 3, every: 15 }, desc: "Shoots enemy units from far (every 1 s). Every 15 s it stuns a tower for 3 s." },
     saboteur: { name: "Saboteur", color: "#303030", hp: 60, speed: 0.9, reward: 9, life: 1, power: 5, cost: 45, spawn: 1.1, eco: -1, r: 0.24, pts: 3, sabo: { range: 1.5, time: 6, every: 25 }, desc: "Plants a bomb on a tower it walks past: the tower is off for 6 s (every 25 s)." },
@@ -4299,7 +4302,7 @@ const TD = {
   },
   ICON: { recruit: "🪖", scout: "👟", heavy: "💪", shielder: "🛡️", medic: "⛑️", jetpack: "🚀", tank: "🟫", gunner: "🔫", saboteur: "🔧", captain: "📯", kamikaze: "💥", boss: "👑" },
   SEND_TYPES: ["recruit", "scout", "heavy", "shielder", "medic", "jetpack", "tank", "gunner", "saboteur", "captain", "kamikaze"],
-  ECO_START: 30, ECO_MIN: 5, ECO_MAX: 200, INCOME_EVERY: 7,
+  ECO_START: 30, ECO_MIN: 5, ECO_MAX: 200, INCOME_EVERY: 7, AUTO_EVERY: 14, AUTO_TYPES: ["recruit", "recruit", "scout", "scout", "heavy"],
 };
 TD.TTYPES = Object.keys(TD.TOWERS);
 TD.ETYPES = Object.keys(TD.ENEMIES);
@@ -4399,7 +4402,7 @@ function tdNewState({ seed, pvp, linked }) {
   const st = {
     seed, pvp: !!pvp, linked: !!(pvp && linked), W, H, L, map, X1: W + L, totalW: pvp ? 2 * W + L : W,
     t: 0, towers: [], enemies: [], fx: [], nextId: 1, money: [pvp ? 200 : 250, pvp ? 200 : 0], lives: [20, 20], eco: [TD.ECO_START, TD.ECO_START],
-    wave: 0, waveOn: false, queue: [], list: [[], []], cur: [null, null], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
+    wave: 0, waveOn: false, queue: [], squads: [[], []], spawnQ: [[], []], autoT: [TD.AUTO_EVERY, TD.AUTO_EVERY], over: false, winner: -1, r: rng(seed ^ 0x5eed), incomeT: TD.INCOME_EVERY, started: !pvp,
   };
   return st;
 }
@@ -4428,11 +4431,12 @@ function tdSpawn(st, type, side, from, entry, hpMult = 1, routeIdx = -1) {
   if (!st.pvp) {
     const rs = st.map.routes.filter((x) => x.entry === entry);
     const pts = rs[Math.floor(st.r() * rs.length)].cells.map(([x, y]) => [tdWX(st, side, x) + 0.5, y + 0.5]);
-    start = [st.W + 0.2, st.map.entries[entry].y + 0.5]; path = E.air ? [tdBaseCenter(st, side)] : pts;
+    start = [st.W + 0.2, st.map.entries[entry].y + 0.5]; path = E.air ? tdFlyPath([start, ...pts]) : pts;
   } else {
-    const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : Math.floor(st.r() * st.map.routes.length);
+    const ri = routeIdx >= 0 && routeIdx < st.map.routes.length ? routeIdx : tdPickRoute(st, from);
     start = tdBaseCenter(st, from);
-    path = E.air ? [tdBaseCenter(st, side)] : tdRoutePts(st, from, ri).slice(1);
+    const full = tdRoutePts(st, from, ri);
+    path = E.air ? tdFlyPath(full) : full.slice(1);
   }
   const hp = Math.round(E.hp * hpMult);
   st.enemies.push({
@@ -4449,6 +4453,38 @@ function tdSpawnAlly(st, type, hpMult = 1) {
   st.enemies.push({ id: st.nextId++, type, side: -1, from: 0, x: path[0][0], y: path[0][1], path: path.slice(1), idx: 0, hp, maxHp: hp, armor: E.armor || 0,
     speed: E.speed * (0.95 + st.r() * 0.1), slowUntil: 0, slowF: 1, dist: 0, air: false, dead: false });
 }
+// Jet Pack: follows the road but cuts across the grass, max 3 tiles per jump
+function tdFlyPath(raw, hop = 3) {
+  const pts = [raw[0]];   // cut long straight parts into 1-tile steps first
+  for (let i = 1; i < raw.length; i++) {
+    const [ax, ay] = raw[i - 1], [bx, by] = raw[i], n = Math.ceil(Math.hypot(bx - ax, by - ay));
+    for (let k = 1; k <= n; k++) pts.push([ax + (bx - ax) * k / n, ay + (by - ay) * k / n]);
+  }
+  const out = [];
+  let i = 0;
+  while (i < pts.length - 1) {
+    let j = i + 1;
+    for (let k = pts.length - 1; k > i + 1; k--) if (Math.hypot(pts[k][0] - pts[i][0], pts[k][1] - pts[i][1]) <= hop) { j = k; break; }
+    out.push(pts[j]); i = j;
+  }
+  return out;
+}
+// PvP: pick the path with the fewest enemies of the other player on it, and not the same path every time
+function tdPickRoute(st, from) {
+  const n = st.map.routes.length;
+  st.rcells ||= [0, 1].map((f) => st.map.routes.map((_, ri) => new Set(tdRoutePts(st, f, ri).map(([x, y]) => Math.floor(x) + "," + Math.floor(y)))));
+  st.routeUse ||= [new Array(n).fill(0), new Array(n).fill(0)];
+  let best = 0, bs = Infinity;
+  for (let ri = 0; ri < n; ri++) {
+    let danger = 0;
+    const cells = st.rcells[from][ri];
+    for (const o of st.enemies) if (!o.dead && !o.air && o.from !== from && cells.has(Math.floor(o.x) + "," + Math.floor(o.y))) danger++;
+    const score = danger * 3 + st.routeUse[from][ri] * 2 + st.r();
+    if (score < bs) { bs = score; best = ri; }
+  }
+  st.routeUse[from] = st.routeUse[from].map((v, i) => v * 0.7 + (i === best ? 1 : 0));
+  return best;
+}
 function tdHit(st, e, dmg, pierce, byTowerSide) {
   if (e.dead) return;
   const d = pierce ? dmg : Math.max(1, dmg - e.armor);
@@ -4461,15 +4497,29 @@ function tdStep(st, dt) {
   const t = st.t;
   // solo wave queue
   while (st.queue.length && st.queue[0].at <= t) { const q = st.queue.shift(); tdSpawn(st, q.type, 0, -1, q.entry, q.hp); }
-  // PvP: spawn list (one enemy at a time) + eco income
+  // PvP: squads + free units from the base + eco income
   if (st.pvp) {
     for (const side of [0, 1]) {
-      if (!st.cur[side] && st.list[side].length) { const it = st.list[side].shift(); st.cur[side] = { ...it, start: t, end: t + TD.ENEMIES[it.type].spawn }; }
-      const c = st.cur[side];
-      if (c && t >= c.end) {
-        tdSpawn(st, c.type, 1 - side, side, 0, 1 + t / 600, c.route);
-        st.cur[side] = null;
+      const q = st.spawnQ[side];
+      // squad ready -> the whole group leaves together on the safest path
+      const sq = st.squads[side][0];
+      if (sq && t >= sq.readyAt) {
+        st.squads[side].shift();
+        const ri = tdPickRoute(st, side);
+        const grp = st.nextId++;
+        sq.list.forEach((ty, i) => q.push({ type: ty, at: t + i * 0.35, route: ri, grp }));
       }
+      // the base sends a small free group now and then
+      st.autoT[side] -= dt;
+      if (st.autoT[side] <= 0) {
+        st.autoT[side] += TD.AUTO_EVERY;
+        const ri = tdPickRoute(st, side);
+        const n = 2 + Math.min(3, Math.floor(t / 150));
+        const grp = st.nextId++;
+        for (let i = 0; i < n; i++) q.push({ type: TD.AUTO_TYPES[Math.floor(st.r() * TD.AUTO_TYPES.length)], at: t + i * 0.4, route: ri, grp });
+      }
+      q.sort((a, b) => a.at - b.at);
+      while (q.length && q[0].at <= t) { const it = q.shift(); tdSpawn(st, it.type, 1 - side, side, 0, 1 + t / 600, it.route); st.enemies[st.enemies.length - 1].grp = it.grp; }
     }
     st.incomeT -= dt;
     if (st.incomeT <= 0) { st.incomeT += TD.INCOME_EVERY; for (const side of [0, 1]) st.money[side] += st.eco[side]; }
@@ -4545,14 +4595,22 @@ function tdStep(st, dt) {
     e.blocked = blocked;
     if (blocked) continue;
     let spd = e.speed * (e.buff ? 1.2 : 1);
-    if (E.rush && !e.air) {   // Shielder: rush to the front, then keep the speed of the fastest one in front
-      let ahead = false, front = 0;
+    if (E.rush && !e.air) {   // Shielder: rush to the front; if the others are far behind, slow down and wait for them
+      let ahead = false, any = false, gapBehind = Infinity, front = 0;
       for (const o of st.enemies) {
-        if (o === e || o.dead || o.air || o.from !== e.from || o.side !== e.side) continue;
-        if (o.dist > e.dist + 0.35) { ahead = true; break; }
-        if (e.dist - o.dist < 2.5) front = Math.max(front, o.speed);
+        if (o === e || o.dead || o.air || o.from !== e.from || o.side !== e.side || o.grp !== e.grp) continue;
+        const gap = e.dist - o.dist;
+        if (gap > 5) continue;   // too far: not really in the group anymore
+        any = true;
+        if (gap < -0.35) { ahead = true; break; }
+        gapBehind = Math.min(gapBehind, gap);
+        if (gap < 2.5) front = Math.max(front, o.speed);
       }
-      spd = ahead ? E.rush : Math.max(e.speed, front);
+      if (ahead) spd = E.rush;
+      else if (!any) spd = e.speed;
+      else if (gapBehind > 1.5) spd = e.speed * 0.25;
+      else spd = Math.max(e.speed * 0.6, Math.min(front, E.rush));
+      if (e.buff) spd *= 1.2;
     }
     let move = spd * (e.slowUntil > t ? e.slowF : 1) * dt;
     while (move > 0 && e.idx < e.path.length) {
@@ -4577,7 +4635,7 @@ function tdStep(st, dt) {
       if (tw.bt <= 0) {
         tw.bt = T.every[tw.lvl];
         const list = T.units[tw.lvl], ty = list[(tw.bi = (tw.bi || 0) + 1) % list.length];
-        if (st.pvp) tdSpawn(st, ty, 1 - tw.side, tw.side, 0, 1 + t / 600, -1);
+        if (st.pvp) st.spawnQ[tw.side].push({ type: ty, at: t, route: tdPickRoute(st, tw.side) });
         else tdSpawnAlly(st, ty, 1 + st.wave * 0.08);
       }
       continue;
@@ -4693,16 +4751,23 @@ function tdApply(st, side, a) {
     st.towers = st.towers.filter((x) => x !== tw);
     return null;
   }
-  if (a.a === "send") {
+  if (a.a === "squad") {
     if (!st.pvp) return "?";
-    const E = TD.ENEMIES[a.type];
-    if (!E || !TD.SEND_TYPES.includes(a.type)) return "?";
-    if (st.list[side].length >= 40) return "Your spawn list is full (40).";
-    if (st.money[side] < E.cost) return "Not enough money.";
-    st.money[side] -= E.cost;
-    st.eco[side] = Math.max(TD.ECO_MIN, Math.min(TD.ECO_MAX, st.eco[side] + E.eco));
-    const ri = Number.isInteger(a.route) && a.route >= 0 && a.route < st.map.routes.length ? a.route : -1;
-    st.list[side].push({ type: a.type, route: ri });
+    const list = [];
+    let cost = 0, time = 4, eco = 0;
+    for (const ty of TD.SEND_TYPES) {
+      const n = Math.max(0, Math.min(20, (a.units || {})[ty] | 0));
+      for (let i = 0; i < n; i++) { list.push(ty); cost += TD.ENEMIES[ty].cost; time += TD.ENEMIES[ty].spawn * 1.5; eco += TD.ENEMIES[ty].eco; }
+    }
+    if (!list.length) return "Empty squad.";
+    if (list.length > 30) return "Max 30 enemies in a squad.";
+    if (st.money[side] < cost) return "Not enough money.";
+    if (st.squads[side].length >= 3) return "Max 3 squads waiting.";
+    st.money[side] -= cost;
+    st.eco[side] = Math.max(TD.ECO_MIN, Math.min(TD.ECO_MAX, st.eco[side] + eco));
+    const prev = st.squads[side][st.squads[side].length - 1];
+    const start = Math.max(st.t, prev ? prev.readyAt : st.t);
+    st.squads[side].push({ list, start, readyAt: start + time });
     return null;
   }
   return "?";
@@ -4716,21 +4781,17 @@ function tdSnap(st) {
     tw: st.towers.map((x) => [x.id, x.side, TD.TTYPES.indexOf(x.type), x.lvl, x.lx, x.ly, (x.stun || 0) > st.t ? 1 : 0]),
     e: st.enemies.slice(0, 220).map((e) => [e.id, TD.ETYPES.indexOf(e.type), r1(e.x), r1(e.y), Math.max(1, Math.round(e.hp / e.maxHp * 100)), e.slowUntil > st.t ? 1 : 0, e.side]),
     fx: st.fx.slice(-50).map((f) => [f.k, r1(f.x1), r1(f.y1), r1(f.x2), r1(f.y2)]),
-    ec: st.eco, sl: tdSpawnInfo(st, true), it: Math.ceil(st.incomeT),
+    ec: st.eco, sq: tdSquadInfo(st), it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   });
 }
-function tdSpawnInfo(st, compact) {   // per side: [current type index, progress %, [waiting type indexes]]
-  return [0, 1].map((s) => {
-    const c = st.cur[s];
-    const pct = c ? Math.round(Math.min(1, (st.t - c.start) / Math.max(0.05, c.end - c.start)) * 100) : 0;
-    return [c ? TD.ETYPES.indexOf(c.type) : -1, pct, st.list[s].map((x) => TD.ETYPES.indexOf(x.type))];
-  });
+function tdSquadInfo(st) {   // per side: [[progress %, units], ...]
+  return [0, 1].map((s) => st.squads[s].map((q) => [Math.round(Math.min(1, Math.max(0, (st.t - q.start) / Math.max(0.1, q.readyAt - q.start))) * 100), q.list.length]));
 }
 function tdView(st) {   // live state -> what we draw
   return {
     towers: st.towers.map((x) => ({ ...x, stunned: (x.stun || 0) > st.t })), money: st.money, lives: st.lives, t: st.t,
     enemies: st.enemies.map((e) => ({ id: e.id, type: e.type, x: e.x, y: e.y, hp: e.hp / e.maxHp, slow: e.slowUntil > st.t, side: e.side })),
-    fx: st.fx, eco: st.eco, sl: tdSpawnInfo(st, false), it: Math.ceil(st.incomeT),
+    fx: st.fx, eco: st.eco, sq: st.pvp ? tdSquadInfo(st) : [[], []], it: Math.ceil(st.incomeT), at: st.autoT.map(Math.ceil),
   };
 }
 
@@ -4917,42 +4978,41 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     b.onclick = () => { ui.buildType = ui.buildType === ty ? null : ty; ui.selId = null; refreshUI(); };
     tbtn[ty] = b; bar.append(b);
   }
-  // spawn list (PvP)
-  let lane = "both";
+  // squad maker (PvP)
+  const counts = {};
   if (pvp && canAct) {
-    const how = "They leave from YOUR base" + (st.linked ? ", fight the other player's enemies wherever they meet," : ",") + " then attack the other base.";
-    squadBox.append(el("div", "tdsqh", "⚔ Send enemies (click to add them to your spawn list)"), el("div", "hint", how + "  🟢 eco+ = more cash every " + TD.INCOME_EVERY + " s · 🔴 eco− = less."));
-    const grid = el("div", "tdsendgrid");
-    ui.sendBtns = {};
+    const how = "Your squad leaves YOUR base as a group" + (st.linked ? " and fights the other player's enemies it meets," : ",") + " then attacks the other base. The path is chosen by itself (it avoids the enemies and changes every time).";
+    squadBox.append(el("div", "tdsqh", "⚔ Make a squad"), el("div", "hint", how + "  🟢 eco+ = more cash every " + TD.INCOME_EVERY + " s · 🔴 eco− = less."));
+    const grid = el("div", "tdsqgrid");
     for (const ty of TD.SEND_TYPES) {
       const E = TD.ENEMIES[ty];
-      const b = el("button", "tdsend"); b.type = "button";
-      b.append(el("span", "ti", TD.ICON[ty]), el("span", "tn", E.name), el("span", "tc", "💰" + E.cost), el("span", E.eco > 0 ? "eco up" : "eco down", (E.eco > 0 ? "eco +" : "eco ") + E.eco));
-      b.title = E.desc + "\nHP " + E.hp + " · speed " + E.speed + (E.armor ? " · armor " + E.armor : "") + " · wait " + E.spawn + " s";
-      b.onclick = () => send({ a: "send", type: ty, route: ui.route });
-      grid.append(b); ui.sendBtns[ty] = b;
+      counts[ty] = 0;
+      const row = el("div", "tdsqr");
+      const n = el("span", "tdsqn", "0");
+      const minus = el("button", null, "−"); minus.type = "button";
+      const plus = el("button", null, "+"); plus.type = "button";
+      minus.onclick = () => { counts[ty] = Math.max(0, counts[ty] - 1); n.textContent = counts[ty]; refreshUI(); };
+      plus.onclick = () => { counts[ty] = Math.min(20, counts[ty] + 1); n.textContent = counts[ty]; refreshUI(); };
+      row.append(el("span", "tdsqi", TD.ICON[ty] + " " + E.name), minus, n, plus, el("span", "dim", "💰" + E.cost), el("span", E.eco > 0 ? "eco up" : "eco down", (E.eco > 0 ? "+" : "") + E.eco));
+      row.title = E.desc + "\nHP " + E.hp + " · speed " + E.speed + (E.armor ? " · armor " + E.armor : "");
+      grid.append(row);
     }
-    const eco = el("span", "tdeco");
-    const paths = el("div", "tdpaths");
-    paths.append(el("span", null, "Path:"));
-    const pbtn = [];
-    const mkp = (i, label, color) => {
-      const b = el("button", "tdpath", label); b.type = "button";
-      if (color) { b.style.background = color; }
-      b.title = i < 0 ? "Each enemy takes a random path" : "Enemies take path " + (i + 1) + " (see the dashed line on the map)";
-      b.onclick = () => { ui.route = i; pbtn.forEach((x) => x.classList.toggle("on", x === b)); };
-      b.onmouseenter = () => { ui.hoverRoute = i; };
-      b.onmouseleave = () => { ui.hoverRoute = -2; };
-      pbtn.push(b); paths.append(b);
-      if (i === ui.route) b.classList.add("on");
+    const tot = el("span", "tdsqtot");
+    const sendB = el("button", "msgo", "Send squad ▶"); sendB.type = "button";
+    sendB.onclick = () => {
+      if (!Object.values(counts).some((v) => v > 0)) { toast("Add some enemies to the squad first."); return; }
+      send({ a: "squad", units: { ...counts } });
+      for (const ty of TD.SEND_TYPES) counts[ty] = 0;
+      grid.querySelectorAll(".tdsqn").forEach((x) => (x.textContent = "0"));
+      refreshUI();
     };
-    mkp(-1, "🎲 Random");
-    st.map.routes.forEach((_, i) => mkp(i, String(i + 1), TD_ROUTE_COLORS[i % TD_ROUTE_COLORS.length]));
-    const foot = el("div", "row-btns"); foot.append(paths, eco);
-    const listBox = el("div", "tdlist sunken");
-    squadBox.append(grid, foot, listBox);
-    ui.ecoEl = eco; ui.listBox = listBox;
+    const eco = el("div", "tdeco");
+    const foot = el("div", "row-btns"); foot.append(tot, sendB);
+    const queue = el("div", "tdlist sunken");
+    squadBox.append(grid, foot, eco, queue);
+    ui.sqTot = tot; ui.sqSend = sendB; ui.ecoEl = eco; ui.sqQueue = queue;
   }
+  function squadCost() { let c = 0, t = 4, n = 0, e = 0; for (const ty of TD.SEND_TYPES) { const k = counts[ty] || 0; c += k * TD.ENEMIES[ty].cost; t += k * TD.ENEMIES[ty].spawn * 1.5; n += k; e += k * TD.ENEMIES[ty].eco; } return { c, t, n, e }; }
   function refreshUI() {
     const V = ui.V;
     if (!V) return;
@@ -4985,19 +5045,20 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
       info.append(el("b", null, T.icon + " " + T.name + " 💰" + tdCost(st, T)), el("span", "dim", "  " + T.desc + "  Click a green tile to build. Right-click to stop."));
     } else if (canAct) info.append(el("span", "dim", "Pick a tower below, then click on the grass. Click a tower to upgrade or sell it."));
     else info.append(el("span", "dim", "👀 You are watching."));
-    if (ui.listBox) {
-      for (const [ty, b] of Object.entries(ui.sendBtns)) b.disabled = money < TD.ENEMIES[ty].cost;
-      ui.ecoEl.textContent = "Eco: +" + ((V.eco || [])[side] || 0) + " 💰 every " + TD.INCOME_EVERY + " s (next in " + (V.it ?? "?") + " s)";
-      const [ci, pct, waiting] = (V.sl || [])[side] || [-1, 0, []];
-      ui.listBox.replaceChildren();
-      if (ci < 0 && !waiting.length) { ui.listBox.append(el("span", "dim", "Spawn list empty. Click an enemy above to send it.")); return; }
-      if (ci >= 0) {
-        const cur = el("span", "tdcur");
+    if (ui.sqQueue) {
+      const { c, t, n, e } = squadCost();
+      ui.sqTot.textContent = n ? n + " enemies · 💰" + c + " · eco " + (e >= 0 ? "+" : "") + e + " · ready in " + Math.round(t) + " s" : "Empty squad";
+      ui.sqSend.disabled = !n || c > money;
+      ui.ecoEl.textContent = "Eco: +" + ((V.eco || [])[side] || 0) + " 💰 every " + TD.INCOME_EVERY + " s (next in " + (V.it ?? "?") + " s)   ·   🏰 Your base sends a free group (Recruit / Scout / Heavy) in " + ((V.at || [])[side] ?? "?") + " s";
+      const q = (V.sq && V.sq[side]) || [];
+      ui.sqQueue.replaceChildren();
+      if (!q.length) ui.sqQueue.append(el("span", "dim", "No squad waiting."));
+      q.forEach(([pct, cnt], i) => {
+        const r = el("div", "tdcur");
         const b = el("div", "pvpbar sunken"); const f = el("div", "fill"); f.style.width = pct + "%"; b.append(f);
-        cur.append(el("span", null, "Summoning " + TD.ICON[TD.ETYPES[ci]] + " " + TD.ENEMIES[TD.ETYPES[ci]].name), b);
-        ui.listBox.append(cur);
-      }
-      if (waiting.length) ui.listBox.append(el("span", "tdwait", "Next: " + waiting.slice(0, 25).map((i) => TD.ICON[TD.ETYPES[i]]).join(" ") + (waiting.length > 25 ? " +" + (waiting.length - 25) : "")));
+        r.append(el("span", null, (i === 0 ? "⏳ Squad getting ready: " : "⌛ Next squad: ") + cnt + " enemies"), b);
+        ui.sqQueue.append(r);
+      });
     }
   }
   const pos = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
@@ -5029,7 +5090,7 @@ function tdWindow({ title, key, st, side, canAct, send, pvp }) {
     if (!win.w.isConnected) return;
     ui.width = cvWrap.clientWidth - 4;
     if (ui.getView) ui.V = ui.getView();
-    if (ui.V) tdDraw(cv, st, ui.V, { side, mode: ui.mode, routes: pvp && canAct ? { from: side, sel: ui.route, hover: ui.hoverRoute } : null, hover: ui.hover, buildType: ui.buildType, selId: ui.selId, overlay: ui.overlay, width: ui.width, get toWorld() { return ui.toWorld; }, set toWorld(f) { ui.toWorld = f; }, set ts(v) {} });
+    if (ui.V) tdDraw(cv, st, ui.V, { side, mode: ui.mode, routes: null, hover: ui.hover, buildType: ui.buildType, selId: ui.selId, overlay: ui.overlay, width: ui.width, get toWorld() { return ui.toWorld; }, set toWorld(f) { ui.toWorld = f; }, set ts(v) {} });
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
@@ -5104,7 +5165,7 @@ function createTdChallenge(room = S.room) {
   const fs = el("fieldset"); fs.append(el("legend", null, "PvP rules"));
   const lk = el("input"); lk.type = "checkbox"; lk.checked = store("td-linked") !== "0";
   const l1 = el("label", "check"); l1.append(lk, " 🔗 Linked maps (enemies from both players fight each other when they meet)");
-  fs.append(l1, el("div", "hint", "Same map for both (mirrored). No waves: you attack by sending enemies from your base.\nCash every " + TD.INCOME_EVERY + " s = your eco. Each base has 20 ❤. The first base to fall loses!"));
+  fs.append(l1, el("div", "hint", "Same map for both (mirrored). Your base sends free units by itself, and you send squads.\nCash every " + TD.INCOME_EVERY + " s = your eco. Each base has 20 ❤. The first base to fall loses!"));
   let post = null;
   if (room) {
     post = el("input"); post.type = "checkbox"; post.checked = true;
@@ -5299,10 +5360,10 @@ function openTd(gid) {
     snapAt = performance.now();
   }
   function viewFromSnap() {
-    if (!snap) return { towers: [], enemies: [], fx: [], money: [0, 0], lives: [20, 20], eco: [0, 0], sl: [[-1, 0, []], [-1, 0, []]], it: 7 };
+    if (!snap) return { towers: [], enemies: [], fx: [], money: [0, 0], lives: [20, 20], eco: [0, 0], sq: [[], []], it: 7, at: [0, 0] };
     const k = Math.min(1, (performance.now() - snapAt) / 200);
     return {
-      money: snap.m, lives: snap.l, eco: snap.ec || [0, 0], sl: snap.sl || [[-1, 0, []], [-1, 0, []]], it: snap.it,
+      money: snap.m, lives: snap.l, eco: snap.ec || [0, 0], sq: snap.sq || [[], []], it: snap.it, at: snap.at || [0, 0],
       towers: snap.tw.map(([id, side, ti, lvl, lx, ly, sn]) => ({ id, side, type: TD.TTYPES[ti], lvl, lx, ly, stunned: !!sn })),
       enemies: snap.e.map(([id, ti, x, y, hp, slow, sd]) => {
         const c = curPos.get(id), p = prevPos.get(id) || c;
