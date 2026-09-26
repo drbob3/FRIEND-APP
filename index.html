@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-yIGDqr15o39tq+ltiqvPU/BkbWupUKJoe3u/mF4Zinw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-5CyvllkPncwjNF8C0ynyyTiLQD4NIkfrnnxnh2Ms7jw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -1002,7 +1002,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.41";
+const APP_VERSION = "10.42";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5062,7 +5062,7 @@ function openPvp(gid) {
 /* ========================= GAMES: CHICKEN TOWER ========================= */
 // Tiles: . empty · # stone block · = platform (jump through from below) · % crate (shoot it) · ^ spikes · g dirt surface (grass) · d dirt underground
 // Background blocks (dark, you go through them): B stone · G dirt surface · D dirt underground · P platform · X crate
-// Markers: S start · E exit · C checkpoint · w black chicken (walks) · f helicopter chicken (flies) · + heart
+// Markers: S start · E exit · C checkpoint · w black chicken (walks) · f helicopter chicken (flies) · n sniper chicken (aims with a laser) · + heart
 const CT = {
   T: 24, VW: 480, VH: 360, STEP: 1 / 120,
   GRAV: 1500, JUMP: 520, RUN: 170, MAXFALL: 720,
@@ -5070,7 +5070,7 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwf+BGDPX",
+  TILES: ".#=%^gdSECwfn+BGDPX",
   BG: { "#": "B", g: "G", d: "D", "=": "P", "%": "X" },   // background versions (dark, can't be touched)
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
@@ -5089,9 +5089,9 @@ const CT = {
     ["pan", "✋", "Scroll (touch screens)"], [".", "⬜", "Eraser (right click erases too)"], ["#", "🧱", "Stone block"], ["g", "🟩", "Dirt surface (grass)"], ["d", "🟫", "Dirt underground"],
     ["=", "🪵", "Platform (jump through it from below)"], ["%", "📦", "Crate (breaks with 2 shots)"], ["^", "🔺", "Spikes"],
     ["S", "🏁", "Start (only one)"], ["E", "🚪", "Exit"], ["C", "🚩", "Checkpoint"],
-    ["w", "🐔", "Black chicken (walks)"], ["f", "🚁", "Helicopter chicken (flies to you)"], ["+", "❤", "Heart (+1 life)"],
+    ["w", "🐔", "Black chicken (walks)"], ["f", "🚁", "Helicopter chicken (flies to you)"], ["n", "🎯", "Sniper chicken (doesn't move, aims 5-6 s then shoots)"], ["+", "❤", "Heart (+1 life)"],
   ],
-  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2."],
+  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2.", "Red laser? Hide behind a wall before the sniper shoots!"],
 };
 const ctClamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const CT_BLACK = { body: "#2c2c32", wing: "#16161a", eye: "#ff3030", leg: "#c88010" };
@@ -5241,9 +5241,10 @@ function ctNewGame(level) {
   let sx = 2, sy = H - 2, foundS = false;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
-    if ("SwfCE+".includes(c)) g[y][x] = ".";
+    if ("SwfnCE+".includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
+    else if (c === "n") st.ents.push({ k: "n", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: -1, hp: 3, fl: 0, t: Math.random() * 9, mode: "idle", aimT: 0, aimDur: 5.5, lockT: 0, cd: 1, lost: 0, gun: Math.PI, laser: null, tracer: 0 });
     else if (c === "f") st.ents.push({ k: "f", x: x * T + 2, y: y * T + 5, w: 20, h: 14, hx: x * T + 2, hy: y * T + 5, hp: 2, fl: 0, t: Math.random() * 9, face: 1, tilt: 0 });
     else if (c === "C") st.cps.push({ x: x * T, y: y * T, on: false });
     else if (c === "E") st.exits.push({ x: x * T, y: y * T });
@@ -5323,6 +5324,68 @@ function ctHurt(st) {
   beep([[330, 0, 0.12], [220, 0.1, 0.15], [140, 0.22, 0.25]], "square", 0.07);
 }
 function ctRedrawTile(st, tx, ty) { const px = tx * CT.T, py = ty * CT.T; ctTileArt(st.cctx, st.bgl[ty][tx], px, py); ctTileArt(st.cctx, st.g[ty][tx], px, py, true); }
+// ray from (x0,y0) toward (x1,y1): distance to the first solid block (background blocks and platforms don't stop it)
+function ctRay(st, x0, y0, dx, dy, maxLen) {
+  const T = CT.T;
+  for (let d = 0; d < maxLen; d += 4) {
+    const x = x0 + dx * d, y = y0 + dy * d;
+    if (y > st.H * T + 40) return d;
+    if (ctSolid(ctTile(st, Math.floor(x / T), Math.floor(y / T)))) return d;
+  }
+  return maxLen;
+}
+function ctSees(st, x0, y0, x1, y1) {
+  const d = Math.hypot(x1 - x0, y1 - y0) || 1;
+  return ctRay(st, x0, y0, (x1 - x0) / d, (y1 - y0) / d, d) >= d - 2;
+}
+// SNIPER: doesn't move. Sees you from any distance if no wall is in the way -> red laser wobbles around you and slowly
+// closes in (5-6 s), then stays ON you (1-2 s) and shoots. Hide while it aims = it stops. Hide after it locked = it
+// still shoots at the last place it saw you.
+function ctSniperStep(st, e, dt) {
+  const p = st.p;
+  e.vy = Math.min(CT.MAXFALL, e.vy + CT.GRAV * dt); e.vx = 0; ctMove(st, e, dt);
+  if (e.y > st.H * CT.T + 40) { e.dead = true; return; }
+  e.tracer = Math.max(0, e.tracer - dt);
+  const ex = e.x + e.w / 2 + e.dir * 3, ey = e.y + 5;   // eye / gun
+  const pcx = p.x + p.w / 2, pcy = p.y + p.h / 2;
+  const seen = p.deadT <= 0 && st.phase === "play" && (ctSees(st, ex, ey, pcx, pcy) || ctSees(st, ex, ey, pcx, p.y + 3));
+  if (seen) e.last = { x: pcx, y: pcy };
+  let tx = null, ty = null;
+  if (e.mode === "cool") { e.cd -= dt; if (e.cd <= 0) e.mode = "idle"; }
+  else if (e.mode === "idle") { if (seen) { e.mode = "aim"; e.aimT = 0; e.aimDur = 5 + Math.random(); e.lost = 0; beep([[1500, 0, 0.05], [1500, 0.1, 0.05]], "square", 0.03); } }
+  else if (e.mode === "aim") {
+    if (seen) {
+      e.lost = 0; e.aimT += dt;
+      const k = Math.min(1, e.aimT / e.aimDur), amp = 70 * Math.pow(1 - k, 1.4);
+      tx = pcx + Math.sin(e.t * 2.3) * amp + Math.sin(e.t * 5.1) * amp * 0.25; ty = pcy + Math.cos(e.t * 1.7) * amp * 0.7;
+      if (k >= 1) { e.mode = "lock"; e.lockT = 1 + Math.random(); beep([[900, 0, 0.08], [1200, 0.1, 0.08], [1600, 0.2, 0.12]], "square", 0.05); }
+    } else { e.lost += dt; if (e.lost > 0.35) { e.mode = "idle"; e.laser = null; } else if (e.laser) { tx = e.laser.tx; ty = e.laser.ty; } }
+  } else if (e.mode === "lock") {
+    e.lockT -= dt;
+    tx = e.last.x; ty = e.last.y;   // stays on you, or on the last place it saw you
+    if (e.lockT <= 0) {   // BANG
+      const dx0 = tx - ex, dy0 = ty - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
+      const len = ctRay(st, ex, ey, dx, dy, 3000);
+      e.shot = { x1: ex + dx * len, y1: ey + dy * len }; e.tracer = 0.18;
+      // does the bullet line touch the player?
+      if (p.deadT <= 0) {
+        const qx = pcx - ex, qy = pcy - ey, along = qx * dx + qy * dy, off = Math.abs(qx * dy - qy * dx);
+        if (along > 0 && along < len + 4 && off < 11) ctHurt(st);
+      }
+      ctBurst(st, e.shot.x1, e.shot.y1, 8, ["#ffd060", "#fff", "#888"], 120, 300);
+      st.shake = Math.max(st.shake, 0.2);
+      beep([[120, 0, 0.12], [60, 0.03, 0.2]], "sawtooth", 0.09);
+      e.mode = "cool"; e.cd = 2; e.laser = null;
+    }
+  }
+  if (tx != null) {
+    e.dir = tx >= e.x + e.w / 2 ? 1 : -1;
+    const dx0 = tx - ex, dy0 = ty - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
+    const len = ctRay(st, ex, ey, dx, dy, 3000);   // the laser goes past you and stops on a wall
+    e.gun = Math.atan2(dy, dx);
+    e.laser = { x0: ex, y0: ey, x1: ex + dx * len, y1: ey + dy * len, tx, ty, lock: e.mode === "lock" };
+  } else if (e.mode !== "aim") e.laser = null;
+}
 function ctStep(st, inp, dt) {
   const p = st.p, T = CT.T;
   st.time += dt;
@@ -5416,7 +5479,8 @@ function ctStep(st, inp, dt) {
   for (const e of st.ents) {
     if (e.dead) continue;
     e.fl = Math.max(0, e.fl - dt); e.t += dt;
-    if (e.k === "w") {
+    if (e.k === "n") { ctSniperStep(st, e, dt); }
+    else if (e.k === "w") {
       e.vx = e.dir * 45;
       e.vy = Math.min(CT.MAXFALL, e.vy + CT.GRAV * dt);
       if (ctMove(st, e, dt)) e.dir *= -1;
@@ -5544,6 +5608,19 @@ function ctDrawHeliChicken(c, x, y, t, flash, face, tilt = 0) {   // box 20x14 �
   if (Math.floor(t * 20) % 2) { c.fillStyle = "rgba(200,200,200,.5)"; c.fillRect(bx - 2, -2, 1, 2); c.fillRect(bx + 1, -1, 1, 2); }   // exhaust puff
   c.restore();
   c.restore();
+}
+function ctDrawSniper(c, x, y, dir, gun, t, flash, aiming) {   // box 18x16 · black chicken with a long rifle
+  const fx = x + 9, fy = y + 16;
+  ctDrawChicken(c, fx, fy, dir, null, 0, 0.8, flash ? CT_FLASH : CT_BLACK);
+  c.save(); c.translate(fx, fy - 8); c.rotate(gun);
+  c.fillStyle = "#5a3a1a"; c.fillRect(-4, -2, 8, 4);            // stock
+  c.fillStyle = "#1e1e22"; c.fillRect(4, -1.5, 18, 3);          // long barrel
+  c.fillStyle = "#444"; c.fillRect(20, -2, 3, 4);               // muzzle
+  c.fillStyle = "#2a2a30"; c.fillRect(6, -5, 8, 3);             // scope
+  c.fillStyle = aiming && Math.floor(t * 8) % 2 ? "#ff4040" : "#8a8aff"; c.fillRect(13, -5, 1.5, 3);   // scope glint
+  c.restore();
+  // camo headband
+  c.fillStyle = "#3a5a2a"; c.fillRect(fx + dir * 3.2 - 3.5, fy - 18.5, 7, 1.6);
 }
 function ctHeart(c, x, y, s, col = "#e02020") {
   c.fillStyle = col; c.beginPath();
@@ -5697,11 +5774,29 @@ function ctDrawWorld(c, st, inp, now) {
   for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
   for (const e of st.ents) if (!e.dead && vis(e.x, e.y)) {
     if (e.k === "w") ctDrawBlackChicken(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0);
+    else if (e.k === "n") ctDrawSniper(c, Math.round(e.x), Math.round(e.y), e.dir, e.gun, e.t, e.fl > 0, e.mode === "aim" || e.mode === "lock");
     else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, e.face || 1, e.tilt || 0);
   }
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
     ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, p.aim, p.walk);
     if (st.muzzle) { c.fillStyle = "#ffe060"; c.beginPath(); c.arc(st.muzzle.x, st.muzzle.y, 6, 0, Math.PI * 2); c.fill(); c.fillStyle = "#fff"; c.beginPath(); c.arc(st.muzzle.x, st.muzzle.y, 3, 0, Math.PI * 2); c.fill(); }
+  }
+  for (const e of st.ents) {
+    if (e.k !== "n" || e.dead) continue;
+    if (e.laser) {
+      const L = e.laser, pulse = L.lock ? 0.75 + Math.sin(now * 30) * 0.25 : 0.45;
+      c.strokeStyle = "rgba(255,0,0," + (pulse * 0.25).toFixed(2) + ")"; c.lineWidth = L.lock ? 8 : 6;   // glow
+      c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
+      c.strokeStyle = "rgba(255,30,30," + pulse.toFixed(2) + ")"; c.lineWidth = L.lock ? 3 : 2;
+      c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
+      c.strokeStyle = "rgba(255,200,200," + (pulse * 0.8).toFixed(2) + ")"; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
+      c.fillStyle = "#ff2020"; c.beginPath(); c.arc(L.x1, L.y1, L.lock ? 4 : 3, 0, Math.PI * 2); c.fill();
+    }
+    if (e.tracer > 0 && e.shot) {
+      c.strokeStyle = "rgba(255,240,160," + (e.tracer / 0.18).toFixed(2) + ")"; c.lineWidth = 3;
+      c.beginPath(); c.moveTo(e.x + e.w / 2 + e.dir * 3, e.y + 5); c.lineTo(e.shot.x1, e.shot.y1); c.stroke();
+    }
   }
   c.fillStyle = "#ffe080";
   for (const b of st.pel) c.fillRect(Math.round(b.x) - 1, Math.round(b.y) - 1, 3, 3);
@@ -6177,7 +6272,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
@@ -6196,6 +6291,7 @@ async function openCtEditor(start) {
     else if (ch === "C") ctDrawFlag(c, px, py, false);
     else if (ch === "w") ctDrawBlackChicken(c, px + 3, py + 8, 1, 0, false);
     else if (ch === "f") ctDrawHeliChicken(c, px + 2, py + 8, 0.2, false, 1);
+    else if (ch === "n") ctDrawSniper(c, px + 3, py + 8, -1, Math.PI, 0, false, false);
     else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
     c.fillStyle = "rgba(255,255,255,.07)"; c.fillRect(px, py, T, 1); c.fillRect(px, py, 1, T);
     c.fillStyle = "#ffd040"; c.font = "bold 9px monospace"; c.textAlign = "left";
