@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gPSW7CcUcdkK8wrMEGdxSEk/PISgQwd3Hy4YFTyXKc0=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GI+MZ4ge3Be31yXcNG6m6Znhomb2WwZQmG9oNBtrUOk=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -500,16 +500,22 @@
   .ctpad button { min-width: 56px; min-height: 48px; font-size: 20px; touch-action: none; }
   @media (pointer: coarse) { .ctpad { display: flex; } }
   .float.ctmenu { width: min(480px, calc(calc(100vw / var(--z, 1)) - 16px)); }
+  .float.ctstory { width: min(520px, calc(calc(100vw / var(--z, 1)) - 16px)); }
   .ctlogo { font: bold 24px/1.2 "Courier New", monospace; color: #d09000; text-shadow: 2px 2px 0 #000; letter-spacing: 1px; text-align: center; }
   .ctlist { max-height: 220px; overflow: auto; }
+  .ctlvls { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 4px; }
+  .ctlv { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .ctlv > button:first-child { padding: 4px 2px; line-height: 1.25; min-height: 42px; }
+  .ctlv > button.done { background: #d4ecd4; }
+  .ctlv .small { padding: 1px 2px; }
   .ctedrow { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
   .ctedrow input:not(.ctnum) { flex: 1; min-width: 120px; }
   .ctedrow .ctnum { width: 64px; }
-  .float.ctedwin { width: min(660px, calc(calc(100vw / var(--z, 1)) - 16px)); }
+  .float.ctedwin { width: min(700px, calc(calc(100vw / var(--z, 1)) - 16px)); }
   .ctpal { display: flex; flex-wrap: wrap; gap: 2px; }
-  .cteds { height: max(200px, min(calc(calc(100vh / var(--z, 1)) - 360px), 560px)); overflow-y: auto; overflow-x: hidden; background: #000; line-height: 0; text-align: center; }
+  .cteds { height: max(200px, min(calc(calc(100vh / var(--z, 1)) - 400px), 560px)); overflow: auto; background: #000; line-height: 0; }
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
-  .cteds canvas { width: 480px; max-width: 100%; image-rendering: pixelated; cursor: crosshair; }
+  .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
   .gcard .hint { white-space: pre-line; }
   .gscore { flex: 1 1 180px; min-width: 160px; }
@@ -996,7 +1002,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.36";
+const APP_VERSION = "10.37";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5054,16 +5060,23 @@ function openPvp(gid) {
 }
 
 /* ========================= GAMES: CHICKEN TOWER ========================= */
-// Tiles: . empty · # block · = platform (jump through from below) · % crate (shoot it) · ^ spikes
-// Markers: S start · E exit · C checkpoint · w fox (walks) · f hawk (flies) · + heart
+// Tiles: . empty · # stone block · = platform (jump through from below) · % crate (shoot it) · ^ spikes · g dirt surface (grass) · d dirt underground
+// Markers: S start · E exit · C checkpoint · w black chicken (walks) · f helicopter chicken (flies) · + heart
 const CT = {
-  T: 24, COLS: 20, VW: 480, VH: 360, STEP: 1 / 120,
+  T: 24, VW: 480, VH: 360, STEP: 1 / 120,
   GRAV: 1500, JUMP: 520, RUN: 170, MAXFALL: 720,
-  SHELLS: 2, RELOAD: 0.3, SHOT_CD: 0.2, PELLETS: 6, SPREAD: 0.36, PEL_SPEED: 720, PEL_LIFE: 0.26,
+  SHELLS: 2, RELOAD: 0.35, SHOT_CD: 0.2, PELLETS: 6, SPREAD: 0.36, PEL_SPEED: 720, PEL_LIFE: 0.26,
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
-  MIN_ROWS: 20, MAX_ROWS: 300,
-  TILES: ".#=%^SECwf+",
+  TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
+  TILES: ".#=%^gdSECwf+",
+  THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
+  WORLDS: [
+    { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
+    { theme: "fortress", name: "Fortress", desc: "Get inside the castle walls." },
+    { theme: "tower", name: "The Tower", desc: "Climb to the very top!" },
+  ],
+  SLOTS: ["1-1", "1-2", "1-3", "1-4", "1-5", "2-1", "2-2", "2-3", "2-4", "2-5", "3-1", "3-2", "3-3", "3-4", "3-5"],
   SIZES: { small: { label: "Small (60)", rows: 60 }, medium: { label: "Medium (100)", rows: 100 }, big: { label: "Big (160)", rows: 160 }, huge: { label: "Huge (250)", rows: 250 } },
   DIFFS: {
     easy:   { label: "Easy",   minLen: 4, maxLen: 7, shot: 0.06, solid: 0.15, side: 0.5,  spike: 0.25, fox: 0.2,  hawk: 0.08, crate: 0.12, heart: 0.07, cpEvery: 18 },
@@ -5071,28 +5084,44 @@ const CT = {
     hard:   { label: "Hard",   minLen: 2, maxLen: 5, shot: 0.22, solid: 0.3,  side: 0.6,  spike: 0.55, fox: 0.5,  hawk: 0.28, crate: 0.18, heart: 0.03, cpEvery: 32 },
   },
   TOOLS: [
-    ["pan", "✋", "Scroll (touch screens)"], [".", "⬜", "Eraser (right click erases too)"], ["#", "🧱", "Block"], ["=", "🟫", "Platform (jump through it from below)"],
-    ["%", "📦", "Crate (breaks with 2 shots)"], ["^", "🔺", "Spikes"], ["S", "🐔", "Start (only one)"], ["E", "🚪", "Exit"],
-    ["C", "🚩", "Checkpoint"], ["w", "🦊", "Fox (walks on platforms)"], ["f", "🦅", "Hawk (flies to you)"], ["+", "❤", "Heart (+1 life)"],
+    ["pan", "✋", "Scroll (touch screens)"], [".", "⬜", "Eraser (right click erases too)"], ["#", "🧱", "Stone block"], ["g", "🟩", "Dirt surface (grass)"], ["d", "🟫", "Dirt underground"],
+    ["=", "🪵", "Platform (jump through it from below)"], ["%", "📦", "Crate (breaks with 2 shots)"], ["^", "🔺", "Spikes"],
+    ["S", "🏁", "Start (only one)"], ["E", "🚪", "Exit"], ["C", "🚩", "Checkpoint"],
+    ["w", "🐔", "Black chicken (walks)"], ["f", "🚁", "Helicopter chicken (flies to you)"], ["+", "❤", "Heart (+1 life)"],
   ],
-  TIPS: ["Shoot DOWN to fly higher!", "You have 2 shells. They reload when you land.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Foxes need 3 pellets, hawks 2."],
+  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2."],
 };
 const ctClamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const CT_BLACK = { body: "#2c2c32", wing: "#16161a", eye: "#ff3030", leg: "#c88010" };
+const CT_FLASH = { body: "#ffffff", wing: "#e0e0e0", eye: "#ff3030", leg: "#ffffff" };
+const ctSlotTheme = (slot) => CT.WORLDS[+String(slot)[0] - 1]?.theme || "tower";
+const ctWorldOf = (slot) => CT.WORLDS[+String(slot)[0] - 1];
 
 /* ----- levels ----- */
 function ctNormRows(rows) {
   const ok = new Set(CT.TILES);
-  const r = (rows || []).slice(0, CT.MAX_ROWS).map((s) => {
-    let t = "";
-    for (let i = 0; i < CT.COLS; i++) { const c = String(s)[i]; t += i === 0 || i === CT.COLS - 1 ? "#" : c && ok.has(c) ? c : "."; }
-    return t;
-  });
-  while (r.length < CT.MIN_ROWS) r.unshift("#" + ".".repeat(CT.COLS - 2) + "#");
+  let src = (rows || []).map((r) => String(r));
+  const W = ctClamp(Math.max(0, ...src.map((r) => r.length)), CT.MIN_W, CT.MAX_W);
+  const maxH = Math.min(CT.MAX_H, Math.floor(CT.MAX_CELLS / W));
+  if (src.length > maxH) src = src.slice(src.length - maxH);
+  const r = src.map((s) => { let t = ""; for (let i = 0; i < W; i++) { const c = s[i]; t += c && ok.has(c) ? c : "."; } return t; });
+  while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
 function ctParse(map) { return ctNormRows(String(map || "").split("\n")); }
-function ctBlankRows(h) {
-  const W = CT.COLS;
+function ctBlankRows(theme = "tower") {
+  if (theme === "outside" || theme === "fortress") {
+    const W = 120, H = 15;
+    const rows = Array.from({ length: H }, () => Array(W).fill("."));
+    for (let x = 0; x < W; x++) {
+      if (theme === "outside") { rows[12][x] = "g"; rows[13][x] = "d"; rows[14][x] = "d"; }
+      else { rows[13][x] = "#"; rows[14][x] = "#"; }
+    }
+    const fy = theme === "outside" ? 11 : 12;
+    rows[fy][2] = "S"; rows[fy][W - 3] = "E";
+    return rows.map((r) => r.join(""));
+  }
+  const W = CT.TOWER_W, h = 60;
   const rows = Array.from({ length: h }, (_, y) => (y === 0 || y === h - 1 ? "#".repeat(W) : "#" + ".".repeat(W - 2) + "#").split(""));
   rows[h - 2][2] = "S";
   for (let x = 7; x <= 12; x++) rows[3][x] = "=";
@@ -5102,7 +5131,7 @@ function ctBlankRows(h) {
 function ctGenerate({ size = "medium", diff = "normal", seed = randSeed() } = {}) {
   const rows = CT.SIZES[size]?.rows || 100, P = CT.DIFFS[diff] || CT.DIFFS.normal;
   const R0 = rng(seed), ri = (a, b) => a + Math.floor(R0() * (b - a + 1)), ch = (p) => R0() < p;
-  const W = CT.COLS;
+  const W = CT.TOWER_W;
   const g = Array.from({ length: rows }, (_, y) => Array.from({ length: W }, (_, x) => (x === 0 || x === W - 1 || y === 0 || y === rows - 1 ? "#" : ".")));
   const free = (x, y) => x > 0 && x < W - 1 && y > 0 && y < rows - 1 && g[y][x] === ".";
   const put = (x, y, c) => { if (free(x, y)) g[y][x] = c; };
@@ -5171,17 +5200,17 @@ function ctGenerate({ size = "medium", diff = "normal", seed = randSeed() } = {}
 }
 function ctRandomLevel(size, diff) {
   const seed = randSeed();
-  return { name: "Random tower · " + (CT.SIZES[size]?.label.split(" ")[0] || size) + " · " + (CT.DIFFS[diff]?.label || diff), rows: ctGenerate({ size, diff, seed }), random: { size, diff, seed } };
+  return { name: "Random tower · " + (CT.SIZES[size]?.label.split(" ")[0] || size) + " · " + (CT.DIFFS[diff]?.label || diff), rows: ctGenerate({ size, diff, seed }), theme: "tower", random: { size, diff, seed } };
 }
 
 /* ----- game state ----- */
 function ctNewGame(level) {
   const T = CT.T;
   const g = ctNormRows(level.rows).map((r) => r.split(""));
-  const H = g.length;
-  const st = { level, H, g, ents: [], pel: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camY: 0, phase: "loading", loadRow: 0, loadT: 0, shake: 0, flash: 0 };
+  const H = g.length, W = g[0].length;
+  const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
   let sx = 2, sy = H - 2, foundS = false;
-  for (let y = 0; y < H; y++) for (let x = 0; x < CT.COLS; x++) {
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
     if ("SwfCE+".includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
@@ -5193,16 +5222,20 @@ function ctNewGame(level) {
   }
   st.p = { x: sx * T + 5, y: sy * T + T - 20, w: 14, h: 20, vx: 0, vy: 0, ground: false, face: 1, coyote: 0, jbuf: 0, jumping: false, dropT: 0, shells: CT.SHELLS, reload: 0, cd: 0, inv: 0, walk: 0, aim: 0, deadT: 0 };
   st.cp = { x: st.p.x, y: st.p.y };
-  st.startY = st.p.y; st.goalY = st.exits.length ? Math.min(...st.exits.map((e) => e.y)) : 0;
+  st.start = { x: st.p.x, y: st.p.y };
+  const ex = st.exits.length ? st.exits.reduce((a, b) => (Math.abs(b.x - st.p.x) + Math.abs(b.y - st.p.y) > Math.abs(a.x - st.p.x) + Math.abs(a.y - st.p.y) ? b : a)) : null;
+  st.goal = ex ? { x: ex.x, y: ex.y } : { x: st.p.x, y: 0 };
   st.maxCam = Math.max(0, H * T - CT.VH);
+  st.maxCamX = Math.max(0, W * T - CT.VW);
   st.camY = ctClamp(st.p.y + st.p.h / 2 - CT.VH * 0.55, 0, st.maxCam);
+  st.camX = ctClamp(st.p.x + st.p.w / 2 - CT.VW * 0.42, 0, st.maxCamX);
   st.cache = document.createElement("canvas");
-  st.cache.width = CT.VW; st.cache.height = H * T;
+  st.cache.width = W * T; st.cache.height = H * T;
   st.cctx = st.cache.getContext("2d");
   return st;
 }
-const ctTile = (st, tx, ty) => (tx < 0 || tx >= CT.COLS || ty < 0 ? "#" : ty >= st.H ? "." : st.g[ty][tx]);
-const ctSolid = (c) => c === "#" || c === "%";
+const ctTile = (st, tx, ty) => (tx < 0 || tx >= st.W || ty < 0 ? "#" : ty >= st.H ? "." : st.g[ty][tx]);
+const ctSolid = (c) => c === "#" || c === "%" || c === "g" || c === "d";
 const ctHit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 
 function ctMove(st, o, dt, drop = false) {
@@ -5235,7 +5268,7 @@ function ctText(st, x, y, text, col = "#fff") { st.texts.push({ x, y, text, col,
 function ctShoot(st, aim) {
   const p = st.p;
   if (p.cd > 0 || p.deadT > 0) return;
-  if (p.shells <= 0) { p.cd = 0.15; beep([[900, 0, 0.03]], "square", 0.03); return; }
+  if (p.shells <= 0) { p.cd = 0.15; beep([[900, 0, 0.03]], "square", 0.03); if (!st.noAmmoT || st.time - st.noAmmoT > 2) { st.noAmmoT = st.time; ctText(st, p.x + 7, p.y - 10, "STAND STILL TO RELOAD", "#ffd040"); } return; }
   p.shells--; p.cd = CT.SHOT_CD; p.reload = 0;
   const ca = Math.cos(aim), sa = Math.sin(aim);
   const cx = p.x + p.w / 2 + ca * 16, cy = p.y + p.h - 9 + sa * 16;
@@ -5265,7 +5298,6 @@ function ctStep(st, inp, dt) {
   st.time += dt;
   st.shake = Math.max(0, st.shake - dt); st.flash = Math.max(0, st.flash - dt);
   if (st.flash <= 0) st.muzzle = null;
-  // player
   if (p.deadT > 0) {
     p.deadT -= dt;
     if (p.deadT <= 0) {
@@ -5292,22 +5324,21 @@ function ctStep(st, inp, dt) {
     const wasAir = !p.ground;
     ctMove(st, p, dt, p.dropT > 0);
     if (p.ground && wasAir && p.vy === 0) ctBurst(st, p.x + p.w / 2, p.y + p.h, 3, ["#8a8a9a"], 40, 200);
-    if (p.ground && p.shells < CT.SHELLS) { p.reload += dt; if (p.reload >= CT.RELOAD) { p.shells = CT.SHELLS; p.reload = 0; beep([[1200, 0, 0.02], [900, 0.05, 0.03]], "square", 0.03); } }
-    else if (!p.ground) p.reload = 0;
+    // reload: only when you stand still on the ground, one shell at a time
+    const still = p.ground && !dir && Math.abs(p.vx) < 15;
+    if (still && p.shells < CT.SHELLS) { p.reload += dt; if (p.reload >= CT.RELOAD) { p.shells++; p.reload = 0; beep([[1200, 0, 0.02], [900, 0.05, 0.03]], "square", 0.03); } }
+    else p.reload = 0;
     p.cd = Math.max(0, p.cd - dt);
-    // aim
     const cx = p.x + p.w / 2, cy = p.y + p.h - 9;
-    if (inp.tap) { p.aim = Math.atan2(inp.tap.y + st.camY - cy, inp.tap.x - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
-    else if (inp.mouseAim) { p.aim = Math.atan2(inp.my + st.camY - cy, inp.mx - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
+    if (inp.tap) { p.aim = Math.atan2(inp.tap.y + st.camY - cy, inp.tap.x + st.camX - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
+    else if (inp.mouseAim) { p.aim = Math.atan2(inp.my + st.camY - cy, inp.mx + st.camX - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
     else p.aim = inp.down && !p.ground ? Math.PI / 2 : inp.down ? (p.face > 0 ? 0.9 : Math.PI - 0.9) : p.face > 0 ? 0 : Math.PI;
     if (inp.fireHit) ctShoot(st, p.aim);
     inp.tap = null;
-    // hazards
     for (let ty = Math.floor((p.y + p.h - 8) / T); ty <= Math.floor((p.y + p.h - 1) / T); ty++)
       for (let tx = Math.floor((p.x + 2) / T); tx <= Math.floor((p.x + p.w - 3) / T); tx++)
         if (ctTile(st, tx, ty) === "^" && p.y + p.h > ty * T + 11) ctHurt(st);
     if (p.y > st.H * T + 40) ctHurt(st);
-    // checkpoints, hearts, exit
     for (const c of st.cps) if (!c.on && ctHit(p, { x: c.x + 4, y: c.y - 8, w: 16, h: 32 })) {
       for (const o of st.cps) o.on = false;
       c.on = true; st.cp = { x: c.x + 5, y: c.y + T - p.h };
@@ -5329,12 +5360,12 @@ function ctStep(st, inp, dt) {
     const tx = Math.floor(b.x / T), ty = Math.floor(b.y / T), c = ctTile(st, tx, ty);
     if (ctSolid(c)) {
       b.life = 0;
-      if (c === "%" && ty < st.H) {
+      if (c === "%" && ty < st.H && tx >= 0 && tx < st.W) {
         const k = tx + "," + ty;
         st.crates[k] = (st.crates[k] ?? 2) - 1;
         if (st.crates[k] <= 0) { st.g[ty][tx] = "."; ctRedrawTile(st, tx, ty); ctBurst(st, tx * T + 12, ty * T + 12, 12, ["#b07a36", "#e0a85a", "#6e4a1e"], 140, 500); beep([[200, 0, 0.08]], "square", 0.05); }
         else ctBurst(st, b.x, b.y, 2, ["#e0a85a"], 60, 300);
-      } else ctBurst(st, b.x, b.y, 1, ["#ffd060"], 50, 0);
+      } else ctBurst(st, b.x, b.y, 1, c === "g" || c === "d" ? ["#8a5a30"] : ["#ffd060"], 50, c === "g" || c === "d" ? 300 : 0);
       continue;
     }
     for (const e of st.ents) {
@@ -5343,7 +5374,7 @@ function ctStep(st, inp, dt) {
       if (e.k === "f") { e.x += Math.sign(b.vx) * 4; e.y += Math.sign(b.vy) * 3; }
       if (e.hp <= 0) {
         e.dead = true; st.kills++;
-        ctBurst(st, e.x + e.w / 2, e.y + e.h / 2, 14, e.k === "w" ? ["#e07020", "#fff", "#5a2a0a"] : ["#7a4a2a", "#c89060", "#fff"], 150, 300);
+        ctBurst(st, e.x + e.w / 2, e.y + e.h / 2, 16, ["#2c2c32", "#16161a", "#e02020", "#555"], 150, 300);
         beep([[300, 0, 0.05], [150, 0.04, 0.1]], "square", 0.05);
       }
       break;
@@ -5368,18 +5399,19 @@ function ctStep(st, inp, dt) {
       const ex = e.x + e.w / 2, ey = e.y + e.h / 2, d = Math.hypot(pcx - ex, pcy - ey) || 1;
       if (d < 170 && p.deadT <= 0) { e.x += (pcx - ex) / d * 62 * dt; e.y += (pcy - ey) / d * 62 * dt; }
       else { const k = Math.min(1, dt * 1.5); e.x += (e.hx + Math.sin(e.t * 0.8) * 36 - e.x) * k; e.y += (e.hy + Math.sin(e.t * 2) * 6 - e.y) * k; }
-      e.x = ctClamp(e.x, T, (CT.COLS - 1) * T - e.w);
+      e.x = ctClamp(e.x, 0, st.W * T - e.w);
     }
     if (p.deadT <= 0 && ctHit({ x: p.x + 2, y: p.y + 2, w: p.w - 4, h: p.h - 3 }, e)) ctHurt(st);
   }
-  // particles, texts, camera
   for (const q of st.parts) { q.life -= dt; q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
   st.parts = st.parts.filter((q) => q.life > 0);
   for (const t of st.texts) { t.life -= dt * 0.8; t.y -= 30 * dt; }
   st.texts = st.texts.filter((t) => t.life > 0);
-  const focusY = p.deadT > 0 && p.deadT < 0.4 ? st.cp.y : p.y;
-  const target = ctClamp(focusY + p.h / 2 - CT.VH * 0.55, 0, st.maxCam);
-  st.camY += (target - st.camY) * Math.min(1, dt * 7);
+  // camera
+  const back = p.deadT > 0 && p.deadT < 0.4;
+  const fx = back ? st.cp.x : p.x, fy = back ? st.cp.y : p.y;
+  st.camY += (ctClamp(fy + p.h / 2 - CT.VH * 0.55, 0, st.maxCam) - st.camY) * Math.min(1, dt * 7);
+  st.camX += (ctClamp(fx + p.w / 2 - CT.VW * 0.42 + (back ? 0 : p.face * 30), 0, st.maxCamX) - st.camX) * Math.min(1, dt * 5);
 }
 
 /* ----- drawing ----- */
@@ -5391,6 +5423,18 @@ function ctTileArt(c, ch, px, py) {
     c.fillStyle = "#7c7c92"; c.fillRect(px, py, T, 3); c.fillRect(px, py, 3, T);
     c.fillStyle = "#3a3a4a"; c.fillRect(px, py + T - 3, T, 3); c.fillRect(px + T - 3, py, 3, T);
     c.fillStyle = "#4c4c5e"; c.fillRect(px + 5, py + 11, T - 10, 2); c.fillRect(px + 11, py + 4, 2, 7);
+  } else if (ch === "g" || ch === "d") {
+    c.fillStyle = "#6e4020"; c.fillRect(px, py, T, T);
+    for (let i = 0; i < 6; i++) {
+      const h = (px * 31 + py * 17 + i * 97) % 997;
+      c.fillStyle = i % 2 ? "#8a5a30" : "#4e2c14";
+      c.fillRect(px + (h % 19) + 2, py + ((h * 7) % (ch === "g" ? 12 : 19)) + (ch === "g" ? 9 : 2), 2, 2);
+    }
+    if (ch === "g") {
+      c.fillStyle = "#3a9a36"; c.fillRect(px, py, T, 7);
+      c.fillStyle = "#62c85a"; c.fillRect(px, py, T, 2);
+      c.fillStyle = "#3a9a36"; for (let i = 1; i < T; i += 5) c.fillRect(px + i, py + 7, 2, 1 + ((px + i + py) % 3));
+    }
   } else if (ch === "=") {
     c.fillStyle = "#8b5a2b"; c.fillRect(px, py, T, 8);
     c.fillStyle = "#c08040"; c.fillRect(px, py, T, 2);
@@ -5409,56 +5453,47 @@ function ctTileArt(c, ch, px, py) {
     }
   }
 }
-function ctDrawChicken(c, x, y, face, aim, walk, s = 1) {   // x, y = feet (center bottom)
+function ctDrawChicken(c, x, y, face, aim, walk, s = 1, pal = null) {   // x, y = feet (center bottom); aim null = no gun
+  const body = pal?.body || "#f4f4f4", wing = pal?.wing || "#dcdcdc", eye = pal?.eye || "#000", leg = pal?.leg || "#f0a020";
   c.save(); c.translate(x, y); c.scale(s, s);
   const lg = walk ? Math.sin(walk * 20) * 2 : 0;
-  c.fillStyle = "#f0a020"; c.fillRect(-4 + lg, -4, 2, 4); c.fillRect(2 - lg, -4, 2, 4);
-  c.fillStyle = "#f4f4f4";
+  c.fillStyle = leg; c.fillRect(-4 + lg, -4, 2, 4); c.fillRect(2 - lg, -4, 2, 4);
+  c.fillStyle = body;
   c.beginPath(); c.ellipse(0, -10, 8, 6.5, 0, 0, Math.PI * 2); c.fill();
   c.beginPath(); c.moveTo(-face * 6, -13); c.lineTo(-face * 11, -18); c.lineTo(-face * 9, -9); c.fill();
   c.beginPath(); c.arc(face * 4, -17, 4.5, 0, Math.PI * 2); c.fill();
   c.fillStyle = "#e02020"; c.fillRect(face * 4 - 3, -24, 2, 3); c.fillRect(face * 4 - 1, -25, 2, 4); c.fillRect(face * 4 + 1, -24, 2, 3); c.fillRect(face * 6 - 1, -14, 2, 3);
   c.fillStyle = "#f0a020"; c.beginPath(); c.moveTo(face * 8, -19); c.lineTo(face * 12.5, -17); c.lineTo(face * 8, -15); c.fill();
-  c.fillStyle = "#000"; c.fillRect(face * 5 - 0.5, -19, 1.6, 1.6);
-  c.save(); c.translate(0, -9); c.rotate(aim);
-  c.fillStyle = "#6b3e1a"; c.fillRect(-3, -2, 8, 4);
-  c.fillStyle = "#2a2a2a"; c.fillRect(5, -1.5, 13, 3);
-  c.fillStyle = "#666"; c.fillRect(5, -1.5, 13, 1);
-  c.restore();
-  c.fillStyle = "#dcdcdc"; c.beginPath(); c.ellipse(-face * 1.5, -9, 4.5, 3, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = eye; c.fillRect(face * 5 - 0.5, -19, 1.8, 1.8);
+  if (pal === CT_BLACK) { c.fillStyle = "#000"; c.fillRect(face * 3 - 1.5, -21, 5, 1); }   // angry eyebrow
+  if (aim != null) {
+    c.save(); c.translate(0, -9); c.rotate(aim);
+    c.fillStyle = "#6b3e1a"; c.fillRect(-3, -2, 8, 4);
+    c.fillStyle = "#2a2a2a"; c.fillRect(5, -1.5, 13, 3);
+    c.fillStyle = "#666"; c.fillRect(5, -1.5, 13, 1);
+    c.restore();
+  }
+  c.fillStyle = wing; c.beginPath(); c.ellipse(-face * 1.5, -9, 4.5, 3, 0, 0, Math.PI * 2); c.fill();
   c.restore();
 }
-function ctDrawFox(c, x, y, dir, t, flash) {   // box 18x16 at x,y
-  const col = flash ? "#fff" : "#e07020";
-  c.fillStyle = col; c.fillRect(x + 1, y + 5, 16, 8);
-  const hx = dir > 0 ? x + 12 : x - 2;
-  c.fillRect(hx, y + 1, 8, 8);
-  c.beginPath(); c.moveTo(hx, y + 2); c.lineTo(hx + 2, y - 3); c.lineTo(hx + 4, y + 2); c.moveTo(hx + 4, y + 2); c.lineTo(hx + 6, y - 3); c.lineTo(hx + 8, y + 2); c.fill();
-  c.fillStyle = flash ? "#fff" : "#fff4e0"; c.fillRect(dir > 0 ? hx + 5 : hx, y + 6, 3, 3);
-  c.fillStyle = "#000"; c.fillRect(dir > 0 ? hx + 5 : hx + 1, y + 3, 2, 2); c.fillRect(dir > 0 ? hx + 7 : hx - 1, y + 6, 2, 2);
-  const tx = dir > 0 ? x - 6 : x + 16;
-  c.fillStyle = col; c.fillRect(tx, y + 4 + Math.round(Math.sin(t * 8)), 8, 4);
-  c.fillStyle = "#fff"; c.fillRect(dir > 0 ? tx : tx + 5, y + 4 + Math.round(Math.sin(t * 8)), 3, 4);
-  c.fillStyle = "#3a1a0a"; const lg = Math.round(Math.sin(t * 14) * 2);
-  c.fillRect(x + 3 + lg, y + 13, 2, 3); c.fillRect(x + 12 - lg, y + 13, 2, 3);
+function ctDrawBlackChicken(c, x, y, dir, t, flash) {   // box 18x16
+  ctDrawChicken(c, x + 9, y + 16, dir, null, t, 0.8, flash ? CT_FLASH : CT_BLACK);
 }
-function ctDrawHawk(c, x, y, t, flash, face) {   // box 20x14
-  const w = Math.sin(t * 12) * 5;
-  c.fillStyle = flash ? "#fff" : "#6a3a1a";
-  c.beginPath(); c.moveTo(x + 10, y + 7); c.lineTo(x - 2, y + 2 + w); c.lineTo(x + 6, y + 10); c.fill();
-  c.beginPath(); c.moveTo(x + 10, y + 7); c.lineTo(x + 22, y + 2 + w); c.lineTo(x + 14, y + 10); c.fill();
-  c.fillStyle = flash ? "#fff" : "#8a5a2a"; c.beginPath(); c.ellipse(x + 10, y + 8, 6, 4.5, 0, 0, Math.PI * 2); c.fill();
-  const hx = x + 10 + face * 6;
-  c.fillStyle = "#f0f0e0"; c.beginPath(); c.arc(hx, y + 5, 3.5, 0, Math.PI * 2); c.fill();
-  c.fillStyle = "#f0c020"; c.beginPath(); c.moveTo(hx + face * 3, y + 4); c.lineTo(hx + face * 6, y + 6); c.lineTo(hx + face * 2, y + 7); c.fill();
-  c.fillStyle = "#000"; c.fillRect(hx + face * 1 - 0.5, y + 3.5, 1.5, 1.5);
+function ctDrawHeliChicken(c, x, y, t, flash, face) {   // box 20x14
+  const fx = x + 10, fy = y + 17;
+  ctDrawChicken(c, fx, fy, face, null, 0, 0.72, flash ? CT_FLASH : CT_BLACK);
+  const mx = fx + face * 2.9;
+  c.fillStyle = "#555"; c.fillRect(mx - 0.75, fy - 22, 1.5, 4);
+  const bl = 3 + Math.abs(Math.cos(t * 30)) * 11;
+  c.fillStyle = "#9a9aa8"; c.fillRect(mx - bl, fy - 23, bl * 2, 2);
+  c.fillStyle = "#333"; c.fillRect(mx - 1.5, fy - 23.5, 3, 3);
 }
 function ctHeart(c, x, y, s, col = "#e02020") {
   c.fillStyle = col; c.beginPath();
   c.arc(x - s * 0.25, y - s * 0.1, s * 0.28, 0, Math.PI * 2); c.arc(x + s * 0.25, y - s * 0.1, s * 0.28, 0, Math.PI * 2); c.fill();
   c.beginPath(); c.moveTo(x - s * 0.52, y); c.lineTo(x + s * 0.52, y); c.lineTo(x, y + s * 0.5); c.fill();
 }
-function ctDrawDoor(c, x, y, t) {   // tile x,y (door stands on the tile's floor)
+function ctDrawDoor(c, x, y, t) {
   const T = CT.T;
   c.fillStyle = "#2a1808"; c.fillRect(x + 1, y + T - 36, 22, 36);
   c.fillStyle = "#8b5a2b"; c.fillRect(x + 4, y + T - 33, 16, 33);
@@ -5471,27 +5506,111 @@ function ctDrawFlag(c, x, y, on) {
   c.fillStyle = "#bbb"; c.fillRect(x + 6, y + 1, 2, 23);
   c.fillStyle = on ? "#30d050" : "#d03030"; c.beginPath(); c.moveTo(x + 8, y + 2); c.lineTo(x + 20, y + 6); c.lineTo(x + 8, y + 10); c.fill();
 }
-function ctDrawBg(c, scroll) {
+const ctHash = (n) => { n = (n ^ 61) ^ (n >>> 16); n = Math.imul(n, 9); n ^= n >>> 4; n = Math.imul(n, 0x27d4eb2d); n ^= n >>> 15; return (n >>> 0) / 4294967296; };
+function ctBgTower(c, camX, camY) {
   c.fillStyle = "#15152b"; c.fillRect(0, 0, CT.VW, CT.VH);
   c.fillStyle = "#1f1f3c";
-  const sc = scroll * 0.5, first = Math.floor(sc / 16);
+  const sc = camY * 0.5, ox = Math.round(camX * 0.5), first = Math.floor(sc / 16);
   for (let r = first; r * 16 - sc < CT.VH; r++) {
     const yy = Math.round(r * 16 - sc);
     c.fillRect(0, yy, CT.VW, 1);
-    for (let x = (r & 1) ? 16 : 0; x < CT.VW; x += 32) c.fillRect(x, yy, 1, 16);
+    for (let x = ((r & 1) ? 16 : 0) - (ox % 32); x < CT.VW; x += 32) c.fillRect(x, yy, 1, 16);
   }
+}
+function ctBgOutside(c, camX, camY, maxCam, now) {
+  const W = CT.VW, H = CT.VH;
+  const hz = Math.round(H * 0.64 + (maxCam - camY) * 0.15);
+  const sky = c.createLinearGradient(0, 0, 0, hz);
+  sky.addColorStop(0, "#070b22"); sky.addColorStop(0.55, "#221c48"); sky.addColorStop(1, "#6a3452");
+  c.fillStyle = sky; c.fillRect(0, 0, W, Math.max(0, hz));
+  // stars + moon
+  for (let i = 0; i < 40; i++) {
+    const sx = ((ctHash(i * 3 + 1) * 900 - camX * 0.02) % 900 + 900) % 900 * W / 900, sy = ctHash(i * 3 + 2) * hz * 0.7;
+    c.fillStyle = ctHash(i * 7 + Math.floor(now * 2)) > 0.93 ? "#fff" : "#9aa0c8"; c.fillRect(Math.round(sx), Math.round(sy), 1, 1);
+  }
+  c.fillStyle = "#e8e4c8"; c.beginPath(); c.arc(Math.round(90 - camX * 0.01), Math.round(hz * 0.25), 14, 0, Math.PI * 2); c.fill();
+  c.fillStyle = "#221c48"; c.beginPath(); c.arc(Math.round(96 - camX * 0.01), Math.round(hz * 0.25 - 4), 12, 0, Math.PI * 2); c.fill();
+  // far mountains
+  c.fillStyle = "#2a2248";
+  c.beginPath(); c.moveTo(0, hz);
+  const o1 = camX * 0.06;
+  for (let x = -((o1 % 80)) - 80; x <= W + 80; x += 40) { const k = Math.floor((x + o1) / 40); c.lineTo(x, hz - 18 - ctHash(k * 5 + 11 >>> 0) * 38); }
+  c.lineTo(W, hz); c.fill();
+  // the Tower on its cliff, very far away
+  const bx = Math.round(W * 0.66 - camX * 0.04);
+  c.save(); c.translate(bx, hz); c.scale(0.7, 0.7); c.translate(-bx, -hz);
+  c.fillStyle = "#16122a";
+  c.beginPath(); c.moveTo(bx - 90, hz); c.lineTo(bx - 50, hz - 40); c.lineTo(bx - 30, hz - 72); c.lineTo(bx + 70, hz - 76); c.lineTo(bx + 90, hz - 44); c.lineTo(bx + 130, hz); c.fill();
+  c.fillStyle = "#1c1734"; c.fillRect(bx, hz - 76 - 150, 34, 152);
+  for (let i = 0; i < 5; i++) c.fillRect(bx - 4 + i * 9, hz - 76 - 158, 6, 9);
+  c.fillStyle = "#1c1734"; c.fillRect(bx - 4, hz - 76 - 150, 42, 6);
+  for (let i = 0; i < 7; i++) { c.fillStyle = ctHash(i * 13 + Math.floor(now * 0.7)) > 0.3 ? "#ffcc55" : "#6a5020"; c.fillRect(bx + 8 + (i % 2) * 14, hz - 76 - 136 + i * 19, 4, 6); }
+  c.fillStyle = "#b02020"; const fl = Math.sin(now * 5) * 2;
+  c.fillRect(bx + 16, hz - 76 - 176, 2, 18); c.beginPath(); c.moveTo(bx + 18, hz - 76 - 176); c.lineTo(bx + 30, hz - 76 - 171 + fl); c.lineTo(bx + 18, hz - 76 - 166); c.fill();
+  c.restore();
+  // near hills
+  c.fillStyle = "#12261a";
+  c.beginPath(); c.moveTo(0, H);
+  const o2 = camX * 0.25;
+  for (let x = 0; x <= W; x += 8) c.lineTo(x, hz + 6 + Math.sin((x + o2) / 55) * 8 + Math.sin((x + o2) / 23) * 3);
+  c.lineTo(W, H); c.fill();
+  c.fillStyle = "#0c1a12"; c.fillRect(0, hz + 22, W, H);
+}
+function ctBgFortress(c, camX, camY, maxCam, now) {
+  const W = CT.VW, H = CT.VH;
+  const top = Math.round(34 + (maxCam - camY) * 0.5);
+  const sky = c.createLinearGradient(0, 0, 0, Math.max(1, top));
+  sky.addColorStop(0, "#10142e"); sky.addColorStop(1, "#3a2c4c");
+  c.fillStyle = sky; c.fillRect(0, 0, W, Math.max(0, top));
+  const ox = camX * 0.5;
+  // battlements
+  c.fillStyle = "#3b352f";
+  for (let x = -(ox % 40) - 40; x < W + 40; x += 40) c.fillRect(Math.round(x), top - 14, 24, 14);
+  c.fillRect(0, top, W, H - top);
+  // stone blocks
+  c.fillStyle = "#2b2621";
+  for (let y = top, r = 0; y < H; y += 16, r++) {
+    c.fillRect(0, y, W, 1);
+    for (let x = ((r & 1) ? 16 : 0) - (ox % 32); x < W; x += 32) c.fillRect(Math.round(x), y, 1, 16);
+  }
+  c.fillStyle = "#453e36";
+  for (let y = top + 1, r = 0; y < H; y += 16, r++) c.fillRect(0, y, W, 1);
+  // arrow slits, banners, torches
+  for (let k = Math.floor(ox / 160) - 1; k * 160 - ox < W + 160; k++) {
+    const x = Math.round(k * 160 - ox);
+    c.fillStyle = "#14110e"; c.fillRect(x + 40, top + 44, 6, 26); c.fillRect(x + 36, top + 54, 14, 5);
+    if (k % 2 === 0) {
+      c.fillStyle = "#7a1818"; c.fillRect(x + 100, top + 14, 24, 64);
+      c.beginPath(); c.moveTo(x + 100, top + 78); c.lineTo(x + 112, top + 70); c.lineTo(x + 124, top + 78); c.fillStyle = "#3b352f"; c.fill();
+      c.fillStyle = "#d8b030"; c.fillRect(x + 108, top + 30, 8, 8); c.fillRect(x + 110, top + 26, 4, 16);
+      c.fillStyle = "#5a1010"; c.fillRect(x + 100, top + 14, 24, 3);
+    } else {
+      c.fillStyle = "#1a1612"; c.fillRect(x + 110, top + 60, 4, 14); c.fillRect(x + 106, top + 72, 12, 3);
+      const f = Math.sin(now * 13 + k) * 1.5;
+      c.fillStyle = "rgba(255,160,40,.15)"; c.beginPath(); c.arc(x + 112, top + 54, 22, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#ff8a20"; c.beginPath(); c.ellipse(x + 112, top + 54 + f * 0.3, 5, 8 + f, 0, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#ffe060"; c.beginPath(); c.ellipse(x + 112, top + 57, 2.5, 4, 0, 0, Math.PI * 2); c.fill();
+    }
+  }
+  c.fillStyle = "rgba(0,0,0,.25)"; c.fillRect(0, top, W, H - top);
+}
+function ctDrawBg(c, st, now) {
+  if (st.theme === "outside") ctBgOutside(c, st.camX, st.camY, st.maxCam, now);
+  else if (st.theme === "fortress") ctBgFortress(c, st.camX, st.camY, st.maxCam, now);
+  else ctBgTower(c, st.camX, st.camY);
 }
 function ctTextOut(c, text, x, y, col = "#fff", font = "bold 14px monospace", align = "center") {
   c.font = font; c.textAlign = align; c.textBaseline = "alphabetic";
   c.fillStyle = "#000"; c.fillText(text, x + 2, y + 2);
   c.fillStyle = col; c.fillText(text, x, y);
 }
+function ctLevelLabel(level) { return level.slot ? "WORLD " + level.slot + " · " + ctWorldOf(level.slot).name.toUpperCase() : ""; }
 function ctDrawLoading(c, st, pct, now) {
   const W = CT.VW, H = CT.VH;
   c.fillStyle = "#000080"; c.fillRect(0, 0, W, H);
-  ctTextOut(c, "CHICKEN TOWER", W / 2, 70, "#ffd040", "bold 34px monospace");
-  ctDrawChicken(c, W / 2, 175 - Math.abs(Math.sin(now * 5)) * 18, 1, -0.5, now, 3);
-  // Win95 progress bar
+  ctTextOut(c, "CHICKEN TOWER", W / 2, 60, "#ffd040", "bold 34px monospace");
+  if (st.level.slot) ctTextOut(c, ctLevelLabel(st.level), W / 2, 86, "#fff", "bold 14px monospace");
+  ctDrawChicken(c, W / 2, 180 - Math.abs(Math.sin(now * 5)) * 18, 1, -0.5, now, 3);
   const bx = 90, by = 220, bw = W - 180, bh = 22;
   c.fillStyle = "#c0c0c0"; c.fillRect(bx - 4, by - 4, bw + 8, bh + 8);
   c.fillStyle = "#fff"; c.fillRect(bx - 4, by - 4, bw + 8, 2); c.fillRect(bx - 4, by - 4, 2, bh + 8);
@@ -5500,25 +5619,25 @@ function ctDrawLoading(c, st, pct, now) {
   const n = Math.floor((bw - 4) / 12 * pct);
   c.fillStyle = "#000080";
   for (let i = 0; i < n; i++) c.fillRect(bx + 2 + i * 12, by + 3, 10, bh - 6);
-  ctTextOut(c, "LOADING TOWER... " + Math.floor(pct * 100) + "%", W / 2, 272, "#fff", "bold 14px monospace");
+  ctTextOut(c, "LOADING " + (st.theme === "tower" ? "TOWER" : "LEVEL") + "... " + Math.floor(pct * 100) + "%", W / 2, 272, "#fff", "bold 14px monospace");
   ctTextOut(c, "Tip: " + CT.TIPS[st.tip % CT.TIPS.length], W / 2, 310, "#a0c0ff", "12px monospace");
 }
 function ctDrawWorld(c, st, inp, now) {
-  const T = CT.T, p = st.p;
+  const p = st.p;
   const sh = st.shake > 0 ? st.shake * 14 : 0;
-  const cam = Math.round(st.camY);
+  const cam = Math.round(st.camY), camX = Math.round(st.camX);
   c.save();
   if (sh) c.translate(Math.round((Math.random() - 0.5) * sh), Math.round((Math.random() - 0.5) * sh));
-  ctDrawBg(c, st.camY);
-  c.drawImage(st.cache, 0, cam, CT.VW, CT.VH, 0, 0, CT.VW, CT.VH);
-  c.translate(0, -cam);
-  const vis = (y) => y > cam - 60 && y < cam + CT.VH + 60;
-  for (const e of st.exits) if (vis(e.y)) ctDrawDoor(c, e.x, e.y, now);
-  for (const f of st.cps) if (vis(f.y)) ctDrawFlag(c, f.x, f.y, f.on);
-  for (const k of st.picks) if (!k.got && vis(k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
-  for (const e of st.ents) if (!e.dead && vis(e.y)) {
-    if (e.k === "w") ctDrawFox(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0);
-    else ctDrawHawk(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, p.x > e.x ? 1 : -1);
+  ctDrawBg(c, st, now);
+  c.drawImage(st.cache, camX, cam, CT.VW, CT.VH, 0, 0, CT.VW, CT.VH);
+  c.translate(-camX, -cam);
+  const vis = (x, y) => y > cam - 60 && y < cam + CT.VH + 60 && x > camX - 60 && x < camX + CT.VW + 60;
+  for (const e of st.exits) if (vis(e.x, e.y)) ctDrawDoor(c, e.x, e.y, now);
+  for (const f of st.cps) if (vis(f.x, f.y)) ctDrawFlag(c, f.x, f.y, f.on);
+  for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
+  for (const e of st.ents) if (!e.dead && vis(e.x, e.y)) {
+    if (e.k === "w") ctDrawBlackChicken(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0);
+    else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, p.x > e.x ? 1 : -1);
   }
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
     ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, p.aim, p.walk);
@@ -5529,7 +5648,6 @@ function ctDrawWorld(c, st, inp, now) {
   for (const q of st.parts) { c.fillStyle = q.col; c.fillRect(Math.round(q.x) - 1, Math.round(q.y) - 1, 3, 3); }
   for (const t of st.texts) { c.globalAlpha = Math.max(0, Math.min(1, t.life * 2)); ctTextOut(c, t.text, t.x, t.y, t.col, "bold 12px monospace"); c.globalAlpha = 1; }
   c.restore();
-  // aim cross (mouse)
   if (inp.mouseAim && st.phase === "play") {
     c.strokeStyle = "rgba(255,255,255,.8)"; c.lineWidth = 1;
     const mx = Math.round(inp.mx) + 0.5, my = Math.round(inp.my) + 0.5;
@@ -5542,16 +5660,25 @@ function ctDrawWorld(c, st, inp, now) {
     c.fillStyle = on ? "#c02020" : "#3a3a3a"; c.fillRect(9 + i * 9, 26, 6, 10);
     c.fillStyle = on ? "#e0b030" : "#555"; c.fillRect(9 + i * 9, 34, 6, 3);
   }
-  if (p.shells < CT.SHELLS && p.ground) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
+  if (p.shells < CT.SHELLS && p.reload > 0) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
   const t = st.phase === "win" ? st.winTime : st.time;
   ctTextOut(c, "⏱ " + ctFmt(t), CT.VW - 30, 20, "#fff", "bold 13px monospace", "right");
-  // height meter
-  const mx = CT.VW - 14, top = 32, bot = CT.VH - 14, hh = bot - top, WH = st.H * T;
-  c.fillStyle = "rgba(0,0,0,.55)"; c.fillRect(mx - 3, top, 7, hh);
-  for (const f of st.cps) { c.fillStyle = f.on ? "#30d050" : "#d03030"; c.fillRect(mx - 5, top + Math.round(hh * f.y / WH), 11, 2); }
-  for (const e of st.exits) { c.fillStyle = "#50ff78"; c.fillRect(mx - 5, top + Math.round(hh * e.y / WH), 11, 3); }
-  const py = top + Math.round(hh * ctClamp(p.y / WH, 0, 1));
-  c.fillStyle = "#fff"; c.fillRect(mx - 4, py - 2, 9, 5); c.fillStyle = "#e02020"; c.fillRect(mx - 1, py - 4, 3, 2);
+  const T = CT.T;
+  if (st.maxCam > 0 && st.H > st.W * 0.75) {   // tall level: height meter on the right
+    const mx = CT.VW - 14, top = 32, bot = CT.VH - 14, hh = bot - top, WH = st.H * T;
+    c.fillStyle = "rgba(0,0,0,.55)"; c.fillRect(mx - 3, top, 7, hh);
+    for (const f of st.cps) { c.fillStyle = f.on ? "#30d050" : "#d03030"; c.fillRect(mx - 5, top + Math.round(hh * f.y / WH), 11, 2); }
+    for (const e of st.exits) { c.fillStyle = "#50ff78"; c.fillRect(mx - 5, top + Math.round(hh * e.y / WH), 11, 3); }
+    const py = top + Math.round(hh * ctClamp(p.y / WH, 0, 1));
+    c.fillStyle = "#fff"; c.fillRect(mx - 4, py - 2, 9, 5); c.fillStyle = "#e02020"; c.fillRect(mx - 1, py - 4, 3, 2);
+  } else if (st.maxCamX > 0) {   // wide level: progress bar at the bottom
+    const l = 60, r = CT.VW - 60, ww = r - l, y = CT.VH - 12, WW = st.W * T;
+    c.fillStyle = "rgba(0,0,0,.55)"; c.fillRect(l, y - 3, ww, 7);
+    for (const f of st.cps) { c.fillStyle = f.on ? "#30d050" : "#d03030"; c.fillRect(l + Math.round(ww * f.x / WW), y - 5, 2, 11); }
+    for (const e of st.exits) { c.fillStyle = "#50ff78"; c.fillRect(l + Math.round(ww * e.x / WW), y - 5, 3, 11); }
+    const px = l + Math.round(ww * ctClamp(p.x / WW, 0, 1));
+    c.fillStyle = "#fff"; c.fillRect(px - 2, y - 4, 5, 9); c.fillStyle = "#e02020"; c.fillRect(px - 1, y - 6, 3, 2);
+  }
 }
 function ctFmt(s) { const m = Math.floor(s / 60); return m + ":" + String(Math.floor(s % 60)).padStart(2, "0") + "." + Math.floor((s * 10) % 10); }
 function ctOverlay(c, lines) {
@@ -5559,25 +5686,58 @@ function ctOverlay(c, lines) {
   for (const [text, y, col, font] of lines) ctTextOut(c, text, CT.VW / 2, y, col, font);
 }
 
+/* ----- story progress (localStorage + ctProg/{uid} for accounts) ----- */
+function ctProg() { try { const o = JSON.parse(store("ct-story") || "{}"); return o && typeof o === "object" ? o : {}; } catch { return {}; } }
+function ctProgSave(o) { store("ct-story", JSON.stringify(o)); }
+let ctProgSynced = false;
+async function ctProgSync() {
+  if (ctProgSynced || !S.me || S.me.guest) return;
+  ctProgSynced = true;
+  try {
+    const r = (await D.get(R("ctProg/" + S.me.uid))).val() || {};
+    const o = ctProg();
+    for (const [k, v] of Object.entries(r)) if (CT.SLOTS.includes(k) && typeof v === "number" && v > 0 && (!(o[k] > 0) || v < o[k])) o[k] = v;
+    ctProgSave(o);
+    for (const [k, v] of Object.entries(o)) if (CT.SLOTS.includes(k) && v > 0 && (!(r[k] > 0) || v < r[k])) D.set(R("ctProg/" + S.me.uid + "/" + k), v).catch(() => {});
+    ctStoryRefresh && ctStoryRefresh();
+  } catch (e) { ctProgSynced = false; logError("Chicken Tower progress: " + e.message); }
+}
+function ctProgWin(slot, t) {
+  const o = ctProg(), old = o[slot];
+  const v = Math.max(0.1, Math.round(t * 10) / 10);
+  if (!(old > 0) || v < old) {
+    o[slot] = v; ctProgSave(o);
+    if (S.me && !S.me.guest) D.set(R("ctProg/" + S.me.uid + "/" + slot), v).catch((e) => logError("Chicken Tower progress: " + e.message));
+  }
+  return old;
+}
+function ctSlotOpen(slot) {
+  if (S.isAdmin) return true;
+  const o = ctProg();
+  for (const s of CT.SLOTS) { if (s === slot) return true; if (S.ctStory?.[s] && !(o[s] > 0)) return false; }
+  return true;
+}
+function ctNextSlot(slot) { const i = CT.SLOTS.indexOf(slot); for (let j = i + 1; j < CT.SLOTS.length; j++) if (S.ctStory?.[CT.SLOTS[j]]) return CT.SLOTS[j]; return null; }
+function ctStoryLevel(slot) { const L = S.ctStory?.[slot]; return L && L.map ? { slot, name: L.name, rows: ctParse(L.map), theme: ctSlotTheme(slot) } : null; }
+
 /* ----- play window ----- */
 let ctRunId = 0;
 function openCtPlay(level) {
   const runId = ++ctRunId;
-  const win = openWindow("Chicken Tower - " + level.name, "🐔", { key: "ct-play" });
+  const titleOf = (lv) => "Chicken Tower - " + (lv.slot ? lv.slot + " · " : "") + lv.name;
+  const win = openWindow(titleOf(level), "🐔", { key: "ct-play" });
   win.w.classList.add("ctwin");
   win.w.style.left = Math.max(8, Math.round((vwZ() - win.w.offsetWidth) / 2)) + "px";
   win.w.style.top = Math.max(8, Math.min(40, vhZ() - win.w.offsetHeight - 8)) + "px";
   const alive = () => runId === ctRunId && win.w.isConnected;
   const top = el("div", "cttop");
-  const info = el("span", "ctinfo", level.name);
+  const info = el("span", "ctinfo");
   const mkB = (t, title, fn) => { const b = el("button", null, t); b.type = "button"; if (title) b.title = title; b.onclick = fn; return b; };
   const pauseB = mkB("⏸ Pause", "Pause (P)", () => setPause(!paused));
-  const restartB = mkB("🔁 Restart", "Start this tower again", () => restart(false));
-  const newB = mkB("🎲 New tower", "Another random tower (same size and difficulty)", () => { level = ctRandomLevel(level.random.size, level.random.diff); win.setTitle("Chicken Tower - " + level.name); info.textContent = level.name; restart(true); });
-  newB.hidden = !level.random;
-  const menuB = mkB("📋 Menu", "Choose another tower", openCtMenu);
-  const editB = mkB("✎ Edit", "Open this tower in the level editor (admin)", () => openCtEditor({ id: level.id || null, name: level.random ? "Random tower" : level.name, rows: level.rows }));
-  editB.hidden = !S.isAdmin || !!level.test;
+  const restartB = mkB("🔁 Restart", "Start this level again", () => restart(false));
+  const newB = mkB("🎲 New tower", "Another random tower (same size and difficulty)", () => setLevel(ctRandomLevel(level.random.size, level.random.diff)));
+  const menuB = mkB("📋 Menu", "Choose another level", () => (level.slot ? openCtStory() : openCtMenu()));
+  const editB = mkB("✎ Edit", "Open this level in the level editor (admin)", () => openCtEditor({ id: level.id || null, slot: level.slot || null, name: level.random ? "Random tower" : level.name, rows: level.rows, theme: level.theme }));
   top.append(info, pauseB, restartB, newB, menuB, editB);
   const res = el("div", "ctres pvpres"); res.hidden = true;
   const cvWrap = el("div", "ctcv sunken");
@@ -5585,7 +5745,6 @@ function openCtPlay(level) {
   cvWrap.append(cv);
   const c = cv.getContext("2d"); c.imageSmoothingEnabled = false;
   const inp = { left: false, right: false, jump: false, down: false, fire: false, jumpHit: false, fireHit: false, mouseAim: false, mx: 0, my: 0, tap: null };
-  // touch pad
   const pad = el("div", "ctpad");
   const padBtn = (t, k) => {
     const b = el("button", null, t); b.type = "button";
@@ -5599,11 +5758,21 @@ function openCtPlay(level) {
   g1.append(padBtn("◀", "left"), padBtn("▶", "right"), padBtn("⬇", "down"));
   g2.append(padBtn("💥", "fire"), padBtn("⤒", "jump"));
   pad.append(g1, g2);
-  const help = el("div", "hint ctkeys", "Move: A D or ← → (Q D on AZERTY) · Jump: Space / W / ↑ · Aim: mouse · Shoot: click (or J) · Drop down: S / ↓ · Pause: P");
+  const help = el("div", "hint ctkeys", "Move: A D or ← → (Q D on AZERTY) · Jump: Space / W / ↑ · Aim: mouse · Shoot: click (or J) · Stand still to reload · Drop down: S / ↓ · Pause: P");
   win.content.append(top, res, cvWrap, pad, help);
-  if (matchMedia("(pointer: coarse)").matches) help.textContent = "Tap the game to shoot there. 💥 shoots forward (with ⬇: down).";
+  if (matchMedia("(pointer: coarse)").matches) help.textContent = "Tap the game to shoot there. 💥 shoots forward (with ⬇: down). Stand still to reload.";
 
-  let st, paused = false, first = true, loadStart = 0;
+  let st, paused = false, first = true, loadStart = 0, ended = false;
+  function setLevel(lv) {
+    level = lv;
+    win.setTitle(titleOf(level));
+    info.textContent = (level.slot ? level.slot + " · " : "") + level.name;
+    newB.hidden = !level.random;
+    editB.hidden = !S.isAdmin || !!level.test;
+    menuB.textContent = level.slot ? "📖 Story" : "📋 Menu";
+    first = true;
+    restart(true);
+  }
   function setPause(v) {
     if (!st || st.phase !== "play") v = false;
     paused = v; pauseB.textContent = paused ? "▶ Resume" : "⏸ Pause";
@@ -5620,24 +5789,33 @@ function openCtPlay(level) {
     ended = false;
   }
   function begin() { if (st.phase === "title") { st.phase = "play"; st.time = 0; cv.focus({ preventScroll: true }); } }
-  let ended = false;
   function showResult() {
     ended = true;
     res.replaceChildren();
     if (st.phase === "win") {
-      const bestK = level.id && !level.test ? "ct-best-" + level.id : null;
-      const old = bestK ? parseFloat(store(bestK)) : NaN;
-      const rec = bestK && (!(old > 0) || st.winTime < old);
-      if (rec) store(bestK, String(st.winTime));
-      res.append(el("span", null, "🏆 You escaped the tower in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : bestK && old > 0 ? " · Best: " + ctFmt(old) : "")));
-      if (bestK) ctMenuRefresh && ctMenuRefresh();
-    } else res.append(el("span", null, "💀 Game over! You climbed " + ctClamp(Math.round(100 * (st.startY - st.bestY) / Math.max(1, st.startY - st.goalY)), 0, 99) + "% of the tower."));
+      let old = NaN, rec = false;
+      if (level.slot && !level.test) { old = ctProgWin(level.slot, st.winTime); rec = !(old > 0) || st.winTime < old; ctStoryRefresh && ctStoryRefresh(); }
+      else if (level.id && !level.test) {
+        const k = "ct-best-" + level.id; old = parseFloat(store(k)); rec = !(old > 0) || st.winTime < old;
+        if (rec) store(k, String(st.winTime));
+        ctMenuRefresh && ctMenuRefresh();
+      }
+      res.append(el("span", null, "🏆 " + (level.slot ? "Level " + level.slot + " cleared" : st.theme === "tower" ? "You escaped the tower" : "Level cleared") + " in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : old > 0 ? " · Best: " + ctFmt(old) : "")));
+      if (level.slot && !level.test) {
+        const nx = ctNextSlot(level.slot);
+        if (nx) { const nb = mkB("▶ Next level (" + nx + ")", null, () => { const lv = ctStoryLevel(nx); if (lv) setLevel(lv); }); nb.classList.add("msgo"); res.append(nb); }
+        else res.append(el("span", null, level.slot === "3-5" ? "🎉 YOU FINISHED THE STORY!" : "More levels coming soon..."));
+      }
+    } else {
+      const d0 = Math.hypot(st.goal.x - st.start.x, st.goal.y - st.start.y) || 1;
+      const d1 = Math.hypot(st.goal.x - st.best.x, st.goal.y - st.best.y);
+      res.append(el("span", null, "💀 Game over! You made it " + ctClamp(Math.round(100 * (1 - d1 / d0)), 0, 99) + "% of the way."));
+    }
     res.append(mkB("🔁 Play again", null, () => restart(false)));
     if (level.random) res.append(mkB("🎲 New tower", null, () => newB.click()));
     res.hidden = false;
   }
 
-  // keyboard
   const KEYS = { ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right", ArrowUp: "jump", KeyW: "jump", Space: "jump", ArrowDown: "down", KeyS: "down", KeyJ: "fire", KeyK: "fire", KeyX: "fire" };
   const onKey = (e, down) => {
     if (!alive()) { document.removeEventListener("keydown", kd); document.removeEventListener("keyup", ku); return; }
@@ -5658,7 +5836,6 @@ function openCtPlay(level) {
   document.addEventListener("keydown", kd); document.addEventListener("keyup", ku);
   const blur = () => { for (const k of ["left", "right", "jump", "down", "fire"]) inp[k] = false; };
   window.addEventListener("blur", blur);
-  // mouse / touch on the canvas
   const toCanvas = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CT.VW / r.width, y: (e.clientY - r.top) * CT.VH / r.height }; };
   cv.addEventListener("pointermove", (e) => { if (e.pointerType !== "mouse") return; const q = toCanvas(e); inp.mx = q.x; inp.my = q.y; inp.mouseAim = true; });
   cv.addEventListener("pointerdown", (e) => {
@@ -5674,7 +5851,7 @@ function openCtPlay(level) {
   cv.addEventListener("contextmenu", (e) => e.preventDefault());
   cv.addEventListener("pointerleave", () => { inp.mouseAim = false; });
 
-  restart(true);
+  setLevel(level);
   let last = performance.now(), acc = 0;
   function frame(t) {
     if (!alive()) { window.removeEventListener("blur", blur); return; }
@@ -5682,8 +5859,8 @@ function openCtPlay(level) {
     const dt = Math.min(0.1, (t - last) / 1000); last = t;
     const nowS = t / 1000;
     if (st.phase === "loading") {
-      const n = st.fast ? st.H : 8;
-      for (let i = 0; i < n && st.loadRow < st.H; i++, st.loadRow++) for (let x = 0; x < CT.COLS; x++) ctRedrawTile(st, x, st.loadRow);
+      const n = st.fast ? st.H : Math.max(1, Math.floor(400 / st.W));
+      for (let i = 0; i < n && st.loadRow < st.H; i++, st.loadRow++) for (let x = 0; x < st.W; x++) ctRedrawTile(st, x, st.loadRow);
       const pct = Math.min(st.loadRow / st.H, st.fast ? 1 : (t - loadStart) / 1100);
       if (pct >= 1) { st.phase = st.skipTitle ? "play" : "title"; st.time = 0; }
       else { ctDrawLoading(c, st, pct, nowS); return; }
@@ -5692,40 +5869,51 @@ function openCtPlay(level) {
     if (st.phase === "play" && !paused) {
       acc += dt;
       while (acc >= CT.STEP) { ctStep(st, inp, CT.STEP); inp.jumpHit = inp.fireHit = false; acc -= CT.STEP; if (st.phase !== "play") break; }
-      st.bestY = Math.min(st.bestY ?? 1e9, st.p.y);
+      if (st.p.deadT <= 0) {
+        const dNow = Math.hypot(st.goal.x - st.p.x, st.goal.y - st.p.y);
+        if (!st.best || dNow < Math.hypot(st.goal.x - st.best.x, st.goal.y - st.best.y)) st.best = { x: st.p.x, y: st.p.y };
+      }
     } else if (st.phase === "over" || st.phase === "win") {
       acc = 0;
       for (const q of st.parts) { q.life -= dt; q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
       st.parts = st.parts.filter((q) => q.life > 0);
+      if (!st.best) st.best = st.start;
       if (!ended) showResult();
     } else acc = 0;
     ctDrawWorld(c, st, inp, nowS);
     const blink = Math.floor(nowS * 2) % 2 === 0;
+    const tower = st.theme === "tower";
     if (st.phase === "title") ctOverlay(c, [
-      ["CHICKEN TOWER", 80, "#ffd040", "bold 34px monospace"],
-      [level.name.slice(0, 40), 115, "#fff", "bold 14px monospace"],
-      [st.H + " blocks tall · reach the 🚪 EXIT at the top!", 140, "#a0c0ff", "12px monospace"],
-      ["Move A/D ←→ · Jump Space/W · Aim mouse · Shoot click", 190, "#ddd", "12px monospace"],
-      ["Shoot DOWN to fly higher! 2 shells, reload on landing.", 210, "#ddd", "12px monospace"],
-      [blink ? "CLICK OR PRESS SPACE TO START" : "", 270, "#fff", "bold 16px monospace"],
+      [level.slot ? "WORLD " + level.slot : "CHICKEN TOWER", 78, "#ffd040", "bold 34px monospace"],
+      [level.name.slice(0, 40), 112, "#fff", "bold 15px monospace"],
+      [level.slot ? ctWorldOf(level.slot).name : st.W + " × " + st.H + " blocks", 136, "#a0c0ff", "12px monospace"],
+      ["Reach the 🚪 EXIT" + (tower ? " at the top!" : "!"), 160, "#a0c0ff", "12px monospace"],
+      ["Move A/D ←→ · Jump Space/W · Aim mouse · Shoot click", 200, "#ddd", "12px monospace"],
+      ["Shoot DOWN to fly higher! Stand still to reload.", 220, "#ddd", "12px monospace"],
+      [blink ? "CLICK OR PRESS SPACE TO START" : "", 276, "#fff", "bold 16px monospace"],
     ]);
     else if (paused) ctOverlay(c, [["PAUSED", 160, "#fff", "bold 30px monospace"], ["Click or press P to continue", 195, "#ddd", "13px monospace"]]);
     else if (st.phase === "over") ctOverlay(c, [["GAME OVER", 150, "#ff5050", "bold 34px monospace"], ["Press R to try again", 190, "#ddd", "13px monospace"]]);
-    else if (st.phase === "win") ctOverlay(c, [["YOU ESCAPED!", 140, "#50ff78", "bold 34px monospace"], ["Time " + ctFmt(st.winTime) + " · ❤ " + st.lives + " · 💀 " + st.kills, 178, "#fff", "bold 14px monospace"], ["Press R to play again", 210, "#ddd", "13px monospace"]]);
+    else if (st.phase === "win") ctOverlay(c, [[tower && !level.slot ? "YOU ESCAPED!" : "LEVEL CLEARED!", 140, "#50ff78", "bold 32px monospace"], ["Time " + ctFmt(st.winTime) + " · ❤ " + st.lives + " · 💀 " + st.kills, 178, "#fff", "bold 14px monospace"], ["Press R to play again", 210, "#ddd", "13px monospace"]]);
   }
   requestAnimationFrame(frame);
   win.onClosed = () => { if (runId === ctRunId) ctRunId++; };
   setTimeout(() => cv.focus({ preventScroll: true }), 50);
 }
 
-/* ----- menu ----- */
-let ctLevelsSub = null, ctMenuRefresh = null;
+/* ----- data ----- */
+let ctLevelsSub = null, ctStorySub = null, ctMenuRefresh = null, ctStoryRefresh = null;
+function ctRefreshAll() { ctMenuRefresh && ctMenuRefresh(); ctStoryRefresh && ctStoryRefresh(); }
 function ctSubLevels() {
-  if (ctLevelsSub) return;
-  ctLevelsSub = D.onValue(R("ctLevels"), (s) => { S.ctLevels = s.val() || {}; S.ctLoaded = true; S.ctErr = null; ctMenuRefresh && ctMenuRefresh(); },
-    (e) => { S.ctLoaded = true; S.ctErr = e.message; ctLevelsSub = null; logError("Chicken Tower: " + e.message); ctMenuRefresh && ctMenuRefresh(); });
+  if (!ctLevelsSub) ctLevelsSub = D.onValue(R("ctLevels"), (s) => { S.ctLevels = s.val() || {}; S.ctLoaded = true; S.ctErr = null; ctRefreshAll(); },
+    (e) => { S.ctLoaded = true; S.ctErr = e.message; ctLevelsSub = null; logError("Chicken Tower: " + e.message); ctRefreshAll(); });
+  if (!ctStorySub) ctStorySub = D.onValue(R("ctStory"), (s) => { S.ctStory = s.val() || {}; S.ctStoryLoaded = true; S.ctStoryErr = null; ctRefreshAll(); },
+    (e) => { S.ctStoryLoaded = true; S.ctStoryErr = e.message; ctStorySub = null; logError("Chicken Tower story: " + e.message); ctRefreshAll(); });
 }
-function ctSavedLevel(id) { const L = S.ctLevels?.[id]; return L ? { id, name: L.name, rows: ctParse(L.map) } : null; }
+function ctSavedLevel(id) { const L = S.ctLevels?.[id]; return L ? { id, name: L.name, rows: ctParse(L.map), theme: CT.THEMES[L.th] ? L.th : "tower" } : null; }
+const ctRulesMsg = (err) => (/permission/i.test(err || "") ? "the Firebase rules need the Chicken Tower update." : "loading failed.");
+
+/* ----- menus ----- */
 function openCtMenu() {
   ctSubLevels();
   const win = openWindow("Chicken Tower", "🐔", { key: "ct-menu" });
@@ -5735,29 +5923,32 @@ function openCtMenu() {
     const sc = win.content.querySelector(".ctlist")?.scrollTop || 0;
     win.content.replaceChildren();
     win.content.append(el("div", "ctlogo", "🐔 CHICKEN TOWER 🔫"),
-      el("div", "hint", "Climb the tower with your shotgun and reach the 🚪 exit at the top!\nShoot DOWN to fly higher (2 shells, they reload when you land)."));
-    // random
+      el("div", "hint", "You are a chicken with a shotgun. Reach the 🚪 exit!\nShoot DOWN to fly higher. Stand still to reload your 2 shells."));
+    const fsS = el("fieldset"); fsS.append(el("legend", null, "📖 Story mode"));
+    const nBuilt = CT.SLOTS.filter((s) => S.ctStory?.[s]).length, nDone = CT.SLOTS.filter((s) => S.ctStory?.[s] && ctProg()[s] > 0).length;
+    const goS = el("button", "msgo", "📖 Play the story"); goS.type = "button"; goS.onclick = openCtStory;
+    fsS.append(el("div", "hint", "3 worlds: 🌄 Outside → 🏰 Fortress → 🗼 The Tower. " + (S.ctStoryLoaded ? nDone + " / " + nBuilt + " levels cleared." : "")), goS);
     const fsR = el("fieldset"); fsR.append(el("legend", null, "🎲 Random tower"));
     const mkSel = (opts, val) => { const s = el("select", "sunken"); for (const [k, o] of Object.entries(opts)) { const op = el("option", null, o.label); op.value = k; s.append(op); } s.value = val; return s; };
     const sizeS = mkSel(CT.SIZES, CT.SIZES[store("ct-size")] ? store("ct-size") : "medium");
     const diffS = mkSel(CT.DIFFS, CT.DIFFS[store("ct-diff")] ? store("ct-diff") : "normal");
     sizeS.onchange = () => store("ct-size", sizeS.value); diffS.onchange = () => store("ct-diff", diffS.value);
-    const goR = el("button", "msgo", "▶ Play a random tower"); goR.type = "button";
+    const goR = el("button", null, "▶ Play a random tower"); goR.type = "button";
     goR.onclick = () => openCtPlay(ctRandomLevel(sizeS.value, diffS.value));
     const rr = el("div", "ctedrow"); rr.append("Height:", sizeS, "Difficulty:", diffS);
     fsR.append(rr, goR);
-    // saved towers
-    const fsL = el("fieldset"); fsL.append(el("legend", null, "🏗 Towers made by the admins"));
+    const fsL = el("fieldset"); fsL.append(el("legend", null, "🏗 Custom levels made by the admins"));
     const list = el("div", "list sunken ctlist");
     const all = Object.entries(S.ctLevels || {}).filter(([, L]) => L && L.map).sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0));
-    if (S.ctErr && !all.length) list.append(el("div", "empty-row", /permission/i.test(S.ctErr) ? "Can't load the towers: the Firebase rules need the Chicken Tower update." : "Can't load the towers."));
+    if (S.ctErr && !all.length) list.append(el("div", "empty-row", "Can't load the levels: " + ctRulesMsg(S.ctErr)));
     else if (!S.ctLoaded) list.append(el("div", "empty-row", "Loading..."));
-    else if (!all.length) list.append(el("div", "empty-row", "No tower yet." + (S.isAdmin ? " Make one with the 🛠 Level editor!" : " The admins can make some.")));
+    else if (!all.length) list.append(el("div", "empty-row", "No custom level yet." + (S.isAdmin ? " Make one with the 🛠 Level editor!" : " The admins can make some.")));
     for (const [id, L] of all) {
       const row = el("div", "grow");
       const txt = el("div", "gtxt");
       const best = parseFloat(store("ct-best-" + id));
-      txt.append(el("b", null, L.name), el("span", "dim", " · " + (L.h || "?") + " blocks · by " + uname(L.by) + (best > 0 ? " · 🏆 " + ctFmt(best) : "")));
+      const th = CT.THEMES[L.th] || CT.THEMES.tower;
+      txt.append(el("b", null, th.icon + " " + L.name), el("span", "dim", " · " + (L.w || 20) + "×" + (L.h || "?") + " · by " + uname(L.by) + (best > 0 ? " · 🏆 " + ctFmt(best) : "")));
       const play = el("button", "small", "▶ Play"); play.type = "button";
       play.onclick = () => { const lv = ctSavedLevel(id); if (lv) openCtPlay(lv); };
       row.append(txt, play);
@@ -5765,14 +5956,14 @@ function openCtMenu() {
       list.append(row);
     }
     fsL.append(list);
-    win.content.append(fsR, fsL);
+    win.content.append(fsS, fsR, fsL);
     if (S.isAdmin) {
       const fsA = el("fieldset"); fsA.append(el("legend", null, "🛠 Admin"));
       const e1 = el("button", null, "🛠 Level editor"); e1.type = "button"; e1.onclick = () => openCtEditor(null);
       const e2 = el("button", null, "🎲 Random tower → editor"); e2.type = "button";
-      e2.onclick = () => openCtEditor({ id: null, name: "Random tower", rows: ctGenerate({ size: sizeS.value, diff: diffS.value }) });
+      e2.onclick = () => openCtEditor({ id: null, name: "Random tower", rows: ctGenerate({ size: sizeS.value, diff: diffS.value }), theme: "tower", fresh: true });
       const r2 = el("div", "row-btns"); r2.append(e1, e2);
-      fsA.append(r2, el("div", "hint", "Towers you save here can be played by everyone."));
+      fsA.append(r2, el("div", "hint", "Levels you save can be played by everyone. Story levels: 📖 Play the story → ✎ on a level."));
       win.content.append(fsA);
     }
     const l2 = win.content.querySelector(".ctlist"); if (l2) l2.scrollTop = sc;
@@ -5781,43 +5972,102 @@ function openCtMenu() {
   ctMenuRefresh = paint;
   win.onClosed = () => { if (ctMenuRefresh === paint) ctMenuRefresh = null; };
 }
+function openCtStory() {
+  ctSubLevels(); ctProgSync();
+  const win = openWindow("Chicken Tower - Story", "📖", { key: "ct-story" });
+  win.w.classList.add("ctmenu", "ctstory");
+  const paint = () => {
+    if (!win.w.isConnected) return;
+    win.content.replaceChildren();
+    win.content.append(el("div", "ctlogo", "📖 STORY MODE"));
+    if (S.ctStoryErr && !S.ctStory) { win.content.append(el("div", "empty-row", "Can't load the story: " + ctRulesMsg(S.ctStoryErr))); return; }
+    if (!S.ctStoryLoaded) { win.content.append(el("div", "empty-row", "Loading...")); return; }
+    const prog = ctProg();
+    CT.WORLDS.forEach((Wd, wi) => {
+      const fs = el("fieldset"); fs.append(el("legend", null, CT.THEMES[Wd.theme].icon + " World " + (wi + 1) + " · " + Wd.name));
+      fs.append(el("div", "hint", Wd.desc));
+      const row = el("div", "ctlvls");
+      for (let l = 1; l <= 5; l++) {
+        const slot = (wi + 1) + "-" + l, L = S.ctStory?.[slot];
+        const cell = el("div", "ctlv");
+        const b = el("button", null, ""); b.type = "button";
+        const open = L && ctSlotOpen(slot), done = prog[slot] > 0;
+        b.append(el("b", null, slot), el("br"), el("span", "dim", !L ? "—" : done ? "✔ " + ctFmt(prog[slot]) : open ? "▶ Play" : "🔒"));
+        b.title = L ? L.name : "Not made yet";
+        b.disabled = !open;
+        if (done) b.classList.add("done");
+        b.onclick = () => { const lv = ctStoryLevel(slot); if (lv) openCtPlay(lv); };
+        cell.append(b);
+        if (S.isAdmin) {
+          const e = el("button", "small", L ? "✎ Edit" : "＋ Make"); e.type = "button";
+          e.onclick = () => openCtEditor(L ? ctStoryLevel(slot) : { slot, name: "Level " + slot, rows: ctBlankRows(Wd.theme), theme: Wd.theme, fresh: true });
+          cell.append(e);
+        }
+        row.append(cell);
+      }
+      fs.append(row);
+      win.content.append(fs);
+    });
+    const nBuilt = CT.SLOTS.filter((s) => S.ctStory?.[s]).length;
+    win.content.append(el("div", "hint", nBuilt ? "Clear a level to open the next one." + (S.me?.guest ? " (Guests: progress saved on this device only.)" : " Your progress is saved on your account.") : "The story is not ready yet. Come back soon!" + (S.isAdmin ? "\n(Admin: click ＋ Make to build a level.)" : "")));
+  };
+  paint();
+  ctStoryRefresh = paint;
+  win.onClosed = () => { if (ctStoryRefresh === paint) ctStoryRefresh = null; };
+}
 
 /* ----- level editor (admins) ----- */
 async function openCtEditor(start) {
-  if (!S.isAdmin) { toast("Only admins can make towers."); return; }
+  if (!S.isAdmin) { toast("Only admins can make levels."); return; }
   ctSubLevels();
   const ex = openWins.get("ct-edit");
   if (ex && ex.w.isConnected && ex.ctDirty?.()) {
     focusWindow(ex.w);
-    if (!(await dialog({ title: "Level editor", message: "Your tower has unsaved changes. Open the other one anyway?", okText: "Open it" }))) return;
+    if (!(await dialog({ title: "Level editor", message: "Your level has unsaved changes. Open the other one anyway?", okText: "Open it" }))) return;
   }
   const win = openWindow("Chicken Tower - Level editor", "🛠", { key: "ct-edit" });
   win.w.classList.add("ctedwin");
-  const T = CT.T, W = CT.COLS;
-  let id = start?.id || null, dirty = false, tool = "#";
-  let g = ctNormRows(start?.rows || ctBlankRows(60)).map((r) => r.split(""));
+  const T = CT.T;
+  let customId = null, loadedSlot = null, dirty = false, tool = "#", theme = "tower";
+  let g = [[]];
+  const W = () => g[0].length, H = () => g.length;
   win.ctDirty = () => dirty;
-  // top rows
-  const nameI = el("input", "sunken"); nameI.maxLength = 30; nameI.value = start?.name || "My tower"; nameI.placeholder = "Tower name";
+  const nameI = el("input", "sunken"); nameI.maxLength = 30; nameI.placeholder = "Level name";
   nameI.oninput = () => { dirty = true; status(); };
-  const hI = el("input", "sunken ctnum"); hI.type = "number"; hI.min = CT.MIN_ROWS; hI.max = CT.MAX_ROWS; hI.value = g.length;
-  const hB = el("button", "small", "Set height"); hB.type = "button"; hB.title = "Adds or removes rows at the TOP of the tower";
-  const r1 = el("div", "ctedrow"); r1.append("Name:", nameI, "Height:", hI, hB);
+  const whereS = el("select", "sunken"); whereS.title = "Where this level is saved";
+  const whereOpts = () => {
+    const v = whereS.value;
+    whereS.replaceChildren();
+    const o0 = el("option", null, "🏗 Custom level"); o0.value = "custom"; whereS.append(o0);
+    for (const s of CT.SLOTS) { const o = el("option", null, "📖 Story " + s + " (" + ctWorldOf(s).name + ")" + (S.ctStory?.[s] ? " ✔" : "")); o.value = s; whereS.append(o); }
+    whereS.value = v || "custom";
+  };
+  const themeS = el("select", "sunken"); themeS.title = "Look of the level (background)";
+  for (const [k, o] of Object.entries(CT.THEMES)) { const op = el("option", null, o.icon + " " + o.label); op.value = k; themeS.append(op); }
+  const r0 = el("div", "ctedrow"); r0.append("Name:", nameI);
+  const r1 = el("div", "ctedrow"); r1.append("Save to:", whereS, "Look:", themeS);
+  const wI = el("input", "sunken ctnum"); wI.type = "number"; wI.min = CT.MIN_W; wI.max = CT.MAX_W;
+  const hI = el("input", "sunken ctnum"); hI.type = "number"; hI.min = CT.MIN_H; hI.max = CT.MAX_H;
+  const sB = el("button", "small", "Set size"); sB.type = "button"; sB.title = "Width: adds or removes columns on the RIGHT. Height: adds or removes rows at the TOP.";
+  const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB);
   const pal = el("div", "ctpal");
   const palB = {};
   for (const [k, icon, name] of CT.TOOLS) {
     const b = el("button", "small", icon + " " + name.split(" (")[0]); b.type = "button"; b.title = name;
-    b.onclick = () => { tool = k; for (const [kk, bb] of Object.entries(palB)) bb.classList.toggle("on", kk === tool); cv.style.touchAction = tool === "pan" ? "pan-y" : "none"; };
+    b.onclick = () => { tool = k; for (const [kk, bb] of Object.entries(palB)) bb.classList.toggle("on", kk === tool); cv.style.touchAction = tool === "pan" ? "pan-x pan-y" : "none"; };
     palB[k] = b; pal.append(b);
   }
   const wrap = el("div", "cteds sunken");
-  const cv = el("canvas"); cv.width = W * T;
+  const cv = el("canvas");
   wrap.append(cv);
   const c = cv.getContext("2d");
   const stat = el("div", "hint ctedstat");
   const mk = (t, title, fn, cls) => { const b = el("button", cls || null, t); b.type = "button"; b.title = title || ""; b.onclick = fn; return b; };
-  const bNew = mk("🆕 New", "Empty tower", async () => { if (!(await okLose())) return; load({ id: null, name: "My tower", rows: ctBlankRows(60) }); });
-  const bRnd = mk("🎲 Random...", "Start from a random tower", async () => {
+  const bNew = mk("🆕 New", "Empty level with the chosen look", async () => {
+    if (!(await okLose())) return;
+    load({ id: null, slot: whereS.value === "custom" ? null : whereS.value, name: "My level", rows: ctBlankRows(theme), theme });
+  });
+  const bRnd = mk("🎲 Random tower...", "Start from a random tower", async () => {
     const box = el("div", "ctedrow");
     const sz = el("select", "sunken"), df = el("select", "sunken");
     for (const [k, o] of Object.entries(CT.SIZES)) { const op = el("option", null, o.label); op.value = k; sz.append(op); }
@@ -5826,94 +6076,140 @@ async function openCtEditor(start) {
     box.append("Height:", sz, "Difficulty:", df);
     const r = await dialog({ title: "Random tower", message: "Make a random tower, then change it as you want." + (dirty ? "\n⚠ Your unsaved changes will be lost." : ""), okText: "Make it", extra: { node: box, get: () => ({ size: sz.value, diff: df.value }) } });
     if (!r) return;
-    load({ id: null, name: "Random tower", rows: ctGenerate({ size: r.size, diff: r.diff }) });
+    load({ id: customId, slot: whereS.value === "custom" ? null : whereS.value, name: nameI.value || "Random tower", rows: ctGenerate({ size: r.size, diff: r.diff }), theme: "tower" });
     dirty = true; status();
   });
-  const bOpen = mk("📂 Open...", "Open a saved tower", openCtMenu);
-  const bTest = mk("▶ Test", "Play your tower now (it doesn't save it)", () => {
-    if (!count().S) { toast("Put a 🐔 Start first."); return; }
-    openCtPlay({ id, name: (nameI.value.trim() || "My tower") + " (test)", rows: rowsOut(), test: true });
+  const bOpen = mk("📂 Open...", "Open a saved level", () => { openCtMenu(); });
+  const bTest = mk("▶ Test", "Play your level now (it doesn't save it)", () => {
+    if (!count().S) { toast("Put a 🏁 Start first."); return; }
+    openCtPlay({ id: customId, name: (nameI.value.trim() || "My level") + " (test)", rows: rowsOut(), theme: effTheme(), test: true });
   });
-  const bSave = mk("💾 Save", "Save this tower (everyone can play it)", () => save(false), "msgo");
-  const bSaveNew = mk("💾 Save as new", "Save a copy as a new tower", () => save(true));
-  const bDel = mk("🗑 Delete", "Delete this tower", async () => {
-    if (!id) return;
-    if (!(await dialog({ title: "Delete tower", message: "Delete \"" + (S.ctLevels?.[id]?.name || nameI.value) + "\" for everyone?", okText: "Delete" }))) return;
-    try { await D.set(R("ctLevels/" + id), null); toast("Tower deleted."); id = null; dirty = true; status(); }
+  const bSave = mk("💾 Save", "Save this level (everyone can play it)", () => save(false), "msgo");
+  const bSaveNew = mk("💾 Save as new", "Save a copy as a new custom level", () => save(true));
+  const bDel = mk("🗑 Delete", "Delete this level", async () => {
+    const w = whereS.value;
+    const path = w === "custom" ? (customId ? "ctLevels/" + customId : null) : S.ctStory?.[w] ? "ctStory/" + w : null;
+    if (!path) return;
+    if (!(await dialog({ title: "Delete level", message: "Delete " + (w === "custom" ? "\"" + (S.ctLevels?.[customId]?.name || nameI.value) + "\"" : "story level " + w) + " for everyone?", okText: "Delete" }))) return;
+    try { await D.set(R(path), null); toast("Level deleted."); if (w === "custom") customId = null; else loadedSlot = null; dirty = true; status(); }
     catch (e) { showBanner("Can't delete: " + e.message); }
   });
   const r3 = el("div", "ctedrow"); r3.append(bNew, bRnd, bOpen, bTest, bSave, bSaveNew, bDel);
-  win.content.append(r1, pal, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · Mouse wheel: scroll. The gray walls on the sides can't be changed. Row numbers count from the bottom."));
+  win.content.append(r0, r1, r2, pal, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · Mouse wheel: scroll (Shift + wheel: sideways). Outside the level = wall on the sides, a pit at the bottom. Yellow numbers: rows from the bottom / columns from the left."));
   palB["#"].classList.add("on"); cv.style.touchAction = "none";
 
+  const effTheme = () => (whereS.value === "custom" ? theme : ctSlotTheme(whereS.value));
+  whereS.onchange = () => {
+    if (whereS.value !== "custom") { theme = ctSlotTheme(whereS.value); themeS.value = theme; }
+    themeS.disabled = whereS.value !== "custom";
+    dirty = true; drawAll(); status();
+  };
+  themeS.onchange = () => { theme = themeS.value; dirty = true; drawAll(); status(); };
   function rowsOut() { return g.map((r) => r.join("")); }
   function count() { const n = {}; for (const r of g) for (const ch of r) n[ch] = (n[ch] || 0) + 1; return n; }
   function status() {
-    const n = count();
-    stat.textContent = (id ? "" : "New tower · ") + g.length + " blocks tall · 🐔 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🦊 " + (n.w || 0) + " · 🦅 " + (n.f || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
-    bDel.disabled = !id;
-    win.setTitle("Chicken Tower - Level editor" + (dirty ? " *" : ""));
+    const n = count(), w = whereS.value;
+    const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
+    stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
+      " · 🚩 " + (n.C || 0) + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+    bDel.disabled = !saved;
+    bSaveNew.hidden = w !== "custom";
+    wI.value = W(); hI.value = H();
+    win.setTitle("Chicken Tower - Level editor" + (w === "custom" ? "" : " · Story " + w) + (dirty ? " *" : ""));
   }
+  const EBG = { outside: ["#16213a", "#19253f"], fortress: ["#2a2622", "#2e2925"], tower: ["#1a1a33", "#1d1d3a"] };
   function cell(x, y) {
-    const px = x * T, py = y * T;
+    const px = x * T, py = y * T, bg = EBG[effTheme()] || EBG.tower;
     c.save(); c.beginPath(); c.rect(px, py, T, T); c.clip();
-    c.fillStyle = (x + y) % 2 ? "#1a1a33" : "#1d1d3a"; c.fillRect(px, py, T, T);
+    c.fillStyle = bg[(x + y) % 2]; c.fillRect(px, py, T, T);
     const ch = g[y][x];
     ctTileArt(c, ch, px, py);
     if (ch === "S") ctDrawChicken(c, px + 12, py + T, 1, 0, 0, 0.9);
-    else if (ch === "E") { c.fillStyle = "#8b5a2b"; c.fillRect(px + 5, py + 2, 14, 22); c.fillStyle = "#2a1808"; c.strokeStyle = "#2a1808"; c.strokeRect(px + 5.5, py + 2.5, 13, 21); c.fillStyle = "#f0d040"; c.fillRect(px + 15, py + 13, 2, 2); }
+    else if (ch === "E") { c.fillStyle = "#8b5a2b"; c.fillRect(px + 5, py + 2, 14, 22); c.strokeStyle = "#2a1808"; c.strokeRect(px + 5.5, py + 2.5, 13, 21); c.fillStyle = "#f0d040"; c.fillRect(px + 15, py + 13, 2, 2); }
     else if (ch === "C") ctDrawFlag(c, px, py, false);
-    else if (ch === "w") ctDrawFox(c, px + 3, py + 8, 1, 0, false);
-    else if (ch === "f") ctDrawHawk(c, px + 2, py + 5, 0.2, false, 1);
+    else if (ch === "w") ctDrawBlackChicken(c, px + 3, py + 8, 1, 0, false);
+    else if (ch === "f") ctDrawHeliChicken(c, px + 2, py + 8, 0.2, false, 1);
     else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
     c.fillStyle = "rgba(255,255,255,.07)"; c.fillRect(px, py, T, 1); c.fillRect(px, py, 1, T);
-    if (x === 0 && (g.length - 1 - y) % 10 === 0 && y !== 0) { c.fillStyle = "#ffd040"; c.font = "bold 9px monospace"; c.textAlign = "left"; c.fillText(String(g.length - 1 - y), px + 1, py + 10); }
+    c.fillStyle = "#ffd040"; c.font = "bold 9px monospace"; c.textAlign = "left";
+    if (x === 0 && (H() - 1 - y) % 10 === 0 && y !== 0) c.fillText(String(H() - 1 - y), px + 1, py + 10);
+    if (y === H() - 1 && x % 10 === 0 && x !== 0) c.fillText(String(x), px + 1, py + T - 2);
     c.restore();
   }
-  function drawAll() { cv.height = g.length * T; for (let y = 0; y < g.length; y++) for (let x = 0; x < W; x++) cell(x, y); }
+  function drawAll() {
+    cv.width = W() * T; cv.height = H() * T;
+    cv.style.width = W() * T + "px";
+    for (let y = 0; y < H(); y++) for (let x = 0; x < W(); x++) cell(x, y);
+  }
   function setCell(x, y, ch) {
-    if (x <= 0 || x >= W - 1 || y < 0 || y >= g.length || g[y][x] === ch) return;
-    if (ch === "S") for (let yy = 0; yy < g.length; yy++) for (let xx = 0; xx < W; xx++) if (g[yy][xx] === "S") { g[yy][xx] = "."; cell(xx, yy); }
+    if (x < 0 || x >= W() || y < 0 || y >= H() || g[y][x] === ch) return;
+    if (ch === "S") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === "S") { g[yy][xx] = "."; cell(xx, yy); }
     g[y][x] = ch; cell(x, y); dirty = true;
   }
   function load(lv) {
-    id = lv.id || null; nameI.value = lv.name || "My tower";
+    customId = lv.id || null; loadedSlot = lv.slot || null;
+    whereOpts(); whereS.value = loadedSlot || "custom";
+    theme = loadedSlot ? ctSlotTheme(loadedSlot) : CT.THEMES[lv.theme] ? lv.theme : "tower";
+    themeS.value = theme; themeS.disabled = !!loadedSlot;
+    nameI.value = lv.name || "My level";
     g = ctNormRows(lv.rows).map((r) => r.split(""));
-    hI.value = g.length; dirty = false; drawAll(); status();
-    requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; });
+    dirty = !!lv.fresh; drawAll(); status();
+    requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; wrap.scrollLeft = 0; });
   }
   async function okLose() { return !dirty || !!(await dialog({ title: "Level editor", message: "Your changes are not saved. Continue anyway?", okText: "Continue" })); }
-  hB.onclick = async () => {
-    const nh = ctClamp(Math.round(+hI.value || g.length), CT.MIN_ROWS, CT.MAX_ROWS);
-    hI.value = nh;
-    if (nh === g.length) return;
-    const blank = () => ("#" + ".".repeat(W - 2) + "#").split("");
-    const fromBottom = wrap.scrollHeight - wrap.scrollTop;
-    if (nh > g.length) g.splice(1, 0, ...Array.from({ length: nh - g.length }, blank));
-    else {
-      const cut = g.slice(1, 1 + g.length - nh);
-      if (cut.some((r) => r.some((ch, x) => x > 0 && x < W - 1 && ch !== ".")) && !(await dialog({ title: "Smaller tower", message: "Some things at the top of the tower will be deleted. Continue?", okText: "Continue" }))) { hI.value = g.length; return; }
-      g.splice(1, g.length - nh);
+  sB.onclick = async () => {
+    let nw = ctClamp(Math.round(+wI.value || W()), CT.MIN_W, CT.MAX_W), nh = ctClamp(Math.round(+hI.value || H()), CT.MIN_H, CT.MAX_H);
+    if (nw * nh > CT.MAX_CELLS) { toast("Too big! Width × height must be " + CT.MAX_CELLS + " or less (now " + nw * nh + ")."); return; }
+    if (nw === W() && nh === H()) return;
+    const used = (r) => r.some((ch) => ch !== "." && ch !== "#");
+    // height (top)
+    if (nh !== H()) {
+      const at = g[0].every((ch) => ch === "#") ? 1 : 0;
+      if (nh > H()) {
+        const wall = g[at] ? [g[at][0] === "#", g[at][W() - 1] === "#"] : [false, false];
+        g.splice(at, 0, ...Array.from({ length: nh - H() }, () => Array.from({ length: W() }, (_, x) => (x === 0 && wall[0]) || (x === W() - 1 && wall[1]) ? "#" : ".")));
+      } else {
+        const cut = g.slice(at, at + H() - nh);
+        if (cut.some(used) && !(await dialog({ title: "Smaller level", message: "Some things at the top will be deleted. Continue?", okText: "Continue" }))) return;
+        g.splice(at, H() - nh);
+      }
+    }
+    // width (right)
+    if (nw !== W()) {
+      const rightWall = g.every((r, y) => r[W() - 1] === "#") && W() > 1;
+      const at = rightWall ? W() - 1 : W();
+      if (nw > W()) { const add = nw - W(); for (const r of g) r.splice(at, 0, ...Array(add).fill(r === g[0] && g[0].every((ch) => ch === "#") || r === g[H() - 1] && g[H() - 1].every((ch) => ch === "#") ? "#" : ".")); }
+      else {
+        const del = W() - nw;
+        if (g.some((r) => used(r.slice(at - del, at))) && !(await dialog({ title: "Smaller level", message: "Some things on the right will be deleted. Continue?", okText: "Continue" }))) return;
+        for (const r of g) r.splice(at - del, del);
+      }
     }
     dirty = true; drawAll(); status();
-    wrap.scrollTop = wrap.scrollHeight - fromBottom;
   };
   async function save(asNew) {
     const name = nameI.value.trim().slice(0, 30);
-    if (!name) { toast("Give your tower a name."); nameI.focus(); return; }
+    if (!name) { toast("Give your level a name."); nameI.focus(); return; }
     const n = count();
-    if (!n.S) { toast("Put a 🐔 Start first."); return; }
+    if (!n.S) { toast("Put a 🏁 Start first."); return; }
     if (!n.E) { toast("Put a 🚪 Exit first."); return; }
-    const key = !asNew && id ? id : D.push(R("ctLevels")).key;
-    const old = S.ctLevels?.[key];
-    try {
-      await D.set(R("ctLevels/" + key), { name, map: rowsOut().join("\n"), h: g.length, by: old?.by || S.me.uid, ts: now() });
-      id = key; dirty = false; status();
-      toast("💾 Saved! Everyone can play \"" + name + "\" now.");
-    } catch (e) { showBanner("Can't save the tower: " + (/permission/i.test(e.message) ? "the Firebase rules need the Chicken Tower update." : e.message)); }
+    const w = asNew ? "custom" : whereS.value;
+    const data = { name, map: rowsOut().join("\n"), h: H(), w: W(), th: w === "custom" ? theme : ctSlotTheme(w), ts: now() };
+    let path;
+    if (w === "custom") {
+      const key = !asNew && customId ? customId : D.push(R("ctLevels")).key;
+      data.by = S.ctLevels?.[key]?.by || S.me.uid; path = "ctLevels/" + key;
+      try { await D.set(R(path), data); customId = key; loadedSlot = null; if (asNew) whereS.value = "custom"; }
+      catch (e) { showBanner("Can't save the level: " + ctRulesMsg(e.message)); return; }
+    } else {
+      if (S.ctStory?.[w] && loadedSlot !== w && !(await dialog({ title: "Replace story level", message: "Story level " + w + " (\"" + S.ctStory[w].name + "\") already exists. Replace it?", okText: "Replace" }))) return;
+      data.by = S.ctStory?.[w]?.by || S.me.uid; path = "ctStory/" + w;
+      try { await D.set(R(path), data); loadedSlot = w; }
+      catch (e) { showBanner("Can't save the level: " + ctRulesMsg(e.message)); return; }
+    }
+    dirty = false; whereOpts(); status();
+    toast("💾 Saved! Everyone can play \"" + name + "\" now.");
   }
-  // painting
   let painting = null, lastC = null;
   const cellAt = (e) => { const r = cv.getBoundingClientRect(); return { x: Math.floor((e.clientX - r.left) * cv.width / r.width / T), y: Math.floor((e.clientY - r.top) * cv.height / r.height / T) }; };
   const paintTo = (p) => {
@@ -5926,16 +6222,15 @@ async function openCtEditor(start) {
     if (tool === "pan" && e.button !== 2) return;
     e.preventDefault();
     painting = e.button === 2 ? "." : tool;
-    if ("SE".includes(painting)) { setCell(cellAt(e).x, cellAt(e).y, painting); painting = null; status(); return; }
+    if ("SE".includes(painting)) { const q = cellAt(e); setCell(q.x, q.y, painting); painting = null; status(); return; }
     cv.setPointerCapture(e.pointerId); lastC = null; paintTo(cellAt(e));
   });
   cv.addEventListener("pointermove", (e) => { if (painting) paintTo(cellAt(e)); });
   const stop = () => { if (painting) { painting = null; lastC = null; status(); } };
   cv.addEventListener("pointerup", stop); cv.addEventListener("pointercancel", stop);
   cv.addEventListener("contextmenu", (e) => e.preventDefault());
-  win.beforeClose = async () => !dirty || !!(await dialog({ title: "Level editor", message: "Close without saving your tower?", okText: "Close" }));
-  load({ id, name: nameI.value, rows: rowsOut() });
-  if (start?.rows && !start.id && start.name === "Random tower") { dirty = true; status(); }
+  win.beforeClose = async () => !dirty || !!(await dialog({ title: "Level editor", message: "Close without saving your level?", okText: "Close" }));
+  load(start || { id: null, name: "My level", rows: ctBlankRows("outside"), theme: "outside" });
 }
 
 /* ----- lists: games tab + right panel ----- */
@@ -5981,7 +6276,8 @@ function renderGamesPanel(pane) {
   const card3 = el("div", "gcard");
   card3.append(el("div", "gname", "🐔 Chicken Tower"));
   const k1 = el("button", "small", "▶ Play"); k1.type = "button"; k1.onclick = openCtMenu;
-  const r3 = el("div", "row-btns"); r3.append(k1);
+  const k3 = el("button", "small", "📖 Story"); k3.type = "button"; k3.onclick = openCtStory;
+  const r3 = el("div", "row-btns"); r3.append(k3, k1);
   if (S.isAdmin) { const k2 = el("button", "small", "🛠 Editor"); k2.type = "button"; k2.onclick = () => openCtEditor(null); r3.append(k2); }
   card3.append(r3);
   pane.append(card, card2, card3, el("div", "gsoon", "❓ More games soon..."));
@@ -6033,10 +6329,11 @@ function renderGamesPage() {
   c2.append(el("div", "gicon", "❓"), el("div", "gname", "More games"), el("div", "hint", "Coming soon..."));
   const cK = el("div", "gcard big raised");
   cK.append(el("div", "gicon", "🐔"), el("div", "gname", "Chicken Tower"),
-    el("div", "hint", "Solo: you are a chicken with a shotgun.\nClimb the tower and reach the exit at the top!\nRandom towers, or towers made by the admins."));
+    el("div", "hint", "Solo: you are a chicken with a shotgun.\n📖 Story: 3 worlds, 15 levels.\n🎲 Random towers, or levels made by the admins."));
   const rK = el("div", "row-btns");
   const k1 = el("button", null, "▶ Play"); k1.type = "button"; k1.onclick = openCtMenu;
-  rK.append(k1);
+  const k3 = el("button", null, "📖 Story"); k3.type = "button"; k3.onclick = openCtStory;
+  rK.append(k3, k1);
   if (S.isAdmin) { const k2 = el("button", null, "🛠 Level editor"); k2.type = "button"; k2.onclick = () => openCtEditor(null); rK.append(k2); }
   cK.append(rK);
   cards.append(c1, cT, cK, c2); fsG.append(cards);
