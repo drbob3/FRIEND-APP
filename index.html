@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-5CyvllkPncwjNF8C0ynyyTiLQD4NIkfrnnxnh2Ms7jw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-cQtK3WkEUT0fU+bqJk4YsaG5wxTn18IALdBC1oiin+M=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,22 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .gcard .hint { white-space: pre-line; }
   .gscore { flex: 1 1 180px; min-width: 160px; }
   .gscore ol { margin: 4px 0 0; padding: 4px 6px 4px 28px; background: #fff; min-height: 60px; }
@@ -1002,7 +1018,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.42";
+const APP_VERSION = "10.43";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5070,8 +5086,7 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwfn+BGDPX",
-  BG: { "#": "B", g: "G", d: "D", "=": "P", "%": "X" },   // background versions (dark, can't be touched)
+  TILES: ".#=%^gdSECwfn+BGDPXtlvorjWkOihycIKQMzuHebL",
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
@@ -5085,13 +5100,31 @@ const CT = {
     normal: { label: "Normal", minLen: 3, maxLen: 6, shot: 0.14, solid: 0.25, side: 0.55, spike: 0.4,  fox: 0.35, hawk: 0.16, crate: 0.15, heart: 0.04, cpEvery: 24 },
     hard:   { label: "Hard",   minLen: 2, maxLen: 5, shot: 0.22, solid: 0.3,  side: 0.6,  spike: 0.55, fox: 0.5,  hawk: 0.28, crate: 0.18, heart: 0.03, cpEvery: 32 },
   },
+  CATS: [["basic", "🧱 Basic"], ["outside", "🌄 Outside"], ["castle", "🏰 Castle"], ["tower", "🗼 Tower"], ["special", "⚙ Special"], ["things", "🐔 Things"]],
+  // [letter, icon, name, what it does, menu tab]
   TOOLS: [
-    ["pan", "✋", "Scroll (touch screens)"], [".", "⬜", "Eraser (right click erases too)"], ["#", "🧱", "Stone block"], ["g", "🟩", "Dirt surface (grass)"], ["d", "🟫", "Dirt underground"],
-    ["=", "🪵", "Platform (jump through it from below)"], ["%", "📦", "Crate (breaks with 2 shots)"], ["^", "🔺", "Spikes"],
-    ["S", "🏁", "Start (only one)"], ["E", "🚪", "Exit"], ["C", "🚩", "Checkpoint"],
-    ["w", "🐔", "Black chicken (walks)"], ["f", "🚁", "Helicopter chicken (flies to you)"], ["n", "🎯", "Sniper chicken (doesn't move, aims 5-6 s then shoots)"], ["+", "❤", "Heart (+1 life)"],
+    ["#", "🧱", "Stone block", "Solid.", "basic"], ["=", "🪵", "Platform", "Jump through it from below. Hold ↓ to drop down.", "basic"],
+    ["%", "📦", "Crate", "Solid. Breaks with 2 shots.", "basic"], ["^", "🔺", "Spikes", "Touch it = −1 life.", "basic"],
+    ["g", "🟩", "Dirt surface", "Solid. Grass on top.", "basic"], ["d", "🟫", "Dirt underground", "Solid.", "basic"],
+    ["t", "🪵", "Tree trunk", "Solid.", "outside"], ["l", "🍃", "Leaves", "Decoration: you go through it.", "outside"],
+    ["v", "🌾", "Tall grass", "Decoration: you go through it.", "outside"], ["o", "🌼", "Flowers", "Decoration: you go through it.", "outside"],
+    ["r", "🪨", "Rock", "Solid.", "outside"], ["j", "🚧", "Fence", "Decoration: you go through it.", "outside"],
+    ["W", "💧", "Water", "Falling in = −1 life.", "outside"],
+    ["k", "🧱", "Castle brick", "Solid.", "castle"], ["O", "🚪", "Wooden door", "Decoration (put 2 on top of each other for a tall door).", "castle"],
+    ["i", "🪟", "Window", "Decoration: a lit window.", "castle"], ["h", "🔥", "Torch", "Decoration: a burning torch.", "castle"],
+    ["y", "🚩", "Banner", "Decoration: a red flag on the wall.", "castle"], ["c", "⛓", "Chains", "Decoration: hanging chains.", "castle"],
+    ["I", "▦", "Iron bars", "Solid, but shots go through (and the sniper can see you through it).", "castle"],
+    ["K", "🧱", "Dark brick", "Solid.", "tower"], ["Q", "🔷", "Glass", "Solid. Breaks with 1 shot. The sniper can see you through it.", "tower"],
+    ["M", "⬜", "Metal block", "Solid.", "tower"], ["z", "🕸", "Cobweb", "Decoration: you go through it.", "tower"],
+    ["u", "▁", "Half block", "Solid bottom half. You walk up it like a step.", "special"], ["H", "🪜", "Ladder", "Climb with W / S (or ↑ / ↓). Space = jump off.", "special"],
+    ["e", "🧊", "Ice", "Solid and slippery.", "special"], ["b", "🟥", "Bounce pad", "Throws you very high.", "special"],
+    ["L", "🌋", "Lava", "Touch it = −1 life.", "special"],
+    ["S", "🏁", "Start", "Where the player starts (only one).", "things"], ["E", "🚪", "Exit", "Touch it to win the level.", "things"],
+    ["C", "🚩", "Checkpoint", "Touch it: you come back here when you lose a life.", "things"], ["+", "❤", "Heart", "+1 life.", "things"],
+    ["w", "🐔", "Black chicken", "Walks left and right. 3 shots.", "things"], ["f", "🚁", "Helicopter chicken", "Flies to you. 2 shots.", "things"],
+    ["n", "🎯", "Sniper chicken", "Doesn't move. Aims 5-6 s with a red laser, then shoots. 3 shots.", "things"],
   ],
-  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2.", "Red laser? Hide behind a wall before the sniper shoots!"],
+  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2.", "Red laser? Hide behind a wall before the sniper shoots!", "Climb ladders with W / S."],
 };
 const ctClamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const CT_BLACK = { body: "#2c2c32", wing: "#16161a", eye: "#ff3030", leg: "#c88010" };
@@ -5110,7 +5143,8 @@ function ctNormRows(rows) {
   while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
-const CT_BGSET = "BGDPX";
+const CT_MARK = "SECwfn+";
+const CT_LEGACY_BG = { B: "#", G: "g", D: "d", P: "=", X: "%" };   // v10.39-10.41 background letters
 // A level has 2 layers of the same size: rows (normal blocks, markers) and bg (background blocks).
 // Saved in ONE string: normal rows, then "\n~\n", then the background rows packed as "12.3B" (count + block).
 function ctSplitLayers(rows, bg) {
@@ -5119,9 +5153,9 @@ function ctSplitLayers(rows, bg) {
   for (let y = 0; y < H; y++) {
     const src = bg ? String(bg[bg.length - H + y] || "") : "";
     const bb = [];
-    for (let x = 0; x < W; x++) { const c = src[x]; bb.push(c && CT_BGSET.includes(c) ? c : "."); }
+    for (let x = 0; x < W; x++) { const c = CT_LEGACY_BG[src[x]] || src[x]; bb.push(c && c !== "." && !CT_MARK.includes(c) && CT.TILES.includes(c) ? c : "."); }
     let t = "";
-    for (let x = 0; x < W; x++) { const c = rows[y][x]; if (CT_BGSET.includes(c)) { bb[x] = c; t += "."; } else t += c; }   // old levels: background blocks were in the normal layer
+    for (let x = 0; x < W; x++) { const c = rows[y][x]; if (CT_LEGACY_BG[c]) { bb[x] = CT_LEGACY_BG[c]; t += "."; } else t += c; }   // old levels: background blocks were in the normal layer
     f.push(t); b.push(bb.join(""));
   }
   return { rows: f, bg: b };
@@ -5241,7 +5275,7 @@ function ctNewGame(level) {
   let sx = 2, sy = H - 2, foundS = false;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
-    if ("SwfnCE+".includes(c)) g[y][x] = ".";
+    if (CT_MARK.includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
     else if (c === "n") st.ents.push({ k: "n", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: -1, hp: 3, fl: 0, t: Math.random() * 9, mode: "idle", aimT: 0, aimDur: 5.5, lockT: 0, cd: 1, lost: 0, gun: Math.PI, laser: null, tracer: 0 });
@@ -5266,7 +5300,17 @@ function ctNewGame(level) {
   return st;
 }
 const ctTile = (st, tx, ty) => (tx < 0 || tx >= st.W || ty < 0 ? "#" : ty >= st.H ? "." : st.g[ty][tx]);
-const ctSolid = (c) => c === "#" || c === "%" || c === "g" || c === "d";
+const CT_SOLID = "#%gdtrkKMQIebu";
+const ctSolid = (c) => !!c && c.length === 1 && CT_SOLID.includes(c);
+const ctTop = (c) => (c === "u" ? 12 : 0);   // half block: only the bottom half is solid
+const ctLiquid = (c) => c === "W" || c === "L";
+// solid block at a point of the world (pass = letters that let this thing through: "I" for shots, "IQ" for the sniper's eyes)
+function ctBlockAt(st, x, y, pass) {
+  const T = CT.T, tx = Math.floor(x / T), ty = Math.floor(y / T), c = ctTile(st, tx, ty);
+  if (!ctSolid(c) || (pass && pass.includes(c))) return null;
+  if (y - ty * T < ctTop(c)) return null;
+  return c;
+}
 const ctHit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 
 function ctMove(st, o, dt, drop = false) {
@@ -5274,8 +5318,18 @@ function ctMove(st, o, dt, drop = false) {
   let hitX = 0;
   o.x += o.vx * dt;
   const y0 = Math.floor(o.y / T), y1 = Math.floor((o.y + o.h - 0.01) / T);
-  if (o.vx > 0) { const tx = Math.floor((o.x + o.w - 0.01) / T); for (let ty = y0; ty <= y1; ty++) if (ctSolid(ctTile(st, tx, ty))) { o.x = tx * T - o.w; o.vx = 0; hitX = 1; break; } }
-  else if (o.vx < 0) { const tx = Math.floor(o.x / T); for (let ty = y0; ty <= y1; ty++) if (ctSolid(ctTile(st, tx, ty))) { o.x = (tx + 1) * T; o.vx = 0; hitX = -1; break; } }
+  if (o.vx !== 0) {
+    const right = o.vx > 0, tx = right ? Math.floor((o.x + o.w - 0.01) / T) : Math.floor(o.x / T);
+    for (let ty = y0; ty <= y1; ty++) {
+      const c = ctTile(st, tx, ty);
+      if (!ctSolid(c)) continue;
+      const top = ty * T + ctTop(c);
+      if (o.y + o.h <= top + 0.01) continue;
+      // walk up a half block like a step
+      if (ctTop(c) && o.ground && o.y + o.h - top <= 12.5 && !ctSolid(ctTile(st, tx, ty - 1)) && !ctSolid(ctTile(st, tx, Math.floor((top - o.h) / T)))) { o.y = top - o.h; continue; }
+      o.x = right ? tx * T - o.w : (tx + 1) * T; o.vx = 0; hitX = right ? 1 : -1; break;
+    }
+  }
   const prevBottom = o.y + o.h;
   o.y += o.vy * dt;
   o.ground = false;
@@ -5284,7 +5338,10 @@ function ctMove(st, o, dt, drop = false) {
     const ty = Math.floor((o.y + o.h - 0.01) / T);
     for (let tx = x0; tx <= x1; tx++) {
       const c = ctTile(st, tx, ty);
-      if (ctSolid(c) || (c === "=" && !drop && prevBottom <= ty * T + 0.5)) { o.y = ty * T - o.h; o.vy = 0; o.ground = true; break; }
+      let top = null;
+      if (ctSolid(c)) { const tp = ty * T + ctTop(c); if (!ctTop(c) || (o.y + o.h > tp && prevBottom <= tp + 0.5)) top = tp; }
+      else if ((c === "=" || (c === "H" && ctTile(st, tx, ty - 1) !== "H")) && !drop && prevBottom <= ty * T + 0.5) top = ty * T;   // platform / top of a ladder
+      if (top != null) { o.y = top - o.h; o.vy = 0; o.ground = true; break; }
     }
   } else if (o.vy < 0) {
     const ty = Math.floor(o.y / T);
@@ -5314,6 +5371,12 @@ function ctShoot(st, aim) {
   st.muzzle = { x: cx, y: cy };
   beep([[150, 0, 0.06], [80, 0.02, 0.12]], "sawtooth", 0.07);
 }
+function ctBreak(st, tx, ty) {   // crate or glass breaks
+  const T = CT.T, c = st.g[ty][tx];
+  st.g[ty][tx] = "."; ctRedrawTile(st, tx, ty);
+  if (c === "Q") { ctBurst(st, tx * T + 12, ty * T + 12, 14, ["#dff2ff", "#aee0ff", "#fff"], 150, 500); beep([[2200, 0, 0.04], [1700, 0.03, 0.05], [2600, 0.06, 0.04]], "square", 0.04); }
+  else { ctBurst(st, tx * T + 12, ty * T + 12, 12, ["#b07a36", "#e0a85a", "#6e4a1e"], 140, 500); beep([[200, 0, 0.08]], "square", 0.05); }
+}
 function ctHurt(st) {
   const p = st.p;
   if (p.inv > 0 || p.deadT > 0 || st.phase !== "play") return;
@@ -5323,14 +5386,28 @@ function ctHurt(st) {
   ctBurst(st, p.x + p.w / 2, p.y + p.h / 2, 18, ["#fff", "#eee", "#e02020", "#f0a020"], 160, 250);
   beep([[330, 0, 0.12], [220, 0.1, 0.15], [140, 0.22, 0.25]], "square", 0.07);
 }
-function ctRedrawTile(st, tx, ty) { const px = tx * CT.T, py = ty * CT.T; ctTileArt(st.cctx, st.bgl[ty][tx], px, py); ctTileArt(st.cctx, st.g[ty][tx], px, py, true); }
+function ctRedrawTile(st, tx, ty) {
+  const px = tx * CT.T, py = ty * CT.T, b = st.bgl[ty][tx];
+  st.cctx.clearRect(px, py, CT.T, CT.T);
+  if (b !== ".") ctTileDark(st.cctx, b, px, py);
+  ctTileArt(st.cctx, st.g[ty][tx], px, py, true);
+}
+// background version of a block: same drawing, darker
+function ctTileDark(c, ch, px, py) {
+  const T = CT.T, o = ctTileDark.tmp || (ctTileDark.tmp = Object.assign(document.createElement("canvas"), { width: T, height: T }));
+  const oc = o.getContext("2d");
+  ctTileArt(oc, ch, 0, 0);
+  if (ch === "h" || ch === "W" || ch === "L") ctAnimTile(oc, ch, 0, 0, 0.3, true);
+  oc.globalCompositeOperation = "source-atop"; oc.fillStyle = "rgba(0,0,20,.55)"; oc.fillRect(0, 0, T, T); oc.globalCompositeOperation = "source-over";
+  c.drawImage(o, px, py);
+}
 // ray from (x0,y0) toward (x1,y1): distance to the first solid block (background blocks and platforms don't stop it)
 function ctRay(st, x0, y0, dx, dy, maxLen) {
   const T = CT.T;
   for (let d = 0; d < maxLen; d += 4) {
     const x = x0 + dx * d, y = y0 + dy * d;
     if (y > st.H * T + 40) return d;
-    if (ctSolid(ctTile(st, Math.floor(x / T), Math.floor(y / T)))) return d;
+    if (ctBlockAt(st, x, y, "IQ")) return d;   // iron bars and glass: it sees through
   }
   return maxLen;
 }
@@ -5367,6 +5444,7 @@ function ctSniperStep(st, e, dt) {
       const dx0 = tx - ex, dy0 = ty - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
       const len = ctRay(st, ex, ey, dx, dy, 3000);
       e.shot = { x1: ex + dx * len, y1: ey + dy * len }; e.tracer = 0.18;
+      for (let d = 0; d < len; d += 4) { const gx = Math.floor((ex + dx * d) / CT.T), gy = Math.floor((ey + dy * d) / CT.T); if (ctTile(st, gx, gy) === "Q" && gy < st.H && gx >= 0 && gx < st.W) ctBreak(st, gx, gy); }   // the bullet breaks glass
       // does the bullet line touch the player?
       if (p.deadT <= 0) {
         const qx = pcx - ex, qy = pcy - ey, along = qx * dx + qy * dy, off = Math.abs(qx * dy - qy * dx);
@@ -5400,11 +5478,21 @@ function ctStep(st, inp, dt) {
   } else {
     p.inv = Math.max(0, p.inv - dt);
     const dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
-    p.vx += (dir * CT.RUN - p.vx) * Math.min(1, dt * (p.ground ? 18 : 5));
+    const fyT = Math.floor((p.y + p.h + 1) / T), fl = ctTile(st, Math.floor((p.x + 1) / T), fyT), fr = ctTile(st, Math.floor((p.x + p.w - 1) / T), fyT);
+    const onIce = p.ground && (fl === "e" || fr === "e");
+    p.vx += (dir * CT.RUN - p.vx) * Math.min(1, dt * (p.ground ? (onIce ? 1.6 : 18) : 5));
     if (dir && !inp.mouseAim) p.face = dir;
     p.walk = p.ground && dir ? p.walk + dt : 0;
     p.coyote = p.ground ? 0.1 : Math.max(0, p.coyote - dt);
     p.jbuf = inp.jumpHit ? 0.12 : Math.max(0, p.jbuf - dt);
+    // ladders: W/S (↑/↓) climb, Space jumps off
+    const lx = Math.floor((p.x + p.w / 2) / T);
+    const onLadder = ctTile(st, lx, Math.floor((p.y + p.h / 2) / T)) === "H" || ctTile(st, lx, Math.floor((p.y + p.h - 2) / T)) === "H";
+    const overLadder = p.ground && ctTile(st, lx, fyT) === "H";
+    if (p.climb && !onLadder && !overLadder) p.climb = false;
+    if (!p.climb && ((onLadder && inp.up) || ((onLadder || overLadder) && inp.down))) { p.climb = true; p.jumping = false; }
+    if (p.climb && inp.jumpHit && !inp.up) { p.climb = false; p.jbuf = 0.12; p.coyote = 0.1; }
+    if (p.climb) p.jbuf = 0;
     if (p.jbuf > 0 && p.coyote > 0) { p.vy = -CT.JUMP; p.jbuf = 0; p.coyote = 0; p.jumping = true; p.ground = false; beep([[520, 0, 0.05], [700, 0.03, 0.05]], "square", 0.03); }
     if (p.jumping && !inp.jump && p.vy < -200) { p.vy = -200; p.jumping = false; }
     if (p.vy >= 0) p.jumping = false;
@@ -5413,10 +5501,27 @@ function ctStep(st, inp, dt) {
       if (ctTile(st, Math.floor(p.x / T), ty) === "=" || ctTile(st, Math.floor((p.x + p.w - 0.01) / T), ty) === "=") p.dropT = 0.22;
     }
     p.dropT = Math.max(0, p.dropT - dt);
-    p.vy = Math.min(CT.MAXFALL, p.vy + CT.GRAV * dt);
     const wasAir = !p.ground;
-    ctMove(st, p, dt, p.dropT > 0);
-    if (p.ground && wasAir && p.vy === 0) ctBurst(st, p.x + p.w / 2, p.y + p.h, 3, ["#8a8a9a"], 40, 200);
+    if (p.climb) {
+      p.vy = ((inp.down ? 1 : 0) - (inp.up ? 1 : 0)) * 120;
+      p.vx = dir * 90;
+      if ((inp.up || inp.down) && !dir) p.x += (lx * T + (T - p.w) / 2 - p.x) * Math.min(1, dt * 14);   // stay in the middle of the ladder
+      ctMove(st, p, dt, true);
+      if (p.ground && !inp.up && !onLadder) p.climb = false;
+    } else {
+      p.vy = Math.min(CT.MAXFALL, p.vy + CT.GRAV * dt);
+      ctMove(st, p, dt, p.dropT > 0);
+    }
+    if (p.ground && wasAir && p.vy === 0 && !p.climb) ctBurst(st, p.x + p.w / 2, p.y + p.h, 3, ["#8a8a9a"], 40, 200);
+    // bounce pad
+    if (p.ground && !p.climb) {
+      const by = Math.floor((p.y + p.h + 1) / T);
+      if (ctTile(st, Math.floor((p.x + 2) / T), by) === "b" || ctTile(st, Math.floor((p.x + p.w - 2) / T), by) === "b") {
+        p.vy = -820; p.ground = false; p.jumping = false; p.coyote = 0;
+        ctBurst(st, p.x + p.w / 2, p.y + p.h, 6, ["#ff7070", "#fff"], 90, 300);
+        beep([[300, 0, 0.06], [600, 0.04, 0.08], [900, 0.1, 0.06]], "square", 0.05);
+      }
+    }
     // reload: only when you stand still on the ground, one shell at a time
     const still = p.ground && !dir && Math.abs(p.vx) < 15;
     if (still && p.shells < CT.SHELLS) { p.reload += dt; if (p.reload >= CT.RELOAD) { p.shells++; p.reload = 0; beep([[1200, 0, 0.02], [900, 0.05, 0.03]], "square", 0.03); } }
@@ -5431,6 +5536,14 @@ function ctStep(st, inp, dt) {
     for (let ty = Math.floor((p.y + p.h - 8) / T); ty <= Math.floor((p.y + p.h - 1) / T); ty++)
       for (let tx = Math.floor((p.x + 2) / T); tx <= Math.floor((p.x + p.w - 3) / T); tx++)
         if (ctTile(st, tx, ty) === "^" && p.y + p.h > ty * T + 11) ctHurt(st);
+    // water / lava
+    for (let ty = Math.floor((p.y + 4) / T); ty <= Math.floor((p.y + p.h - 1) / T); ty++)
+      for (let tx = Math.floor((p.x + 2) / T); tx <= Math.floor((p.x + p.w - 3) / T); tx++) {
+        const c = ctTile(st, tx, ty);
+        if (!ctLiquid(c)) continue;
+        const surf = ty * T + (ctTile(st, tx, ty - 1) === c ? 0 : 7);
+        if (p.y + p.h > surf + 3 && p.deadT <= 0 && p.inv <= 0) { ctBurst(st, p.x + p.w / 2, surf, 12, c === "W" ? ["#bfe0ff", "#5aa0ff", "#fff"] : ["#ffb040", "#ff5010", "#ffe060"], 140, 400); ctHurt(st); }
+      }
     if (p.y > st.H * T + 40) ctHurt(st);
     for (const c of st.cps) if (!c.on && ctHit(p, { x: c.x + 4, y: c.y - 8, w: 16, h: 32 })) {
       for (const o of st.cps) o.on = false;
@@ -5450,13 +5563,13 @@ function ctStep(st, inp, dt) {
   // pellets
   for (const b of st.pel) {
     b.life -= dt; b.x += b.vx * dt; b.y += b.vy * dt;
-    const tx = Math.floor(b.x / T), ty = Math.floor(b.y / T), c = ctTile(st, tx, ty);
-    if (ctSolid(c)) {
+    const tx = Math.floor(b.x / T), ty = Math.floor(b.y / T), c = ctBlockAt(st, b.x, b.y, "I");
+    if (c) {
       b.life = 0;
-      if (c === "%" && ty < st.H && tx >= 0 && tx < st.W) {
+      if ((c === "%" || c === "Q") && ty < st.H && tx >= 0 && tx < st.W) {
         const k = tx + "," + ty;
-        st.crates[k] = (st.crates[k] ?? 2) - 1;
-        if (st.crates[k] <= 0) { st.g[ty][tx] = "."; ctRedrawTile(st, tx, ty); ctBurst(st, tx * T + 12, ty * T + 12, 12, ["#b07a36", "#e0a85a", "#6e4a1e"], 140, 500); beep([[200, 0, 0.08]], "square", 0.05); }
+        st.crates[k] = (st.crates[k] ?? (c === "Q" ? 1 : 2)) - 1;
+        if (st.crates[k] <= 0) ctBreak(st, tx, ty);
         else ctBurst(st, b.x, b.y, 2, ["#e0a85a"], 60, 300);
       } else ctBurst(st, b.x, b.y, 1, c === "g" || c === "d" ? ["#8a5a30"] : ["#ffd060"], 50, c === "g" || c === "d" ? 300 : 0);
       continue;
@@ -5488,7 +5601,7 @@ function ctStep(st, inp, dt) {
         const fx = e.dir > 0 ? e.x + e.w + 1 : e.x - 1, c = ctTile(st, Math.floor(fx / T), Math.floor((e.y + e.h + 2) / T));
         if (!(ctSolid(c) || c === "=")) e.dir *= -1;
       }
-      if (e.y > st.H * T + 40) e.dead = true;
+      if (e.y > st.H * T + 40 || ctLiquid(ctTile(st, Math.floor((e.x + e.w / 2) / T), Math.floor((e.y + e.h - 4) / T)))) e.dead = true;
     } else {
       const ex = e.x + e.w / 2, ey = e.y + e.h / 2, d = Math.hypot(pcx - ex, pcy - ey) || 1, ox = e.x;
       const chase = d < 170 && p.deadT <= 0;
@@ -5515,17 +5628,9 @@ function ctStep(st, inp, dt) {
 /* ----- drawing ----- */
 function ctTileArt(c, ch, px, py, noClear = false) {
   const T = CT.T;
-  const fg = { B: "#", G: "g", D: "d", P: "=", X: "%" }[ch];
-  if (fg) {
-    const o = ctTileArt.tmp || (ctTileArt.tmp = Object.assign(document.createElement("canvas"), { width: T, height: T }));
-    const oc = o.getContext("2d");
-    ctTileArt(oc, fg, 0, 0);
-    oc.globalCompositeOperation = "source-atop"; oc.fillStyle = "rgba(0,0,20,.55)"; oc.fillRect(0, 0, T, T); oc.globalCompositeOperation = "source-over";
-    if (!noClear) c.clearRect(px, py, T, T);
-    c.drawImage(o, px, py);
-    return;
-  }
+  if (CT_LEGACY_BG[ch]) { if (!noClear) c.clearRect(px, py, T, T); ctTileDark(c, CT_LEGACY_BG[ch], px, py); return; }
   if (!noClear) c.clearRect(px, py, T, T);
+  if ("tlvorjWLkOihycIKQMzuHeb".includes(ch)) { ctTileArt2(c, ch, px, py); return; }
   if (ch === "#") {
     c.fillStyle = "#5a5a6e"; c.fillRect(px, py, T, T);
     c.fillStyle = "#7c7c92"; c.fillRect(px, py, T, 3); c.fillRect(px, py, 3, T);
@@ -5561,6 +5666,124 @@ function ctTileArt(c, ch, px, py, noClear = false) {
     }
   }
 }
+// ----- new blocks (v10.43) -----
+function ctTileArt2(c, ch, px, py) {
+  const T = CT.T, h = (i) => ((px * 31 + py * 17 + i * 97) % 997);
+  if (ch === "t") {   // tree trunk
+    c.fillStyle = "#6b4423"; c.fillRect(px + 3, py, 18, T);
+    c.fillStyle = "#4e2f16"; c.fillRect(px + 3, py, 2, T); c.fillRect(px + 19, py, 2, T); c.fillRect(px + 9, py + (h(1) % 10), 1, 9); c.fillRect(px + 14, py + (h(2) % 8) + 6, 1, 10);
+    c.fillStyle = "#8a5a30"; c.fillRect(px + 6, py + (h(3) % 12), 1, 7); c.fillRect(px + 16, py + (h(4) % 12), 1, 6);
+  } else if (ch === "l") {   // leaves
+    c.fillStyle = "#2f7a2a"; c.fillRect(px, py, T, T);
+    for (let i = 0; i < 7; i++) { const q = h(i); c.fillStyle = i % 3 ? "#3f9a36" : "#1f5a1c"; c.beginPath(); c.arc(px + 3 + (q % 18), py + 3 + ((q * 7) % 18), 2 + (q % 3), 0, Math.PI * 2); c.fill(); }
+  } else if (ch === "v") {   // tall grass
+    c.fillStyle = "#2f8a2a";
+    for (let i = 0; i < 6; i++) { const x = px + 2 + i * 4, tall = 10 + (h(i) % 12); c.beginPath(); c.moveTo(x, py + T); c.lineTo(x + 1 + (i % 2 ? 2 : -1), py + T - tall); c.lineTo(x + 3, py + T); c.fill(); }
+    c.fillStyle = "#5ac84e"; for (let i = 0; i < 3; i++) c.fillRect(px + 4 + i * 7, py + T - 8 - (h(i + 9) % 6), 1, 6);
+  } else if (ch === "o") {   // flowers
+    const cols = ["#e84040", "#f0d020", "#f4f4f4", "#c860e0", "#ff8a30"];
+    for (let i = 0; i < 3; i++) {
+      const x = px + 4 + i * 7 + (h(i) % 3), top = py + 8 + (h(i + 5) % 8);
+      c.fillStyle = "#2f8a2a"; c.fillRect(x, top, 1, py + T - top); c.fillRect(x - 2, py + T - 5, 2, 1);
+      c.fillStyle = cols[h(i + 11) % cols.length]; c.fillRect(x - 2, top - 2, 5, 3); c.fillRect(x - 1, top - 3, 3, 5);
+      c.fillStyle = "#f0c020"; c.fillRect(x, top - 1, 1, 1);
+    }
+  } else if (ch === "r") {   // rock
+    c.fillStyle = "#6e6e76"; c.beginPath(); c.moveTo(px + 2, py + T); c.lineTo(px + 1, py + 10); c.lineTo(px + 6, py + 3); c.lineTo(px + 16, py + 1); c.lineTo(px + 23, py + 8); c.lineTo(px + 23, py + T); c.fill();
+    c.fillStyle = "#8e8e98"; c.beginPath(); c.moveTo(px + 4, py + 9); c.lineTo(px + 7, py + 5); c.lineTo(px + 15, py + 3); c.lineTo(px + 12, py + 7); c.fill();
+    c.fillStyle = "#4a4a52"; c.fillRect(px + 14, py + 12, 1, 6); c.fillRect(px + 15, py + 17, 3, 1); c.fillRect(px + 2, py + T - 2, 21, 2);
+  } else if (ch === "j") {   // fence
+    c.fillStyle = "#9a6a3a"; c.fillRect(px + 3, py + 6, 4, 18); c.fillRect(px + 17, py + 6, 4, 18); c.fillRect(px, py + 10, T, 3); c.fillRect(px, py + 17, T, 3);
+    c.fillStyle = "#6a4420"; c.fillRect(px + 3, py + 6, 4, 1); c.fillRect(px + 17, py + 6, 4, 1); c.fillRect(px, py + 12, T, 1); c.fillRect(px, py + 19, T, 1);
+  } else if (ch === "W") {   // water body (surface is animated)
+    c.fillStyle = "rgba(40,110,210,.78)"; c.fillRect(px, py, T, T);
+    c.fillStyle = "rgba(120,180,255,.25)"; c.fillRect(px + (h(1) % 14), py + 8 + (h(2) % 10), 8, 1);
+  } else if (ch === "L") {   // lava body
+    c.fillStyle = "#b8300c"; c.fillRect(px, py, T, T);
+    for (let i = 0; i < 4; i++) { const q = h(i); c.fillStyle = i % 2 ? "#e8601a" : "#ff9a30"; c.fillRect(px + (q % 20), py + 4 + ((q * 3) % 18), 4, 2); }
+  } else if (ch === "k") {   // castle brick
+    c.fillStyle = "#b39a70"; c.fillRect(px, py, T, T);
+    c.fillStyle = "#7a6648"; c.fillRect(px, py + 11, T, 2); c.fillRect(px, py + T - 1, T, 1); c.fillRect(px + 11, py, 2, 11); c.fillRect(px + 4, py + 13, 2, 11); c.fillRect(px + 18, py + 13, 2, 11);
+    c.fillStyle = "#cdb78e"; c.fillRect(px, py, 11, 1); c.fillRect(px + 13, py, 11, 1); c.fillRect(px + 6, py + 13, 12, 1);
+  } else if (ch === "O") {   // wooden door (stack 2 for a tall door)
+    c.fillStyle = "#7a4a22"; c.fillRect(px + 2, py, 20, T);
+    c.fillStyle = "#5a3416"; c.fillRect(px + 7, py, 1, T); c.fillRect(px + 12, py, 1, T); c.fillRect(px + 17, py, 1, T);
+    c.fillStyle = "#2e2e32"; c.fillRect(px + 2, py + 4, 20, 2); c.fillRect(px + 2, py + 17, 20, 2);
+    c.fillStyle = "#d8b030"; c.fillRect(px + 17, py + 11, 2, 2);
+  } else if (ch === "i") {   // window
+    c.fillStyle = "#2a2420"; c.fillRect(px + 3, py + 2, 18, 20);
+    c.fillStyle = "#ffcf70"; c.fillRect(px + 5, py + 4, 14, 16);
+    c.fillStyle = "#ffe8a8"; c.fillRect(px + 6, py + 5, 4, 5);
+    c.fillStyle = "#2a2420"; c.fillRect(px + 11, py + 4, 2, 16); c.fillRect(px + 5, py + 11, 14, 2);
+  } else if (ch === "h") {   // torch holder (flame is animated)
+    c.fillStyle = "#2a2622"; c.fillRect(px + 10, py + 12, 4, 10); c.fillRect(px + 8, py + 11, 8, 2); c.fillRect(px + 9, py + 20, 6, 2);
+    c.fillStyle = "#6a4a2a"; c.fillRect(px + 10, py + 9, 4, 3);
+  } else if (ch === "y") {   // banner
+    c.fillStyle = "#3a3026"; c.fillRect(px + 1, py + 1, 22, 2);
+    c.fillStyle = "#8a1c1c"; c.fillRect(px + 4, py + 3, 16, 15);
+    c.beginPath(); c.moveTo(px + 4, py + 18); c.lineTo(px + 12, py + 23); c.lineTo(px + 20, py + 18); c.fill();
+    c.fillStyle = "#d8b030"; c.fillRect(px + 4, py + 5, 16, 1); c.fillRect(px + 10, py + 9, 4, 6); c.fillRect(px + 8, py + 11, 8, 2);
+  } else if (ch === "c") {   // chains
+    c.strokeStyle = "#8a8a92"; c.lineWidth = 2;
+    for (let y = 0; y < T; y += 6) { c.beginPath(); if ((y / 6) % 2) { c.moveTo(px + 12, py + y); c.lineTo(px + 12, py + y + 6); } else c.ellipse(px + 12, py + y + 3, 2.5, 3.5, 0, 0, Math.PI * 2); c.stroke(); }
+  } else if (ch === "I") {   // iron bars
+    c.fillStyle = "#3a3a40"; c.fillRect(px, py, T, 3); c.fillRect(px, py + T - 3, T, 3);
+    for (let x = 2; x < T; x += 6) { c.fillStyle = "#4a4a52"; c.fillRect(px + x, py, 3, T); c.fillStyle = "#7a7a86"; c.fillRect(px + x, py, 1, T); }
+  } else if (ch === "K") {   // dark brick
+    c.fillStyle = "#3a3448"; c.fillRect(px, py, T, T);
+    c.fillStyle = "#26222f"; c.fillRect(px, py + 11, T, 2); c.fillRect(px, py + T - 1, T, 1); c.fillRect(px + 11, py, 2, 11); c.fillRect(px + 4, py + 13, 2, 11); c.fillRect(px + 18, py + 13, 2, 11);
+    c.fillStyle = "#4a4460"; c.fillRect(px, py, 11, 1); c.fillRect(px + 13, py, 11, 1); c.fillRect(px + 6, py + 13, 12, 1);
+  } else if (ch === "Q") {   // glass
+    c.fillStyle = "rgba(170,220,255,.32)"; c.fillRect(px, py, T, T);
+    c.fillStyle = "rgba(230,245,255,.85)"; c.fillRect(px, py, T, 1); c.fillRect(px, py, 1, T); c.fillRect(px + T - 1, py, 1, T); c.fillRect(px, py + T - 1, T, 1);
+    c.fillStyle = "rgba(255,255,255,.55)"; c.beginPath(); c.moveTo(px + 4, py + 14); c.lineTo(px + 14, py + 4); c.lineTo(px + 17, py + 4); c.lineTo(px + 4, py + 17); c.fill();
+  } else if (ch === "M") {   // metal
+    c.fillStyle = "#8a9098"; c.fillRect(px, py, T, T);
+    c.fillStyle = "#b8c0c8"; c.fillRect(px, py, T, 2); c.fillRect(px, py, 2, T);
+    c.fillStyle = "#5a6068"; c.fillRect(px, py + T - 2, T, 2); c.fillRect(px + T - 2, py, 2, T);
+    c.fillStyle = "#4a5058"; for (const [a, b] of [[4, 4], [18, 4], [4, 18], [18, 18]]) c.fillRect(px + a, py + b, 2, 2);
+  } else if (ch === "z") {   // cobweb
+    c.strokeStyle = "rgba(235,235,245,.55)"; c.lineWidth = 1; c.beginPath();
+    for (let a = 0; a <= 4; a++) { const an = a * Math.PI / 8; c.moveTo(px, py); c.lineTo(px + Math.cos(an) * 24, py + Math.sin(an) * 24); }
+    for (const r of [7, 13, 19]) { c.moveTo(px + r, py); for (let a = 1; a <= 4; a++) { const an = a * Math.PI / 8; c.lineTo(px + Math.cos(an) * r, py + Math.sin(an) * r); } }
+    c.stroke();
+  } else if (ch === "u") {   // half block
+    c.fillStyle = "#5a5a6e"; c.fillRect(px, py + 12, T, 12);
+    c.fillStyle = "#7c7c92"; c.fillRect(px, py + 12, T, 3); c.fillRect(px, py + 12, 3, 12);
+    c.fillStyle = "#3a3a4a"; c.fillRect(px, py + T - 3, T, 3); c.fillRect(px + T - 3, py + 12, 3, 12);
+  } else if (ch === "H") {   // ladder
+    c.fillStyle = "#8a5a2a"; c.fillRect(px + 4, py, 3, T); c.fillRect(px + 17, py, 3, T);
+    c.fillStyle = "#a8743a"; for (let y = 3; y < T; y += 7) c.fillRect(px + 4, py + y, 16, 3);
+    c.fillStyle = "#5a3a16"; for (let y = 5; y < T; y += 7) c.fillRect(px + 7, py + y, 10, 1);
+  } else if (ch === "e") {   // ice
+    c.fillStyle = "#aee4ff"; c.fillRect(px, py, T, T);
+    c.fillStyle = "#6fb6d8"; c.fillRect(px, py + T - 2, T, 2); c.fillRect(px + T - 2, py, 2, T);
+    c.fillStyle = "#ffffff"; c.fillRect(px, py, T, 2); c.fillRect(px + 4, py + 6, 6, 2); c.fillRect(px + 6, py + 8, 2, 4); c.fillRect(px + 15, py + 14, 4, 1);
+  } else if (ch === "b") {   // bounce pad
+    c.fillStyle = "#3a3a40"; c.fillRect(px + 1, py + 18, 22, 6);
+    c.strokeStyle = "#c0c0c8"; c.lineWidth = 2; c.beginPath(); c.moveTo(px + 6, py + 18); for (let i = 0; i < 4; i++) c.lineTo(px + (i % 2 ? 6 : 18), py + 15 - i * 2.5); c.stroke();
+    c.beginPath(); c.moveTo(px + 18, py + 18); for (let i = 0; i < 4; i++) c.lineTo(px + (i % 2 ? 18 : 6), py + 15 - i * 2.5); c.stroke();
+    c.fillStyle = "#e02828"; c.fillRect(px + 1, py + 3, 22, 5); c.fillStyle = "#ff7070"; c.fillRect(px + 1, py + 3, 22, 1);
+  }
+}
+// moving parts (drawn every frame over the tile)
+function ctAnimTile(c, ch, px, py, now, top) {
+  const T = CT.T;
+  if (ch === "h") {
+    const f = Math.sin(now * 13 + px * 0.3) * 1.5;
+    c.fillStyle = "rgba(255,160,40,.16)"; c.beginPath(); c.arc(px + 12, py + 6, 16, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#ff7a18"; c.beginPath(); c.ellipse(px + 12, py + 5 + f * 0.3, 3.5, 5.5 + f, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#ffe060"; c.beginPath(); c.ellipse(px + 12, py + 7, 1.8, 2.8, 0, 0, Math.PI * 2); c.fill();
+  } else if (ch === "W" && top) {
+    c.fillStyle = "#bfe0ff";
+    for (let x = 0; x < T; x += 2) c.fillRect(px + x, py + 2 + Math.round(Math.sin((px + x) / 6 + now * 3) * 1.5), 2, 2);
+  } else if (ch === "L") {
+    if (top) { c.fillStyle = "#ffb040"; for (let x = 0; x < T; x += 2) c.fillRect(px + x, py + 1 + Math.round(Math.sin((px + x) / 5 + now * 2) * 1.5), 2, 3); }
+    const k = (now * 0.6 + (px * 13 + py * 7) % 97 / 97) % 1;
+    c.fillStyle = "rgba(255,210,90," + (1 - k).toFixed(2) + ")"; c.beginPath(); c.arc(px + 6 + ((px * 7) % 12), py + T - k * T, 1.5 + k * 1.5, 0, Math.PI * 2); c.fill();
+  }
+}
+
 function ctDrawChicken(c, x, y, face, aim, walk, s = 1, pal = null) {   // x, y = feet (center bottom); aim null = no gun
   const body = pal?.body || "#f4f4f4", wing = pal?.wing || "#dcdcdc", eye = pal?.eye || "#000", leg = pal?.leg || "#f0a020";
   c.save(); c.translate(x, y); c.scale(s, s);
@@ -5760,7 +5983,7 @@ function ctDrawLoading(c, st, pct, now) {
   ctTextOut(c, "Tip: " + CT.TIPS[st.tip % CT.TIPS.length], W / 2, 310, "#a0c0ff", "12px monospace");
 }
 function ctDrawWorld(c, st, inp, now) {
-  const p = st.p;
+  const p = st.p, T = CT.T;
   const sh = st.shake > 0 ? st.shake * 14 : 0;
   const cam = Math.round(st.camY), camX = Math.round(st.camX);
   ctDrawBg(c, st, now);   // background never shakes: it always covers the whole screen
@@ -5769,6 +5992,11 @@ function ctDrawWorld(c, st, inp, now) {
   c.drawImage(st.cache, camX, cam, CT.VW, CT.VH, 0, 0, CT.VW, CT.VH);
   c.translate(-camX, -cam);
   const vis = (x, y) => y > cam - 60 && y < cam + CT.VH + 60 && x > camX - 60 && x < camX + CT.VW + 60;
+  for (let ty = Math.max(0, Math.floor(cam / T)); ty <= Math.min(st.H - 1, Math.floor((cam + CT.VH) / T)); ty++)
+    for (let tx = Math.max(0, Math.floor(camX / T)); tx <= Math.min(st.W - 1, Math.floor((camX + CT.VW) / T)); tx++) {
+      const ch = st.g[ty][tx];
+      if (ch === "h" || ch === "W" || ch === "L") ctAnimTile(c, ch, tx * T, ty * T, now, ty === 0 || st.g[ty - 1][tx] !== ch);
+    }
   for (const e of st.exits) if (vis(e.x, e.y)) ctDrawDoor(c, e.x, e.y, now);
   for (const f of st.cps) if (vis(f.x, f.y)) ctDrawFlag(c, f.x, f.y, f.on);
   for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
@@ -5818,7 +6046,6 @@ function ctDrawWorld(c, st, inp, now) {
   if (p.shells < CT.SHELLS && p.reload > 0) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
   const t = st.phase === "win" ? st.winTime : st.time;
   ctTextOut(c, "⏱ " + ctFmt(t), CT.VW - 30, 20, "#fff", "bold 13px monospace", "right");
-  const T = CT.T;
   if (st.maxCam > 0 && st.H > st.W * 0.75) {   // tall level: height meter on the right
     const mx = CT.VW - 14, top = 32, bot = CT.VH - 14, hh = bot - top, WH = st.H * T;
     c.fillStyle = "rgba(0,0,0,.55)"; c.fillRect(mx - 3, top, 7, hh);
@@ -5903,8 +6130,8 @@ function openCtPlay(level) {
   const pad = el("div", "ctpad");
   const padBtn = (t, k) => {
     const b = el("button", null, t); b.type = "button";
-    const on = (e) => { e.preventDefault(); if (st.phase === "title") { begin(); return; } if (paused) { setPause(false); return; } inp[k] = true; if (k === "jump") inp.jumpHit = true; if (k === "fire") { inp.fireHit = true; inp.mouseAim = false; } };
-    const off = (e) => { e.preventDefault(); inp[k] = false; };
+    const on = (e) => { e.preventDefault(); if (st.phase === "title") { begin(); return; } if (paused) { setPause(false); return; } inp[k] = true; if (k === "jump") { inp.jumpHit = true; inp.up = true; } if (k === "fire") { inp.fireHit = true; inp.mouseAim = false; } };
+    const off = (e) => { e.preventDefault(); inp[k] = false; if (k === "jump") inp.up = false; };
     b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointercancel", off); b.addEventListener("pointerleave", off);
     b.addEventListener("contextmenu", (e) => e.preventDefault());
     return b;
@@ -5913,7 +6140,7 @@ function openCtPlay(level) {
   g1.append(padBtn("◀", "left"), padBtn("▶", "right"), padBtn("⬇", "down"));
   g2.append(padBtn("💥", "fire"), padBtn("⤒", "jump"));
   pad.append(g1, g2);
-  const help = el("div", "hint ctkeys", "Move: A D or ← → (Q D on AZERTY) · Jump: Space / W / ↑ · Aim: mouse · Shoot: click (or J) · Stand still to reload · Drop down: S / ↓ · Pause: P");
+  const help = el("div", "hint ctkeys", "Move: A D or ← → (Q D on AZERTY) · Jump: Space / W / ↑ · Aim: mouse · Shoot: click (or J) · Stand still to reload · Drop down / ladders: S / ↓, W / ↑ · Pause: P");
   win.content.append(top, res, cvWrap, pad, help);
   if (matchMedia("(pointer: coarse)").matches) help.textContent = "Tap the game to shoot there. 💥 shoots forward (with ⬇: down). Stand still to reload.";
 
@@ -5931,7 +6158,7 @@ function openCtPlay(level) {
   function setPause(v) {
     if (!st || st.phase !== "play") v = false;
     paused = v; pauseB.textContent = paused ? "▶ Resume" : "⏸ Pause";
-    for (const k of ["left", "right", "jump", "down", "fire"]) inp[k] = false;
+    for (const k of ["left", "right", "jump", "down", "fire", "up"]) inp[k] = false;
   }
   function restart(showTitle) {
     st = ctNewGame(level);
@@ -5986,10 +6213,11 @@ function openCtPlay(level) {
     if (!k) return;
     if (down && !e.repeat) { if (k === "jump") inp.jumpHit = true; if (k === "fire") { inp.fireHit = true; inp.mouseAim = false; } }
     inp[k] = down;
+    if (e.code === "KeyW" || e.code === "ArrowUp") inp.up = down;   // climb ladders
   };
   const kd = (e) => onKey(e, true), ku = (e) => onKey(e, false);
   document.addEventListener("keydown", kd); document.addEventListener("keyup", ku);
-  const blur = () => { for (const k of ["left", "right", "jump", "down", "fire"]) inp[k] = false; };
+  const blur = () => { for (const k of ["left", "right", "jump", "down", "fire", "up"]) inp[k] = false; };
   window.addEventListener("blur", blur);
   const toCanvas = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * CT.VW / r.width, y: (e.clientY - r.top) * CT.VH / r.height }; };
   cv.addEventListener("pointermove", (e) => { if (e.pointerType !== "mouse") return; const q = toCanvas(e); inp.mx = q.x; inp.my = q.y; inp.mouseAim = true; });
@@ -6172,6 +6400,27 @@ function openCtStory() {
 }
 
 /* ----- level editor (admins) ----- */
+const ctIsBlock = (k) => k && k !== "." && k !== "pan" && !CT_MARK.includes(k);
+function ctEdTile(c, ch, px, py, top = true) {
+  const T = CT.T;
+  ctTileArt(c, ch, px, py, true);
+  if (ch === "h" || ch === "W" || ch === "L") ctAnimTile(c, ch, px, py, 0.3, top);
+  if (ch === "S") ctDrawChicken(c, px + 12, py + T, 1, 0, 0, 0.9);
+  else if (ch === "E") { c.fillStyle = "#8b5a2b"; c.fillRect(px + 5, py + 2, 14, 22); c.strokeStyle = "#2a1808"; c.lineWidth = 1; c.strokeRect(px + 5.5, py + 2.5, 13, 21); c.fillStyle = "#f0d040"; c.fillRect(px + 15, py + 13, 2, 2); }
+  else if (ch === "C") ctDrawFlag(c, px, py, false);
+  else if (ch === "w") ctDrawBlackChicken(c, px + 3, py + 8, 1, 0, false);
+  else if (ch === "f") ctDrawHeliChicken(c, px + 2, py + 8, 0.2, false, 1);
+  else if (ch === "n") ctDrawSniper(c, px + 3, py + 8, -1, Math.PI, 0, false, false);
+  else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
+}
+function ctThumb(k, size = 32, bg = "#1d1d3a") {
+  const cv = el("canvas", "ctthumb"); cv.width = 24; cv.height = 24; cv.style.width = cv.style.height = size + "px";
+  const x = cv.getContext("2d");
+  x.fillStyle = bg; x.fillRect(0, 0, 24, 24);
+  if (ctIsBlock(k) || CT_MARK.includes(k)) ctEdTile(x, k, 0, 0);
+  else { x.font = "15px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(k === "." ? "🧽" : "✋", 12, 13); }
+  return cv;
+}
 async function openCtEditor(start) {
   if (!S.isAdmin) { toast("Only admins can make levels."); return; }
   ctSubLevels();
@@ -6205,18 +6454,57 @@ async function openCtEditor(start) {
   const hI = el("input", "sunken ctnum"); hI.type = "number"; hI.min = CT.MIN_H; hI.max = CT.MAX_H;
   const sB = el("button", "small", "Set size"); sB.type = "button"; sB.title = "Width: adds or removes columns on the RIGHT. Height: adds or removes rows at the TOP.";
   const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB);
-  const pal = el("div", "ctpal");
-  const palB = {};
-  for (const [k, icon, name] of CT.TOOLS) {
-    const b = el("button", "small", icon + " " + name.split(" (")[0]); b.type = "button"; b.title = name;
-    b.onclick = () => { tool = k; for (const [kk, bb] of Object.entries(palB)) bb.classList.toggle("on", kk === tool); cv.style.touchAction = tool === "pan" ? "pan-x pan-y" : "none"; };
-    palB[k] = b; pal.append(b);
+  // ----- build menu -----
+  let bgMode = false, cat = CT.CATS.some(([k]) => k === store("ct-cat")) ? store("ct-cat") : "basic";
+  let recent = String(store("ct-recent") || "#=g%^").split("").filter((k) => CT.TOOLS.some((t) => t[0] === k)).slice(0, 10);
+  const toolInfo = (k) => k === "." ? ["🧽", "Eraser", "Removes what is in the square (with 🌓 ON: only the background block). Right click erases too."]
+    : k === "pan" ? ["✋", "Scroll", "Touch screens: move around the level with your finger."] : (CT.TOOLS.find((t) => t[0] === k) || ["", "", "?", ""]).slice(1, 4);
+  const build = el("div", "ctbuild");
+  const cur = el("div", "ctcur sunken"), curPic = el("span", "ctcurpic"), curTxt = el("div", "ctcurtxt"), curName = el("b"), curDesc = el("div", "dim");
+  curTxt.append(curName, curDesc); cur.append(curPic, curTxt);
+  const tb = (k, label, title) => { const b = el("button", "small ctside"); b.type = "button"; b.title = title; b.append(ctThumb(k, 18), " " + label); b.onclick = () => setTool(k); return b; };
+  const eraseB = tb(".", "Eraser", "Eraser"), panB = tb("pan", "Scroll", "Scroll (touch screens)");
+  const bgB = el("button", "small ctside", "🌓 Background: OFF"); bgB.type = "button";
+  bgB.title = "ON: blocks and the eraser work on the BACKGROUND layer (dark blocks you go through). A normal block can be in the same square.";
+  bgB.onclick = () => { bgMode = !bgMode; bgB.textContent = "🌓 Background: " + (bgMode ? "ON" : "OFF"); bgB.classList.toggle("on", bgMode); refreshCur(); };
+  const side = el("div", "ctsidebtns"); side.append(eraseB, panB, bgB);
+  const top1 = el("div", "ctbuildtop"); top1.append(cur, side);
+  const tabs = el("div", "cttabs"), grid = el("div", "ctgrid sunken"), recentRow = el("div", "ctrecent");
+  const tabB = {};
+  for (const [k, label] of CT.CATS) {
+    const b = el("button", "small", label); b.type = "button";
+    b.onclick = () => { cat = k; store("ct-cat", k); paintGrid(); };
+    tabB[k] = b; tabs.append(b);
   }
-  let bgMode = false;
-  const bgB = el("button", "small", "🌓 Background: OFF"); bgB.type = "button";
-  bgB.title = "ON: stone, dirt, platform, crate AND the eraser work on the BACKGROUND layer (dark blocks you go through). A normal block can be in the same square.";
-  bgB.onclick = () => { bgMode = !bgMode; bgB.textContent = "🌓 Background: " + (bgMode ? "ON" : "OFF"); bgB.classList.toggle("on", bgMode); };
-  pal.append(bgB);
+  build.append(top1, tabs, grid, recentRow);
+  function paintGrid() {
+    for (const [k, b] of Object.entries(tabB)) b.classList.toggle("on", k === cat);
+    grid.replaceChildren();
+    for (const t of CT.TOOLS.filter((t) => t[4] === cat)) {
+      const b = el("button", "ctblk" + (tool === t[0] ? " on" : "")); b.type = "button"; b.title = t[2] + ": " + t[3];
+      b.append(ctThumb(t[0], 32), el("span", null, t[2]));
+      b.onclick = () => setTool(t[0]);
+      grid.append(b);
+    }
+  }
+  function paintRecent() {
+    recentRow.replaceChildren(el("span", "dim", "Recent:"));
+    for (const k of recent) { const b = el("button", "ctrec" + (tool === k ? " on" : "")); b.type = "button"; b.title = toolInfo(k)[1]; b.append(ctThumb(k, 22)); b.onclick = () => setTool(k); recentRow.append(b); }
+  }
+  function refreshCur() {
+    const [, nm, ds] = toolInfo(tool);
+    curPic.replaceChildren(ctThumb(tool, 40));
+    curName.textContent = nm + (bgMode && (ctIsBlock(tool) || tool === ".") ? " (🌓 background)" : "");
+    curDesc.textContent = bgMode && ctIsBlock(tool) ? "Painted as a dark BACKGROUND block: you go through it." : ds;
+    eraseB.classList.toggle("on", tool === "."); panB.classList.toggle("on", tool === "pan");
+  }
+  function setTool(k) {
+    tool = k;
+    if (ctIsBlock(k) || CT_MARK.includes(k)) { recent = [k, ...recent.filter((x) => x !== k)].slice(0, 10); store("ct-recent", recent.join("")); }
+    const t = CT.TOOLS.find((t) => t[0] === k); if (t && t[4] !== cat) { cat = t[4]; store("ct-cat", cat); }
+    refreshCur(); paintGrid(); paintRecent();
+    cv.style.touchAction = tool === "pan" ? "pan-x pan-y" : "none";
+  }
   const wrap = el("div", "cteds sunken");
   const cv = el("canvas");
   wrap.append(cv);
@@ -6255,8 +6543,8 @@ async function openCtEditor(start) {
     catch (e) { showBanner("Can't delete: " + e.message); }
   });
   const r3 = el("div", "ctedrow"); r3.append(bNew, bRnd, bOpen, bTest, bSave, bSaveNew, bDel);
-  win.content.append(r0, r1, r2, pal, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · 🌓 Background ON = paint/erase the background layer (a normal block can be on top) · Mouse wheel: scroll (Shift + wheel: sideways). Outside the level = wall on the sides, a pit at the bottom. Yellow numbers: rows from the bottom / columns from the left."));
-  palB["#"].classList.add("on"); cv.style.touchAction = "none";
+  win.content.append(r0, r1, r2, build, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · 🌓 Background ON = paint/erase the background layer (a normal block can be on top) · Mouse wheel: scroll (Shift + wheel: sideways). Outside the level = wall on the sides, a pit at the bottom. Yellow numbers: rows from the bottom / columns from the left."));
+  setTool(tool);
 
   const effTheme = () => (whereS.value === "custom" ? theme : ctSlotTheme(whereS.value));
   whereS.onchange = () => {
@@ -6284,15 +6572,8 @@ async function openCtEditor(start) {
     c.save(); c.beginPath(); c.rect(px, py, T, T); c.clip();
     c.fillStyle = bg[(x + y) % 2]; c.fillRect(px, py, T, T);
     const ch = g[y][x];
-    if (bgl[y][x] !== ".") ctTileArt(c, bgl[y][x], px, py, true);
-    ctTileArt(c, ch, px, py, true);
-    if (ch === "S") ctDrawChicken(c, px + 12, py + T, 1, 0, 0, 0.9);
-    else if (ch === "E") { c.fillStyle = "#8b5a2b"; c.fillRect(px + 5, py + 2, 14, 22); c.strokeStyle = "#2a1808"; c.strokeRect(px + 5.5, py + 2.5, 13, 21); c.fillStyle = "#f0d040"; c.fillRect(px + 15, py + 13, 2, 2); }
-    else if (ch === "C") ctDrawFlag(c, px, py, false);
-    else if (ch === "w") ctDrawBlackChicken(c, px + 3, py + 8, 1, 0, false);
-    else if (ch === "f") ctDrawHeliChicken(c, px + 2, py + 8, 0.2, false, 1);
-    else if (ch === "n") ctDrawSniper(c, px + 3, py + 8, -1, Math.PI, 0, false, false);
-    else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
+    if (bgl[y][x] !== ".") ctTileDark(c, bgl[y][x], px, py);
+    ctEdTile(c, ch, px, py, y === 0 || g[y - 1][x] !== ch);
     c.fillStyle = "rgba(255,255,255,.07)"; c.fillRect(px, py, T, 1); c.fillRect(px, py, 1, T);
     c.fillStyle = "#ffd040"; c.font = "bold 9px monospace"; c.textAlign = "left";
     if (x === 0 && (H() - 1 - y) % 10 === 0 && y !== 0) c.fillText(String(H() - 1 - y), px + 1, py + 10);
@@ -6307,6 +6588,7 @@ async function openCtEditor(start) {
   function setCell(x, y, ch, layer) {
     if (x < 0 || x >= W() || y < 0 || y >= H()) return;
     if (layer === "bg") { if (bgl[y][x] === ch) return; bgl[y][x] = ch; cell(x, y); dirty = true; return; }
+    if (y + 1 < H()) setTimeout(() => cell(x, y + 1));
     if (g[y][x] === ch) return;
     if (ch === "S") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === "S") { g[yy][xx] = "."; cell(xx, yy); }
     g[y][x] = ch; cell(x, y); dirty = true;
@@ -6394,8 +6676,8 @@ async function openCtEditor(start) {
     if (tool === "pan" && e.button !== 2) return;
     e.preventDefault();
     // 🌓 Background ON: blocks and the eraser work on the BACKGROUND layer (the normal block in the same square stays)
-    const onBg = bgMode && (CT.BG[tool] || tool === "." || e.button === 2);
-    painting = { ch: e.button === 2 || tool === "." ? "." : onBg ? CT.BG[tool] : tool, layer: onBg ? "bg" : "fg" };
+    const onBg = bgMode && (ctIsBlock(tool) || tool === "." || e.button === 2);
+    painting = { ch: e.button === 2 || tool === "." ? "." : tool, layer: onBg ? "bg" : "fg" };
     if (painting.layer === "fg" && "SE".includes(painting.ch)) { const q = cellAt(e); setCell(q.x, q.y, painting.ch); painting = null; status(); return; }
     cv.setPointerCapture(e.pointerId); lastC = null; paintTo(cellAt(e));
   });
