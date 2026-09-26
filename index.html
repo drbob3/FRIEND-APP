@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-j/Fb8LJYnbFDN8hViaHsK8/Xlsgcth7GZV0H9VUrgUY=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gPSW7CcUcdkK8wrMEGdxSEk/PISgQwd3Hy4YFTyXKc0=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -996,7 +996,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.35";
+const APP_VERSION = "10.36";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -1872,9 +1872,11 @@ function startApp() {
     if (!S.connected) return;
     const st = R("status/" + S.me.uid);
     try {
-      await D.onDisconnect(st).set({ online: false, lastSeen: now() });
+      if (!presConn) presConn = D.push(R("status/" + S.me.uid + "/conns")).key;   // this tab / device
+      await D.onDisconnect(R("status/" + S.me.uid + "/conns/" + presConn)).remove();
+      await D.onDisconnect(st).update({ online: false, lastSeen: now() });   // for older versions of the site
       await D.onDisconnect(R("loc/" + S.me.uid)).remove();
-      await D.set(st, { online: true, lastSeen: now() });
+      await D.update(st, { online: true, lastSeen: now(), ["conns/" + presConn]: now() });   // update, NOT set: set erased the other tabs
       setLoc();
     } catch (e) { logError("Presence: " + e.message); }
   });
@@ -1885,7 +1887,8 @@ function startApp() {
     usersReadyResolve();
     renderMe(); renderSide(); render(); renderToolbar();
   });
-  sub(R("status"), (s) => { S.status = s.val() || {}; syncAdminLoc(); renderSide(); });
+  sub(R("status"), (s) => { S.status = s.val() || {}; presSig = Object.keys(S.status).filter(isOnline).sort().join(","); syncAdminLoc(); renderSide(); });
+  startPresenceTimers();
   sub(R("admins"), (s) => {
     S.admins = { ...(s.val() || {}), [OWNER_UID]: true };
     const was = S.isAdmin;
@@ -2928,7 +2931,44 @@ function renderMe() {
   $("meName").textContent = S.me.name + (S.isAdmin ? " ⭐" : "");
   $("meStatus").textContent = (S.connected ? "● online" : "○ offline") + (S.me.guest ? " · [GUEST]" : isHead() ? " · HEAD ADMIN" : S.isAdmin ? " · admin" : "");
 }
-function isOnline(uid) { return !!S.status[uid]?.online; }
+/* ----- online / offline -----
+   Every open tab or device has its own entry in status/{uid}/conns and refreshes it every minute (heartbeat).
+   Someone is online if at least one of their entries was refreshed less than 2.5 minutes ago.
+   (Before: one single online switch -> closing 1 of 2 tabs showed "offline", and sleeping phones stayed "online".) */
+const PRES_BEAT = 60000, PRES_STALE = 150000;
+let presConn = null, presTimer = 0, presSig = "";
+function isOnline(uid) {
+  if (S.me && uid === S.me.uid) return !!S.connected;
+  const st = S.status[uid];
+  if (!st) return false;
+  if (st.conns && typeof st.conns === "object") {
+    const t = Date.now() + (S.serverOffset || 0) - PRES_STALE;
+    for (const v of Object.values(st.conns)) if (typeof v === "number" && v > t) return true;
+    return false;
+  }
+  return !!st.online;   // someone still on an old version of the site
+}
+function presenceBeat() {
+  if (!S.me || !S.connected || !presConn || !auth.currentUser || auth.currentUser.uid !== S.me.uid) return;
+  const upd = { online: true, lastSeen: now(), ["conns/" + presConn]: now() };
+  // clean my own dead entries (tabs that crashed without saying goodbye)
+  const mine = S.status[S.me.uid]?.conns || {};
+  const old = Date.now() + (S.serverOffset || 0) - 5 * 60000;
+  for (const [k, v] of Object.entries(mine)) if (k !== presConn && !(typeof v === "number" && v > old)) upd["conns/" + k] = null;
+  D.update(R("status/" + S.me.uid), upd).catch((e) => logError("Heartbeat: " + e.message));
+}
+function presenceRecheck() {   // someone can go offline without any database change (timeout) -> recheck the lists
+  const sig = Object.keys(S.status).filter(isOnline).sort().join(",");
+  if (sig !== presSig) { presSig = sig; if (started) renderSide(); }
+}
+function startPresenceTimers() {
+  clearInterval(presTimer);
+  let n = 0;
+  presTimer = setInterval(() => { if (++n % 2 === 0) presenceBeat(); presenceRecheck(); }, PRES_BEAT / 2);
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { presenceBeat(); presenceRecheck(); } });
+window.addEventListener("pageshow", (e) => { if (e.persisted) presenceBeat(); });
+window.addEventListener("pagehide", () => { if (S.me && presConn && auth.currentUser) D.remove(R("status/" + S.me.uid + "/conns/" + presConn)).catch(() => {}); });
 function personRow(uid, extraText) {
   const u = S.users[uid] || { name: "?", guest: false };
   const it = el("div", "item click");
@@ -4076,7 +4116,9 @@ async function logout() {
   const ok = await dialog({ title: "Log out", message: guest ? "Log out?\nYour guest identity will be DELETED forever (your messages stay)." : "Log out?", okText: "Log out" });
   if (!ok) return;
   const uid = S.me.uid;
-  try { await D.onDisconnect(R("status/" + uid)).cancel(); await D.onDisconnect(R("loc/" + uid)).cancel(); } catch {}
+  clearInterval(presTimer);
+  try { await D.onDisconnect(R("status/" + uid)).cancel(); await D.onDisconnect(R("loc/" + uid)).cancel(); if (presConn) await D.onDisconnect(R("status/" + uid + "/conns/" + presConn)).cancel(); } catch {}
+  presConn = null;
   if (guest) {
     const upd = {};
     for (const r of Object.keys(S.myChats)) upd["members/" + r + "/" + uid] = null;
