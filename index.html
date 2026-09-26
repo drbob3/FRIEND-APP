@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-GI+MZ4ge3Be31yXcNG6m6Znhomb2WwZQmG9oNBtrUOk=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Wg2hgQF/VLMzct1CmaSfrP2X6aV9HTkDKqkZ2dFvUkc=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -1002,7 +1002,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.37";
+const APP_VERSION = "10.40";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5061,6 +5061,7 @@ function openPvp(gid) {
 
 /* ========================= GAMES: CHICKEN TOWER ========================= */
 // Tiles: . empty · # stone block · = platform (jump through from below) · % crate (shoot it) · ^ spikes · g dirt surface (grass) · d dirt underground
+// Background blocks (dark, you go through them): B stone · G dirt surface · D dirt underground · P platform · X crate
 // Markers: S start · E exit · C checkpoint · w black chicken (walks) · f helicopter chicken (flies) · + heart
 const CT = {
   T: 24, VW: 480, VH: 360, STEP: 1 / 120,
@@ -5069,7 +5070,8 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwf+",
+  TILES: ".#=%^gdSECwf+BGDPX",
+  BG: { "#": "B", g: "G", d: "D", "=": "P", "%": "X" },   // background versions (dark, can't be touched)
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
@@ -5215,7 +5217,7 @@ function ctNewGame(level) {
     if ("SwfCE+".includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
-    else if (c === "f") st.ents.push({ k: "f", x: x * T + 2, y: y * T + 5, w: 20, h: 14, hx: x * T + 2, hy: y * T + 5, hp: 2, fl: 0, t: Math.random() * 9 });
+    else if (c === "f") st.ents.push({ k: "f", x: x * T + 2, y: y * T + 5, w: 20, h: 14, hx: x * T + 2, hy: y * T + 5, hp: 2, fl: 0, t: Math.random() * 9, face: 1, tilt: 0 });
     else if (c === "C") st.cps.push({ x: x * T, y: y * T, on: false });
     else if (c === "E") st.exits.push({ x: x * T, y: y * T });
     else if (c === "+") st.picks.push({ x: x * T + 5, y: y * T + 5, w: 14, h: 14, t: Math.random() * 9 });
@@ -5396,10 +5398,14 @@ function ctStep(st, inp, dt) {
       }
       if (e.y > st.H * T + 40) e.dead = true;
     } else {
-      const ex = e.x + e.w / 2, ey = e.y + e.h / 2, d = Math.hypot(pcx - ex, pcy - ey) || 1;
-      if (d < 170 && p.deadT <= 0) { e.x += (pcx - ex) / d * 62 * dt; e.y += (pcy - ey) / d * 62 * dt; }
+      const ex = e.x + e.w / 2, ey = e.y + e.h / 2, d = Math.hypot(pcx - ex, pcy - ey) || 1, ox = e.x;
+      const chase = d < 170 && p.deadT <= 0;
+      if (chase) { e.x += (pcx - ex) / d * 62 * dt; e.y += (pcy - ey) / d * 62 * dt; }
       else { const k = Math.min(1, dt * 1.5); e.x += (e.hx + Math.sin(e.t * 0.8) * 36 - e.x) * k; e.y += (e.hy + Math.sin(e.t * 2) * 6 - e.y) * k; }
       e.x = ctClamp(e.x, 0, st.W * T - e.w);
+      if (chase) { if (Math.abs(pcx - ex) > 3) e.face = pcx > ex ? 1 : -1; }   // attacking: look at the player
+      else if (Math.abs(e.x - ox) > 0.05) e.face = e.x > ox ? 1 : -1;       // flying around: look where it goes
+      e.tilt += ((chase ? 0.3 * e.face : 0) - e.tilt) * Math.min(1, dt * 6);   // leans forward when it attacks
     }
     if (p.deadT <= 0 && ctHit({ x: p.x + 2, y: p.y + 2, w: p.w - 4, h: p.h - 3 }, e)) ctHurt(st);
   }
@@ -5417,6 +5423,15 @@ function ctStep(st, inp, dt) {
 /* ----- drawing ----- */
 function ctTileArt(c, ch, px, py) {
   const T = CT.T;
+  const fg = { B: "#", G: "g", D: "d", P: "=", X: "%" }[ch];
+  if (fg) {
+    const o = ctTileArt.tmp || (ctTileArt.tmp = Object.assign(document.createElement("canvas"), { width: T, height: T }));
+    const oc = o.getContext("2d");
+    ctTileArt(oc, fg, 0, 0);
+    oc.globalCompositeOperation = "source-atop"; oc.fillStyle = "rgba(0,0,20,.55)"; oc.fillRect(0, 0, T, T); oc.globalCompositeOperation = "source-over";
+    c.clearRect(px, py, T, T); c.drawImage(o, px, py);
+    return;
+  }
   c.clearRect(px, py, T, T);
   if (ch === "#") {
     c.fillStyle = "#5a5a6e"; c.fillRect(px, py, T, T);
@@ -5479,14 +5494,27 @@ function ctDrawChicken(c, x, y, face, aim, walk, s = 1, pal = null) {   // x, y 
 function ctDrawBlackChicken(c, x, y, dir, t, flash) {   // box 18x16
   ctDrawChicken(c, x + 9, y + 16, dir, null, t, 0.8, flash ? CT_FLASH : CT_BLACK);
 }
-function ctDrawHeliChicken(c, x, y, t, flash, face) {   // box 20x14
-  const fx = x + 10, fy = y + 17;
-  ctDrawChicken(c, fx, fy, face, null, 0, 0.72, flash ? CT_FLASH : CT_BLACK);
-  const mx = fx + face * 2.9;
-  c.fillStyle = "#555"; c.fillRect(mx - 0.75, fy - 22, 1.5, 4);
-  const bl = 3 + Math.abs(Math.cos(t * 30)) * 11;
-  c.fillStyle = "#9a9aa8"; c.fillRect(mx - bl, fy - 23, bl * 2, 2);
-  c.fillStyle = "#333"; c.fillRect(mx - 1.5, fy - 23.5, 3, 3);
+function ctDrawHeliChicken(c, x, y, t, flash, face, tilt = 0) {   // box 20x14 · black chicken with a helicopter backpack
+  const fx = x + 10, fy = y + 17, s = 0.72, cy = fy - 10 * s;
+  c.save();
+  if (tilt) { c.translate(fx, cy); c.rotate(tilt); c.translate(-fx, -cy); }
+  ctDrawChicken(c, fx, fy, face, null, 0, s, flash ? CT_FLASH : CT_BLACK);
+  c.save(); c.translate(fx, fy); c.scale(s, s);
+  const bx = -face * 9;   // backpack on the back
+  c.fillStyle = flash ? "#fff" : "#6a5530"; c.fillRect(bx - 5, -20, 10, 14);
+  c.fillStyle = flash ? "#eee" : "#4a3a1e"; c.fillRect(bx - 5, -20, 10, 2); c.fillRect(bx - 4, -12, 8, 4);
+  c.fillStyle = flash ? "#fff" : "#8a7040"; c.fillRect(bx - 3, -11, 6, 2);
+  c.fillStyle = "#666"; c.fillRect(bx - 3, -6, 6, 3);   // motor
+  c.fillStyle = "#999"; c.fillRect(bx - 2, -6, 1, 3); c.fillRect(bx + 1, -6, 1, 3);
+  c.strokeStyle = flash ? "#ddd" : "#4a3a1e"; c.lineWidth = 2;   // strap over the chest
+  c.beginPath(); c.moveTo(bx + face * 4, -18); c.lineTo(face * 3, -5); c.stroke();
+  c.fillStyle = "#555"; c.fillRect(bx - 1, -29, 2, 9);   // mast
+  const bl = 4 + Math.abs(Math.cos(t * 30)) * 14;
+  c.fillStyle = "#a8a8b8"; c.fillRect(bx - bl, -30, bl * 2, 2);
+  c.fillStyle = "#333"; c.fillRect(bx - 2, -31, 4, 3);
+  if (Math.floor(t * 20) % 2) { c.fillStyle = "rgba(200,200,200,.5)"; c.fillRect(bx - 2, -2, 1, 2); c.fillRect(bx + 1, -1, 1, 2); }   // exhaust puff
+  c.restore();
+  c.restore();
 }
 function ctHeart(c, x, y, s, col = "#e02020") {
   c.fillStyle = col; c.beginPath();
@@ -5520,7 +5548,8 @@ function ctBgTower(c, camX, camY) {
 function ctBgOutside(c, camX, camY, maxCam, now) {
   const W = CT.VW, H = CT.VH;
   const hz = Math.round(H * 0.64 + (maxCam - camY) * 0.15);
-  const sky = c.createLinearGradient(0, 0, 0, hz);
+  c.fillStyle = "#0c1a12"; c.fillRect(0, 0, W, H);   // paint EVERYTHING first (old frames stayed visible in the gaps)
+  const sky = c.createLinearGradient(0, 0, 0, Math.max(1, hz));
   sky.addColorStop(0, "#070b22"); sky.addColorStop(0.55, "#221c48"); sky.addColorStop(1, "#6a3452");
   c.fillStyle = sky; c.fillRect(0, 0, W, Math.max(0, hz));
   // stars + moon
@@ -5558,6 +5587,7 @@ function ctBgOutside(c, camX, camY, maxCam, now) {
 }
 function ctBgFortress(c, camX, camY, maxCam, now) {
   const W = CT.VW, H = CT.VH;
+  c.fillStyle = "#3b352f"; c.fillRect(0, 0, W, H);
   const top = Math.round(34 + (maxCam - camY) * 0.5);
   const sky = c.createLinearGradient(0, 0, 0, Math.max(1, top));
   sky.addColorStop(0, "#10142e"); sky.addColorStop(1, "#3a2c4c");
@@ -5637,7 +5667,7 @@ function ctDrawWorld(c, st, inp, now) {
   for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
   for (const e of st.ents) if (!e.dead && vis(e.x, e.y)) {
     if (e.k === "w") ctDrawBlackChicken(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0);
-    else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, p.x > e.x ? 1 : -1);
+    else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, e.face || 1, e.tilt || 0);
   }
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
     ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, p.aim, p.walk);
@@ -6057,6 +6087,11 @@ async function openCtEditor(start) {
     b.onclick = () => { tool = k; for (const [kk, bb] of Object.entries(palB)) bb.classList.toggle("on", kk === tool); cv.style.touchAction = tool === "pan" ? "pan-x pan-y" : "none"; };
     palB[k] = b; pal.append(b);
   }
+  let bgMode = false;
+  const bgB = el("button", "small", "🌓 Background: OFF"); bgB.type = "button";
+  bgB.title = "ON: stone, dirt, platform and crate become BACKGROUND blocks (darker, you go through them)";
+  bgB.onclick = () => { bgMode = !bgMode; bgB.textContent = "🌓 Background: " + (bgMode ? "ON" : "OFF"); bgB.classList.toggle("on", bgMode); };
+  pal.append(bgB);
   const wrap = el("div", "cteds sunken");
   const cv = el("canvas");
   wrap.append(cv);
@@ -6095,7 +6130,7 @@ async function openCtEditor(start) {
     catch (e) { showBanner("Can't delete: " + e.message); }
   });
   const r3 = el("div", "ctedrow"); r3.append(bNew, bRnd, bOpen, bTest, bSave, bSaveNew, bDel);
-  win.content.append(r0, r1, r2, pal, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · Mouse wheel: scroll (Shift + wheel: sideways). Outside the level = wall on the sides, a pit at the bottom. Yellow numbers: rows from the bottom / columns from the left."));
+  win.content.append(r0, r1, r2, pal, wrap, stat, r3, el("div", "hint", "Left click: paint · Right click: erase · 🌓 Background ON = dark blocks you go through · Mouse wheel: scroll (Shift + wheel: sideways). Outside the level = wall on the sides, a pit at the bottom. Yellow numbers: rows from the bottom / columns from the left."));
   palB["#"].classList.add("on"); cv.style.touchAction = "none";
 
   const effTheme = () => (whereS.value === "custom" ? theme : ctSlotTheme(whereS.value));
@@ -6111,7 +6146,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + ((n.B || 0) + (n.G || 0) + (n.D || 0) + (n.P || 0) + (n.X || 0)) + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
@@ -6221,7 +6256,7 @@ async function openCtEditor(start) {
   cv.addEventListener("pointerdown", (e) => {
     if (tool === "pan" && e.button !== 2) return;
     e.preventDefault();
-    painting = e.button === 2 ? "." : tool;
+    painting = e.button === 2 ? "." : bgMode && CT.BG[tool] ? CT.BG[tool] : tool;
     if ("SE".includes(painting)) { const q = cellAt(e); setCell(q.x, q.y, painting); painting = null; status(); return; }
     cv.setPointerCapture(e.pointerId); lastC = null; paintTo(cellAt(e));
   });
