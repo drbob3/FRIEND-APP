@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-cQtK3WkEUT0fU+bqJk4YsaG5wxTn18IALdBC1oiin+M=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gy5EiRCGzN+v9d9bMmPaY6QmHePOCpy2cE7yj8KYUuM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -533,6 +533,22 @@
   .ctrec { padding: 1px; min-width: 0; width: auto; }
   .ctblk, .ctside { min-width: 0; }
   .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .gcard .hint { white-space: pre-line; }
   .gscore { flex: 1 1 180px; min-width: 160px; }
   .gscore ol { margin: 4px 0 0; padding: 4px 6px 4px 28px; background: #fff; min-height: 60px; }
@@ -1018,7 +1034,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.43";
+const APP_VERSION = "10.46";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5086,7 +5102,7 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwfn+BGDPXtlvorjWkOihycIKQMzuHebL",
+  TILES: ".#=%^gdSECwfnF+BGDPXtlvorjWkOihycIKQMzuHebL",
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
@@ -5123,8 +5139,9 @@ const CT = {
     ["C", "🚩", "Checkpoint", "Touch it: you come back here when you lose a life.", "things"], ["+", "❤", "Heart", "+1 life.", "things"],
     ["w", "🐔", "Black chicken", "Walks left and right. 3 shots.", "things"], ["f", "🚁", "Helicopter chicken", "Flies to you. 2 shots.", "things"],
     ["n", "🎯", "Sniper chicken", "Doesn't move. Aims 5-6 s with a red laser, then shoots. 3 shots.", "things"],
+    ["F", "🔥", "Flamethrower chicken", "Walks around calmly. When it sees you or gets shot, it chases you (jumps over holes and walls), burns you up close and sometimes charges a fire ball. 4 shots.", "things"],
   ],
-  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2.", "Red laser? Hide behind a wall before the sniper shoots!", "Climb ladders with W / S."],
+  TIPS: ["Shoot DOWN to fly higher!", "Stand still to reload your 2 shells.", "Crates break with 2 shots.", "Touch a 🚩 checkpoint to come back there.", "Hold ↓ (or S) to drop through a platform.", "Black chickens need 3 pellets, helicopter chickens 2.", "Red laser? Hide behind a wall before the sniper shoots!", "Climb ladders with W / S.", "A flamethrower chicken chases you: keep your distance and watch for fire balls!"],
 };
 const ctClamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const CT_BLACK = { body: "#2c2c32", wing: "#16161a", eye: "#ff3030", leg: "#c88010" };
@@ -5143,7 +5160,7 @@ function ctNormRows(rows) {
   while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
-const CT_MARK = "SECwfn+";
+const CT_MARK = "SECwfnF+";
 const CT_LEGACY_BG = { B: "#", G: "g", D: "d", P: "=", X: "%" };   // v10.39-10.41 background letters
 // A level has 2 layers of the same size: rows (normal blocks, markers) and bg (background blocks).
 // Saved in ONE string: normal rows, then "\n~\n", then the background rows packed as "12.3B" (count + block).
@@ -5271,13 +5288,14 @@ function ctNewGame(level) {
   const lay = ctSplitLayers(ctNormRows(level.rows), level.bg || null);
   const g = lay.rows.map((r) => r.split(""));
   const H = g.length, W = g[0].length;
-  const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
+  const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], shots: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
   let sx = 2, sy = H - 2, foundS = false;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
     if (CT_MARK.includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
+    else if (c === "F") st.ents.push({ k: "F", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 4, fl: 0, t: Math.random() * 9, alert: false, fbT: 2, charge: 0, lastSeen: 99, firing: false });
     else if (c === "n") st.ents.push({ k: "n", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: -1, hp: 3, fl: 0, t: Math.random() * 9, mode: "idle", aimT: 0, aimDur: 5.5, lockT: 0, cd: 1, lost: 0, gun: Math.PI, laser: null, tracer: 0 });
     else if (c === "f") st.ents.push({ k: "f", x: x * T + 2, y: y * T + 5, w: 20, h: 14, hx: x * T + 2, hy: y * T + 5, hp: 2, fl: 0, t: Math.random() * 9, face: 1, tilt: 0 });
     else if (c === "C") st.cps.push({ x: x * T, y: y * T, on: false });
@@ -5415,9 +5433,119 @@ function ctSees(st, x0, y0, x1, y1) {
   const d = Math.hypot(x1 - x0, y1 - y0) || 1;
   return ctRay(st, x0, y0, (x1 - x0) / d, (y1 - y0) / d, d) >= d - 2;
 }
-// SNIPER: doesn't move. Sees you from any distance if no wall is in the way -> red laser wobbles around you and slowly
-// closes in (5-6 s), then stays ON you (1-2 s) and shoots. Hide while it aims = it stops. Hide after it locked = it
-// still shoots at the last place it saw you.
+// SNIPER: doesn't move. Sees you from any distance if no wall is in the way (it sees through iron bars and glass).
+// - Searching: the laser (dim) sweeps slowly to random places, stops, looks around, sometimes turns around.
+// - Aiming 5-6 s: the aim point follows you like a heavy rifle (it lags, overshoots when you change direction, shakes).
+//   It closes in slowly; when you move it has trouble: the aim gets worse and the countdown goes slower.
+// - Locked 1-2 s: the laser snaps on you (or on the last place it saw you) and it shoots.
+// - Hide while it aims = it stops. Hide after the lock = it still shoots your last spot.
+// FLAMETHROWER CHICKEN
+// Calm: walks like a black chicken (turns at walls and edges), sees ~300 px in front of it (70 px behind).
+// Alert (it saw you, or you shot it): runs to you, jumps over walls, holes, spikes and water/lava, jumps up to you,
+// drops down to you. Up close it burns you with its flamethrower (all the time). Sometimes (randomly, every 3-6 s)
+// it stops, charges 1 s and shoots a fire ball at you. It calms down after 6 s without seeing you.
+function ctFlamerAlert(st, e) {
+  const p = st.p;
+  e.alert = true; e.lastSeen = 0; e.last = { x: p.x + p.w / 2, y: p.y + p.h / 2 }; e.fbT = 1.5 + Math.random() * 2;
+  ctText(st, e.x + e.w / 2, e.y - 10, "!", "#ff8020");
+  beep([[500, 0, 0.06], [800, 0.06, 0.08]], "square", 0.04);
+}
+function ctFlamerStep(st, e, dt) {
+  const p = st.p, T = CT.T;
+  const ex = e.x + e.w / 2, ey = e.y + 6, nx = ex + e.dir * 12, ny = e.y + 9;
+  const pcx = p.x + p.w / 2, pcy = p.y + p.h / 2, dx = pcx - ex, dy = pcy - (e.y + e.h / 2);
+  const playing = p.deadT <= 0 && st.phase === "play";
+  const sees = playing && Math.abs(dx) < 300 && Math.abs(dy) < 170 && (e.alert || Math.sign(dx) === e.dir || Math.abs(dx) < 70) && (ctSees(st, ex, ey, pcx, pcy) || ctSees(st, ex, ey, pcx, p.y + 3));
+  if (sees) { e.lastSeen = 0; e.last = { x: pcx, y: pcy }; if (!e.alert) ctFlamerAlert(st, e); }
+  else e.lastSeen += dt;
+  if (e.alert && e.lastSeen > 6) { e.alert = false; e.charge = 0; }
+  e.vy = Math.min(CT.MAXFALL, e.vy + CT.GRAV * dt);
+  e.firing = false;
+  if (!e.alert) e.vx = e.dir * 40;
+  else if (e.charge > 0) {   // charging a fire ball: stands still
+    e.vx = 0;
+    if (Math.abs(dx) > 6) e.dir = Math.sign(dx);
+    e.charge -= dt;
+    if (Math.random() < 0.5) st.parts.push({ x: nx + (Math.random() - 0.5) * 20, y: ny + (Math.random() - 0.5) * 20, vx: 0, vy: 0, life: 0.2, col: "#ffb040", g: 0, to: { x: nx, y: ny } });
+    if (e.charge <= 0) {
+      const tx = sees ? pcx : e.last.x, ty = sees ? pcy : e.last.y, d = Math.hypot(tx - nx, ty - ny) || 1;
+      st.shots.push({ x: nx + e.dir * 4, y: ny, vx: (tx - nx) / d * 270, vy: (ty - ny) / d * 270, life: 3 });
+      beep([[200, 0, 0.08], [120, 0.05, 0.15]], "sawtooth", 0.07);
+      e.fbT = 3 + Math.random() * 3;
+    }
+  } else {
+    const tx = e.last ? e.last.x : pcx;
+    if (Math.abs(tx - ex) > 8) e.dir = Math.sign(tx - ex);
+    const near = Math.abs(tx - ex) < 26 && Math.abs(dy) < 30;
+    const tooHigh = e.lastSeen < 1 && dy < -110;   // higher than it can jump: keep you in sight and use fire balls
+    e.vx = near ? 0 : e.dir * 100;
+    if (tooHigh) { const adx = Math.abs(dx); e.vx = adx < 80 ? -e.dir * 70 : adx < 130 ? 0 : e.dir * 100; if (e.fbT > 1.2) e.fbT = 1.2; }
+    if (sees && Math.abs(dx) < 90 && Math.abs(dy) < 34) e.firing = true;   // close: FLAMES
+    e.fbT -= dt;
+    if (e.fbT <= 0) {
+      if (sees && e.ground && Math.hypot(dx, dy) > 60 && Math.random() < 0.7) { e.charge = 1; beep([[300, 0, 0.3], [450, 0.25, 0.3], [600, 0.5, 0.3]], "triangle", 0.04); }
+      else e.fbT = 0.6 + Math.random() * 1.2;
+    }
+    // smart moves (only on the ground)
+    if (e.ground && e.vx !== 0) {
+      const fx = e.dir > 0 ? e.x + e.w + 3 : e.x - 3, ftx = Math.floor(fx / T), footTy = Math.floor((e.y + e.h + 2) / T), midTy = Math.floor((e.y + e.h - 4) / T);
+      const under = ctTile(st, ftx, footTy), at = ctTile(st, ftx, midTy);
+      const groundAhead = ctSolid(under) || under === "=" || under === "H";
+      const wallAhead = ctSolid(at);
+      const danger = at === "^" || under === "^" || ctLiquid(under) || ctLiquid(at);
+      const playerBelow = pcy > e.y + e.h + 30;
+      const playerAbove = e.lastSeen < 1 && pcy < e.y - 34 && dy > -110 && Math.abs(dx) < 90;
+      const goingBack = Math.sign(e.vx) !== e.dir;
+      if (!goingBack && (wallAhead || danger || (!groundAhead && !playerBelow) || playerAbove)) { e.vy = -520; e.vx = e.dir * 125; e.air = true; }
+    }
+    if (e.air && !tooHigh) e.vx = e.dir * 125;
+  }
+  const hit = ctMove(st, e, dt);
+  if (e.ground) e.air = false;
+  if (!e.alert) {
+    if (hit) e.dir *= -1;
+    if (e.ground) { const fx = e.dir > 0 ? e.x + e.w + 1 : e.x - 1, c = ctTile(st, Math.floor(fx / T), Math.floor((e.y + e.h + 2) / T)); if (!(ctSolid(c) || c === "=")) e.dir *= -1; }
+  }
+  if (e.y > st.H * T + 40 || ctLiquid(ctTile(st, Math.floor((e.x + e.w / 2) / T), Math.floor((e.y + e.h - 4) / T)))) { e.dead = true; return; }
+  // flames
+  if (e.firing) {
+    const len = Math.max(8, ctRay(st, nx, ny, e.dir, 0, 80));
+    for (let i = 0; i < 3; i++) { const lf = Math.min(0.45, len / 300) * (0.6 + Math.random() * 0.5); st.parts.push({ x: nx, y: ny + (Math.random() - 0.5) * 3, vx: e.dir * (170 + Math.random() * 140), vy: (Math.random() - 0.5) * 70 - 10, life: lf, max: lf, fire: true, col: "#ffb030", g: -90 }); }
+    if (playing && ctHit({ x: e.dir > 0 ? nx : nx - len, y: ny - 12, w: len, h: 24 }, p)) ctHurt(st);
+    if ((e.fsnd = (e.fsnd || 0) - dt) <= 0) { e.fsnd = 0.12; beep([[70 + Math.random() * 50, 0, 0.1]], "sawtooth", 0.025); }
+  }
+}
+function ctDrawFlamer(c, x, y, dir, t, flash, alert, charge, walking) {   // box 18x16 · black chicken + fuel tank + flamethrower
+  const fx = x + 9, fy = y + 16, s = 0.85;
+  ctDrawChicken(c, fx, fy, dir, null, walking ? t : 0, s, flash ? CT_FLASH : CT_BLACK);
+  c.save(); c.translate(fx, fy); c.scale(s, s);
+  const bx = -dir * 9;
+  c.fillStyle = flash ? "#fff" : "#c85a10"; c.fillRect(bx - 4, -22, 8, 15);   // fuel tank
+  c.fillStyle = flash ? "#fff" : "#ffa040"; c.fillRect(bx - 4, -22, 8, 2); c.fillRect(bx - 3, -17, 1, 8);
+  c.fillStyle = "#6a2a00"; c.fillRect(bx - 4, -13, 8, 1);
+  c.fillStyle = "#444"; c.fillRect(bx - 2, -24, 4, 2);
+  c.strokeStyle = "#2a2a2a"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(bx, -8); c.quadraticCurveTo(0, -1, dir * 5, -8); c.stroke();   // hose
+  c.fillStyle = "#4a4a50"; c.fillRect(dir * 4 - 3.5, -20.5, 7, 3);   // goggles
+  c.fillStyle = alert ? "#ff4020" : "#8ac8ff"; c.fillRect(dir * 5.5 - 1, -20, 2, 2);
+  c.fillStyle = "#34343a"; c.fillRect(dir > 0 ? 2 : -14, -10, 12, 3);   // flamethrower
+  c.fillStyle = "#6a6a72"; c.fillRect(dir > 0 ? 12 : -16, -11, 4, 5);
+  c.restore();
+  const tx = fx + dir * 14, ty = fy - 7;
+  if (charge > 0) {   // charging glow
+    const k = 1 - charge;
+    c.fillStyle = "rgba(255,120,30," + (0.25 + 0.3 * k).toFixed(2) + ")"; c.beginPath(); c.arc(tx, ty, 4 + k * 8, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#ffd060"; c.beginPath(); c.arc(tx, ty, 2 + k * 3, 0, Math.PI * 2); c.fill();
+  } else if (alert) {   // pilot light
+    c.fillStyle = Math.floor(t * 20) % 2 ? "#60a0ff" : "#ffa030"; c.fillRect(tx - 1, ty - 2, 2, 2);
+  }
+}
+const ctUpAngle = (a) => { while (a > Math.PI / 2) a -= Math.PI * 2; while (a <= -Math.PI * 1.5) a += Math.PI * 2; return a; };   // angles that turn through the TOP, never through the floor
+function ctSniperFront(e, a) {   // turn an angle into "facing side + small angle in front of it"
+  e.dir = Math.cos(a) >= 0 ? 1 : -1;
+  let r = e.dir > 0 ? a : Math.PI - a;
+  while (r > Math.PI) r -= Math.PI * 2; while (r < -Math.PI) r += Math.PI * 2;
+  e.sr = ctClamp(r, -0.35, 0.12); e.srTo = e.sr;
+}
 function ctSniperStep(st, e, dt) {
   const p = st.p;
   e.vy = Math.min(CT.MAXFALL, e.vy + CT.GRAV * dt); e.vx = 0; ctMove(st, e, dt);
@@ -5427,25 +5555,62 @@ function ctSniperStep(st, e, dt) {
   const pcx = p.x + p.w / 2, pcy = p.y + p.h / 2;
   const seen = p.deadT <= 0 && st.phase === "play" && (ctSees(st, ex, ey, pcx, pcy) || ctSees(st, ex, ey, pcx, p.y + 3));
   if (seen) e.last = { x: pcx, y: pcy };
-  let tx = null, ty = null;
-  if (e.mode === "cool") { e.cd -= dt; if (e.cd <= 0) e.mode = "idle"; }
-  else if (e.mode === "idle") { if (seen) { e.mode = "aim"; e.aimT = 0; e.aimDur = 5 + Math.random(); e.lost = 0; beep([[1500, 0, 0.05], [1500, 0.1, 0.05]], "square", 0.03); } }
-  else if (e.mode === "aim") {
+  // player speed (for the "trouble aiming" part)
+  const pv = Math.hypot(p.vx, p.vy);
+  if (e.sweepA == null) { e.sweepA = e.dir > 0 ? 0 : Math.PI; e.sr = 0; e.srTo = 0; e.sweepWait = Math.random(); e.turnT = 0; e.scans = 0; e.ax = ex + Math.cos(e.sweepA) * 200; e.ay = ey + Math.sin(e.sweepA) * 200; e.avx = 0; e.avy = 0; }
+  let tx = null, ty = null, k = 60, damp = 9, search = false;
+  if (e.mode === "cool") { e.cd -= dt; if (e.cd <= 0) { e.mode = "idle"; e.sweepWait = 0.4; } }
+  else if (e.mode === "idle") {
     if (seen) {
-      e.lost = 0; e.aimT += dt;
-      const k = Math.min(1, e.aimT / e.aimDur), amp = 70 * Math.pow(1 - k, 1.4);
-      tx = pcx + Math.sin(e.t * 2.3) * amp + Math.sin(e.t * 5.1) * amp * 0.25; ty = pcy + Math.cos(e.t * 1.7) * amp * 0.7;
-      if (k >= 1) { e.mode = "lock"; e.lockT = 1 + Math.random(); beep([[900, 0, 0.08], [1200, 0.1, 0.08], [1600, 0.2, 0.12]], "square", 0.05); }
-    } else { e.lost += dt; if (e.lost > 0.35) { e.mode = "idle"; e.laser = null; } else if (e.laser) { tx = e.laser.tx; ty = e.laser.ty; } }
+      e.mode = "aim"; e.aimT = 0; e.aimDur = 5 + Math.random(); e.lost = 0;
+      ctText(st, e.x + e.w / 2, e.y - 10, "!", "#ff4040");
+      beep([[1500, 0, 0.05], [1500, 0.1, 0.05]], "square", 0.03);
+    } else {
+      // searching: looks IN FRONT of it and scans slowly up and down around the height where you could be.
+      // After a few scans it turns around (quick turn, the laser is off while it turns).
+      search = true;
+      if (e.turnT > 0) {
+        e.turnT -= dt;
+        if (e.turnT <= 0) { e.dir *= -1; e.sr = 0; e.srTo = -0.1; const a0 = e.dir > 0 ? 0 : Math.PI; e.ax = ex + Math.cos(a0) * 200; e.ay = ey; e.avx = e.avy = 0; e.sweepWait = 0.4; }
+        else { e.laser = null; return; }
+      }
+      const da = e.srTo - e.sr;
+      if (Math.abs(da) > 0.005) e.sr += Math.sign(da) * Math.min(Math.abs(da), 0.35 * dt);
+      else if ((e.sweepWait -= dt) <= 0) {
+        e.scans++;
+        if (e.scans >= 4 && Math.random() < 0.35) { e.scans = 0; e.turnT = 0.45; e.laser = null; return; }   // look behind
+        e.srTo = e.srTo <= -0.08 ? 0.02 + Math.random() * 0.08 : -0.12 - Math.random() * 0.2;   // down a bit, then up a bit (about -18° .. +6°)
+        e.sweepWait = 0.5 + Math.random() * 0.9;
+      }
+      e.sweepA = e.dir > 0 ? e.sr : Math.PI - e.sr;
+      tx = ex + Math.cos(e.sweepA) * 200; ty = ey + Math.sin(e.sweepA) * 200;
+      k = 25; damp = 10;
+    }
+  }
+  if (e.mode === "aim") {
+    if (seen) {
+      e.lost = 0;
+      const moving = pv > 60;
+      e.aimT += dt * (moving ? 0.55 : 1);   // harder to aim at a moving target
+      const q = Math.min(1, e.aimT / e.aimDur);
+      const amp = 70 * Math.pow(1 - q, 1.4) + Math.min(45, pv * 0.18) * (1 - q * 0.6);
+      tx = pcx + Math.sin(e.t * 2.3) * amp + Math.sin(e.t * 5.1) * amp * 0.25;
+      ty = pcy + Math.cos(e.t * 1.7) * amp * 0.7;
+      k = 18 + 40 * q; damp = 5 + 4 * q;   // heavy at first (lags + overshoots), steadier at the end
+      if (q >= 1) { e.mode = "lock"; e.lockT = 1 + Math.random(); beep([[900, 0, 0.08], [1200, 0.1, 0.08], [1600, 0.2, 0.12]], "square", 0.05); }
+    } else {
+      e.lost += dt;
+      tx = e.ax; ty = e.ay;
+      if (e.lost > 0.35) { e.mode = "idle"; ctSniperFront(e, Math.atan2(e.ay - ey, e.ax - ex)); e.sweepWait = 1.2; e.scans = 0; }
+    }
   } else if (e.mode === "lock") {
     e.lockT -= dt;
-    tx = e.last.x; ty = e.last.y;   // stays on you, or on the last place it saw you
-    if (e.lockT <= 0) {   // BANG
+    tx = e.last.x; ty = e.last.y; k = 160; damp = 24;   // snaps on you, or on the last place it saw you
+    if (e.lockT <= 0) {   // BANG (straight at the last seen spot)
       const dx0 = tx - ex, dy0 = ty - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
       const len = ctRay(st, ex, ey, dx, dy, 3000);
       e.shot = { x1: ex + dx * len, y1: ey + dy * len }; e.tracer = 0.18;
       for (let d = 0; d < len; d += 4) { const gx = Math.floor((ex + dx * d) / CT.T), gy = Math.floor((ey + dy * d) / CT.T); if (ctTile(st, gx, gy) === "Q" && gy < st.H && gx >= 0 && gx < st.W) ctBreak(st, gx, gy); }   // the bullet breaks glass
-      // does the bullet line touch the player?
       if (p.deadT <= 0) {
         const qx = pcx - ex, qy = pcy - ey, along = qx * dx + qy * dy, off = Math.abs(qx * dy - qy * dx);
         if (along > 0 && along < len + 4 && off < 11) ctHurt(st);
@@ -5454,15 +5619,24 @@ function ctSniperStep(st, e, dt) {
       st.shake = Math.max(st.shake, 0.2);
       beep([[120, 0, 0.12], [60, 0.03, 0.2]], "sawtooth", 0.09);
       e.mode = "cool"; e.cd = 2; e.laser = null;
+      e.ax = e.shot.x1; e.ay = e.shot.y1; e.avx = e.avy = 0;
+      ctSniperFront(e, Math.atan2(dy, dx)); e.scans = 0;
+      return;
     }
   }
-  if (tx != null) {
-    e.dir = tx >= e.x + e.w / 2 ? 1 : -1;
-    const dx0 = tx - ex, dy0 = ty - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
-    const len = ctRay(st, ex, ey, dx, dy, 3000);   // the laser goes past you and stops on a wall
-    e.gun = Math.atan2(dy, dx);
-    e.laser = { x0: ex, y0: ey, x1: ex + dx * len, y1: ey + dy * len, tx, ty, lock: e.mode === "lock" };
-  } else if (e.mode !== "aim") e.laser = null;
+  if (tx == null) { if (e.mode === "cool") e.laser = null; return; }
+  // the aim point moves like a heavy rifle: spring + damping (lags behind, overshoots, then settles)
+  e.avx += ((tx - e.ax) * k - e.avx * damp) * dt;
+  e.avy += ((ty - e.ay) * k - e.avy * damp) * dt;
+  e.ax += e.avx * dt; e.ay += e.avy * dt;
+  let jx = 0, jy = 0;
+  if (e.mode === "aim") { const sh = 2.2 * (1 - Math.min(1, e.aimT / e.aimDur)) + (pv > 60 ? 1.2 : 0); jx = (Math.random() - 0.5) * sh; jy = (Math.random() - 0.5) * sh; }   // shaky hands
+  const ax = e.ax + jx, ay = e.ay + jy;
+  if (Math.abs(ax - (e.x + e.w / 2)) > 4) e.dir = ax >= e.x + e.w / 2 ? 1 : -1;
+  const dx0 = ax - ex, dy0 = ay - ey, d0 = Math.hypot(dx0, dy0) || 1, dx = dx0 / d0, dy = dy0 / d0;
+  const len = ctRay(st, ex, ey, dx, dy, 3000);   // the laser goes past you and stops on a wall
+  e.gun = Math.atan2(dy, dx);
+  e.laser = { x0: ex, y0: ey, x1: ex + dx * len, y1: ey + dy * len, tx: ax, ty: ay, lock: e.mode === "lock", search };
 }
 function ctStep(st, inp, dt) {
   const p = st.p, T = CT.T;
@@ -5577,6 +5751,7 @@ function ctStep(st, inp, dt) {
     for (const e of st.ents) {
       if (e.dead || !ctHit({ x: b.x - 1, y: b.y - 1, w: 2, h: 2 }, e)) continue;
       b.life = 0; e.hp--; e.fl = 0.1;
+      if (e.k === "F" && !e.alert) ctFlamerAlert(st, e);   // shooting it makes it angry
       if (e.k === "f") { e.x += Math.sign(b.vx) * 4; e.y += Math.sign(b.vy) * 3; }
       if (e.hp <= 0) {
         e.dead = true; st.kills++;
@@ -5587,12 +5762,29 @@ function ctStep(st, inp, dt) {
     }
   }
   st.pel = st.pel.filter((b) => b.life > 0);
+  // fire balls
+  for (const f of st.shots) {
+    f.life -= dt; f.x += f.vx * dt; f.y += f.vy * dt;
+    if (Math.random() < 0.8) { const lf = 0.25 + Math.random() * 0.2; st.parts.push({ x: f.x + (Math.random() - 0.5) * 6, y: f.y + (Math.random() - 0.5) * 6, vx: -f.vx * 0.1, vy: -20 - Math.random() * 30, life: lf, max: lf, fire: true, col: "#ff9a20", g: -80 }); }
+    const c = ctBlockAt(st, f.x, f.y, "I");
+    if (c || f.y > st.H * T + 40 || f.life <= 0) {
+      f.life = 0;
+      const tx = Math.floor(f.x / T), ty = Math.floor(f.y / T);
+      if ((c === "%" || c === "Q") && ty >= 0 && ty < st.H && tx >= 0 && tx < st.W) ctBreak(st, tx, ty);   // burns crates, breaks glass
+      ctBurst(st, f.x, f.y, 14, ["#ff5010", "#ff9a20", "#ffd040", "#555"], 130, -40);
+      beep([[110, 0, 0.1]], "sawtooth", 0.05);
+      continue;
+    }
+    if (p.deadT <= 0 && Math.hypot(f.x - (p.x + p.w / 2), f.y - (p.y + p.h / 2)) < 12) { f.life = 0; ctBurst(st, f.x, f.y, 14, ["#ff5010", "#ff9a20", "#ffd040"], 130, -40); ctHurt(st); }
+  }
+  st.shots = st.shots.filter((f) => f.life > 0);
   // enemies
   const pcx = p.x + p.w / 2, pcy = p.y + p.h / 2;
   for (const e of st.ents) {
     if (e.dead) continue;
     e.fl = Math.max(0, e.fl - dt); e.t += dt;
     if (e.k === "n") { ctSniperStep(st, e, dt); }
+    else if (e.k === "F") { ctFlamerStep(st, e, dt); }
     else if (e.k === "w") {
       e.vx = e.dir * 45;
       e.vy = Math.min(CT.MAXFALL, e.vy + CT.GRAV * dt);
@@ -5614,7 +5806,7 @@ function ctStep(st, inp, dt) {
     }
     if (p.deadT <= 0 && ctHit({ x: p.x + 2, y: p.y + 2, w: p.w - 4, h: p.h - 3 }, e)) ctHurt(st);
   }
-  for (const q of st.parts) { q.life -= dt; q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
+  for (const q of st.parts) { q.life -= dt; if (q.to) { q.x += (q.to.x - q.x) * Math.min(1, dt * 12); q.y += (q.to.y - q.y) * Math.min(1, dt * 12); continue; } q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
   st.parts = st.parts.filter((q) => q.life > 0);
   for (const t of st.texts) { t.life -= dt * 0.8; t.y -= 30 * dt; }
   st.texts = st.texts.filter((t) => t.life > 0);
@@ -6003,6 +6195,7 @@ function ctDrawWorld(c, st, inp, now) {
   for (const e of st.ents) if (!e.dead && vis(e.x, e.y)) {
     if (e.k === "w") ctDrawBlackChicken(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0);
     else if (e.k === "n") ctDrawSniper(c, Math.round(e.x), Math.round(e.y), e.dir, e.gun, e.t, e.fl > 0, e.mode === "aim" || e.mode === "lock");
+    else if (e.k === "F") ctDrawFlamer(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0, e.alert, e.charge, Math.abs(e.vx) > 1 && e.ground);
     else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, e.face || 1, e.tilt || 0);
   }
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
@@ -6012,23 +6205,34 @@ function ctDrawWorld(c, st, inp, now) {
   for (const e of st.ents) {
     if (e.k !== "n" || e.dead) continue;
     if (e.laser) {
-      const L = e.laser, pulse = L.lock ? 0.75 + Math.sin(now * 30) * 0.25 : 0.45;
+      const L = e.laser, pulse = L.lock ? 0.75 + Math.sin(now * 30) * 0.25 : L.search ? 0.22 : 0.45;
       c.strokeStyle = "rgba(255,0,0," + (pulse * 0.25).toFixed(2) + ")"; c.lineWidth = L.lock ? 8 : 6;   // glow
       c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
       c.strokeStyle = "rgba(255,30,30," + pulse.toFixed(2) + ")"; c.lineWidth = L.lock ? 3 : 2;
       c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
       c.strokeStyle = "rgba(255,200,200," + (pulse * 0.8).toFixed(2) + ")"; c.lineWidth = 1;
       c.beginPath(); c.moveTo(L.x0, L.y0); c.lineTo(L.x1, L.y1); c.stroke();
-      c.fillStyle = "#ff2020"; c.beginPath(); c.arc(L.x1, L.y1, L.lock ? 4 : 3, 0, Math.PI * 2); c.fill();
+      c.fillStyle = L.search ? "rgba(255,40,40,.5)" : "#ff2020"; c.beginPath(); c.arc(L.x1, L.y1, L.lock ? 4 : L.search ? 2 : 3, 0, Math.PI * 2); c.fill();
     }
     if (e.tracer > 0 && e.shot) {
       c.strokeStyle = "rgba(255,240,160," + (e.tracer / 0.18).toFixed(2) + ")"; c.lineWidth = 3;
       c.beginPath(); c.moveTo(e.x + e.w / 2 + e.dir * 3, e.y + 5); c.lineTo(e.shot.x1, e.shot.y1); c.stroke();
     }
   }
+  for (const f of st.shots) {
+    c.fillStyle = "rgba(255,110,20,.3)"; c.beginPath(); c.arc(f.x, f.y, 10, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#ff6a10"; c.beginPath(); c.arc(f.x, f.y, 6, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#ffe070"; c.beginPath(); c.arc(f.x, f.y, 3, 0, Math.PI * 2); c.fill();
+  }
   c.fillStyle = "#ffe080";
   for (const b of st.pel) c.fillRect(Math.round(b.x) - 1, Math.round(b.y) - 1, 3, 3);
-  for (const q of st.parts) { c.fillStyle = q.col; c.fillRect(Math.round(q.x) - 1, Math.round(q.y) - 1, 3, 3); }
+  for (const q of st.parts) {
+    if (q.fire) {   // flame puff: grows, goes yellow -> orange -> red -> smoke
+      const k = 1 - q.life / q.max, r = 2.5 + k * 6;
+      c.fillStyle = k < 0.25 ? "#fff0a0" : k < 0.5 ? "#ffb030" : k < 0.75 ? "#ff5a18" : "rgba(90,70,60,.6)";
+      c.globalAlpha = 1 - k * 0.6; c.beginPath(); c.arc(q.x, q.y, r, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+    } else { c.fillStyle = q.col; c.fillRect(Math.round(q.x) - 1, Math.round(q.y) - 1, 3, 3); }
+  }
   for (const t of st.texts) { c.globalAlpha = Math.max(0, Math.min(1, t.life * 2)); ctTextOut(c, t.text, t.x, t.y, t.col, "bold 12px monospace"); c.globalAlpha = 1; }
   c.restore();
   if (inp.mouseAim && st.phase === "play") {
@@ -6411,6 +6615,7 @@ function ctEdTile(c, ch, px, py, top = true) {
   else if (ch === "w") ctDrawBlackChicken(c, px + 3, py + 8, 1, 0, false);
   else if (ch === "f") ctDrawHeliChicken(c, px + 2, py + 8, 0.2, false, 1);
   else if (ch === "n") ctDrawSniper(c, px + 3, py + 8, -1, Math.PI, 0, false, false);
+  else if (ch === "F") ctDrawFlamer(c, px + 3, py + 8, 1, 0, false, false, 0, false);
   else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
 }
 function ctThumb(k, size = 32, bg = "#1d1d3a") {
@@ -6560,7 +6765,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
