@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-JQFJvlrKTlTZnoM51YN4FUB+UCP+MdXtSDQcun5UG2c=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-e+c7DR6SDB2/bE0EqzATMoZL8NyzLIJGwC6NgQRi6fA=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .ctbuild { display: flex; flex-direction: column; gap: 3px; }
   .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
@@ -1118,7 +1137,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.52";
+const APP_VERSION = "10.53";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5512,6 +5531,10 @@ function ctWorldStars(w, extraSlot) {
   for (let l = 1; l <= 5; l++) { const sl = w + "-" + l; if (o[sl + "s"] || sl === extraSlot) n++; }
   return n;
 }
+// normal players must never find out that secret levels exist (only admins see the secret door, stars count, "SECRET LEVEL"...)
+const ctSecretHidden = () => !S.isAdmin;
+const ctIsSecret = (slot) => !!slot && String(slot).endsWith("S");
+const ctSlotShown = (slot) => !slot ? "" : ctIsSecret(slot) && ctSecretHidden() ? "" : slot + " · ";   // "1-S · " is never shown to players
 function ctSecretDoor(st) {
   const lv = st.level, w = lv.slot ? String(lv.slot)[0] : null;
   if (!w || lv.slot.endsWith("S")) return { open: false, msg: "This door only works in story levels." };
@@ -5978,13 +6001,14 @@ function ctStep(st, inp, dt) {
     for (const k of st.stars) if (!k.got && ctHit(p, k)) {
       k.got = true; st.gotStar = true;
       if (st.level.slot && st.sdoors.length && ctWorldStars(String(st.level.slot)[0], st.level.slot) >= 5) st.sdoorOpen = true;
-      ctText(st, k.x + 8, k.y - 6, st.hadStar ? "⭐ (already found)" : "⭐ SECRET FOUND!", "#ffe040");
+      ctText(st, k.x + 8, k.y - 6, ctSecretHidden() ? "⭐" : st.hadStar ? "⭐ (already found)" : "⭐ SECRET FOUND!", "#ffe040");
       ctBurst(st, k.x + 8, k.y + 8, 16, ["#ffe040", "#fff", "#ffb020"], 150, 100);
       beep([[988, 0, 0.08], [1319, 0.08, 0.08], [1568, 0.16, 0.08], [1976, 0.24, 0.2]], "square", 0.05);
     }
     for (const d of st.sdoors) if (ctHit(p, { x: d.x + 4, y: d.y - 8, w: 16, h: 32 }) && st.time > (st.doorMsgT || 0)) {
       const info = ctSecretDoor(st);
       if (info.open) { st.phase = "secret"; st.winTime = st.time; beep([[392, 0, 0.12], [523, 0.1, 0.12], [659, 0.2, 0.12], [784, 0.3, 0.12], [1047, 0.4, 0.3]], "triangle", 0.06); break; }
+      if (ctSecretHidden()) continue;   // locked = it isn't there for players
       st.doorMsgT = st.time + 2;
       ctText(st, d.x + 12, d.y - 16, info.msg, "#d0a0ff");
       beep([[200, 0, 0.1], [150, 0.1, 0.15]], "square", 0.04);
@@ -6484,7 +6508,7 @@ function ctTextOut(c, text, x, y, col = "#fff", font = "bold 14px monospace", al
   c.fillStyle = col; c.fillText(text, x, y);
   c.restore();
 }
-function ctLevelLabel(level) { return !level.slot ? "" : String(level.slot).endsWith("S") ? "🔮 SECRET LEVEL · WORLD " + level.slot[0] : "WORLD " + level.slot + " · " + ctWorldOf(level.slot).name.toUpperCase(); }
+function ctLevelLabel(level) { return !level.slot ? "" : ctIsSecret(level.slot) ? (ctSecretHidden() ? "WORLD " + level.slot[0] + " · " + ctWorldOf(level.slot).name.toUpperCase() : "🔮 SECRET LEVEL · WORLD " + level.slot[0]) : "WORLD " + level.slot + " · " + ctWorldOf(level.slot).name.toUpperCase(); }
 function ctDrawLoading(c, st, pct, now) {
   const W = CT.VW, H = CT.VH;
   c.fillStyle = "#000080"; c.fillRect(0, 0, W, H);
@@ -6519,7 +6543,7 @@ function ctDrawWorld(c, st, inp, now) {
     }
   for (const e of st.exits) if (vis(e.x, e.y)) ctDrawDoor(c, e.x, e.y, now);
   for (const sg of st.signs) if (vis(sg.x, sg.y)) ctDrawSign(c, sg.x, sg.y, sg.on);
-  for (const d of st.sdoors) if (vis(d.x, d.y)) ctDrawSecretDoor(c, d.x, d.y, now, st.sdoorOpen);
+  for (const d of st.sdoors) if (vis(d.x, d.y) && (st.sdoorOpen || !ctSecretHidden())) ctDrawSecretDoor(c, d.x, d.y, now, st.sdoorOpen);
   for (const k of st.stars) if (!k.got && vis(k.x, k.y)) ctDrawStar(c, k.x + 8, k.y + 8 + Math.sin(now * 3 + k.t) * 2, 8, now, st.hadStar);
   for (const f of st.cps) if (vis(f.x, f.y)) ctDrawFlag(c, f.x, f.y, f.on);
   for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
@@ -6653,7 +6677,7 @@ function ctStoryLevel(slot) { const L = S.ctStory?.[slot]; if (!L || !L.map) ret
 let ctRunId = 0;
 function openCtPlay(level) {
   const runId = ++ctRunId;
-  const titleOf = (lv) => "Chicken Tower - " + (lv.slot ? lv.slot + " · " : "") + lv.name;
+  const titleOf = (lv) => "Chicken Tower - " + ctSlotShown(lv.slot) + lv.name;
   const win = openWindow(titleOf(level), "🐔", { key: "ct-play" });
   win.w.classList.add("ctwin");
   win.w.style.left = Math.max(8, Math.round((vwZ() - win.w.offsetWidth) / 2)) + "px";
@@ -6695,7 +6719,7 @@ function openCtPlay(level) {
   function setLevel(lv) {
     level = lv;
     win.setTitle(titleOf(level));
-    info.textContent = (level.slot ? level.slot + " · " : "") + level.name;
+    info.textContent = ctSlotShown(level.slot) + level.name;
     newB.hidden = !level.random;
     editB.hidden = !S.isAdmin || !!level.test;
     menuB.textContent = level.slot ? "📖 Story" : "📋 Menu";
@@ -6708,6 +6732,7 @@ function openCtPlay(level) {
     for (const k of ["left", "right", "jump", "down", "fire", "up"]) inp[k] = false;
   }
   function restart(showTitle) {
+    win.w.classList.remove("ctcrash");
     st = ctNewGame(level);
     st.tip = Math.floor(Math.random() * 99);
     st.fast = !first && !showTitle;
@@ -6730,9 +6755,10 @@ function openCtPlay(level) {
         if (rec) store(k, String(st.winTime));
         ctMenuRefresh && ctMenuRefresh();
       }
-      if (newStar) res.append(el("span", null, "⭐ Secret saved! World " + level.slot[0] + ": " + ctWorldStars(level.slot[0]) + "/5 ⭐"));
-      res.append(el("span", null, "🏆 " + (level.slot && level.slot.endsWith("S") ? "🔮 SECRET LEVEL cleared" : level.slot ? "Level " + level.slot + " cleared" : st.theme === "tower" ? "You escaped the tower" : "Level cleared") + " in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : old > 0 ? " · Best: " + ctFmt(old) : "")));
-      if (level.slot && level.slot.endsWith("S")) res.append(el("span", null, "🎉 You found the secret of World " + level.slot[0] + "!"));
+      if (newStar && ctSecretHidden()) res.append(el("span", null, "⭐ saved!"));
+      else if (newStar) res.append(el("span", null, "⭐ Secret saved! World " + level.slot[0] + ": " + ctWorldStars(level.slot[0]) + "/5 ⭐"));
+      res.append(el("span", null, "🏆 " + (ctIsSecret(level.slot) ? (ctSecretHidden() ? "Level cleared" : "🔮 SECRET LEVEL cleared") : level.slot ? "Level " + level.slot + " cleared" : st.theme === "tower" ? "You escaped the tower" : "Level cleared") + " in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : old > 0 ? " · Best: " + ctFmt(old) : "")));
+      if (ctIsSecret(level.slot) && !ctSecretHidden()) res.append(el("span", null, "🎉 You found the secret of World " + level.slot[0] + "!"));
       else if (level.slot && !level.test) {
         const nx = ctNextSlot(level.slot);
         if (nx) { const nb = mkB("▶ Next level (" + nx + ")", null, () => { const lv = ctStoryLevel(nx); if (lv) setLevel(lv); }); nb.classList.add("msgo"); res.append(nb); }
@@ -6809,7 +6835,7 @@ function openCtPlay(level) {
     } else if (st.phase === "glitch") {
       acc = 0; st.glitchT += dt;
       if (st.glitchT < 2.2 && (st.gsnd = (st.gsnd || 0) - dt) <= 0) { st.gsnd = 0.04 + Math.random() * 0.08; beep([[60 + Math.random() * 1800, 0, 0.04 + Math.random() * 0.06]], Math.random() < 0.5 ? "square" : "sawtooth", 0.05); }
-      if (st.glitchT > 2.2 + 0.9 + 3) { st.phase = "win"; st.blackWin = true; beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06); }
+      if (st.glitchT > 2.2 + 0.9 + 3) { st.phase = "win"; st.blackWin = true; win.w.classList.remove("ctcrash"); win.setTitle(titleOf(level)); beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06); }
     } else if (st.phase === "secret") {   // went through the secret door: this level counts as cleared, then the secret level
       if (!ended) {
         ended = true;
@@ -6826,7 +6852,9 @@ function openCtPlay(level) {
     } else acc = 0;
     // glitch death: 2.2 s glitch → the picture FREEZES (0.9 s, silent) → the window turns white like a crash (3 s) → "LEVEL CLEARED" on black
     if (st.phase === "glitch" && st.glitchT > 2.2) {
-      if (st.glitchT > 3.1) { c.fillStyle = "#fff"; c.fillRect(0, 0, CT.VW, CT.VH); }   // white = crashed
+      if (st.glitchT > 3.1 && !win.w.classList.contains("ctcrash")) {   // the WHOLE game window turns white like a program that stopped responding
+        win.w.classList.add("ctcrash"); win.setTitle(titleOf(level) + " (Not Responding)");
+      }
       return;   // frozen: keep the last picture (next frame already asked at the top)
     }
     if (st.blackWin && st.phase === "win") { c.fillStyle = "#000"; c.fillRect(0, 0, CT.VW, CT.VH); }
@@ -6834,15 +6862,15 @@ function openCtPlay(level) {
     if (st.phase === "glitch") ctGlitch(c, cv, st.glitchT);
     const blink = Math.floor(nowS * 2) % 2 === 0;
     const tower = st.theme === "tower";
-    if (st.phase === "secret") ctOverlay(c, [["🔮 SECRET DOOR", 150, "#d0a0ff", "bold 30px monospace"], ["Going to the secret level...", 190, "#fff", "13px monospace"]]);
+    if (st.phase === "secret") ctOverlay(c, ctSecretHidden() ? [] : [["🔮 SECRET DOOR", 150, "#d0a0ff", "bold 30px monospace"], ["Going to the secret level...", 190, "#fff", "13px monospace"]], ctSecretHidden());
     else if (st.phase === "title") ctOverlay(c, [
-      [level.slot && level.slot.endsWith("S") ? "🔮 SECRET LEVEL" : level.slot ? "WORLD " + level.slot : "CHICKEN TOWER", 78, level.slot && level.slot.endsWith("S") ? "#d0a0ff" : "#ffd040", "bold 34px monospace"],
+      [ctIsSecret(level.slot) ? (ctSecretHidden() ? "WORLD " + level.slot[0] : "🔮 SECRET LEVEL") : level.slot ? "WORLD " + level.slot : "CHICKEN TOWER", 78, ctIsSecret(level.slot) && !ctSecretHidden() ? "#d0a0ff" : "#ffd040", "bold 34px monospace"],
       [level.name.slice(0, 40), 112, "#fff", "bold 15px monospace"],
       [level.slot ? ctWorldOf(level.slot).name : st.W + " × " + st.H + " blocks", 136, "#a0c0ff", "12px monospace"],
       ["Reach the 🚪 EXIT" + (tower ? " at the top!" : "!"), 160, "#a0c0ff", "12px monospace"],
       ["Move A/D ←→ · Jump Space/W · Aim mouse · Shoot click", 200, "#ddd", "12px monospace"],
       [st.noGun ? "No shotgun in this level..." : "Shoot DOWN to fly higher! Stand still to reload.", 220, st.noGun ? "#ffb0b0" : "#ddd", "12px monospace"],
-      [st.stars.length ? (st.hadStar ? "⭐ You already found this level's secret" : "☆ A secret is hidden in this level...") : "", 244, "#ffe070", "12px monospace"],
+      [st.stars.length && !ctSecretHidden() ? (st.hadStar ? "⭐ You already found this level's secret" : "☆ A secret is hidden in this level...") : "", 244, "#ffe070", "12px monospace"],
       [blink ? "CLICK OR PRESS SPACE TO START" : "", 276, "#fff", "bold 16px monospace"],
     ]);
     else if (paused) ctOverlay(c, [["PAUSED", 160, "#fff", "bold 30px monospace"], ["Click or press P to continue", 195, "#ddd", "13px monospace"]]);
@@ -6946,7 +6974,7 @@ function openCtStory() {
         const b = el("button", null, ""); b.type = "button";
         const open = L && ctSlotOpen(slot), done = prog[slot] > 0;
         const hasStar = L && ctFgPart(L.map).includes("*");
-        b.append(el("b", null, slot + (prog[slot + "s"] ? " ⭐" : hasStar ? " ☆" : "")), el("br"), el("span", "dim", !L ? "—" : done ? "✔ " + ctFmt(prog[slot]) : open ? "▶ Play" : "🔒"));
+        b.append(el("b", null, slot + (prog[slot + "s"] ? " ⭐" : hasStar && !ctSecretHidden() ? " ☆" : "")), el("br"), el("span", "dim", !L ? "—" : done ? "✔ " + ctFmt(prog[slot]) : open ? "▶ Play" : "🔒"));
         b.title = L ? L.name : "Not made yet";
         b.disabled = !open;
         if (done) b.classList.add("done");
@@ -6962,7 +6990,7 @@ function openCtStory() {
       fs.append(row);
       const stars = ctWorldStars(wi + 1);
       const anySecret = [1, 2, 3, 4, 5].some((l) => ctFgPart(S.ctStory?.[(wi + 1) + "-" + l]?.map).includes("*"));
-      if (anySecret || stars) fs.append(el("div", "hint ctstars", "⭐ " + stars + " / 5 secrets found" + (stars >= 5 ? " · 🔮 The secret door of this world is OPEN!" : "")));
+      if ((anySecret || stars) && !ctSecretHidden()) fs.append(el("div", "hint ctstars", "⭐ " + stars + " / 5 secrets found" + (stars >= 5 ? " · 🔮 The secret door of this world is OPEN!" : "")));
       if (S.isAdmin) {   // only admins see the secret level here
         const sl = (wi + 1) + "-S", L = S.ctStory?.[sl];
         const r2 = el("div", "row-btns");
