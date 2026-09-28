@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-PgDZPWFygM4RXJIjV8/ArpkphGIZgYZrFc2A1rQS0YE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tLjq8aMqeZDECUDFvdxNJZ8WrCcX4swc5Ef7+UGJbjE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,23 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .ctbuild { display: flex; flex-direction: column; gap: 3px; }
   .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
@@ -1084,7 +1101,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.50";
+const APP_VERSION = "10.51";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5238,7 +5255,7 @@ const ctFgPart = (map) => String(map || "").split("\n~~\n")[0].split("\n~\n")[0]
 function ctUnpack(map) {
   const all = String(map || "").split("\n~~\n");   // 3rd part (optional): sign texts as JSON
   let signs = {}, opts = {};
-  if (all[1]) { try { const o = JSON.parse(all[1]); if (o && typeof o === "object") { for (const [k, v] of Object.entries(o)) if (/^\d+,\d+$/.test(k) && typeof v === "string") signs[k] = v.slice(0, 200); if (o._ && typeof o._ === "object") opts = { nogun: !!o._.nogun }; } } catch {} }
+  if (all[1]) { try { const o = JSON.parse(all[1]); if (o && typeof o === "object") { for (const [k, v] of Object.entries(o)) if (/^\d+,\d+$/.test(k) && typeof v === "string") signs[k] = v.slice(0, 200); if (o._ && typeof o._ === "object") opts = { nogun: !!o._.nogun, glitch: !!o._.glitch }; } } catch {} }
   const parts = all[0].split("\n~\n");
   const rows = ctNormRows(parts[0].split("\n"));
   const bg = parts[1] ? parts[1].split("\n").map((r) => r.replace(/(\d*)(\D)/g, (_, n, ch) => ch.repeat(Math.min(CT.MAX_W, +n || 1)))) : null;
@@ -5248,7 +5265,7 @@ function ctPack(rows, bg, signs, opts) {
   let m = rows.join("\n");
   if (bg && bg.some((r) => /[^.]/.test(r))) m += "\n~\n" + bg.map((r) => r.replace(/(.)\1*/g, (run, ch) => (run.length > 1 ? run.length : "") + ch)).join("\n");
   const extra = { ...(signs || {}) };
-  if (opts && opts.nogun) extra._ = { nogun: 1 };   // level options
+  if (opts && (opts.nogun || opts.glitch)) { extra._ = {}; if (opts.nogun) extra._.nogun = 1; if (opts.glitch) extra._.glitch = 1; }   // level options
   if (Object.keys(extra).length) m += "\n~~\n" + JSON.stringify(extra);
   return m;
 }
@@ -5376,6 +5393,7 @@ function ctNewGame(level) {
   st.cp = { x: st.p.x, y: st.p.y };
   st.locks = ctMakeLocks(stopCells, st.p);
   st.noGun = !!(level.opts && level.opts.nogun);
+  st.glitchEnd = !!((level.opts && level.opts.glitch) || level.slot === "1-S");   // dying = screen glitch, then "level cleared" (secret level 1)
   for (const L of st.locks) if (L.cells.some(([x, y]) => cutCells.includes(x + "," + y))) L.cut = true;
   st.hadStar = !!(level.slot && !level.test && ctProg()[level.slot + "s"]);
   st.sdoorOpen = !!(level.slot && !String(level.slot).endsWith("S") && (S.isAdmin || ctWorldStars(String(level.slot)[0]) >= 5));   // already found before: the star is shown as a ghost
@@ -5538,16 +5556,18 @@ function ctStrangerStep(st, dt) {
   st.cut.bars = ctClamp(st.cut.bars + (st.cut.t < 3.2 ? dt * 2 : -dt * 1.2), 0, 1);   // cinema bars at the start
   if (!s) return;
   s.t += dt;
-  const dx = p.x + p.w / 2 - (s.x + s.w / 2), dist = Math.abs(dx);
-  s.dir = dx >= 0 ? 1 : -1;
-  const go = st.cut.t > 0.6 && dist > 46;
-  const onScreen = s.x + s.w > st.camX - 10 && s.x < st.camX + CT.VW + 10;
-  s.vx = go ? s.dir * (onScreen ? 32 : 95) : 0;   // slow when you can see him, catches up when he's off the screen
+  // he keeps walking to the right (doesn't stop at the player); he only stops at the edge of a hole
+  s.dir = 1;
+  const onScreen = s.x + s.w > st.camX - 10 && s.x < st.camX + CT.VW + 10, behind = s.x + s.w < st.camX;
+  const go = st.cut.t > 0.6 && !s.stopped;
+  s.vx = go ? s.dir * (behind ? 95 : 32) : 0;   // slow; catches up only when he's still behind the screen
   s.vy = Math.min(CT.MAXFALL, s.vy + CT.GRAV * dt);
-  if (go && s.ground) {   // step over walls and holes like a person would
-    const fx = s.dir > 0 ? s.x + s.w + 3 : s.x - 3, ftx = Math.floor(fx / T);
+  if (go && s.ground) {
+    const fx = s.x + s.w + 3, ftx = Math.floor(fx / T);
     const under = ctTile(st, ftx, Math.floor((s.y + s.h + 2) / T)), at = ctTile(st, ftx, Math.floor((s.y + s.h - 4) / T));
-    if (ctSolid(at) || !(ctSolid(under) || under === "=" || under === "H") || ctLiquid(under) || under === "^" || at === "^") { s.vy = -520; s.vx = s.dir * 110; s.air = true; }
+    const hole = !(ctSolid(under) || under === "=" || under === "H") || ctLiquid(under) || under === "^" || at === "^" || ctLiquid(at);
+    if (hole) { s.vx = 0; s.stopped = true; }             // stops at the edge and stays there
+    else if (ctSolid(at)) { s.vy = -520; s.vx = s.dir * 110; s.air = true; }   // climbs over walls
   }
   if (s.air) s.vx = s.dir * 110;
   ctMove(st, s, dt);
@@ -5571,9 +5591,32 @@ function ctDrawStranger(c, s, now) {   // chicken with a gas mask and a red bere
   c.fillStyle = "#e0c040"; c.fillRect(d * 5 - 1, -22.5, 2, 2);   // badge
   c.restore();
 }
+// screen glitch: strips of the picture slide sideways, colors split, static noise, black frames (gets worse, then stops)
+function ctGlitch(c, cv, t) {
+  const W = CT.VW, H = CT.VH, k = Math.min(1, t / 1.8);
+  const n = 4 + Math.floor(k * 14);
+  for (let i = 0; i < n; i++) {   // sliding strips
+    const y = Math.floor(Math.random() * H), h = 2 + Math.floor(Math.random() * (6 + k * 26)), dx = Math.round((Math.random() - 0.5) * (20 + k * 120));
+    c.drawImage(cv, 0, y, W, h, dx, y, W, h);
+  }
+  c.save();
+  c.globalCompositeOperation = "lighter";   // color split
+  c.globalAlpha = 0.25 + k * 0.3;
+  c.drawImage(cv, Math.round(4 + k * 6), 0, W, H, 0, 0, W, H);
+  c.globalCompositeOperation = "source-over"; c.globalAlpha = 1;
+  for (let i = 0; i < 6 + k * 30; i++) {   // colored bars + noise blocks
+    c.fillStyle = ["rgba(255,0,60,.35)", "rgba(0,255,220,.35)", "#fff", "#000", "rgba(80,255,80,.4)"][Math.floor(Math.random() * 5)];
+    c.fillRect(Math.floor(Math.random() * W), Math.floor(Math.random() * H), 2 + Math.random() * (10 + k * 60), 1 + Math.random() * 4);
+  }
+  for (let y = 0; y < H; y += 3) { c.fillStyle = "rgba(0,0,0," + (0.08 + Math.random() * 0.1).toFixed(2) + ")"; c.fillRect(0, y, W, 1); }   // scanlines
+  if (Math.random() < 0.08 + k * 0.2) { c.fillStyle = Math.random() < 0.7 ? "#000" : "#fff"; c.globalAlpha = 0.5 + Math.random() * 0.5; c.fillRect(0, 0, W, H); c.globalAlpha = 1; }   // flicker
+  if (t > 2.2) { c.fillStyle = "rgba(0,0,0," + Math.min(1, (t - 2.2) / 0.4).toFixed(2) + ")"; c.fillRect(0, 0, W, H); }   // fades to black
+  c.restore();
+}
 function ctHurt(st) {
   const p = st.p;
   if (p.inv > 0 || p.deadT > 0 || st.phase !== "play") return;
+  if (st.glitchEnd) { st.phase = "glitch"; st.glitchT = 0; st.winTime = st.time; return; }   // no death: the screen breaks, then the level ends
   st.lives--; st.deaths++;
   p.deadT = 0.8;
   st.shake = 0.35;
@@ -5830,12 +5873,13 @@ function ctStep(st, inp, dt) {
     let dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
     if (st.cut) {
       if (st.cut.t < 1.4) dir = 0;             // the scene starts: no control for a moment
-      else if (dir < 0) dir = 1;               // he won't walk toward the stranger: ← makes him go right
+      else if (dir < 0 && st.stranger && p.x + p.w / 2 - (st.stranger.x + st.stranger.w / 2) > 0 && p.x + p.w / 2 - (st.stranger.x + st.stranger.w / 2) < 80) { dir = 1; p.scared = true; }   // close to the stranger: ← makes him walk right (slowly)
       if (st.cut.t < 1.4) { inp.jumpHit = false; }
     }
     const fyT = Math.floor((p.y + p.h + 1) / T), fl = ctTile(st, Math.floor((p.x + 1) / T), fyT), fr = ctTile(st, Math.floor((p.x + p.w - 1) / T), fyT);
     const onIce = p.ground && (fl === "e" || fr === "e");
-    p.vx += (dir * CT.RUN - p.vx) * Math.min(1, dt * (p.ground ? (onIce ? 1.6 : 18) : 5));
+    const runSp = p.scared ? 55 : CT.RUN; p.scared = false;
+    p.vx += (dir * runSp - p.vx) * Math.min(1, dt * (p.ground ? (onIce ? 1.6 : 18) : 5));
     if (dir && (!inp.mouseAim || st.noGun || st.cut)) p.face = dir;
     p.walk = p.ground && dir ? p.walk + dt : 0;
     p.coyote = p.ground ? 0.1 : Math.max(0, p.coyote - dt);
@@ -6747,6 +6791,10 @@ function openCtPlay(level) {
         const dNow = Math.hypot(st.goal.x - st.p.x, st.goal.y - st.p.y);
         if (!st.best || dNow < Math.hypot(st.goal.x - st.best.x, st.goal.y - st.best.y)) st.best = { x: st.p.x, y: st.p.y };
       }
+    } else if (st.phase === "glitch") {
+      acc = 0; st.glitchT += dt;
+      if ((st.gsnd = (st.gsnd || 0) - dt) <= 0) { st.gsnd = 0.04 + Math.random() * 0.08; beep([[60 + Math.random() * 1800, 0, 0.04 + Math.random() * 0.06]], Math.random() < 0.5 ? "square" : "sawtooth", 0.05); }
+      if (st.glitchT > 2.6) { st.phase = "win"; beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06); }
     } else if (st.phase === "secret") {   // went through the secret door: this level counts as cleared, then the secret level
       if (!ended) {
         ended = true;
@@ -6762,6 +6810,7 @@ function openCtPlay(level) {
       if (!ended) showResult();
     } else acc = 0;
     ctDrawWorld(c, st, inp, nowS);
+    if (st.phase === "glitch") ctGlitch(c, cv, st.glitchT);
     const blink = Math.floor(nowS * 2) % 2 === 0;
     const tower = st.theme === "tower";
     if (st.phase === "secret") ctOverlay(c, [["🔮 SECRET DOOR", 150, "#d0a0ff", "bold 30px monospace"], ["Going to the secret level...", 190, "#fff", "13px monospace"]]);
@@ -6987,7 +7036,10 @@ async function openCtEditor(start) {
   const gunC = el("input"); gunC.type = "checkbox"; gunC.checked = true;
   gunC.onchange = () => { dirty = true; status(); };
   const gunL = el("label", "check"); gunL.title = "Off = the player has NO shotgun in this level (can't shoot)"; gunL.append(gunC, " 🔫 Shotgun");
-  const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB, gunL);
+  const glC = el("input"); glC.type = "checkbox"; glC.checked = false;
+  glC.onchange = () => { dirty = true; status(); };
+  const glL = el("label", "check"); glL.title = "On = when the player would lose a life, the screen glitches and the level ends as CLEARED (always on in secret level 1-S)"; glL.append(glC, " 👾 Death = glitch + cleared");
+  const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB, gunL, glL);
   // ----- build menu -----
   let bgMode = false, cat = CT.CATS.some(([k]) => k === store("ct-cat")) ? store("ct-cat") : "basic";
   let recent = String(store("ct-recent") || "#=g%^").split("").filter((k) => CT.TOOLS.some((t) => t[0] === k)).slice(0, 10);
@@ -7064,7 +7116,7 @@ async function openCtEditor(start) {
   const bOpen = mk("📂 Open...", "Open a saved level", () => { openCtMenu(); });
   const bTest = mk("▶ Test", "Play your level now (it doesn't save it)", () => {
     if (!count().S) { toast("Put a 🏁 Start first."); return; }
-    openCtPlay({ id: customId, name: (nameI.value.trim() || "My level") + " (test)", rows: rowsOut(), bg: bgOut(), signs: signsOut(), opts: { nogun: !gunC.checked }, theme: effTheme(), test: true });
+    openCtPlay({ id: customId, name: (nameI.value.trim() || "My level") + " (test)", rows: rowsOut(), bg: bgOut(), signs: signsOut(), opts: { nogun: !gunC.checked, glitch: glC.checked || whereS.value === "1-S" }, theme: effTheme(), test: true });
   });
   const bSave = mk("💾 Save", "Save this level (everyone can play it)", () => save(false), "msgo");
   const bSaveNew = mk("💾 Save as new", "Save a copy as a new custom level", () => save(true));
@@ -7095,7 +7147,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (gunC.checked ? "" : " · 🚫🔫 no shotgun") + (n.R ? " · 🎬 stranger" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (gunC.checked ? "" : " · 🚫🔫 no shotgun") + (glC.checked || w === "1-S" ? " · 👾 glitch death" : "") + (n.R ? " · 🎬 stranger" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
@@ -7138,6 +7190,7 @@ async function openCtEditor(start) {
     const lay = ctSplitLayers(ctNormRows(lv.rows), lv.bg || null);
     g = lay.rows.map((r) => r.split("")); bgl = lay.bg.map((r) => r.split(""));
     gunC.checked = !(lv.opts && lv.opts.nogun);
+    glC.checked = !!(lv.opts && lv.opts.glitch) || loadedSlot === "1-S";
     sg = g.map((r, y) => r.map((ch, x) => (ch === "N" ? (lv.signs || {})[x + "," + y] || null : null)));
     dirty = !!lv.fresh; drawAll(); status();
     requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; wrap.scrollLeft = 0; });
@@ -7187,7 +7240,7 @@ async function openCtEditor(start) {
     if (!n.S) { toast("Put a 🏁 Start first."); return; }
     if (!n.E) { toast("Put a 🚪 Exit first."); return; }
     const w = asNew ? "custom" : whereS.value;
-    const map = ctPack(rowsOut(), bgOut(), signsOut(), { nogun: !gunC.checked });
+    const map = ctPack(rowsOut(), bgOut(), signsOut(), { nogun: !gunC.checked, glitch: glC.checked });
     if (map.length > 13000) { toast("This level is too big to save (" + map.length + " / 13000 letters). Make it a bit smaller."); return; }
     const data = { name, map, h: H(), w: W(), th: w === "custom" ? theme : ctSlotTheme(w), ts: now() };
     let path;
