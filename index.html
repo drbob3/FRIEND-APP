@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-3EofefodOJaDICcjyN3feq2B9xeWKHgCRIHMa2c0Kwo=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-PgDZPWFygM4RXJIjV8/ArpkphGIZgYZrFc2A1rQS0YE=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,23 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .ctbuild { display: flex; flex-direction: column; gap: 3px; }
   .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
@@ -1067,7 +1084,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.49";
+const APP_VERSION = "10.50";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5135,7 +5152,7 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwfnF+*Z|_NBGDPXtlvorjWkOihycIKQMzuHebL",
+  TILES: ".#=%^gdSECwfnF+*Z|_NRBGDPXtlvorjWkOihycIKQMzuHebL",
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
@@ -5173,6 +5190,7 @@ const CT = {
     ["C", "🚩", "Checkpoint", "Touch it: you come back here when you lose a life.", "things"], ["+", "❤", "Heart", "+1 life.", "things"],
     ["*", "⭐", "Secret star", "A hidden secret (1 per level). Take it and finish the level = ⭐ in the Story menu.", "things"],
     ["N", "🪧", "Sign", "Shows your text in a bubble when the player touches it (you go through it). Click the sign with this tool to write or change its text.", "utility"],
+    ["R", "🎬", "Stranger (cutscene)", "Invisible. Works like a ↔ camera stop. When the player touches it: cinema bars, the camera slides right, and a chicken with a gas mask and a red beret comes from the left and slowly follows the player. The player can't walk toward him (← = he walks right). 1 per level.", "utility"],
     ["|", "↔", "Camera stop ↔", "Invisible in the game. The screen can't scroll left/right past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
     ["_", "↕", "Camera stop ↕", "Invisible in the game. The screen can't scroll up/down past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
     ["Z", "🔮", "Secret door", "ONE per world. Opens with the 5 ⭐ of the world's 5 levels and leads to the world's secret level.", "things"],
@@ -5199,7 +5217,7 @@ function ctNormRows(rows) {
   while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
-const CT_MARK = "SECwfnF+*Z|_N";
+const CT_MARK = "SECwfnF+*Z|_NR";
 const CT_LEGACY_BG = { B: "#", G: "g", D: "d", P: "=", X: "%" };   // v10.39-10.41 background letters
 // A level has 2 layers of the same size: rows (normal blocks, markers) and bg (background blocks).
 // Saved in ONE string: normal rows, then "\n~\n", then the background rows packed as "12.3B" (count + block).
@@ -5219,17 +5237,19 @@ function ctSplitLayers(rows, bg) {
 const ctFgPart = (map) => String(map || "").split("\n~~\n")[0].split("\n~\n")[0];   // normal rows only
 function ctUnpack(map) {
   const all = String(map || "").split("\n~~\n");   // 3rd part (optional): sign texts as JSON
-  let signs = {};
-  if (all[1]) { try { const o = JSON.parse(all[1]); if (o && typeof o === "object") for (const [k, v] of Object.entries(o)) if (/^\d+,\d+$/.test(k) && typeof v === "string") signs[k] = v.slice(0, 200); } catch {} }
+  let signs = {}, opts = {};
+  if (all[1]) { try { const o = JSON.parse(all[1]); if (o && typeof o === "object") { for (const [k, v] of Object.entries(o)) if (/^\d+,\d+$/.test(k) && typeof v === "string") signs[k] = v.slice(0, 200); if (o._ && typeof o._ === "object") opts = { nogun: !!o._.nogun }; } } catch {} }
   const parts = all[0].split("\n~\n");
   const rows = ctNormRows(parts[0].split("\n"));
   const bg = parts[1] ? parts[1].split("\n").map((r) => r.replace(/(\d*)(\D)/g, (_, n, ch) => ch.repeat(Math.min(CT.MAX_W, +n || 1)))) : null;
-  return { ...ctSplitLayers(rows, bg), signs };
+  return { ...ctSplitLayers(rows, bg), signs, opts };
 }
-function ctPack(rows, bg, signs) {
+function ctPack(rows, bg, signs, opts) {
   let m = rows.join("\n");
   if (bg && bg.some((r) => /[^.]/.test(r))) m += "\n~\n" + bg.map((r) => r.replace(/(.)\1*/g, (run, ch) => (run.length > 1 ? run.length : "") + ch)).join("\n");
-  if (signs && Object.keys(signs).length) m += "\n~~\n" + JSON.stringify(signs);
+  const extra = { ...(signs || {}) };
+  if (opts && opts.nogun) extra._ = { nogun: 1 };   // level options
+  if (Object.keys(extra).length) m += "\n~~\n" + JSON.stringify(extra);
   return m;
 }
 function ctBlankRows(theme = "tower") {
@@ -5334,10 +5354,11 @@ function ctNewGame(level) {
   const H = g.length, W = g[0].length;
   const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], shots: [], stars: [], sdoors: [], signs: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
   let sx = 2, sy = H - 2, foundS = false;
-  const stopCells = [];
+  const stopCells = [], cutCells = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
     if (c === "|" || c === "_") stopCells.push([x, y, c]);
+    if (c === "R") { stopCells.push([x, y, "|"]); cutCells.push(x + "," + y); }   // the Stranger trigger is also a ↔ stop
     if (CT_MARK.includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
@@ -5354,6 +5375,8 @@ function ctNewGame(level) {
   st.p = { x: sx * T + 5, y: sy * T + T - 20, w: 14, h: 20, vx: 0, vy: 0, ground: false, face: 1, coyote: 0, jbuf: 0, jumping: false, dropT: 0, shells: CT.SHELLS, reload: 0, cd: 0, inv: 0, walk: 0, aim: 0, deadT: 0 };
   st.cp = { x: st.p.x, y: st.p.y };
   st.locks = ctMakeLocks(stopCells, st.p);
+  st.noGun = !!(level.opts && level.opts.nogun);
+  for (const L of st.locks) if (L.cells.some(([x, y]) => cutCells.includes(x + "," + y))) L.cut = true;
   st.hadStar = !!(level.slot && !level.test && ctProg()[level.slot + "s"]);
   st.sdoorOpen = !!(level.slot && !String(level.slot).endsWith("S") && (S.isAdmin || ctWorldStars(String(level.slot)[0]) >= 5));   // already found before: the star is shown as a ghost
   st.start = { x: st.p.x, y: st.p.y };
@@ -5496,6 +5519,57 @@ function ctCamLimits(st) {   // camera limits + the player's walls from the came
   if (o.maxX < o.minX) o.maxX = o.minX;
   if (o.maxY < o.minY) o.maxY = o.minY;
   return o;
+}
+// THE STRANGER (cutscene, user's design for secret level 1): a chicken with a gas mask and a red beret. Comes from the
+// left edge of the screen at the player's height and slowly walks to him (jumps over walls and holes). Never attacks:
+// it stops just behind the player, staring, and follows again when he moves. The player can't walk toward it.
+function ctStartStranger(st) {
+  const p = st.p, T = CT.T;
+  st.cut = { t: 0, bars: 0 };
+  const lim = ctCamLimits(st), camTo = ctClamp(p.x + p.w / 2 - CT.VW * 0.22, lim.minX, lim.maxX);   // where the camera is going
+  let sx = Math.max(0, camTo - 30), sy = p.y + p.h - 18;
+  for (let k = 0; k < 20 && (ctSolid(ctTile(st, Math.floor((sx + 9) / T), Math.floor((sy + 10) / T))) || ctSolid(ctTile(st, Math.floor((sx + 9) / T), Math.floor((sy + 17) / T)))); k++) sy -= T;   // not inside a wall
+  st.stranger = { x: sx, y: sy, w: 18, h: 18, vx: 0, vy: 0, dir: 1, t: 0, ground: false, walk: 0 };
+  beep([[196, 0, 0.5], [185, 0.5, 0.5], [175, 1.0, 0.9]], "triangle", 0.05);   // low, uneasy notes
+}
+function ctStrangerStep(st, dt) {
+  const s = st.stranger, p = st.p, T = CT.T;
+  st.cut.t += dt;
+  st.cut.bars = ctClamp(st.cut.bars + (st.cut.t < 3.2 ? dt * 2 : -dt * 1.2), 0, 1);   // cinema bars at the start
+  if (!s) return;
+  s.t += dt;
+  const dx = p.x + p.w / 2 - (s.x + s.w / 2), dist = Math.abs(dx);
+  s.dir = dx >= 0 ? 1 : -1;
+  const go = st.cut.t > 0.6 && dist > 46;
+  const onScreen = s.x + s.w > st.camX - 10 && s.x < st.camX + CT.VW + 10;
+  s.vx = go ? s.dir * (onScreen ? 32 : 95) : 0;   // slow when you can see him, catches up when he's off the screen
+  s.vy = Math.min(CT.MAXFALL, s.vy + CT.GRAV * dt);
+  if (go && s.ground) {   // step over walls and holes like a person would
+    const fx = s.dir > 0 ? s.x + s.w + 3 : s.x - 3, ftx = Math.floor(fx / T);
+    const under = ctTile(st, ftx, Math.floor((s.y + s.h + 2) / T)), at = ctTile(st, ftx, Math.floor((s.y + s.h - 4) / T));
+    if (ctSolid(at) || !(ctSolid(under) || under === "=" || under === "H") || ctLiquid(under) || under === "^" || at === "^") { s.vy = -520; s.vx = s.dir * 110; s.air = true; }
+  }
+  if (s.air) s.vx = s.dir * 110;
+  ctMove(st, s, dt);
+  if (s.ground) s.air = false;
+  s.walk = s.ground && s.vx ? s.walk + dt : 0;
+  if (s.y > st.H * T + 40 || ctLiquid(ctTile(st, Math.floor((s.x + 9) / T), Math.floor((s.y + 14) / T)))) { s.x = Math.max(0, st.camX - 30); s.y = p.y + p.h - 18; s.vy = 0; }   // never lost: comes back from the left
+}
+function ctDrawStranger(c, s, now) {   // chicken with a gas mask and a red beret
+  const fx = Math.round(s.x + 9), fy = Math.round(s.y + 18), d = s.dir, sc = 0.95;
+  ctDrawChicken(c, fx, fy, d, null, s.walk, sc, { body: "#cfcfc4", wing: "#a8a89c", eye: "#000", leg: "#c88a20" });
+  c.save(); c.translate(fx, fy); c.scale(sc, sc);
+  // gas mask: lower face + filter where the beak is, round goggles, strap
+  c.fillStyle = "#3c4238"; c.beginPath(); c.ellipse(d * 6, -15, 4.4, 3.2, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = "#2a2e28"; c.fillRect(d > 0 ? 8 : -13.5, -19.5, 5.5, 7);
+  c.fillStyle = "#6a7064"; c.fillRect(d > 0 ? 12.5 : -13.5, -18.5, 1, 5);
+  c.strokeStyle = "#2a2e28"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(d * 2.5, -18.3); c.lineTo(-d * 1.5, -17.5); c.stroke();
+  for (const gx of [d * 4.3, d * 7.6]) { c.fillStyle = "#1a1c18"; c.beginPath(); c.arc(gx, -18.4, 2, 0, Math.PI * 2); c.fill(); c.fillStyle = "#7fa888"; c.beginPath(); c.arc(gx, -18.4, 1.1, 0, Math.PI * 2); c.fill(); }
+  // red beret (instead of the comb)
+  c.fillStyle = "#b01818"; c.beginPath(); c.ellipse(d * 2.5, -21.5, 6, 2.6, -d * 0.2, 0, Math.PI * 2); c.fill();
+  c.fillStyle = "#801010"; c.fillRect(d * 2.5 - 5, -20.6, 10, 1.2);
+  c.fillStyle = "#e0c040"; c.fillRect(d * 5 - 1, -22.5, 2, 2);   // badge
+  c.restore();
 }
 function ctHurt(st) {
   const p = st.p;
@@ -5753,11 +5827,16 @@ function ctStep(st, inp, dt) {
     }
   } else {
     p.inv = Math.max(0, p.inv - dt);
-    const dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
+    let dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
+    if (st.cut) {
+      if (st.cut.t < 1.4) dir = 0;             // the scene starts: no control for a moment
+      else if (dir < 0) dir = 1;               // he won't walk toward the stranger: ← makes him go right
+      if (st.cut.t < 1.4) { inp.jumpHit = false; }
+    }
     const fyT = Math.floor((p.y + p.h + 1) / T), fl = ctTile(st, Math.floor((p.x + 1) / T), fyT), fr = ctTile(st, Math.floor((p.x + p.w - 1) / T), fyT);
     const onIce = p.ground && (fl === "e" || fr === "e");
     p.vx += (dir * CT.RUN - p.vx) * Math.min(1, dt * (p.ground ? (onIce ? 1.6 : 18) : 5));
-    if (dir && !inp.mouseAim) p.face = dir;
+    if (dir && (!inp.mouseAim || st.noGun || st.cut)) p.face = dir;
     p.walk = p.ground && dir ? p.walk + dt : 0;
     p.coyote = p.ground ? 0.1 : Math.max(0, p.coyote - dt);
     p.jbuf = inp.jumpHit ? 0.12 : Math.max(0, p.jbuf - dt);
@@ -5805,9 +5884,9 @@ function ctStep(st, inp, dt) {
     p.cd = Math.max(0, p.cd - dt);
     const cx = p.x + p.w / 2, cy = p.y + p.h - 9;
     if (inp.tap) { p.aim = Math.atan2(inp.tap.y + st.camY - cy, inp.tap.x + st.camX - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
-    else if (inp.mouseAim) { p.aim = Math.atan2(inp.my + st.camY - cy, inp.mx + st.camX - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
+    else if (inp.mouseAim && !st.noGun && !st.cut) { p.aim = Math.atan2(inp.my + st.camY - cy, inp.mx + st.camX - cx); p.face = Math.cos(p.aim) >= 0 ? 1 : -1; }
     else p.aim = inp.down && !p.ground ? Math.PI / 2 : inp.down ? (p.face > 0 ? 0.9 : Math.PI - 0.9) : p.face > 0 ? 0 : Math.PI;
-    if (inp.fireHit) ctShoot(st, p.aim);
+    if (inp.fireHit && !st.noGun && !st.cut) ctShoot(st, p.aim);
     inp.tap = null;
     for (let ty = Math.floor((p.y + p.h - 8) / T); ty <= Math.floor((p.y + p.h - 1) / T); ty++)
       for (let tx = Math.floor((p.x + 2) / T); tx <= Math.floor((p.x + p.w - 3) / T); tx++)
@@ -5831,7 +5910,7 @@ function ctStep(st, inp, dt) {
       ctText(st, k.x + 7, k.y - 4, "+1 ❤", "#f66"); beep([[880, 0, 0.06], [1320, 0.06, 0.1]], "square", 0.05);
     }
     for (const sg of st.signs) sg.on = ctHit(p, { x: sg.x + 2, y: sg.y - 6, w: T - 4, h: T + 6 });   // reading a sign
-    for (const L of st.locks) if (L.on && L.cells.some(([cx, cy]) => ctHit(p, { x: cx * T, y: cy * T, w: T, h: T }))) L.on = false;   // touched: the screen can scroll again
+    for (const L of st.locks) if (L.on && L.cells.some(([cx, cy]) => ctHit(p, { x: cx * T, y: cy * T, w: T, h: T }))) { L.on = false; if (L.cut && !st.cut) ctStartStranger(st); }   // touched: the screen can scroll again
     { const lim = ctCamLimits(st);
       if (lim.pR != null && p.x + p.w > lim.pR) { p.x = lim.pR - p.w; if (p.vx > 0) p.vx = 0; }
       if (lim.pL != null && p.x < lim.pL) { p.x = lim.pL; if (p.vx < 0) p.vx = 0; }
@@ -5934,12 +6013,14 @@ function ctStep(st, inp, dt) {
   st.parts = st.parts.filter((q) => q.life > 0);
   for (const t of st.texts) { t.life -= dt * 0.8; t.y -= 30 * dt; }
   st.texts = st.texts.filter((t) => t.life > 0);
+  if (st.cut) ctStrangerStep(st, dt);
   // camera
   const back = p.deadT > 0 && p.deadT < 0.4;
   const fx = back ? st.cp.x : p.x, fy = back ? st.cp.y : p.y;
   const lim = ctCamLimits(st);
   st.camY += (ctClamp(fy + p.h / 2 - CT.VH * 0.55, lim.minY, lim.maxY) - st.camY) * Math.min(1, dt * 7);
-  st.camX += (ctClamp(fx + p.w / 2 - CT.VW * 0.42 + (back ? 0 : p.face * 30), lim.minX, lim.maxX) - st.camX) * Math.min(1, dt * 5);
+  const look = st.cut ? CT.VW * 0.22 : CT.VW * 0.42 - (back ? 0 : p.face * 30);   // cutscene: the camera goes as far right as it can (player on the left)
+  st.camX += (ctClamp(fx + p.w / 2 - look, lim.minX, lim.maxX) - st.camX) * Math.min(1, dt * (st.cut && st.cut.t < 1.4 ? 2.2 : 5));
   st.camY = ctClamp(st.camY, lim.minY, lim.maxY); st.camX = ctClamp(st.camX, lim.minX, lim.maxX);
 }
 
@@ -6389,8 +6470,9 @@ function ctDrawWorld(c, st, inp, now) {
     else if (e.k === "F") ctDrawFlamer(c, Math.round(e.x), Math.round(e.y), e.dir, e.t, e.fl > 0, e.alert, e.charge, Math.abs(e.vx) > 1 && e.ground);
     else ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, e.face || 1, e.tilt || 0);
   }
+  if (st.stranger) ctDrawStranger(c, st.stranger, now);
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
-    ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, p.aim, p.walk);
+    ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, st.noGun ? null : p.aim, p.walk);
     if (st.muzzle) { c.fillStyle = "#ffe060"; c.beginPath(); c.arc(st.muzzle.x, st.muzzle.y, 6, 0, Math.PI * 2); c.fill(); c.fillStyle = "#fff"; c.beginPath(); c.arc(st.muzzle.x, st.muzzle.y, 3, 0, Math.PI * 2); c.fill(); }
   }
   for (const e of st.ents) {
@@ -6427,20 +6509,21 @@ function ctDrawWorld(c, st, inp, now) {
   for (const sg of st.signs) if (sg.a > 0.01 && sg.text) ctDrawSignBubble(c, sg, camX, cam, sg.a);
   for (const t of st.texts) { c.globalAlpha = Math.max(0, Math.min(1, t.life * 2)); c.font = "bold 12px monospace"; const hw = c.measureText(t.text).width / 2 + 4; ctTextOut(c, t.text, ctClamp(t.x, camX + hw, camX + CT.VW - hw), t.y, t.col, "bold 12px monospace"); c.globalAlpha = 1; }
   c.restore();
-  if (inp.mouseAim && st.phase === "play") {
+  if (inp.mouseAim && st.phase === "play" && !st.noGun) {
     c.strokeStyle = "rgba(255,255,255,.8)"; c.lineWidth = 1;
     const mx = Math.round(inp.mx) + 0.5, my = Math.round(inp.my) + 0.5;
     c.beginPath(); c.moveTo(mx - 6, my); c.lineTo(mx - 2, my); c.moveTo(mx + 2, my); c.lineTo(mx + 6, my); c.moveTo(mx, my - 6); c.lineTo(mx, my - 2); c.moveTo(mx, my + 2); c.lineTo(mx, my + 6); c.stroke();
   }
   // HUD
   for (let i = 0; i < Math.max(st.lives, 0); i++) ctHeart(c, 14 + i * 16, 14, 12);
-  for (let i = 0; i < CT.SHELLS; i++) {
+  if (!st.noGun) for (let i = 0; i < CT.SHELLS; i++) {
     const on = i < p.shells;
     c.fillStyle = on ? "#c02020" : "#3a3a3a"; c.fillRect(9 + i * 9, 26, 6, 10);
     c.fillStyle = on ? "#e0b030" : "#555"; c.fillRect(9 + i * 9, 34, 6, 3);
   }
-  if (p.shells < CT.SHELLS && p.reload > 0) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
+  if (!st.noGun && p.shells < CT.SHELLS && p.reload > 0) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
   if (st.gotStar) ctDrawStar(c, 38, 32, 6, now, false);
+  if (st.cut && st.cut.bars > 0) { const bh = Math.round(34 * st.cut.bars); c.fillStyle = "#000"; c.fillRect(0, 0, CT.VW, bh); c.fillRect(0, CT.VH - bh, CT.VW, bh); }
   const t = st.phase === "win" ? st.winTime : st.time;
   ctTextOut(c, "⏱ " + ctFmt(t), CT.VW - 30, 20, "#fff", "bold 13px monospace", "right");
   if (st.maxCam > 0 && st.H > st.W * 0.75) {   // tall level: height meter on the right
@@ -6505,7 +6588,7 @@ function ctSlotOpen(slot) {
   return true;
 }
 function ctNextSlot(slot) { const i = CT.SLOTS.indexOf(slot); for (let j = i + 1; j < CT.SLOTS.length; j++) if (S.ctStory?.[CT.SLOTS[j]]) return CT.SLOTS[j]; return null; }
-function ctStoryLevel(slot) { const L = S.ctStory?.[slot]; if (!L || !L.map) return null; const m = ctUnpack(L.map); return { slot, name: L.name, rows: m.rows, bg: m.bg, signs: m.signs, theme: ctSlotTheme(slot) }; }
+function ctStoryLevel(slot) { const L = S.ctStory?.[slot]; if (!L || !L.map) return null; const m = ctUnpack(L.map); return { slot, name: L.name, rows: m.rows, bg: m.bg, signs: m.signs, opts: m.opts, theme: ctSlotTheme(slot) }; }
 
 /* ----- play window ----- */
 let ctRunId = 0;
@@ -6524,7 +6607,7 @@ function openCtPlay(level) {
   const restartB = mkB("🔁 Restart", "Start this level again", () => restart(false));
   const newB = mkB("🎲 New tower", "Another random tower (same size and difficulty)", () => setLevel(ctRandomLevel(level.random.size, level.random.diff)));
   const menuB = mkB("📋 Menu", "Choose another level", () => (level.slot ? openCtStory() : openCtMenu()));
-  const editB = mkB("✎ Edit", "Open this level in the level editor (admin)", () => openCtEditor({ id: level.id || null, slot: level.slot || null, name: level.random ? "Random tower" : level.name, rows: level.rows, bg: level.bg, signs: level.signs, theme: level.theme }));
+  const editB = mkB("✎ Edit", "Open this level in the level editor (admin)", () => openCtEditor({ id: level.id || null, slot: level.slot || null, name: level.random ? "Random tower" : level.name, rows: level.rows, bg: level.bg, signs: level.signs, opts: level.opts, theme: level.theme }));
   top.append(info, pauseB, restartB, newB, menuB, editB);
   const res = el("div", "ctres pvpres"); res.hidden = true;
   const cvWrap = el("div", "ctcv sunken");
@@ -6688,7 +6771,7 @@ function openCtPlay(level) {
       [level.slot ? ctWorldOf(level.slot).name : st.W + " × " + st.H + " blocks", 136, "#a0c0ff", "12px monospace"],
       ["Reach the 🚪 EXIT" + (tower ? " at the top!" : "!"), 160, "#a0c0ff", "12px monospace"],
       ["Move A/D ←→ · Jump Space/W · Aim mouse · Shoot click", 200, "#ddd", "12px monospace"],
-      ["Shoot DOWN to fly higher! Stand still to reload.", 220, "#ddd", "12px monospace"],
+      [st.noGun ? "No shotgun in this level..." : "Shoot DOWN to fly higher! Stand still to reload.", 220, st.noGun ? "#ffb0b0" : "#ddd", "12px monospace"],
       [st.stars.length ? (st.hadStar ? "⭐ You already found this level's secret" : "☆ A secret is hidden in this level...") : "", 244, "#ffe070", "12px monospace"],
       [blink ? "CLICK OR PRESS SPACE TO START" : "", 276, "#fff", "bold 16px monospace"],
     ]);
@@ -6710,7 +6793,7 @@ function ctSubLevels() {
   if (!ctStorySub) ctStorySub = D.onValue(R("ctStory"), (s) => { S.ctStory = s.val() || {}; S.ctStoryLoaded = true; S.ctStoryErr = null; ctRefreshAll(); },
     (e) => { S.ctStoryLoaded = true; S.ctStoryErr = e.message; ctStorySub = null; logError("Chicken Tower story: " + e.message); ctRefreshAll(); });
 }
-function ctSavedLevel(id) { const L = S.ctLevels?.[id]; if (!L) return null; const m = ctUnpack(L.map); return { id, name: L.name, rows: m.rows, bg: m.bg, signs: m.signs, theme: CT.THEMES[L.th] ? L.th : "tower" }; }
+function ctSavedLevel(id) { const L = S.ctLevels?.[id]; if (!L) return null; const m = ctUnpack(L.map); return { id, name: L.name, rows: m.rows, bg: m.bg, signs: m.signs, opts: m.opts, theme: CT.THEMES[L.th] ? L.th : "tower" }; }
 const ctRulesMsg = (err) => (/permission/i.test(err || "") ? "the Firebase rules need the Chicken Tower update." : "loading failed.");
 
 /* ----- menus ----- */
@@ -6846,6 +6929,13 @@ function ctEdTile(c, ch, px, py, top = true) {
   else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
   else if (ch === "*") ctDrawStar(c, px + 12, py + 12, 8, 0.4, false);
   else if (ch === "N") ctDrawSign(c, px, py, false);
+  else if (ch === "R") {   // stranger cutscene trigger (editor only)
+    c.fillStyle = "rgba(200,40,40,.25)"; c.fillRect(px, py, T, T);
+    c.strokeStyle = "rgba(255,90,90,.95)"; c.lineWidth = 1; c.setLineDash([3, 2]); c.strokeRect(px + 1.5, py + 1.5, T - 3, T - 3); c.setLineDash([]);
+    c.fillStyle = "#b01818"; c.beginPath(); c.ellipse(px + 12, py + 9, 7, 3, 0, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#3c4238"; c.beginPath(); c.arc(px + 12, py + 15, 5, 0, Math.PI * 2); c.fill();
+    c.fillStyle = "#111"; c.fillRect(px + 9, py + 14, 2, 2); c.fillRect(px + 13, py + 14, 2, 2);
+  }
   else if (ch === "|" || ch === "_") {   // camera stop (editor only)
     c.fillStyle = "rgba(0,220,255,.22)"; c.fillRect(px, py, T, T);
     c.strokeStyle = "rgba(0,230,255,.9)"; c.lineWidth = 1; c.setLineDash([3, 2]); c.strokeRect(px + 1.5, py + 1.5, T - 3, T - 3); c.setLineDash([]);
@@ -6894,7 +6984,10 @@ async function openCtEditor(start) {
   const wI = el("input", "sunken ctnum"); wI.type = "number"; wI.min = CT.MIN_W; wI.max = CT.MAX_W;
   const hI = el("input", "sunken ctnum"); hI.type = "number"; hI.min = CT.MIN_H; hI.max = CT.MAX_H;
   const sB = el("button", "small", "Set size"); sB.type = "button"; sB.title = "Width: adds or removes columns on the RIGHT. Height: adds or removes rows at the TOP.";
-  const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB);
+  const gunC = el("input"); gunC.type = "checkbox"; gunC.checked = true;
+  gunC.onchange = () => { dirty = true; status(); };
+  const gunL = el("label", "check"); gunL.title = "Off = the player has NO shotgun in this level (can't shoot)"; gunL.append(gunC, " 🔫 Shotgun");
+  const r2 = el("div", "ctedrow"); r2.append("Width:", wI, "Height:", hI, sB, gunL);
   // ----- build menu -----
   let bgMode = false, cat = CT.CATS.some(([k]) => k === store("ct-cat")) ? store("ct-cat") : "basic";
   let recent = String(store("ct-recent") || "#=g%^").split("").filter((k) => CT.TOOLS.some((t) => t[0] === k)).slice(0, 10);
@@ -6971,7 +7064,7 @@ async function openCtEditor(start) {
   const bOpen = mk("📂 Open...", "Open a saved level", () => { openCtMenu(); });
   const bTest = mk("▶ Test", "Play your level now (it doesn't save it)", () => {
     if (!count().S) { toast("Put a 🏁 Start first."); return; }
-    openCtPlay({ id: customId, name: (nameI.value.trim() || "My level") + " (test)", rows: rowsOut(), bg: bgOut(), signs: signsOut(), theme: effTheme(), test: true });
+    openCtPlay({ id: customId, name: (nameI.value.trim() || "My level") + " (test)", rows: rowsOut(), bg: bgOut(), signs: signsOut(), opts: { nogun: !gunC.checked }, theme: effTheme(), test: true });
   });
   const bSave = mk("💾 Save", "Save this level (everyone can play it)", () => save(false), "msgo");
   const bSaveNew = mk("💾 Save as new", "Save a copy as a new custom level", () => save(true));
@@ -7002,7 +7095,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (gunC.checked ? "" : " · 🚫🔫 no shotgun") + (n.R ? " · 🎬 stranger" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
@@ -7033,7 +7126,7 @@ async function openCtEditor(start) {
     if (y + 1 < H()) setTimeout(() => cell(x, y + 1));
     if (g[y][x] === ch) return;
     if (g[y][x] === "N") sg[y][x] = null;   // sign replaced/erased: its text goes too
-    if (ch === "S" || ch === "*" || ch === "Z") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === ch) { g[yy][xx] = "."; cell(xx, yy); }   // only one per level
+    if (ch === "S" || ch === "*" || ch === "Z" || ch === "R") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === ch) { g[yy][xx] = "."; cell(xx, yy); }   // only one per level
     g[y][x] = ch; cell(x, y); dirty = true;
   }
   function load(lv) {
@@ -7044,6 +7137,7 @@ async function openCtEditor(start) {
     nameI.value = lv.name || "My level";
     const lay = ctSplitLayers(ctNormRows(lv.rows), lv.bg || null);
     g = lay.rows.map((r) => r.split("")); bgl = lay.bg.map((r) => r.split(""));
+    gunC.checked = !(lv.opts && lv.opts.nogun);
     sg = g.map((r, y) => r.map((ch, x) => (ch === "N" ? (lv.signs || {})[x + "," + y] || null : null)));
     dirty = !!lv.fresh; drawAll(); status();
     requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; wrap.scrollLeft = 0; });
@@ -7093,7 +7187,7 @@ async function openCtEditor(start) {
     if (!n.S) { toast("Put a 🏁 Start first."); return; }
     if (!n.E) { toast("Put a 🚪 Exit first."); return; }
     const w = asNew ? "custom" : whereS.value;
-    const map = ctPack(rowsOut(), bgOut(), signsOut());
+    const map = ctPack(rowsOut(), bgOut(), signsOut(), { nogun: !gunC.checked });
     if (map.length > 13000) { toast("This level is too big to save (" + map.length + " / 13000 letters). Make it a bit smaller."); return; }
     const data = { name, map, h: H(), w: W(), th: w === "custom" ? theme : ctSlotTheme(w), ts: now() };
     let path;
