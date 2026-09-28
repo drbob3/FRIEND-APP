@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-5cl+xZIovSpX/Wa0a+rhm17fBrW4TtLphA7Fq8vYKs4=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-kYNtFhah+bzoFWk2WOVmoPuwNG0awk+oNqJFDb0U1FY=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -6319,13 +6319,17 @@ function ctBossStep(st, e, dt) {
     } else if (m === "stompWind") {
       e.vx = 0; face();
       if (e.mt <= 0) {
-        let tx = ctClamp(pcx, e.w / 2 + 2, st.W * T - e.w / 2 - 2); if (ctGroundBelow(st, tx, e.y - 40) == null) tx = ex;
-        const air = 2 * 700 / CT.GRAV;
-        e.vy = -700; e.vx = ctClamp((tx - ex) / air, -260, 260); e.mode = "stompAir"; e.air = true; e.shadow = tx;
+        // lands on the PLAYER's floor: goes through platforms that are in the way (up or down)
+        let tx = ctClamp(pcx, e.w / 2 + 2, st.W * T - e.w / 2 - 2);
+        let ty = p.ground ? p.y + p.h : ctGroundBelow(st, pcx, p.y + p.h - 2);
+        if (ty == null || ctGroundBelow(st, tx, ty - 2) == null) { tx = ex; ty = e.y + e.h; }
+        const g = CT.GRAV, rise = Math.max(163, (e.y + e.h) - ty + 70), vy0 = Math.sqrt(2 * g * rise);
+        const air = vy0 / g + Math.sqrt(2 * Math.max(10, rise - ((e.y + e.h) - ty)) / g);
+        e.vy = -vy0; e.vx = ctClamp((tx - ex) / air, -300, 300); e.mode = "stompAir"; e.air = true; e.shadow = tx; e.stompY = ty;
         beep([[120, 0, 0.1], [240, 0.08, 0.14]], "square", 0.05);
       }
     } else if (m === "stompAir") {
-      if (e.ground && e.vy >= 0) { e.vx = 0; e.air = false; ctBossLand(st, e); e.mode = "recover"; e.mt = e.phase === 2 ? 0.35 : 0.6; e.shadow = null; }
+      if (e.ground && e.vy >= 0) { e.vx = 0; e.air = false; ctBossLand(st, e); e.mode = "recover"; e.mt = e.phase === 2 ? 0.35 : 0.6; e.shadow = null; e.stompY = null; }
     } else if (m === "recover") { e.vx = 0; if (e.mt <= 0) ctBossNext(st, e); }
     else if (m === "refuel") {
       e.vx = 0;
@@ -6370,7 +6374,7 @@ function ctBossStep(st, e, dt) {
     } else if (m === "rain") {
       if (e.mt <= 0) {   // falls back down near the player
         let tx = pcx; if (ctGroundBelow(st, tx, st.camY) == null) tx = e.hx + e.w / 2;
-        e.x = ctClamp(tx - e.w / 2, T, st.W * T - e.w - T); e.y = st.camY - e.h - 40; e.vy = 200; e.vx = 0; e.hidden = false; e.mode = "stompAir"; e.shadow = tx; e.dropIn = true;
+        e.x = ctClamp(tx - e.w / 2, T, st.W * T - e.w - T); e.y = st.camY - e.h - 40; e.vy = 200; e.vx = 0; e.hidden = false; e.mode = "stompAir"; e.shadow = tx; e.dropIn = true; e.stompY = p.ground ? p.y + p.h : ctGroundBelow(st, tx, p.y + p.h - 2);
       }
     } else if (m === "dying") {
       e.vx = 0;
@@ -6403,7 +6407,8 @@ function ctBossStep(st, e, dt) {
       if (!(ctSolid(under) || under === "=") || ctLiquid(under) || under === "^" || ctSolid(at)) { e.vx = 0; if (e.mode === "dash") e.stopped = true; }
     }
     e.dropT = Math.max(0, (e.dropT || 0) - dt);
-    ctMove(st, e, dt, e.dropT > 0);   // dropT: falls through platforms (jumping down from one)
+    const through = e.dropT > 0 || (e.mode === "stompAir" && e.stompY != null && e.y + e.h + Math.max(0, e.vy) * dt < e.stompY - 3);   // stomp: falls through platforms above the player's floor
+    ctMove(st, e, dt, through);   // dropT: falls through platforms (jumping down from one)
     e.walk = e.ground && e.vx ? e.walk + dt : 0;
     if (e.y > st.H * T + 40) { e.x = e.hx; e.y = e.hy; e.vx = e.vy = 0; if (e.mode === "stompAir") e.mode = "recover"; }   // fell: back to his spot
   }
@@ -6498,7 +6503,7 @@ function ctDrawBossWorld(c, st, now) {   // in world coordinates
   for (const e of st.ents) {
     if (e.k !== "B" || e.dead || e.hidden) continue;
     if (e.shadow != null && (e.mode === "stompAir" || e.mode === "dropping")) {   // shadow where he will land
-      const gy = ctGroundBelow(st, e.shadow, e.y + e.h - 4);
+      const gy = e.mode === "stompAir" && e.stompY != null ? e.stompY : ctGroundBelow(st, e.shadow, e.y + e.h - 4);
       if (gy != null) { c.fillStyle = "rgba(0,0,0,.35)"; c.beginPath(); c.ellipse(e.shadow, gy - 1, 24, 5, 0, 0, Math.PI * 2); c.fill(); }
     }
     if ((e.mode === "aimTrack" || e.mode === "aimLock") && e.aim != null) {   // aiming line: where the flames will go
