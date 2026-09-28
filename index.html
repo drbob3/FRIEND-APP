@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-e+c7DR6SDB2/bE0EqzATMoZL8NyzLIJGwC6NgQRi6fA=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-rEz/DP1sUSt4Ht9WLJzFSQJaFTAsmKCcxtD4oT5+rec=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
   @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
@@ -1137,7 +1156,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.53";
+const APP_VERSION = "10.54";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5583,17 +5602,24 @@ function ctCamLimits(st) {   // camera limits + the player's walls from the came
 // it stops just behind the player, staring, and follows again when he moves. The player can't walk toward it.
 function ctStartStranger(st) {
   const p = st.p, T = CT.T;
-  st.cut = { t: 0, bars: 0 };
-  const lim = ctCamLimits(st), camTo = ctClamp(p.x + p.w / 2 - CT.VW * 0.22, lim.minX, lim.maxX);   // where the camera is going
-  let sx = Math.max(0, camTo - 60), sy = p.y + p.h - 18;
+  st.cut = { t: 0 };
+  beep([[196, 0, 0.5], [185, 0.5, 0.5], [175, 1.0, 0.9]], "triangle", 0.05);   // low, uneasy notes
+}
+// he only appears once the camera has finished sliding: just off the left edge of the screen, at the player's height
+function ctSpawnStranger(st) {
+  const p = st.p, T = CT.T;
+  let sx = Math.max(0, st.camX - 30), sy = p.y + p.h - 18;
   for (let k = 0; k < 20 && (ctSolid(ctTile(st, Math.floor((sx + 9) / T), Math.floor((sy + 10) / T))) || ctSolid(ctTile(st, Math.floor((sx + 9) / T), Math.floor((sy + 17) / T)))); k++) sy -= T;   // not inside a wall
   st.stranger = { x: sx, y: sy, w: 18, h: 18, vx: 0, vy: 0, dir: 1, t: 0, ground: false, walk: 0 };
-  beep([[196, 0, 0.5], [185, 0.5, 0.5], [175, 1.0, 0.9]], "triangle", 0.05);   // low, uneasy notes
 }
 function ctStrangerStep(st, dt) {
   const s = st.stranger, p = st.p, T = CT.T;
   st.cut.t += dt;
-  if (!s) return;
+  if (!s) {
+    const lim = ctCamLimits(st), camTo = ctClamp(p.x + p.w / 2 - CT.VW * 0.22, lim.minX, lim.maxX);
+    if ((st.cut.t > 1.4 && Math.abs(st.camX - camTo) < 3) || st.cut.t > 5) ctSpawnStranger(st);   // scroll finished (or 5 s max)
+    return;
+  }
   s.t += dt;
   // he keeps walking to the right (doesn't stop at the player); he only stops at the edge of a hole
   s.dir = 1;
@@ -5911,7 +5937,11 @@ function ctStep(st, inp, dt) {
     let dir = (inp.right ? 1 : 0) - (inp.left ? 1 : 0);
     if (st.cut) {
       if (st.cut.t < 1.4) dir = 0;             // the scene starts: no control for a moment
-      else if (dir < 0 && st.stranger && p.x + p.w / 2 - (st.stranger.x + st.stranger.w / 2) > 0 && p.x + p.w / 2 - (st.stranger.x + st.stranger.w / 2) < 80) { dir = 1; p.scared = true; }   // close to the stranger: ← makes him walk right (slowly)
+      else if (st.stranger) {
+        const gap = p.x + p.w / 2 - (st.stranger.x + st.stranger.w / 2);   // > 0 = the stranger is behind the player
+        if (gap > 0 && gap < 80 && dir < 0) { dir = 1; p.scared = true; }          // close to the stranger: ← makes him walk right (slowly)
+        else if (gap > 0 && gap < 34 && dir === 0) { dir = 1; p.scared = true; }   // TOO close: the chicken walks away by itself
+      }
       if (st.cut.t < 1.4) { inp.jumpHit = false; }
     }
     const fyT = Math.floor((p.y + p.h + 1) / T), fl = ctTile(st, Math.floor((p.x + 1) / T), fyT), fr = ctTile(st, Math.floor((p.x + p.w - 1) / T), fyT);
