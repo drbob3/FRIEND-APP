@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-rEz/DP1sUSt4Ht9WLJzFSQJaFTAsmKCcxtD4oT5+rec=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ipC0nV3njWFvPx+HQitRExo7DSQM/TXaAuM/RTHCQEw=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
   @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
@@ -1156,7 +1175,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.54";
+const APP_VERSION = "10.55";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5656,30 +5675,55 @@ function ctDrawStranger(c, s, now) {   // chicken with a gas mask and a red bere
   c.fillStyle = "#e0c040"; c.fillRect(d * 5 - 1, -22.5, 2, 2);   // badge
   c.restore();
 }
-// screen glitch: strips of the picture slide sideways, colors split, static noise, black frames (gets worse, then stops)
-function ctGlitch(c, cv, t) {
-  const W = CT.VW, H = CT.VH, k = Math.min(1, t / 1.8);
-  const n = 4 + Math.floor(k * 14);
-  for (let i = 0; i < n; i++) {   // sliding strips
-    const y = Math.floor(Math.random() * H), h = 2 + Math.floor(Math.random() * (6 + k * 26)), dx = Math.round((Math.random() - 0.5) * (20 + k * 120));
+// GLITCH DEATH timeline (seconds): glitch → FPS drop → freeze → crashed window → "LEVEL CLEARED" on black
+const CT_GL = { lag: 2.4, freeze: 4.0, crash: 4.9, end: 7.9 };
+function ctRand(seed) { let x = (seed >>> 0) || 1; return () => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return (x >>> 0) / 4294967296; }; }
+// screen glitch, SAFE for photosensitive players: no full-screen flashes, the pattern only changes 8 times a second,
+// soft colors (no bright red), low contrast. Random blocks appear in the level (and stay), strips slide, tiles get copied.
+function ctGlitch(c, cv, st, t) {
+  const W = CT.VW, H = CT.VH, T = CT.T, k = Math.min(1, t / CT_GL.lag), tick = Math.floor(t * 8);
+  const cx = Math.round(st.camX), cy = Math.round(st.camY);
+  const bad = st.gBad || (st.gBad = []);
+  if (st.gTick !== tick) {   // new glitch "frame": more broken blocks
+    st.gTick = tick;
+    const r = ctRand(tick * 7919 + 17), chars = "#%gdtrkKMQIebulvojOihyczW=^HL";
+    const n = 1 + Math.floor(k * 4);
+    for (let i = 0; i < n && bad.length < 90; i++) {
+      const b = { x: Math.floor((cx + r() * W) / T), y: Math.floor((cy + r() * H) / T), ch: chars[Math.floor(r() * chars.length)] };
+      if (r() < 0.35) { b.sx = Math.floor(r() * (W / T)) * T; b.sy = Math.floor(r() * (H / T)) * T; }   // a copy of another piece of the screen
+      bad.push(b);
+    }
+  }
+  const r = ctRand(tick * 104729 + 3);
+  // 1) random blocks placed in the level
+  for (const b of bad) {
+    const px = b.x * T - cx, py = b.y * T - cy;
+    if (px < -T || px > W || py < -T || py > H) continue;
+    if (b.sx !== undefined) c.drawImage(cv, b.sx, b.sy, T, T, px, py, T, T);
+    else { c.save(); c.beginPath(); c.rect(px, py, T, T); c.clip(); ctTileArt(c, b.ch, px, py, true); c.restore(); }
+  }
+  // 2) strips of the picture slide sideways (same strips for 1/8 s → no strobing)
+  const n = 2 + Math.floor(k * 6);
+  for (let i = 0; i < n; i++) {
+    const y = Math.floor(r() * H), h = 3 + Math.floor(r() * (6 + k * 18)), dx = Math.round((r() - 0.5) * (16 + k * 70));
     c.drawImage(cv, 0, y, W, h, dx, y, W, h);
   }
+  // 3) soft color split
   c.save();
-  c.globalCompositeOperation = "lighter";   // color split
-  c.globalAlpha = 0.25 + k * 0.3;
-  c.drawImage(cv, Math.round(4 + k * 6), 0, W, H, 0, 0, W, H);
-  c.globalCompositeOperation = "source-over"; c.globalAlpha = 1;
-  for (let i = 0; i < 6 + k * 30; i++) {   // colored bars + noise blocks
-    c.fillStyle = ["rgba(255,0,60,.35)", "rgba(0,255,220,.35)", "#fff", "#000", "rgba(80,255,80,.4)"][Math.floor(Math.random() * 5)];
-    c.fillRect(Math.floor(Math.random() * W), Math.floor(Math.random() * H), 2 + Math.random() * (10 + k * 60), 1 + Math.random() * 4);
-  }
-  for (let y = 0; y < H; y += 3) { c.fillStyle = "rgba(0,0,0," + (0.08 + Math.random() * 0.1).toFixed(2) + ")"; c.fillRect(0, y, W, 1); }   // scanlines
-  if (Math.random() < 0.08 + k * 0.2) { c.fillStyle = Math.random() < 0.7 ? "#000" : "#fff"; c.globalAlpha = 0.5 + Math.random() * 0.5; c.fillRect(0, 0, W, H); c.globalAlpha = 1; }   // flicker
+  c.globalCompositeOperation = "lighter"; c.globalAlpha = 0.1 + k * 0.12;
+  c.drawImage(cv, 3 + Math.round(k * 3), 0, W, H, 0, 0, W, H);
   c.restore();
+  // 4) small low-contrast noise bars
+  for (let i = 0; i < 4 + k * 14; i++) {
+    c.fillStyle = ["rgba(120,200,255,.25)", "rgba(140,255,170,.22)", "rgba(200,200,210,.25)", "rgba(0,0,0,.35)"][Math.floor(r() * 4)];
+    c.fillRect(Math.floor(r() * W), Math.floor(r() * H), 3 + r() * (8 + k * 40), 1 + r() * 3);
+  }
+  for (let y = 0; y < H; y += 3) { c.fillStyle = "rgba(0,0,0,.07)"; c.fillRect(0, y, W, 1); }   // steady scanlines
 }
 function ctHurt(st) {
   const p = st.p;
   if (p.inv > 0 || p.deadT > 0 || st.phase !== "play") return;
+  if (st.phase === "glitch") return;
   if (st.glitchEnd) { st.phase = "glitch"; st.glitchT = 0; st.winTime = st.time; return; }   // no death: the screen breaks, then the level ends
   st.lives--; st.deaths++;
   p.deadT = 0.8;
@@ -6864,8 +6908,14 @@ function openCtPlay(level) {
       }
     } else if (st.phase === "glitch") {
       acc = 0; st.glitchT += dt;
-      if (st.glitchT < 2.2 && (st.gsnd = (st.gsnd || 0) - dt) <= 0) { st.gsnd = 0.04 + Math.random() * 0.08; beep([[60 + Math.random() * 1800, 0, 0.04 + Math.random() * 0.06]], Math.random() < 0.5 ? "square" : "sawtooth", 0.05); }
-      if (st.glitchT > 2.2 + 0.9 + 3) { st.phase = "win"; st.blackWin = true; win.w.classList.remove("ctcrash"); win.setTitle(titleOf(level)); beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06); }
+      const G = st.glitchT;
+      if (G < CT_GL.freeze) {   // the world keeps going while it breaks (the Stranger keeps walking, particles fly)
+        if (st.cut && st.stranger) ctStrangerStep(st, dt);
+        for (const q of st.parts) { q.life -= dt; q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
+        st.parts = st.parts.filter((q) => q.life > 0);
+      }
+      if (G < CT_GL.lag && (st.gsnd = (st.gsnd || 0) - dt) <= 0) { st.gsnd = 0.1 + Math.random() * 0.12; beep([[80 + Math.random() * 900, 0, 0.04 + Math.random() * 0.05]], Math.random() < 0.5 ? "square" : "triangle", 0.035); }
+      if (G > CT_GL.end) { st.phase = "win"; st.blackWin = true; win.w.classList.remove("ctcrash"); win.setTitle(titleOf(level)); beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06); }
     } else if (st.phase === "secret") {   // went through the secret door: this level counts as cleared, then the secret level
       if (!ended) {
         ended = true;
@@ -6880,16 +6930,23 @@ function openCtPlay(level) {
       if (!st.best) st.best = st.start;
       if (!ended) showResult();
     } else acc = 0;
-    // glitch death: 2.2 s glitch → the picture FREEZES (0.9 s, silent) → the window turns white like a crash (3 s) → "LEVEL CLEARED" on black
-    if (st.phase === "glitch" && st.glitchT > 2.2) {
-      if (st.glitchT > 3.1 && !win.w.classList.contains("ctcrash")) {   // the WHOLE game window turns white like a program that stopped responding
-        win.w.classList.add("ctcrash"); win.setTitle(titleOf(level) + " (Not Responding)");
+    // glitch death (CT_GL): 2.4 s safe glitch → FPS drop → the picture FREEZES → the window turns white like a crash (3 s) → "LEVEL CLEARED" on black
+    if (st.phase === "glitch") {
+      const G = st.glitchT;
+      if (G > CT_GL.freeze) {   // frozen: keep the last picture; then the WHOLE game window turns white like a program that stopped responding
+        if (G > CT_GL.crash && !win.w.classList.contains("ctcrash")) { win.w.classList.add("ctcrash"); win.setTitle(titleOf(level) + " (Not Responding)"); }
+        return;
       }
-      return;   // frozen: keep the last picture (next frame already asked at the top)
+      if (G > CT_GL.lag) {   // the game "loses FPS": pictures come slower and slower (15 fps → ~2 fps), each with a tiny sound hiccup
+        const q = (G - CT_GL.lag) / (CT_GL.freeze - CT_GL.lag), gap = 1 / 15 + q * q * 0.5;
+        if (G - (st.gLast || 0) < gap) return;
+        st.gLast = G;
+        beep([[110 + Math.random() * 60, 0, 0.03]], "square", 0.03);
+      }
     }
     if (st.blackWin && st.phase === "win") { c.fillStyle = "#000"; c.fillRect(0, 0, CT.VW, CT.VH); }
     else ctDrawWorld(c, st, inp, nowS);
-    if (st.phase === "glitch") ctGlitch(c, cv, st.glitchT);
+    if (st.phase === "glitch") ctGlitch(c, cv, st, st.glitchT);
     const blink = Math.floor(nowS * 2) % 2 === 0;
     const tower = st.theme === "tower";
     if (st.phase === "secret") ctOverlay(c, ctSecretHidden() ? [] : [["🔮 SECRET DOOR", 150, "#d0a0ff", "bold 30px monospace"], ["Going to the secret level...", 190, "#fff", "13px monospace"]], ctSecretHidden());
