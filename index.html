@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-LrOxupjECeYsWJX1xmKy7Zlw6Bg/qim3Dj0cV4IQtwQ=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-5cl+xZIovSpX/Wa0a+rhm17fBrW4TtLphA7Fq8vYKs4=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
   @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
@@ -1194,7 +1213,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.56";
+const APP_VERSION = "10.57";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5262,7 +5281,7 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwfnF+*Z|_NRBGDPXtlvorjWkOihycIKQMzuHebL@xa",
+  TILES: ".#=%^gdSECwfnF+*Z|_NRBGDPXtlvorjWkOihycIKQMzuHebL@xaq",
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
@@ -5304,6 +5323,7 @@ const CT = {
     ["|", "↔", "Camera stop ↔", "Invisible in the game. The screen can't scroll left/right past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
     ["x", "⛔", "Boss blocker", "Invisible. Put them on BOTH sides of the boss arena (the boss goes between them). When the fight starts (and the player is between them), the camera can't see past them and the player can't leave. They turn off when the boss dies.", "utility"],
     ["a", "📍", "Boss spawn", "Invisible. When the player touches it, the boss falls from the top of the screen onto his 🐓 spot and the fight starts. Without it, the boss is already standing there and wakes up when the player comes close.", "utility"],
+    ["q", "🚪", "Boss door", "Open until the boss spawns, then it SLAMS shut (you can't pass) and opens again when the boss dies. Stack 3 or more on top of each other for a big gate (blocks touching = one door).", "utility"],
     ["_", "↕", "Camera stop ↕", "Invisible in the game. The screen can't scroll up/down past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
     ["Z", "🔮", "Secret door", "ONE per world. Opens with the 5 ⭐ of the world's 5 levels and leads to the world's secret level.", "things"],
     ["w", "🐔", "Black chicken", "Walks left and right. 3 shots.", "things"], ["f", "🚁", "Helicopter chicken", "Flies to you. 2 shots.", "things"],
@@ -5330,7 +5350,7 @@ function ctNormRows(rows) {
   while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
-const CT_MARK = "SECwfnF+*Z|_NR@xa";
+const CT_MARK = "SECwfnF+*Z|_NR@xaq";
 const CT_LEGACY_BG = { B: "#", G: "g", D: "d", P: "=", X: "%" };   // v10.39-10.41 background letters
 // A level has 2 layers of the same size: rows (normal blocks, markers) and bg (background blocks).
 // Saved in ONE string: normal rows, then "\n~\n", then the background rows packed as "12.3B" (count + block).
@@ -5467,12 +5487,13 @@ function ctNewGame(level) {
   const H = g.length, W = g[0].length;
   const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, bossTrig: [], fires: [], waves: [], rainQ: [], ents: [], pel: [], shots: [], stars: [], sdoors: [], signs: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
   let sx = 2, sy = H - 2, foundS = false;
-  const stopCells = [], cutCells = [], bossCols = new Set();
+  const stopCells = [], cutCells = [], bossCols = new Set(), doorCells = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
     if (c === "|" || c === "_") stopCells.push([x, y, c]);
     if (c === "R") { stopCells.push([x, y, "|"]); cutCells.push(x + "," + y); }
     if (c === "x") bossCols.add(x);                                                   // boss blocker (a column)
+    if (c === "q") { doorCells.push([x, y]); bossCols.add(x); }                        // boss door (also works as a boss blocker)
     if (c === "a") st.bossTrig.push({ x: x * T, y: y * T, w: T, h: T });             // boss spawn trigger   // the Stranger trigger is also a ↔ stop
     if (CT_MARK.includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
@@ -5491,6 +5512,7 @@ function ctNewGame(level) {
   st.p = { x: sx * T + 5, y: sy * T + T - 20, w: 14, h: 20, vx: 0, vy: 0, ground: false, face: 1, coyote: 0, jbuf: 0, jumping: false, dropT: 0, shells: CT.SHELLS, reload: 0, cd: 0, inv: 0, walk: 0, aim: 0, deadT: 0 };
   st.cp = { x: st.p.x, y: st.p.y };
   st.locks = ctMakeLocks(stopCells, st.p);
+  st.bdoors = ctMakeDoors(doorCells);
   { const bz = st.ents.find((q) => q.k === "B");
     if (bz) {
       const bc = Math.floor((bz.x + bz.w / 2) / T), cols = [...bossCols];
@@ -5518,7 +5540,7 @@ function ctNewGame(level) {
   return st;
 }
 const ctTile = (st, tx, ty) => (tx < 0 || tx >= st.W || ty < 0 ? "#" : ty >= st.H ? "." : st.g[ty][tx]);
-const CT_SOLID = "#%gdtrkKMQIebu";
+const CT_SOLID = "#%gdtrkKMQIebuq";   // q = a CLOSED boss door (only while the boss fight is on)
 const ctSolid = (c) => !!c && c.length === 1 && CT_SOLID.includes(c);
 const ctTop = (c) => (c === "u" ? 12 : 0);   // half block: only the bottom half is solid
 const ctLiquid = (c) => c === "W" || c === "L";
@@ -6014,6 +6036,74 @@ function ctSniperStep(st, e, dt) {
 const CT_BLAZE = { body: "#c8461c", wing: "#8e2a12", eye: "#ffd040", leg: "#6a4020" };
 const CT_BLAZE2 = { body: "#e0621e", wing: "#a8360e", eye: "#fff4a0", leg: "#6a4020" };
 const CT_BOSS = { HP: 120, W: 40, H: 52 };
+// BOSS DOORS: touching "q" blocks = one gate. Open (you walk through) until the boss spawns, then an iron gate slams
+// down (solid) and goes back up when the boss dies (or when the fight resets).
+function ctMakeDoors(cells) {
+  const key = (x, y) => x + "," + y, left = new Set(cells.map(([x, y]) => key(x, y))), doors = [];
+  for (const [sx, sy] of cells) {
+    if (!left.has(key(sx, sy))) continue;
+    const d = { cells: [], x0: 1e9, x1: -1, y0: 1e9, y1: -1, k: 0, want: 0 }, todo = [[sx, sy]]; left.delete(key(sx, sy));
+    while (todo.length) {
+      const [x, y] = todo.pop(); d.cells.push([x, y]);
+      d.x0 = Math.min(d.x0, x); d.x1 = Math.max(d.x1, x); d.y0 = Math.min(d.y0, y); d.y1 = Math.max(d.y1, y);
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (left.has(key(x + dx, y + dy))) { left.delete(key(x + dx, y + dy)); todo.push([x + dx, y + dy]); }
+    }
+    doors.push(d);
+  }
+  return doors;
+}
+function ctDoorsClose(st) { for (const d of st.bdoors) d.want = 1; }
+function ctDoorsOpen(st) { for (const d of st.bdoors) if (d.want) { d.want = 0; d.snd = false; } }
+function ctDoorsStep(st, dt) {
+  const p = st.p, T = CT.T;
+  for (const d of st.bdoors) {
+    const box = { x: d.x0 * T, y: d.y0 * T, w: (d.x1 - d.x0 + 1) * T, h: (d.y1 - d.y0 + 1) * T };
+    if (d.want && d.k === 0 && ctHit(p, box)) continue;   // never closes on the player: waits until he steps out
+    const k0 = d.k;
+    d.k = d.want ? Math.min(1, d.k + dt / 0.45) : Math.max(0, d.k - dt / 1.3);   // slams down fast, goes up slowly
+    if (d.want && k0 < 1 && d.k >= 1) {   // CLANG
+      st.shake = Math.max(st.shake, 0.3);
+      ctBurst(st, box.x + box.w / 2, box.y + box.h, 12, ["#8a8a96", "#5a5a66", "#a88a6a"], 120, 500);
+      beep([[90, 0, 0.12], [60, 0.05, 0.3], [180, 0.02, 0.06]], "square", 0.08);
+    }
+    if (!d.want && k0 === 1 && d.k < 1) beep([[70, 0, 0.5], [80, 0.4, 0.5], [90, 0.8, 0.4]], "sawtooth", 0.04);   // rumble while it goes up
+    const solid = d.k > 0.5 ? "q" : ".";
+    for (const [x, y] of d.cells) if (st.g[y][x] !== solid) st.g[y][x] = solid;
+  }
+}
+function ctDrawBossDoor(c, d, now) {   // big iron gate in a stone frame (looks best 3+ blocks high)
+  const T = CT.T, x = d.x0 * T, y = d.y0 * T, w = (d.x1 - d.x0 + 1) * T, h = (d.y1 - d.y0 + 1) * T;
+  // stone frame (always there)
+  c.fillStyle = "#4a4650"; c.fillRect(x - 3, y, 3, h); c.fillRect(x + w, y, 3, h);
+  c.fillStyle = "#6a6672"; c.fillRect(x - 3, y, 1, h); c.fillRect(x + w, y, 1, h);
+  // the gate
+  const gh = Math.max(0, Math.round((h - 10) * d.k));
+  if (gh > 0) {
+    c.save(); c.beginPath(); c.rect(x, y + 10, w, gh); c.clip();
+    const top = y + 10 + gh - (h - 10);   // the gate slides down from inside the lintel
+    c.fillStyle = "rgba(20,16,24,.55)"; c.fillRect(x, top, w, h - 10);
+    for (let bx = x + 3; bx < x + w - 1; bx += 7) {   // vertical bars
+      c.fillStyle = "#3a3a44"; c.fillRect(bx, top, 4, h - 10);
+      c.fillStyle = "#6a6a78"; c.fillRect(bx, top, 1, h - 10);
+      c.fillStyle = "#b0b0c0"; c.beginPath(); c.moveTo(bx - 1, top + h - 14); c.lineTo(bx + 2, top + h - 6); c.lineTo(bx + 5, top + h - 14); c.fill();   // spikes at the bottom
+    }
+    for (let by = top + 8; by < top + h - 18; by += 16) { c.fillStyle = "#2c2c34"; c.fillRect(x, by, w, 4); c.fillStyle = "#5a5a66"; c.fillRect(x, by, w, 1); for (let rx = x + 4; rx < x + w - 2; rx += 7) { c.fillStyle = "#9a9aa8"; c.fillRect(rx, by + 1, 2, 2); } }   // bands + rivets
+    if (h >= 3 * T) {   // flame emblem in the middle (big gates)
+      const ex = x + w / 2, ey = top + (h - 10) / 2 + 4, r = Math.min(10, w / 2 - 1);
+      c.fillStyle = "#26262e"; c.beginPath(); c.arc(ex, ey, r + 2, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#7a2a10"; c.beginPath(); c.arc(ex, ey, r, 0, Math.PI * 2); c.fill();
+      c.fillStyle = "#ff8a20"; c.beginPath(); c.moveTo(ex, ey - r * 0.75); c.quadraticCurveTo(ex + r * 0.6, ey, ex, ey + r * 0.6); c.quadraticCurveTo(ex - r * 0.6, ey, ex, ey - r * 0.75); c.fill();
+      c.fillStyle = "#ffd060"; c.beginPath(); c.moveTo(ex, ey - r * 0.2); c.quadraticCurveTo(ex + r * 0.3, ey + r * 0.2, ex, ey + r * 0.45); c.quadraticCurveTo(ex - r * 0.3, ey + r * 0.2, ex, ey - r * 0.2); c.fill();
+    }
+    c.restore();
+  }
+  // lintel on top with 2 warning lights (slow, soft glow while closed)
+  c.fillStyle = "#2c2a32"; c.fillRect(x - 4, y, w + 8, 10);
+  c.fillStyle = "#5a5664"; c.fillRect(x - 4, y, w + 8, 2);
+  for (let rx = x - 1; rx < x + w + 3; rx += 6) { c.fillStyle = "#8a8698"; c.fillRect(rx, y + 5, 2, 2); }
+  const glow = d.k > 0.99 ? 0.55 + 0.25 * Math.sin(now * 3) : 0.15;
+  c.fillStyle = "rgba(255,90,30," + glow.toFixed(2) + ")"; c.fillRect(x - 2, y + 3, 3, 4); c.fillRect(x + w - 1, y + 3, 3, 4);
+}
 const ctExitOpen = (st) => st.bossDone || !st.ents.some((q) => q.k === "B");
 function ctBossNew(tx, ty) {
   const T = CT.T, x = tx * T + T / 2 - CT_BOSS.W / 2, y = ty * T + T - CT_BOSS.H;
@@ -6027,18 +6117,52 @@ function ctGroundBelow(st, x, y) {
   return null;
 }
 function ctBossNext(st, e) {
-  const fast = e.phase === 2 ? 0.65 : 1;
-  if (e.phase === 1 && e.count >= 3) { e.count = 0; e.mode = "refuel"; e.mt = 2.3; ctText(st, e.x + e.w / 2, e.y - 14, "REFUELING...", "#ffd040"); return; }
-  const pool = e.phase === 1 ? ["walk", "jet", "balls", "stomp", "jet", "balls"] : ["walk", "jet", "balls", "stomp", "dash", "dash", "rain", "stomp"];
-  let a; do a = pool[Math.floor(Math.random() * pool.length)]; while (a === e.last);
-  e.last = a; e.count++;
+  const fast = e.phase === 2 ? 0.65 : 1, p = st.p;
+  if (e.phase === 1 && e.count >= 5) { e.count = 0; e.mode = "refuel"; e.mt = 2.3; ctText(st, e.x + e.w / 2, e.y - 14, "REFUELING...", "#ffd040"); return; }
+  const ex = e.x + e.w / 2, pcx = p.x + p.w / 2, dx = pcx - ex, feetDy = (p.y + p.h) - (e.y + e.h);   // feetDy < 0 = the player stands higher
   e.pause = 0.55 * fast;   // small breath before each attack
+  // not on the same floor: jump up to the player's platform, or jump down to the ground
+  if (e.ground && p.ground && p.deadT <= 0 && Math.abs(feetDy) > 40 && e.last !== "hop" && Math.random() < 0.75) {
+    if (feetDy < 0 && -feetDy < 190 && Math.abs(dx) < 300) { e.mode = "hopWind"; e.hop = "up"; e.mt = 0.35 * fast; e.last = "hop"; return; }
+    if (feetDy > 0 && Math.abs(dx) < 340) { e.mode = "hopWind"; e.hop = "down"; e.mt = 0.3 * fast; e.last = "hop"; return; }
+  }
+  const jetLen = e.phase === 2 ? 240 : 190;
+  const jetOk = e.ground && Math.abs(feetDy) < 30 && Math.abs(dx) < jetLen + 10;   // flame jet only on the ground, player in range and at the same height
+  const aimOk = e.ground && Math.hypot(dx, feetDy) < 300 && ctSees(st, ex, e.y + e.h - 20, pcx, p.y + p.h / 2);
+  let pool = e.phase === 1 ? ["walk", "jet", "jet", "balls", "stomp", "aim", "aim"] : ["walk", "jet", "balls", "stomp", "dash", "dash", "rain", "stomp", "aim", "aim"];
+  pool = pool.filter((k) => (k !== "jet" || jetOk) && (k !== "aim" || aimOk) && (k !== "dash" || (e.ground && Math.abs(feetDy) < 30)));
+  let a, n = 0; do a = pool[Math.floor(Math.random() * pool.length)]; while (a === e.last && ++n < 20);
+  e.last = a; e.count++;
   if (a === "walk") { e.mode = "walk"; e.mt = (e.phase === 2 ? 1.1 : 1.6) + Math.random() * 0.6; }
   else if (a === "jet") { e.mode = "jetWind"; e.mt = 0.7 * fast; beep([[180, 0, 0.3], [240, 0.25, 0.35]], "triangle", 0.04); }
+  else if (a === "aim") { e.mode = "aimTrack"; e.mt = 0.5; e.aim = ctBossAimAt(st, e); beep([[260, 0, 0.12]], "triangle", 0.04); }
   else if (a === "balls") { e.mode = "balls"; e.left = e.phase === 2 ? 4 : 3; e.mt = 0.45; }
   else if (a === "stomp") { e.mode = "stompWind"; e.mt = 0.5 * fast; }
   else if (a === "dash") { e.mode = "dashWind"; e.mt = 0.65; }
   else if (a === "rain") { e.mode = "rainUp"; e.mt = 0; e.vy = -900; e.vx = 0; beep([[300, 0, 0.15], [500, 0.12, 0.2]], "sawtooth", 0.04); }
+}
+// AIMING attack: the flamethrower turns to the player (0.5 s), LOCKS (a line shows where it will burn, 1 s to dodge), then fires
+const CT_BOSS_PIVOT = 20, CT_BOSS_GUN = 33;   // gun pivot height above his feet, nozzle distance from the pivot
+function ctBossAimAt(st, e) {
+  const p = st.p, px = e.x + e.w / 2, py = e.y + e.h - CT_BOSS_PIVOT;
+  const dx = p.x + p.w / 2 - px, dy = p.y + p.h / 2 - py, dir = dx >= 0 ? 1 : -1;
+  const la = ctClamp(Math.atan2(dy, Math.abs(dx) || 1), -1.2, 1.2);   // not straight up or down
+  e.dir = dir;
+  return dir > 0 ? la : Math.PI - la;
+}
+function ctBossNozzle(e, ang) { const px = e.x + e.w / 2, py = e.y + e.h - CT_BOSS_PIVOT; return { x: px + Math.cos(ang) * CT_BOSS_GUN, y: py + Math.sin(ang) * CT_BOSS_GUN }; }
+function ctBossFlame(st, e, dt, ang, len0) {   // flames along any angle
+  const p = st.p, n = ctBossNozzle(e, ang), cx = Math.cos(ang), cy = Math.sin(ang);
+  const len = Math.max(10, ctRay(st, n.x, n.y, cx, cy, len0));
+  for (let i = 0; i < 4; i++) { const lf = Math.min(0.55, len / 330) * (0.6 + Math.random() * 0.5), v = 260 + Math.random() * 160, sp = (Math.random() - 0.5) * 0.25; st.parts.push({ x: n.x, y: n.y, vx: Math.cos(ang + sp) * v, vy: Math.sin(ang + sp) * v, life: lf, max: lf, fire: true, big: true, col: "#ffb030", g: -60 }); }
+  if (p.deadT <= 0) {   // distance from the player to the flame line
+    for (const qy of [p.y + 3, p.y + p.h / 2, p.y + p.h - 3]) {
+      const qx = p.x + p.w / 2, t = ctClamp((qx - n.x) * cx + (qy - n.y) * cy, 0, len);
+      if (Math.hypot(n.x + cx * t - qx, n.y + cy * t - qy) < 13) { ctHurt(st); break; }
+    }
+  }
+  if ((e.fsnd = (e.fsnd || 0) - dt) <= 0) { e.fsnd = 0.1; beep([[60 + Math.random() * 40, 0, 0.1]], "sawtooth", 0.035); }
+  return len;
 }
 // the fight starts: the boss arena (between the boss blockers) closes as soon as the player is inside it
 function ctArenaArm(st) { if (st.arena && !st.arena.on) st.arena.armed = true; }
@@ -6046,6 +6170,7 @@ function ctBossSleep(st, e) {   // back to the start of the fight (keeps his hea
   st.boss = null; st.fires = []; st.waves = []; st.rainQ = [];
   for (const f of st.shots) if (f.boss) f.life = 0;
   if (st.arena) { st.arena.on = false; st.arena.armed = false; }
+  ctDoorsOpen(st);
   e.vx = e.vy = 0; e.shadow = null; e.dropIn = false; e.pause = 0; e.away = 0;
   if (st.bossTrig.length) { e.mode = "sleep"; e.hidden = true; e.x = e.hx; e.y = e.hy; st.bossTrigOff = false; }
   else { e.mode = "wait"; e.hidden = false; if (e.y + e.h < 0 || e.y > st.H * CT.T) { e.x = e.hx; e.y = e.hy; } }
@@ -6058,12 +6183,12 @@ function ctBossOnRespawn(st) {   // the player lost a life: if he comes back OUT
   if (!inside) ctBossSleep(st, e);
 }
 function ctBossDrop(st, e) {   // boss spawn touched: he falls from the top of the screen onto his spot
-  st.bossTrigOff = true; ctArenaArm(st);
+  st.bossTrigOff = true; ctArenaArm(st); ctDoorsClose(st);
   e.mode = "dropWait"; e.mt = 1.5; e.hidden = true;
   beep([[120, 0, 0.2], [100, 0.2, 0.25], [80, 0.4, 0.4]], "sawtooth", 0.05);   // something is coming...
 }
 function ctBossStart(st, e) {
-  ctArenaArm(st);
+  ctArenaArm(st); ctDoorsClose(st);
   e.mode = "intro"; e.mt = 2.2; st.boss = e;
   st.shake = Math.max(st.shake, 0.3);
   beep([[70, 0, 0.5], [60, 0.4, 0.6], [90, 1.0, 0.7]], "sawtooth", 0.08);   // ROAR
@@ -6093,13 +6218,7 @@ function ctBossHit(st, e, b) {
   }
   return true;
 }
-function ctBossJet(st, e, dt, len0) {   // flame jet in front of him, along the ground
-  const p = st.p, nx = e.x + e.w / 2 + e.dir * 26, ny = e.y + e.h - 20;
-  const len = Math.max(10, ctRay(st, nx, ny, e.dir, 0, len0));
-  for (let i = 0; i < 4; i++) { const lf = Math.min(0.55, len / 330) * (0.6 + Math.random() * 0.5); st.parts.push({ x: nx, y: ny + (Math.random() - 0.5) * 6, vx: e.dir * (260 + Math.random() * 160), vy: (Math.random() - 0.5) * 80 - 10, life: lf, max: lf, fire: true, big: true, col: "#ffb030", g: -60 }); }
-  if (p.deadT <= 0 && ctHit({ x: e.dir > 0 ? nx : nx - len, y: ny - 12, w: len, h: 24 }, p)) ctHurt(st);
-  if ((e.fsnd = (e.fsnd || 0) - dt) <= 0) { e.fsnd = 0.1; beep([[60 + Math.random() * 40, 0, 0.1]], "sawtooth", 0.035); }
-}
+function ctBossJet(st, e, dt, len0) { if (e.ground) ctBossFlame(st, e, dt, e.dir > 0 ? 0 : Math.PI, len0); }   // flame jet along the ground (never in the air)
 function ctBossLand(st, e) {   // after a stomp or a fall
   st.shake = Math.max(st.shake, 0.3);
   ctBurst(st, e.x + e.w / 2, e.y + e.h, 18, ["#8a6a4a", "#a88a6a", "#6a5040"], 160, 500);
@@ -6143,7 +6262,7 @@ function ctBossStep(st, e, dt) {
     const lf = 0.3 + Math.random() * 0.3;
     st.parts.push({ x: e.x + 6 + Math.random() * (e.w - 12), y: e.y + 10 + Math.random() * 20, vx: (Math.random() - 0.5) * 20, vy: -40 - Math.random() * 40, life: lf, max: lf, fire: true, col: "#ff9a20", g: -60 });
   }
-  if (e.pause > 0 && !["rage", "dying", "wait", "intro", "dropping", "rainUp", "rain", "rainFall", "stompAir", "dash"].includes(e.mode)) { e.pause -= dt; e.vx = 0; face(); }
+  if (e.pause > 0 && !["rage", "dying", "wait", "intro", "dropping", "hopAir", "rainUp", "rain", "rainFall", "stompAir", "dash"].includes(e.mode)) { e.pause -= dt; e.vx = 0; face(); }
   else {
     e.mt -= dt;
     const m = e.mode;
@@ -6155,13 +6274,38 @@ function ctBossStep(st, e, dt) {
     else if (m === "walk") {
       face(); e.vx = e.dir * (e.phase === 2 ? 100 : 62);
       if (e.mt <= 0 || Math.abs(dx) < 34) { e.vx = 0; ctBossNext(st, e); }
+    } else if (m === "hopWind") {   // crouches, then jumps up to the player's platform / down to the ground
+      e.vx = 0; face();
+      if (e.mt <= 0) {
+        const feetDy = (p.y + p.h) - (e.y + e.h), g = CT.GRAV;
+        if (e.hop === "up") {
+          const rise = Math.max(60, -feetDy + 50), vy0 = Math.sqrt(2 * g * rise), tUp = vy0 / g, tDown = Math.sqrt(2 * 50 / g);
+          e.vy = -vy0; e.vx = ctClamp(dx / (tUp + tDown), -300, 300);
+        } else { e.vy = -330; e.vx = ctClamp(dx / 0.75, -260, 260); e.dropT = 0.3; }   // hop off the platform (falls through it)
+        e.mode = "hopAir"; e.air = true;
+        beep([[140, 0, 0.08], [260, 0.06, 0.12]], "square", 0.05);
+      }
+    } else if (m === "hopAir") {
+      if (e.ground && e.vy >= 0 && !(e.dropT > 0)) { e.vx = 0; e.air = false; st.shake = Math.max(st.shake, 0.15); ctBurst(st, ex, e.y + e.h, 10, ["#8a6a4a", "#a88a6a"], 120, 500); beep([[70, 0, 0.12]], "square", 0.05); e.mode = "recover"; e.mt = 0.35; }
+    } else if (m === "aimTrack") {   // the flamethrower follows the player
+      e.vx = 0; e.aim = ctBossAimAt(st, e);
+      if (e.mt <= 0) { e.mode = "aimLock"; e.mt = 1.0; beep([[520, 0, 0.08], [390, 0.1, 0.12]], "square", 0.04); }
+    } else if (m === "aimLock") {   // LOCKED: 1 second to get out of the line
+      e.vx = 0;
+      if (Math.random() < 0.5) { const n = ctBossNozzle(e, e.aim); st.parts.push({ x: n.x + (Math.random() - 0.5) * 20, y: n.y + (Math.random() - 0.5) * 20, vx: 0, vy: 0, life: 0.2, col: "#ffb040", g: 0, to: { x: n.x, y: n.y } }); }
+      if (e.mt <= 0) { e.mode = "aimFire"; e.mt = e.phase === 2 ? 1.4 : 1.1; }
+    } else if (m === "aimFire") {
+      e.vx = 0;
+      if (e.ground) ctBossFlame(st, e, dt, e.aim, 270);
+      if (e.mt <= 0 || !e.ground) { e.aim = null; ctBossNext(st, e); }
     } else if (m === "jetWind") {
       e.vx = 0; face();
+      if (!e.ground) { e.mode = "recover"; e.mt = 0.3; }
       if (Math.random() < 0.6) st.parts.push({ x: ex + e.dir * 26 + (Math.random() - 0.5) * 24, y: e.y + e.h - 20 + (Math.random() - 0.5) * 24, vx: 0, vy: 0, life: 0.2, col: "#ffb040", g: 0, to: { x: ex + e.dir * 26, y: e.y + e.h - 20 } });
       if (e.mt <= 0) { e.mode = "jet"; e.mt = e.phase === 2 ? 1.9 : 1.5; }
     } else if (m === "jet") {
       e.vx = 0; ctBossJet(st, e, dt, e.phase === 2 ? 240 : 190);
-      if (e.mt <= 0) ctBossNext(st, e);
+      if (e.mt <= 0 || !e.ground) ctBossNext(st, e);
     } else if (m === "balls") {
       e.vx = 0; face();
       if (e.mt <= 0) {
@@ -6235,6 +6379,7 @@ function ctBossStep(st, e, dt) {
       if (e.mt <= 0) {
         e.dead = true; st.kills++; st.bossDone = true; st.boss = null;
         if (st.arena) { st.arena.on = false; st.arena.armed = false; }   // the boss blockers turn off
+        ctDoorsOpen(st);
         st.shake = Math.max(st.shake, 0.55);
         ctBurst(st, ex, e.y + e.h / 2, 40, ["#c8461c", "#8e2a12", "#ffd040", "#555", "#333", "#fff"], 260, 300);
         for (let i = 0; i < 20; i++) st.parts.push({ x: ex + (Math.random() - 0.5) * 30, y: e.y + e.h / 2, vx: (Math.random() - 0.5) * 120, vy: -40 - Math.random() * 80, life: 1.4, col: "rgba(80,80,80,.7)", g: -20 });
@@ -6257,7 +6402,8 @@ function ctBossStep(st, e, dt) {
       const under = ctTile(st, ftx, Math.floor((e.y + e.h + 2) / T)), at = ctTile(st, ftx, Math.floor((e.y + e.h - 6) / T));
       if (!(ctSolid(under) || under === "=") || ctLiquid(under) || under === "^" || ctSolid(at)) { e.vx = 0; if (e.mode === "dash") e.stopped = true; }
     }
-    ctMove(st, e, dt);
+    e.dropT = Math.max(0, (e.dropT || 0) - dt);
+    ctMove(st, e, dt, e.dropT > 0);   // dropT: falls through platforms (jumping down from one)
     e.walk = e.ground && e.vx ? e.walk + dt : 0;
     if (e.y > st.H * T + 40) { e.x = e.hx; e.y = e.hy; e.vx = e.vy = 0; if (e.mode === "stompAir") e.mode = "recover"; }   // fell: back to his spot
   }
@@ -6266,6 +6412,7 @@ function ctBossStep(st, e, dt) {
 }
 // burning ground, fire waves, fire rain (updated every step)
 function ctFireStep(st, dt) {
+  ctDoorsStep(st, dt);
   const p = st.p, T = CT.T, playing = p.deadT <= 0 && st.phase === "play";
   const bz = st.boss;
   st.tint = ctClamp((st.tint || 0) + (bz && bz.phase === 2 && bz.mode !== "dying" ? dt : -dt) * 0.7, 0, 1);   // phase 2: the arena slowly glows orange
@@ -6315,13 +6462,16 @@ function ctDrawBlaze(c, fx, fy, dir, t, o = {}) {   // fx, fy = feet (center bot
   c.fillStyle = o.angry ? "#ff5020" : "#60c8ff"; c.fillRect(dir * 5 - 2, -19.5, 5, 1.6);   // visor slit
   // hose + big flamethrower
   c.strokeStyle = "#2a2a2a"; c.lineWidth = 1.3; c.beginPath(); c.moveTo(bx, -10); c.quadraticCurveTo(0, -2, dir * 5, -8); c.stroke();
-  c.fillStyle = "#34343a"; c.fillRect(dir > 0 ? 1 : -13, -10, 12, 3.4);
-  c.fillStyle = "#6a6a72"; c.fillRect(dir > 0 ? 11 : -15, -11, 4, 5.4);
-  c.fillStyle = "#1a1a1a"; c.fillRect(dir > 0 ? 3 : -5, -7, 2, 3);
+  const la = o.aim != null ? Math.atan2(Math.sin(o.aim), Math.cos(o.aim) * dir) : 0;   // gun angle (0 = straight ahead)
+  c.save(); c.scale(dir, 1); c.translate(0, -8.3); c.rotate(la);
+  c.fillStyle = "#34343a"; c.fillRect(1, -1.7, 12, 3.4);
+  c.fillStyle = "#6a6a72"; c.fillRect(11, -2.7, 4, 5.4);
+  c.fillStyle = "#1a1a1a"; c.fillRect(3, 1.3, 2, 3);
+  c.restore();
   c.restore();
   if (o.hurt) { c.globalAlpha = 0.35; c.fillStyle = "#fff"; c.beginPath(); c.ellipse(fx, fy - 10 * s, 9 * s, 8 * s, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1; }   // soft hit tint (no white flash)
   // pilot light / nozzle glow
-  const nx = fx + dir * 14 * s, ny = fy - 8 * s;
+  const nx = fx + dir * Math.cos(la) * 14 * s, ny = fy - 8.3 * s + Math.sin(la) * 14 * s;
   if (o.wind > 0) { const k = o.wind; c.fillStyle = "rgba(255,120,30," + (0.3 + 0.3 * k).toFixed(2) + ")"; c.beginPath(); c.arc(nx, ny, 5 + k * 10, 0, Math.PI * 2); c.fill(); c.fillStyle = "#ffd060"; c.beginPath(); c.arc(nx, ny, 3 + k * 3, 0, Math.PI * 2); c.fill(); }
   else { c.fillStyle = Math.floor(t * 6) % 2 ? "#60a0ff" : "#ffa030"; c.fillRect(nx - 1.5, ny - 2, 3, 3); }
   c.restore();
@@ -6351,13 +6501,22 @@ function ctDrawBossWorld(c, st, now) {   // in world coordinates
       const gy = ctGroundBelow(st, e.shadow, e.y + e.h - 4);
       if (gy != null) { c.fillStyle = "rgba(0,0,0,.35)"; c.beginPath(); c.ellipse(e.shadow, gy - 1, 24, 5, 0, 0, Math.PI * 2); c.fill(); }
     }
+    if ((e.mode === "aimTrack" || e.mode === "aimLock") && e.aim != null) {   // aiming line: where the flames will go
+      const n = ctBossNozzle(e, e.aim), L = ctRay(st, n.x, n.y, Math.cos(e.aim), Math.sin(e.aim), 270);
+      const lock = e.mode === "aimLock", a = lock ? 0.45 + 0.15 * Math.sin(now * 5) : 0.22;
+      c.save(); c.strokeStyle = "rgba(255,150,40," + a.toFixed(2) + ")"; c.lineWidth = lock ? 3 : 2; c.setLineDash([6, 5]); c.lineDashOffset = -now * 30;
+      c.beginPath(); c.moveTo(n.x, n.y); c.lineTo(n.x + Math.cos(e.aim) * L, n.y + Math.sin(e.aim) * L); c.stroke(); c.restore();
+      if (lock) { c.fillStyle = "rgba(255,120,30," + a.toFixed(2) + ")"; c.beginPath(); c.arc(n.x + Math.cos(e.aim) * L, n.y + Math.sin(e.aim) * L, 4, 0, Math.PI * 2); c.fill(); }
+    }
     const shake = e.mode === "dying" || (e.mode === "rage" && e.mt > 2.3) ? (Math.random() - 0.5) * 3 : 0;
     const lying = e.mode === "rage" && e.mt < 2.3 && e.mt > 0.9;
     const fx = Math.round(e.x + e.w / 2 + shake), fy = Math.round(e.y + e.h);
     if (lying) { c.save(); c.translate(fx, fy); c.rotate(-e.dir * 1.2); c.translate(-fx, -fy + 6); }
     ctDrawBlaze(c, fx, fy, e.dir, e.t, {
       phase: e.phase, tanks: e.tanks, walk: e.walk, hurt: e.fl > 0, refuel: e.mode === "refuel", angry: e.phase === 2 || e.mode === "jet" || e.mode === "dash",
-      crouch: e.mode === "stompWind" || e.mode === "dashWind" || e.mode === "recover", wind: e.mode === "jetWind" ? 1 - e.mt / 0.7 : e.mode === "jet" ? 1 : 0 });
+      crouch: e.mode === "stompWind" || e.mode === "dashWind" || e.mode === "recover" || e.mode === "hopWind",
+      aim: e.mode === "aimTrack" || e.mode === "aimLock" || e.mode === "aimFire" ? e.aim : null,
+      wind: e.mode === "jetWind" ? 1 - e.mt / 0.7 : e.mode === "aimLock" ? 1 - e.mt : e.mode === "jet" || e.mode === "aimFire" ? 1 : 0 });
     if (lying) c.restore();
   }
 }
@@ -7043,6 +7202,7 @@ function ctDrawWorld(c, st, inp, now) {
     else if (e.k === "f") ctDrawHeliChicken(c, Math.round(e.x), Math.round(e.y), e.t, e.fl > 0, e.face || 1, e.tilt || 0);
   }
   if (st.stranger) ctDrawStranger(c, st.stranger, now);
+  for (const d of st.bdoors) if (vis(d.x0 * T, d.y0 * T) || vis(d.x1 * T, d.y1 * T)) ctDrawBossDoor(c, d, now);
   ctDrawBossWorld(c, st, now);
   if (p.deadT <= 0 && st.phase !== "over" && !(p.inv > 0 && Math.floor(now * 12) % 2)) {
     ctDrawChicken(c, Math.round(p.x + p.w / 2), Math.round(p.y + p.h), p.face, st.noGun ? null : p.aim, p.walk);
@@ -7541,6 +7701,12 @@ function ctEdTile(c, ch, px, py, top = true) {
     c.fillStyle = "#3c4238"; c.beginPath(); c.arc(px + 12, py + 15, 5, 0, Math.PI * 2); c.fill();
     c.fillStyle = "#111"; c.fillRect(px + 9, py + 14, 2, 2); c.fillRect(px + 13, py + 14, 2, 2);
   }
+  else if (ch === "q") {   // boss door piece (stacks into a big gate)
+    c.fillStyle = "rgba(20,16,24,.6)"; c.fillRect(px + 2, py, T - 4, T);
+    c.fillStyle = "#4a4650"; c.fillRect(px, py, 2, T); c.fillRect(px + T - 2, py, 2, T);
+    for (let bx = px + 4; bx < px + T - 3; bx += 5) { c.fillStyle = "#3a3a44"; c.fillRect(bx, py, 3, T); c.fillStyle = "#7a7a88"; c.fillRect(bx, py, 1, T); }
+    c.fillStyle = "#2c2c34"; c.fillRect(px + 2, py + 10, T - 4, 3); c.fillStyle = "#ff7a20"; c.fillRect(px + 10, py + 9, 4, 5);
+  }
   else if (ch === "x" || ch === "a") {   // boss blocker / boss spawn (editor only)
     c.fillStyle = ch === "x" ? "rgba(255,120,0,.25)" : "rgba(255,40,90,.25)"; c.fillRect(px, py, T, T);
     c.strokeStyle = ch === "x" ? "rgba(255,150,40,.95)" : "rgba(255,80,130,.95)"; c.lineWidth = 1; c.setLineDash([3, 2]); c.strokeRect(px + 1.5, py + 1.5, T - 3, T - 3); c.setLineDash([]);
@@ -7708,7 +7874,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (gunC.checked ? "" : " · 🚫🔫 no shotgun") + (glC.checked || w === "1-S" ? " · 👾 glitch death" : "") + (n["@"] ? " · 🐓 BOSS" + (n["@"] > 1 ? " (only the first one counts!)" : "") + (n.a ? " · 📍 boss spawn" : "") + (n.x ? " · ⛔ boss blockers" : "") : (n.a || n.x ? " · ⚠ boss spawn/blockers but no 🐓 boss" : "")) + (n.R ? " · 🎬 stranger" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (gunC.checked ? "" : " · 🚫🔫 no shotgun") + (glC.checked || w === "1-S" ? " · 👾 glitch death" : "") + (n["@"] ? " · 🐓 BOSS" + (n["@"] > 1 ? " (only the first one counts!)" : "") + (n.a ? " · 📍 boss spawn" : "") + (n.x ? " · ⛔ boss blockers" : "") + (n.q ? " · 🚪 boss door" : "") : (n.a || n.x ? " · ⚠ boss spawn/blockers but no 🐓 boss" : "")) + (n.R ? " · 🎬 stranger" : "") + (n.N ? " · 🪧 " + n.N + " sign" + (n.N > 1 ? "s" : "") : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
