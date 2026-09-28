@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-4XNqRX0bEQA6UWkI3LszZx7ewBN3QwL1A4s9z9S1A3E=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-b3LKW2+Py2FuKGyhVo7QZtNAyt7H9M89D4KpQOY5/Oc=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
   @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
@@ -1251,7 +1270,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.59";
+const APP_VERSION = "10.60";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -6168,6 +6187,7 @@ function ctBossNext(st, e) {
   const jetOk = e.ground && Math.abs(feetDy) < 30 && Math.abs(dx) < jetLen + 10;   // flame jet only on the ground, player in range and at the same height
   const aimOk = e.ground && Math.hypot(dx, feetDy) < 300 && ctSees(st, ex, e.y + e.h - 20, pcx, p.y + p.h / 2);
   let pool = e.phase === 1 ? ["walk", "jet", "jet", "balls", "stomp", "aim", "aim"] : ["walk", "jet", "balls", "stomp", "dash", "dash", "rain", "stomp", "aim", "aim"];
+  if (Math.hypot(dx, feetDy) > 260) pool.push("balls", "balls");   // far away: fire balls are his long-range attack
   pool = pool.filter((k) => (k !== "jet" || jetOk) && (k !== "aim" || aimOk) && (k !== "dash" || (e.ground && Math.abs(feetDy) < 30)));
   let a, n = 0; do a = pool[Math.floor(Math.random() * pool.length)]; while (a === e.last && ++n < 20);
   e.last = a; e.count++;
@@ -6359,9 +6379,13 @@ function ctBossStep(st, e, dt) {
     } else if (m === "balls") {
       e.vx = 0; face();
       if (e.mt <= 0) {
-        const nx = ex + e.dir * 22, ny = e.y + 14, g = 620, tt = 0.85 + Math.random() * 0.35;
-        const tx = pcx + (e.left - 2) * 34 + (Math.random() - 0.5) * 30, ty = p.y + p.h;
-        st.shots.push({ x: nx, y: ny, vx: (tx - nx) / tt, vy: (ty - ny - 0.5 * g * tt * tt) / tt, g, life: 4, boss: true, burn: e.phase === 2 ? 2.4 : 1.4, big: true });
+        // lobbed from ANY distance: the flight time grows with the distance, and the arc stays under the ceiling
+        const nx = ex + e.dir * 22, ny = e.y + 14, g = 620;
+        const tx = pcx + (e.left - 2) * 34 + (Math.random() - 0.5) * 30, ty = p.y + p.h, ddx = tx - nx, ddy = ty - ny;
+        const room = Math.max(20, ctRay(st, nx, ny, 0, -1, 600) - 14);   // free space above him
+        let tt = ctClamp(0.8 + Math.abs(ddx) / 520, 0.85, 2.0) + Math.random() * 0.25;
+        for (; tt > 0.4; tt -= 0.05) { const vy = (ddy - 0.5 * g * tt * tt) / tt; if (vy >= 0 || (vy * vy) / (2 * g) <= room) break; }
+        st.shots.push({ x: nx, y: ny, vx: ctClamp(ddx / tt, -900, 900), vy: (ddy - 0.5 * g * tt * tt) / tt, g, life: 5, boss: true, burn: e.phase === 2 ? 2.4 : 1.4, big: true });
         beep([[180, 0, 0.08], [110, 0.05, 0.14]], "sawtooth", 0.06);
         e.left--; e.mt = e.phase === 2 ? 0.26 : 0.42;
         if (e.left <= 0) ctBossNext(st, e);
@@ -6766,7 +6790,8 @@ function ctStep(st, inp, dt) {
   for (const f of st.shots) {
     f.life -= dt; if (f.g) f.vy += f.g * dt; f.x += f.vx * dt; f.y += f.vy * dt;
     if (Math.random() < 0.8) { const lf = 0.25 + Math.random() * 0.2; st.parts.push({ x: f.x + (Math.random() - 0.5) * 6, y: f.y + (Math.random() - 0.5) * 6, vx: -f.vx * 0.1, vy: -20 - Math.random() * 30, life: lf, max: lf, fire: true, col: "#ff9a20", g: -80 }); }
-    const c = ctBlockAt(st, f.x, f.y, "I");
+    let c = ctBlockAt(st, f.x, f.y, "I");
+    if (!c && f.boss && f.vy > 0) { const pty = Math.floor(f.y / T); if (ctTile(st, Math.floor(f.x / T), pty) === "=" && f.y - f.vy * dt <= pty * T + 1) c = "="; }   // boss fire balls land on platforms too
     if (c || f.y > st.H * T + 40 || f.life <= 0) {
       f.life = 0;
       const tx = Math.floor(f.x / T), ty = Math.floor(f.y / T);
