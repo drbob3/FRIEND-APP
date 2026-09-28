@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-gy5EiRCGzN+v9d9bMmPaY6QmHePOCpy2cE7yj8KYUuM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-WQEFbguO7JMu6EfY6MN86ScoAwH5G0A7LcAguoJDbPg=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -549,6 +549,22 @@
   .ctrec { padding: 1px; min-width: 0; width: auto; }
   .ctblk, .ctside { min-width: 0; }
   .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .gcard .hint { white-space: pre-line; }
   .gscore { flex: 1 1 180px; min-width: 160px; }
   .gscore ol { margin: 4px 0 0; padding: 4px 6px 4px 28px; background: #fff; min-height: 60px; }
@@ -1034,7 +1050,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.46";
+const APP_VERSION = "10.48";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -5102,13 +5118,14 @@ const CT = {
   KICK_UP: 440, KICK_SIDE: 300,
   LIVES: 3, MAX_LIVES: 9,
   TOWER_W: 20, MIN_W: 20, MAX_W: 300, MIN_H: 15, MAX_H: 300, MAX_CELLS: 12000,
-  TILES: ".#=%^gdSECwfnF+BGDPXtlvorjWkOihycIKQMzuHebL",
+  TILES: ".#=%^gdSECwfnF+*Z|_BGDPXtlvorjWkOihycIKQMzuHebL",
   THEMES: { outside: { label: "Outside", icon: "🌄" }, fortress: { label: "Fortress", icon: "🏰" }, tower: { label: "Tower", icon: "🗼" } },
   WORLDS: [
     { theme: "outside", name: "Outside", desc: "Run to the right across the fields. The Tower waits far away on its cliff..." },
     { theme: "fortress", name: "Fortress", desc: "Get inside the castle walls." },
     { theme: "tower", name: "The Tower", desc: "Climb to the very top!" },
   ],
+  SECRET: ["1-S", "2-S", "3-S"],   // secret levels: never in the menu, only through the secret door
   SLOTS: ["1-1", "1-2", "1-3", "1-4", "1-5", "2-1", "2-2", "2-3", "2-4", "2-5", "3-1", "3-2", "3-3", "3-4", "3-5"],
   SIZES: { small: { label: "Small (60)", rows: 60 }, medium: { label: "Medium (100)", rows: 100 }, big: { label: "Big (160)", rows: 160 }, huge: { label: "Huge (250)", rows: 250 } },
   DIFFS: {
@@ -5116,7 +5133,7 @@ const CT = {
     normal: { label: "Normal", minLen: 3, maxLen: 6, shot: 0.14, solid: 0.25, side: 0.55, spike: 0.4,  fox: 0.35, hawk: 0.16, crate: 0.15, heart: 0.04, cpEvery: 24 },
     hard:   { label: "Hard",   minLen: 2, maxLen: 5, shot: 0.22, solid: 0.3,  side: 0.6,  spike: 0.55, fox: 0.5,  hawk: 0.28, crate: 0.18, heart: 0.03, cpEvery: 32 },
   },
-  CATS: [["basic", "🧱 Basic"], ["outside", "🌄 Outside"], ["castle", "🏰 Castle"], ["tower", "🗼 Tower"], ["special", "⚙ Special"], ["things", "🐔 Things"]],
+  CATS: [["basic", "🧱 Basic"], ["outside", "🌄 Outside"], ["castle", "🏰 Castle"], ["tower", "🗼 Tower"], ["special", "⚙ Special"], ["things", "🐔 Things"], ["utility", "🧰 Utility"]],
   // [letter, icon, name, what it does, menu tab]
   TOOLS: [
     ["#", "🧱", "Stone block", "Solid.", "basic"], ["=", "🪵", "Platform", "Jump through it from below. Hold ↓ to drop down.", "basic"],
@@ -5137,6 +5154,10 @@ const CT = {
     ["L", "🌋", "Lava", "Touch it = −1 life.", "special"],
     ["S", "🏁", "Start", "Where the player starts (only one).", "things"], ["E", "🚪", "Exit", "Touch it to win the level.", "things"],
     ["C", "🚩", "Checkpoint", "Touch it: you come back here when you lose a life.", "things"], ["+", "❤", "Heart", "+1 life.", "things"],
+    ["*", "⭐", "Secret star", "A hidden secret (1 per level). Take it and finish the level = ⭐ in the Story menu.", "things"],
+    ["|", "↔", "Camera stop ↔", "Invisible in the game. The screen can't scroll left/right past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
+    ["_", "↕", "Camera stop ↕", "Invisible in the game. The screen can't scroll up/down past it (and the player can't leave the screen that way) until the player TOUCHES it. Stop blocks touching each other = one stop.", "utility"],
+    ["Z", "🔮", "Secret door", "ONE per world. Opens with the 5 ⭐ of the world's 5 levels and leads to the world's secret level.", "things"],
     ["w", "🐔", "Black chicken", "Walks left and right. 3 shots.", "things"], ["f", "🚁", "Helicopter chicken", "Flies to you. 2 shots.", "things"],
     ["n", "🎯", "Sniper chicken", "Doesn't move. Aims 5-6 s with a red laser, then shoots. 3 shots.", "things"],
     ["F", "🔥", "Flamethrower chicken", "Walks around calmly. When it sees you or gets shot, it chases you (jumps over holes and walls), burns you up close and sometimes charges a fire ball. 4 shots.", "things"],
@@ -5160,7 +5181,7 @@ function ctNormRows(rows) {
   while (r.length < CT.MIN_H) r.unshift(".".repeat(W));
   return r;
 }
-const CT_MARK = "SECwfnF+";
+const CT_MARK = "SECwfnF+*Z|_";
 const CT_LEGACY_BG = { B: "#", G: "g", D: "d", P: "=", X: "%" };   // v10.39-10.41 background letters
 // A level has 2 layers of the same size: rows (normal blocks, markers) and bg (background blocks).
 // Saved in ONE string: normal rows, then "\n~\n", then the background rows packed as "12.3B" (count + block).
@@ -5288,10 +5309,12 @@ function ctNewGame(level) {
   const lay = ctSplitLayers(ctNormRows(level.rows), level.bg || null);
   const g = lay.rows.map((r) => r.split(""));
   const H = g.length, W = g[0].length;
-  const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], shots: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
+  const st = { level, theme: CT.THEMES[level.theme] ? level.theme : "tower", W, H, g, ents: [], pel: [], shots: [], stars: [], sdoors: [], parts: [], texts: [], cps: [], exits: [], picks: [], crates: {}, lives: CT.LIVES, kills: 0, deaths: 0, time: 0, camX: 0, camY: 0, phase: "loading", loadRow: 0, shake: 0, flash: 0 };
   let sx = 2, sy = H - 2, foundS = false;
+  const stopCells = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const c = g[y][x];
+    if (c === "|" || c === "_") stopCells.push([x, y, c]);
     if (CT_MARK.includes(c)) g[y][x] = ".";
     if (c === "S" && !foundS) { sx = x; sy = y; foundS = true; }
     else if (c === "w") st.ents.push({ k: "w", x: x * T + 3, y: y * T + T - 16, w: 18, h: 16, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1, hp: 3, fl: 0, t: Math.random() * 9 });
@@ -5300,10 +5323,15 @@ function ctNewGame(level) {
     else if (c === "f") st.ents.push({ k: "f", x: x * T + 2, y: y * T + 5, w: 20, h: 14, hx: x * T + 2, hy: y * T + 5, hp: 2, fl: 0, t: Math.random() * 9, face: 1, tilt: 0 });
     else if (c === "C") st.cps.push({ x: x * T, y: y * T, on: false });
     else if (c === "E") st.exits.push({ x: x * T, y: y * T });
+    else if (c === "*") st.stars.push({ x: x * T + 4, y: y * T + 4, w: 16, h: 16, t: Math.random() * 9 });
+    else if (c === "Z") st.sdoors.push({ x: x * T, y: y * T });
     else if (c === "+") st.picks.push({ x: x * T + 5, y: y * T + 5, w: 14, h: 14, t: Math.random() * 9 });
   }
   st.p = { x: sx * T + 5, y: sy * T + T - 20, w: 14, h: 20, vx: 0, vy: 0, ground: false, face: 1, coyote: 0, jbuf: 0, jumping: false, dropT: 0, shells: CT.SHELLS, reload: 0, cd: 0, inv: 0, walk: 0, aim: 0, deadT: 0 };
   st.cp = { x: st.p.x, y: st.p.y };
+  st.locks = ctMakeLocks(stopCells, st.p);
+  st.hadStar = !!(level.slot && !level.test && ctProg()[level.slot + "s"]);
+  st.sdoorOpen = !!(level.slot && !String(level.slot).endsWith("S") && (S.isAdmin || ctWorldStars(String(level.slot)[0]) >= 5));   // already found before: the star is shown as a ghost
   st.start = { x: st.p.x, y: st.p.y };
   const ex = st.exits.length ? st.exits.reduce((a, b) => (Math.abs(b.x - st.p.x) + Math.abs(b.y - st.p.y) > Math.abs(a.x - st.p.x) + Math.abs(a.y - st.p.y) ? b : a)) : null;
   st.goal = ex ? { x: ex.x, y: ex.y } : { x: st.p.x, y: 0 };
@@ -5312,6 +5340,7 @@ function ctNewGame(level) {
   st.camY = ctClamp(st.p.y + st.p.h / 2 - CT.VH * 0.55, 0, st.maxCam);
   st.camX = ctClamp(st.p.x + st.p.w / 2 - CT.VW * 0.42, 0, st.maxCamX);
   st.bgl = lay.bg.map((r) => r.split(""));
+  { const lim = ctCamLimits(st); st.camX = ctClamp(st.camX, lim.minX, lim.maxX); st.camY = ctClamp(st.camY, lim.minY, lim.maxY); }
   st.cache = document.createElement("canvas");
   st.cache.width = W * T; st.cache.height = H * T;
   st.cctx = st.cache.getContext("2d");
@@ -5394,6 +5423,55 @@ function ctBreak(st, tx, ty) {   // crate or glass breaks
   st.g[ty][tx] = "."; ctRedrawTile(st, tx, ty);
   if (c === "Q") { ctBurst(st, tx * T + 12, ty * T + 12, 14, ["#dff2ff", "#aee0ff", "#fff"], 150, 500); beep([[2200, 0, 0.04], [1700, 0.03, 0.05], [2600, 0.06, 0.04]], "square", 0.04); }
   else { ctBurst(st, tx * T + 12, ty * T + 12, 12, ["#b07a36", "#e0a85a", "#6e4a1e"], 140, 500); beep([[200, 0, 0.08]], "square", 0.05); }
+}
+// secret door: needs the 5 stars of the world (admins can always open it)
+function ctWorldStars(w, extraSlot) {
+  const o = ctProg(); let n = 0;
+  for (let l = 1; l <= 5; l++) { const sl = w + "-" + l; if (o[sl + "s"] || sl === extraSlot) n++; }
+  return n;
+}
+function ctSecretDoor(st) {
+  const lv = st.level, w = lv.slot ? String(lv.slot)[0] : null;
+  if (!w || lv.slot.endsWith("S")) return { open: false, msg: "This door only works in story levels." };
+  const have = ctWorldStars(w, st.gotStar ? lv.slot : null);
+  if (have < 5 && !S.isAdmin) return { open: false, msg: "🔒 " + have + " / 5 ⭐" };
+  if (!S.ctStory?.[w + "-S"]) return { open: false, msg: "Not ready yet..." };
+  return { open: true, have };
+}
+// CAMERA STOPS: stop blocks of the same kind that touch each other = one stop. The side of the player is fixed at the
+// start: the screen can't scroll past the stop (and the player can't leave the screen on that side) until the player
+// touches one of its blocks. "|" = left/right stop, "_" = up/down stop. Invisible in the game.
+function ctMakeLocks(cells, p) {
+  const T = CT.T, key = (x, y) => x + "," + y, left = new Map(cells.map((c) => [key(c[0], c[1]), c])), locks = [];
+  for (const c0 of cells) {
+    if (!left.has(key(c0[0], c0[1]))) continue;
+    const L = { type: c0[2] === "|" ? "h" : "v", cells: [], c0: 1e9, c1: -1, r0: 1e9, r1: -1, on: true };
+    const todo = [c0]; left.delete(key(c0[0], c0[1]));
+    while (todo.length) {
+      const [x, y] = todo.pop(); L.cells.push([x, y]);
+      L.c0 = Math.min(L.c0, x); L.c1 = Math.max(L.c1, x); L.r0 = Math.min(L.r0, y); L.r1 = Math.max(L.r1, y);
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const n = left.get(key(x + dx, y + dy)); if (n && n[2] === c0[2]) { left.delete(key(x + dx, y + dy)); todo.push(n); } }
+    }
+    L.side = L.type === "h" ? (p.x + p.w / 2 < (L.c0 + L.c1 + 1) * T / 2 ? "left" : "right") : (p.y + p.h / 2 < (L.r0 + L.r1 + 1) * T / 2 ? "above" : "below");
+    locks.push(L);
+  }
+  return locks;
+}
+function ctCamLimits(st) {   // camera limits + the player's walls from the camera stops that are still on
+  const T = CT.T;
+  const o = { minX: 0, maxX: st.maxCamX, minY: 0, maxY: st.maxCam, pL: null, pR: null, pT: null, pB: null };
+  for (const L of st.locks) if (L.on) {
+    if (L.type === "h") {
+      if (L.side === "left") { o.maxX = Math.min(o.maxX, Math.max(0, (L.c1 + 1) * T - CT.VW)); o.pR = Math.min(o.pR ?? 1e9, (L.c1 + 1) * T); }
+      else { o.minX = Math.max(o.minX, Math.min(st.maxCamX, L.c0 * T)); o.pL = Math.max(o.pL ?? -1e9, L.c0 * T); }
+    } else {
+      if (L.side === "above") { o.maxY = Math.min(o.maxY, Math.max(0, (L.r1 + 1) * T - CT.VH)); o.pB = Math.min(o.pB ?? 1e9, (L.r1 + 1) * T); }
+      else { o.minY = Math.max(o.minY, Math.min(st.maxCam, L.r0 * T)); o.pT = Math.max(o.pT ?? -1e9, L.r0 * T); }
+    }
+  }
+  if (o.maxX < o.minX) o.maxX = o.minX;
+  if (o.maxY < o.minY) o.maxY = o.minY;
+  return o;
 }
 function ctHurt(st) {
   const p = st.p;
@@ -5728,6 +5806,26 @@ function ctStep(st, inp, dt) {
       k.got = true; st.lives = Math.min(CT.MAX_LIVES, st.lives + 1);
       ctText(st, k.x + 7, k.y - 4, "+1 ❤", "#f66"); beep([[880, 0, 0.06], [1320, 0.06, 0.1]], "square", 0.05);
     }
+    for (const L of st.locks) if (L.on && L.cells.some(([cx, cy]) => ctHit(p, { x: cx * T, y: cy * T, w: T, h: T }))) L.on = false;   // touched: the screen can scroll again
+    { const lim = ctCamLimits(st);
+      if (lim.pR != null && p.x + p.w > lim.pR) { p.x = lim.pR - p.w; if (p.vx > 0) p.vx = 0; }
+      if (lim.pL != null && p.x < lim.pL) { p.x = lim.pL; if (p.vx < 0) p.vx = 0; }
+      if (lim.pT != null && p.y < lim.pT) { p.y = lim.pT; if (p.vy < 0) p.vy = 0; }
+      if (lim.pB != null && p.y + p.h > lim.pB) { p.y = lim.pB - p.h; if (p.vy > 0) { p.vy = 0; p.ground = true; } } }
+    for (const k of st.stars) if (!k.got && ctHit(p, k)) {
+      k.got = true; st.gotStar = true;
+      if (st.level.slot && st.sdoors.length && ctWorldStars(String(st.level.slot)[0], st.level.slot) >= 5) st.sdoorOpen = true;
+      ctText(st, k.x + 8, k.y - 6, st.hadStar ? "⭐ (already found)" : "⭐ SECRET FOUND!", "#ffe040");
+      ctBurst(st, k.x + 8, k.y + 8, 16, ["#ffe040", "#fff", "#ffb020"], 150, 100);
+      beep([[988, 0, 0.08], [1319, 0.08, 0.08], [1568, 0.16, 0.08], [1976, 0.24, 0.2]], "square", 0.05);
+    }
+    for (const d of st.sdoors) if (ctHit(p, { x: d.x + 4, y: d.y - 8, w: 16, h: 32 }) && st.time > (st.doorMsgT || 0)) {
+      const info = ctSecretDoor(st);
+      if (info.open) { st.phase = "secret"; st.winTime = st.time; beep([[392, 0, 0.12], [523, 0.1, 0.12], [659, 0.2, 0.12], [784, 0.3, 0.12], [1047, 0.4, 0.3]], "triangle", 0.06); break; }
+      st.doorMsgT = st.time + 2;
+      ctText(st, d.x + 12, d.y - 16, info.msg, "#d0a0ff");
+      beep([[200, 0, 0.1], [150, 0.1, 0.15]], "square", 0.04);
+    }
     for (const e of st.exits) if (ctHit(p, { x: e.x + 4, y: e.y - 8, w: 16, h: 32 })) {
       st.phase = "win"; st.winTime = st.time;
       beep([[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1047, 0.3, 0.3]], "square", 0.06);
@@ -5813,8 +5911,10 @@ function ctStep(st, inp, dt) {
   // camera
   const back = p.deadT > 0 && p.deadT < 0.4;
   const fx = back ? st.cp.x : p.x, fy = back ? st.cp.y : p.y;
-  st.camY += (ctClamp(fy + p.h / 2 - CT.VH * 0.55, 0, st.maxCam) - st.camY) * Math.min(1, dt * 7);
-  st.camX += (ctClamp(fx + p.w / 2 - CT.VW * 0.42 + (back ? 0 : p.face * 30), 0, st.maxCamX) - st.camX) * Math.min(1, dt * 5);
+  const lim = ctCamLimits(st);
+  st.camY += (ctClamp(fy + p.h / 2 - CT.VH * 0.55, lim.minY, lim.maxY) - st.camY) * Math.min(1, dt * 7);
+  st.camX += (ctClamp(fx + p.w / 2 - CT.VW * 0.42 + (back ? 0 : p.face * 30), lim.minX, lim.maxX) - st.camX) * Math.min(1, dt * 5);
+  st.camY = ctClamp(st.camY, lim.minY, lim.maxY); st.camX = ctClamp(st.camX, lim.minX, lim.maxX);
 }
 
 /* ----- drawing ----- */
@@ -6051,6 +6151,27 @@ function ctDrawDoor(c, x, y, t) {
   const glow = 0.6 + Math.sin(t * 4) * 0.4;
   c.fillStyle = "rgba(80,255,120," + glow.toFixed(2) + ")"; c.font = "bold 9px monospace"; c.textAlign = "center"; c.fillText("EXIT", x + 12, y + T - 39);
 }
+function ctDrawStar(c, x, y, r, now, ghost) {
+  const pts = 5, rot = -Math.PI / 2 + Math.sin(now * 2) * 0.15;
+  if (!ghost) { c.fillStyle = "rgba(255,230,80,.18)"; c.beginPath(); c.arc(x, y, r * 1.9, 0, Math.PI * 2); c.fill(); }
+  c.beginPath();
+  for (let i = 0; i < pts * 2; i++) { const a = rot + i * Math.PI / pts, rr = i % 2 ? r * 0.45 : r; c.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+  c.closePath();
+  if (ghost) { c.strokeStyle = "rgba(255,230,120,.55)"; c.lineWidth = 1.5; c.stroke(); return; }
+  c.fillStyle = "#ffd830"; c.fill(); c.strokeStyle = "#b07800"; c.lineWidth = 1; c.stroke();
+  c.fillStyle = "#fff8c0"; c.fillRect(Math.round(x - 2), Math.round(y - 3), 2, 2);
+  if (Math.floor(now * 3) % 3 === 0) { c.fillStyle = "#fff"; c.fillRect(Math.round(x + r * 0.9), Math.round(y - r), 1, 3); c.fillRect(Math.round(x + r * 0.9) - 1, Math.round(y - r) + 1, 3, 1); }
+}
+function ctDrawSecretDoor(c, x, y, now, open) {   // purple magic door (2 blocks tall like the exit)
+  const T = CT.T;
+  c.fillStyle = "#1e0e30"; c.fillRect(x + 1, y + T - 36, 22, 36);
+  c.fillStyle = open ? "#7a3ac8" : "#4a2a70"; c.fillRect(x + 4, y + T - 33, 16, 33);
+  c.beginPath(); c.arc(x + 12, y + T - 33, 8, Math.PI, 0); c.fill();
+  c.fillStyle = "#1e0e30"; c.fillRect(x + 11, y + T - 33, 2, 33);
+  c.fillStyle = "#ffd830"; c.beginPath(); c.arc(x + 12, y + T - 20, 3, 0, Math.PI * 2); c.fill();   // star lock
+  const glow = 0.5 + Math.sin(now * 3) * 0.3;
+  c.fillStyle = "rgba(200,140,255," + (open ? glow : glow * 0.4).toFixed(2) + ")"; c.font = "bold 8px monospace"; c.textAlign = "center"; c.fillText(open ? "OPEN" : "⭐×5", x + 12, y + T - 44);
+}
 function ctDrawFlag(c, x, y, on) {
   c.fillStyle = "#bbb"; c.fillRect(x + 6, y + 1, 2, 23);
   c.fillStyle = on ? "#30d050" : "#d03030"; c.beginPath(); c.moveTo(x + 8, y + 2); c.lineTo(x + 20, y + 6); c.lineTo(x + 8, y + 10); c.fill();
@@ -6153,10 +6274,13 @@ function ctDrawBg(c, st, now) {
 }
 function ctTextOut(c, text, x, y, col = "#fff", font = "bold 14px monospace", align = "center") {
   c.font = font; c.textAlign = align; c.textBaseline = "alphabetic";
-  c.fillStyle = "#000"; c.fillText(text, x + 2, y + 2);
+  // ONE draw with a canvas shadow (drawing the text twice made emojis appear double: emojis keep their colors)
+  c.save();
+  c.shadowColor = "#000"; c.shadowOffsetX = 2; c.shadowOffsetY = 2; c.shadowBlur = 0;
   c.fillStyle = col; c.fillText(text, x, y);
+  c.restore();
 }
-function ctLevelLabel(level) { return level.slot ? "WORLD " + level.slot + " · " + ctWorldOf(level.slot).name.toUpperCase() : ""; }
+function ctLevelLabel(level) { return !level.slot ? "" : String(level.slot).endsWith("S") ? "🔮 SECRET LEVEL · WORLD " + level.slot[0] : "WORLD " + level.slot + " · " + ctWorldOf(level.slot).name.toUpperCase(); }
 function ctDrawLoading(c, st, pct, now) {
   const W = CT.VW, H = CT.VH;
   c.fillStyle = "#000080"; c.fillRect(0, 0, W, H);
@@ -6190,6 +6314,8 @@ function ctDrawWorld(c, st, inp, now) {
       if (ch === "h" || ch === "W" || ch === "L") ctAnimTile(c, ch, tx * T, ty * T, now, ty === 0 || st.g[ty - 1][tx] !== ch);
     }
   for (const e of st.exits) if (vis(e.x, e.y)) ctDrawDoor(c, e.x, e.y, now);
+  for (const d of st.sdoors) if (vis(d.x, d.y)) ctDrawSecretDoor(c, d.x, d.y, now, st.sdoorOpen);
+  for (const k of st.stars) if (!k.got && vis(k.x, k.y)) ctDrawStar(c, k.x + 8, k.y + 8 + Math.sin(now * 3 + k.t) * 2, 8, now, st.hadStar);
   for (const f of st.cps) if (vis(f.x, f.y)) ctDrawFlag(c, f.x, f.y, f.on);
   for (const k of st.picks) if (!k.got && vis(k.x, k.y)) ctHeart(c, k.x + 7, k.y + 6 + Math.sin(now * 3 + k.t) * 2, 13);
   for (const e of st.ents) if (!e.dead && vis(e.x, e.y)) {
@@ -6233,7 +6359,7 @@ function ctDrawWorld(c, st, inp, now) {
       c.globalAlpha = 1 - k * 0.6; c.beginPath(); c.arc(q.x, q.y, r, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
     } else { c.fillStyle = q.col; c.fillRect(Math.round(q.x) - 1, Math.round(q.y) - 1, 3, 3); }
   }
-  for (const t of st.texts) { c.globalAlpha = Math.max(0, Math.min(1, t.life * 2)); ctTextOut(c, t.text, t.x, t.y, t.col, "bold 12px monospace"); c.globalAlpha = 1; }
+  for (const t of st.texts) { c.globalAlpha = Math.max(0, Math.min(1, t.life * 2)); c.font = "bold 12px monospace"; const hw = c.measureText(t.text).width / 2 + 4; ctTextOut(c, t.text, ctClamp(t.x, camX + hw, camX + CT.VW - hw), t.y, t.col, "bold 12px monospace"); c.globalAlpha = 1; }
   c.restore();
   if (inp.mouseAim && st.phase === "play") {
     c.strokeStyle = "rgba(255,255,255,.8)"; c.lineWidth = 1;
@@ -6248,6 +6374,7 @@ function ctDrawWorld(c, st, inp, now) {
     c.fillStyle = on ? "#e0b030" : "#555"; c.fillRect(9 + i * 9, 34, 6, 3);
   }
   if (p.shells < CT.SHELLS && p.reload > 0) { c.fillStyle = "#fff"; c.fillRect(9, 40, Math.round(15 * p.reload / CT.RELOAD), 2); }
+  if (st.gotStar) ctDrawStar(c, 38, 32, 6, now, false);
   const t = st.phase === "win" ? st.winTime : st.time;
   ctTextOut(c, "⏱ " + ctFmt(t), CT.VW - 30, 20, "#fff", "bold 13px monospace", "right");
   if (st.maxCam > 0 && st.H > st.W * 0.75) {   // tall level: height meter on the right
@@ -6282,11 +6409,19 @@ async function ctProgSync() {
   try {
     const r = (await D.get(R("ctProg/" + S.me.uid))).val() || {};
     const o = ctProg();
-    for (const [k, v] of Object.entries(r)) if (CT.SLOTS.includes(k) && typeof v === "number" && v > 0 && (!(o[k] > 0) || v < o[k])) o[k] = v;
+    for (const [k, v] of Object.entries(r)) if (ctProgKey(k) && typeof v === "number" && v > 0 && (!(o[k] > 0) || v < o[k])) o[k] = v;
     ctProgSave(o);
-    for (const [k, v] of Object.entries(o)) if (CT.SLOTS.includes(k) && v > 0 && (!(r[k] > 0) || v < r[k])) D.set(R("ctProg/" + S.me.uid + "/" + k), v).catch(() => {});
+    for (const [k, v] of Object.entries(o)) if (ctProgKey(k) && v > 0 && (!(r[k] > 0) || v < r[k])) D.set(R("ctProg/" + S.me.uid + "/" + k), v).catch(() => {});
     ctStoryRefresh && ctStoryRefresh();
   } catch (e) { ctProgSynced = false; logError("Chicken Tower progress: " + e.message); }
+}
+const ctProgKey = (k) => CT.SLOTS.includes(k) || CT.SECRET.includes(k) || (k.endsWith("s") && CT.SLOTS.includes(k.slice(0, -1)));
+function ctProgStar(slot) {   // ⭐ of a level (saved when you finish it with the secret)
+  const o = ctProg(), k = slot + "s";
+  if (o[k]) return false;
+  o[k] = 1; ctProgSave(o);
+  if (S.me && !S.me.guest) D.set(R("ctProg/" + S.me.uid + "/" + k), 1).catch((e) => logError("Chicken Tower progress: " + e.message));
+  return true;
 }
 function ctProgWin(slot, t) {
   const o = ctProg(), old = o[slot];
@@ -6380,14 +6515,17 @@ function openCtPlay(level) {
     res.replaceChildren();
     if (st.phase === "win") {
       let old = NaN, rec = false;
-      if (level.slot && !level.test) { old = ctProgWin(level.slot, st.winTime); rec = !(old > 0) || st.winTime < old; ctStoryRefresh && ctStoryRefresh(); }
+      let newStar = false;
+      if (level.slot && !level.test) { old = ctProgWin(level.slot, st.winTime); rec = !(old > 0) || st.winTime < old; if (st.gotStar && !level.slot.endsWith("S")) newStar = ctProgStar(level.slot); ctStoryRefresh && ctStoryRefresh(); }
       else if (level.id && !level.test) {
         const k = "ct-best-" + level.id; old = parseFloat(store(k)); rec = !(old > 0) || st.winTime < old;
         if (rec) store(k, String(st.winTime));
         ctMenuRefresh && ctMenuRefresh();
       }
-      res.append(el("span", null, "🏆 " + (level.slot ? "Level " + level.slot + " cleared" : st.theme === "tower" ? "You escaped the tower" : "Level cleared") + " in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : old > 0 ? " · Best: " + ctFmt(old) : "")));
-      if (level.slot && !level.test) {
+      if (newStar) res.append(el("span", null, "⭐ Secret saved! World " + level.slot[0] + ": " + ctWorldStars(level.slot[0]) + "/5 ⭐"));
+      res.append(el("span", null, "🏆 " + (level.slot && level.slot.endsWith("S") ? "🔮 SECRET LEVEL cleared" : level.slot ? "Level " + level.slot + " cleared" : st.theme === "tower" ? "You escaped the tower" : "Level cleared") + " in " + ctFmt(st.winTime) + "! ❤ " + st.lives + " left · 💀 " + st.kills + " enemies" + (rec && old > 0 ? " · 🎉 New best time!" : old > 0 ? " · Best: " + ctFmt(old) : "")));
+      if (level.slot && level.slot.endsWith("S")) res.append(el("span", null, "🎉 You found the secret of World " + level.slot[0] + "!"));
+      else if (level.slot && !level.test) {
         const nx = ctNextSlot(level.slot);
         if (nx) { const nb = mkB("▶ Next level (" + nx + ")", null, () => { const lv = ctStoryLevel(nx); if (lv) setLevel(lv); }); nb.classList.add("msgo"); res.append(nb); }
         else res.append(el("span", null, level.slot === "3-5" ? "🎉 YOU FINISHED THE STORY!" : "More levels coming soon..."));
@@ -6460,6 +6598,13 @@ function openCtPlay(level) {
         const dNow = Math.hypot(st.goal.x - st.p.x, st.goal.y - st.p.y);
         if (!st.best || dNow < Math.hypot(st.goal.x - st.best.x, st.goal.y - st.best.y)) st.best = { x: st.p.x, y: st.p.y };
       }
+    } else if (st.phase === "secret") {   // went through the secret door: this level counts as cleared, then the secret level
+      if (!ended) {
+        ended = true;
+        if (level.slot && !level.test) { ctProgWin(level.slot, st.winTime); if (st.gotStar) ctProgStar(level.slot); ctStoryRefresh && ctStoryRefresh(); }
+        const w = String(level.slot)[0], lv = ctStoryLevel(w + "-S");
+        setTimeout(() => { if (alive() && lv) setLevel({ ...lv, name: lv.name, test: level.test }); }, 900);
+      }
     } else if (st.phase === "over" || st.phase === "win") {
       acc = 0;
       for (const q of st.parts) { q.life -= dt; q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; }
@@ -6470,13 +6615,15 @@ function openCtPlay(level) {
     ctDrawWorld(c, st, inp, nowS);
     const blink = Math.floor(nowS * 2) % 2 === 0;
     const tower = st.theme === "tower";
-    if (st.phase === "title") ctOverlay(c, [
-      [level.slot ? "WORLD " + level.slot : "CHICKEN TOWER", 78, "#ffd040", "bold 34px monospace"],
+    if (st.phase === "secret") ctOverlay(c, [["🔮 SECRET DOOR", 150, "#d0a0ff", "bold 30px monospace"], ["Going to the secret level...", 190, "#fff", "13px monospace"]]);
+    else if (st.phase === "title") ctOverlay(c, [
+      [level.slot && level.slot.endsWith("S") ? "🔮 SECRET LEVEL" : level.slot ? "WORLD " + level.slot : "CHICKEN TOWER", 78, level.slot && level.slot.endsWith("S") ? "#d0a0ff" : "#ffd040", "bold 34px monospace"],
       [level.name.slice(0, 40), 112, "#fff", "bold 15px monospace"],
       [level.slot ? ctWorldOf(level.slot).name : st.W + " × " + st.H + " blocks", 136, "#a0c0ff", "12px monospace"],
       ["Reach the 🚪 EXIT" + (tower ? " at the top!" : "!"), 160, "#a0c0ff", "12px monospace"],
       ["Move A/D ←→ · Jump Space/W · Aim mouse · Shoot click", 200, "#ddd", "12px monospace"],
       ["Shoot DOWN to fly higher! Stand still to reload.", 220, "#ddd", "12px monospace"],
+      [st.stars.length ? (st.hadStar ? "⭐ You already found this level's secret" : "☆ A secret is hidden in this level...") : "", 244, "#ffe070", "12px monospace"],
       [blink ? "CLICK OR PRESS SPACE TO START" : "", 276, "#fff", "bold 16px monospace"],
     ]);
     else if (paused) ctOverlay(c, [["PAUSED", 160, "#fff", "bold 30px monospace"], ["Click or press P to continue", 195, "#ddd", "13px monospace"]]);
@@ -6579,7 +6726,8 @@ function openCtStory() {
         const cell = el("div", "ctlv");
         const b = el("button", null, ""); b.type = "button";
         const open = L && ctSlotOpen(slot), done = prog[slot] > 0;
-        b.append(el("b", null, slot), el("br"), el("span", "dim", !L ? "—" : done ? "✔ " + ctFmt(prog[slot]) : open ? "▶ Play" : "🔒"));
+        const hasStar = L && String(L.map).split("\n~\n")[0].includes("*");
+        b.append(el("b", null, slot + (prog[slot + "s"] ? " ⭐" : hasStar ? " ☆" : "")), el("br"), el("span", "dim", !L ? "—" : done ? "✔ " + ctFmt(prog[slot]) : open ? "▶ Play" : "🔒"));
         b.title = L ? L.name : "Not made yet";
         b.disabled = !open;
         if (done) b.classList.add("done");
@@ -6593,6 +6741,19 @@ function openCtStory() {
         row.append(cell);
       }
       fs.append(row);
+      const stars = ctWorldStars(wi + 1);
+      const anySecret = [1, 2, 3, 4, 5].some((l) => String(S.ctStory?.[(wi + 1) + "-" + l]?.map || "").split("\n~\n")[0].includes("*"));
+      if (anySecret || stars) fs.append(el("div", "hint ctstars", "⭐ " + stars + " / 5 secrets found" + (stars >= 5 ? " · 🔮 The secret door of this world is OPEN!" : "")));
+      if (S.isAdmin) {   // only admins see the secret level here
+        const sl = (wi + 1) + "-S", L = S.ctStory?.[sl];
+        const r2 = el("div", "row-btns");
+        const e = el("button", "small", (L ? "✎ Edit" : "＋ Make") + " secret level " + sl); e.type = "button";
+        e.onclick = () => openCtEditor(L ? ctStoryLevel(sl) : { slot: sl, name: "Secret " + (wi + 1), rows: ctBlankRows(Wd.theme), theme: Wd.theme, fresh: true });
+        r2.append(e);
+        if (L) { const pl = el("button", "small", "▶ Test"); pl.type = "button"; pl.onclick = () => { const lv = ctStoryLevel(sl); if (lv) openCtPlay(lv); }; r2.append(pl); }
+        r2.append(el("span", "dim", " (admins only — players reach it only through the 🔮 secret door)"));
+        fs.append(r2);
+      }
       win.content.append(fs);
     });
     const nBuilt = CT.SLOTS.filter((s) => S.ctStory?.[s]).length;
@@ -6617,6 +6778,13 @@ function ctEdTile(c, ch, px, py, top = true) {
   else if (ch === "n") ctDrawSniper(c, px + 3, py + 8, -1, Math.PI, 0, false, false);
   else if (ch === "F") ctDrawFlamer(c, px + 3, py + 8, 1, 0, false, false, 0, false);
   else if (ch === "+") ctHeart(c, px + 12, py + 12, 14);
+  else if (ch === "*") ctDrawStar(c, px + 12, py + 12, 8, 0.4, false);
+  else if (ch === "|" || ch === "_") {   // camera stop (editor only)
+    c.fillStyle = "rgba(0,220,255,.22)"; c.fillRect(px, py, T, T);
+    c.strokeStyle = "rgba(0,230,255,.9)"; c.lineWidth = 1; c.setLineDash([3, 2]); c.strokeRect(px + 1.5, py + 1.5, T - 3, T - 3); c.setLineDash([]);
+    c.fillStyle = "#bff6ff"; c.font = "bold 15px monospace"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(ch === "|" ? "↔" : "↕", px + 12, py + 13); c.textBaseline = "alphabetic";
+  }
+  else if (ch === "Z") { c.fillStyle = "#4a2a70"; c.fillRect(px + 5, py + 4, 14, 20); c.beginPath(); c.arc(px + 12, py + 6, 7, Math.PI, 0); c.fill(); c.fillStyle = "#ffd830"; c.beginPath(); c.arc(px + 12, py + 15, 2.5, 0, Math.PI * 2); c.fill(); }
 }
 function ctThumb(k, size = 32, bg = "#1d1d3a") {
   const cv = el("canvas", "ctthumb"); cv.width = 24; cv.height = 24; cv.style.width = cv.style.height = size + "px";
@@ -6649,6 +6817,7 @@ async function openCtEditor(start) {
     whereS.replaceChildren();
     const o0 = el("option", null, "🏗 Custom level"); o0.value = "custom"; whereS.append(o0);
     for (const s of CT.SLOTS) { const o = el("option", null, "📖 Story " + s + " (" + ctWorldOf(s).name + ")" + (S.ctStory?.[s] ? " ✔" : "")); o.value = s; whereS.append(o); }
+    for (const s of CT.SECRET) { const o = el("option", null, "🔮 Secret level World " + s[0] + " (" + ctWorldOf(s).name + ")" + (S.ctStory?.[s] ? " ✔" : "")); o.value = s; whereS.append(o); }
     whereS.value = v || "custom";
   };
   const themeS = el("select", "sunken"); themeS.title = "Look of the level (background)";
@@ -6765,7 +6934,7 @@ async function openCtEditor(start) {
     const n = count(), w = whereS.value;
     const saved = w === "custom" ? !!customId : !!S.ctStory?.[w];
     stat.textContent = (w === "custom" ? (customId ? "Custom level" : "New custom level") : "Story " + w + (S.ctStory?.[w] ? "" : " (empty slot)")) + " · " + W() + " × " + H() + " blocks · 🏁 Start " + (n.S ? "✔" : "✖ missing") + " · 🚪 Exit " + (n.E ? "✔" : "✖ missing") +
-      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
+      " · 🚩 " + (n.C || 0) + " · 🌓 " + n.bg + " · 🐔 " + (n.w || 0) + " · 🚁 " + (n.f || 0) + " · 🎯 " + (n.n || 0) + " · 🔥 " + (n.F || 0) + (n["*"] ? " · ⭐ secret" : "") + (n.Z ? " · 🔮 secret door" : "") + (n["|"] || n["_"] ? " · camera stops ↔" + (n["|"] || 0) + " ↕" + (n["_"] || 0) : "") + " · ❤ " + (n["+"] || 0) + (dirty ? " · ✱ not saved" : "");
     bDel.disabled = !saved;
     bSaveNew.hidden = w !== "custom";
     wI.value = W(); hI.value = H();
@@ -6795,7 +6964,7 @@ async function openCtEditor(start) {
     if (layer === "bg") { if (bgl[y][x] === ch) return; bgl[y][x] = ch; cell(x, y); dirty = true; return; }
     if (y + 1 < H()) setTimeout(() => cell(x, y + 1));
     if (g[y][x] === ch) return;
-    if (ch === "S") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === "S") { g[yy][xx] = "."; cell(xx, yy); }
+    if (ch === "S" || ch === "*" || ch === "Z") for (let yy = 0; yy < H(); yy++) for (let xx = 0; xx < W(); xx++) if (g[yy][xx] === ch) { g[yy][xx] = "."; cell(xx, yy); }   // only one per level
     g[y][x] = ch; cell(x, y); dirty = true;
   }
   function load(lv) {
