@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-kYNtFhah+bzoFWk2WOVmoPuwNG0awk+oNqJFDb0U1FY=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tpGgvTC/Wln8WzYQ11ioiiMgQDbADnzn36KJCDzcq+w=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -517,6 +517,25 @@
   .float.ctedwin.sized .cteds, .float.ctedwin.max .cteds { height: auto; flex: 1; min-height: 120px; }
   .cteds canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
   .ctedstat { white-space: normal; }
+  .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
+  .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
+  @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
+  .ctbuild { display: flex; flex-direction: column; gap: 3px; }
+  .ctbuildtop { display: flex; gap: 4px; align-items: stretch; flex-wrap: wrap; }
+  .ctcur { flex: 1; min-width: 200px; display: flex; gap: 6px; align-items: center; padding: 3px 6px; background: #fff; }
+  .ctcurtxt { min-width: 0; line-height: 1.25; }
+  .ctsidebtns { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
+  .ctside { display: inline-flex; align-items: center; gap: 2px; }
+  .ctthumb { image-rendering: pixelated; display: block; flex: none; }
+  .cttabs { display: flex; flex-wrap: wrap; gap: 2px; }
+  .ctgrid { display: flex; flex-wrap: wrap; gap: 3px; padding: 4px; background: #fff; max-height: 150px; overflow-y: auto; }
+  .ctblk { width: 66px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 2px; font-size: 10px; line-height: 1.1; }
+  .ctblk span { text-align: center; }
+  .ctblk.on { outline: 2px solid #000080; outline-offset: -2px; }
+  .ctrecent { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
+  .ctrec { padding: 1px; min-width: 0; width: auto; }
+  .ctblk, .ctside { min-width: 0; }
+  .ctrec.on { outline: 2px solid #000080; outline-offset: -2px; }
   .ctsignta { width: 100%; box-sizing: border-box; min-width: 260px; font: 13px monospace; resize: vertical; }
   .window.ctcrash::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.55); z-index: 50; cursor: wait; animation: ctcrash .35s ease-out; }
   @keyframes ctcrash { from { background: rgba(255,255,255,0); } }
@@ -1213,7 +1232,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.57";
+const APP_VERSION = "10.58";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -6117,7 +6136,7 @@ function ctGroundBelow(st, x, y) {
   return null;
 }
 function ctBossNext(st, e) {
-  const fast = e.phase === 2 ? 0.65 : 1, p = st.p;
+  const fast = e.phase === 2 ? 0.55 : 1, p = st.p;
   if (e.phase === 1 && e.count >= 5) { e.count = 0; e.mode = "refuel"; e.mt = 2.3; ctText(st, e.x + e.w / 2, e.y - 14, "REFUELING...", "#ffd040"); return; }
   const ex = e.x + e.w / 2, pcx = p.x + p.w / 2, dx = pcx - ex, feetDy = (p.y + p.h) - (e.y + e.h);   // feetDy < 0 = the player stands higher
   e.pause = 0.55 * fast;   // small breath before each attack
@@ -6175,9 +6194,17 @@ function ctBossSleep(st, e) {   // back to the start of the fight (keeps his hea
   if (st.bossTrig.length) { e.mode = "sleep"; e.hidden = true; e.x = e.hx; e.y = e.hy; st.bossTrigOff = false; }
   else { e.mode = "wait"; e.hidden = false; if (e.y + e.h < 0 || e.y > st.H * CT.T) { e.x = e.hx; e.y = e.hy; } }
 }
-function ctBossOnRespawn(st) {   // the player lost a life: if he comes back OUTSIDE the arena, the fight stops (the boss keeps his health)
+function ctBossOnRespawn(st) {   // the player lost a life: the boss HEALS back to the start of his phase (phase 1 = 100%, phase 2 = 50%);
+                                  // if the player comes back OUTSIDE the arena, the fight also stops
   const A = st.arena, e = st.ents.find((q) => q.k === "B" && !q.dead);
-  if (!e || !A || (!A.on && !A.armed)) return;
+  if (!e || e.mode === "dying") return;
+  const full = e.phase === 1 && e.mode !== "rage" ? e.max : e.max / 2;
+  if (e.mode !== "wait" && e.mode !== "sleep" && e.hp < full) {
+    e.hp = full; e.healT = 1.2;
+    ctText(st, e.x + e.w / 2, e.y - 16, "+ HEALED", "#70ff90");
+    beep([[330, 0, 0.1], [440, 0.1, 0.1], [550, 0.2, 0.15]], "triangle", 0.04);
+  } else if (e.hp < full) e.hp = full;
+  if (!A || (!A.on && !A.armed)) return;
   const cx = st.p.x + st.p.w / 2, T = CT.T;
   const inside = (A.cL == null || cx > A.cL * T) && (A.cR == null || cx < (A.cR + 1) * T);
   if (!inside) ctBossSleep(st, e);
@@ -6272,21 +6299,25 @@ function ctBossStep(st, e, dt) {
       if (e.ground && e.vy >= 0 && !e.dropIn) { e.shadow = null; ctBossLand(st, e); st.shake = Math.max(st.shake, 0.45); ctBossStart(st, e); }
     }
     else if (m === "walk") {
-      face(); e.vx = e.dir * (e.phase === 2 ? 100 : 62);
+      face(); e.vx = e.dir * (e.phase === 2 ? 115 : 62);
       if (e.mt <= 0 || Math.abs(dx) < 34) { e.vx = 0; ctBossNext(st, e); }
     } else if (m === "hopWind") {   // crouches, then jumps up to the player's platform / down to the ground
       e.vx = 0; face();
       if (e.mt <= 0) {
         const feetDy = (p.y + p.h) - (e.y + e.h), g = CT.GRAV;
+        e.stompY = p.ground ? p.y + p.h : null;   // aims for the player's floor: goes through platforms in the way
         if (e.hop === "up") {
           const rise = Math.max(60, -feetDy + 50), vy0 = Math.sqrt(2 * g * rise), tUp = vy0 / g, tDown = Math.sqrt(2 * 50 / g);
           e.vy = -vy0; e.vx = ctClamp(dx / (tUp + tDown), -300, 300);
-        } else { e.vy = -330; e.vx = ctClamp(dx / 0.75, -260, 260); e.dropT = 0.3; }   // hop off the platform (falls through it)
+        } else {   // hop off the platform (falls through it and any other platform down to the player's floor)
+          const fall = 36 + Math.max(0, feetDy);
+          e.vy = -330; e.vx = ctClamp(dx / (0.22 + Math.sqrt(2 * fall / g)), -260, 260); e.dropT = 0.3;
+        }
         e.mode = "hopAir"; e.air = true;
         beep([[140, 0, 0.08], [260, 0.06, 0.12]], "square", 0.05);
       }
     } else if (m === "hopAir") {
-      if (e.ground && e.vy >= 0 && !(e.dropT > 0)) { e.vx = 0; e.air = false; st.shake = Math.max(st.shake, 0.15); ctBurst(st, ex, e.y + e.h, 10, ["#8a6a4a", "#a88a6a"], 120, 500); beep([[70, 0, 0.12]], "square", 0.05); e.mode = "recover"; e.mt = 0.35; }
+      if (e.ground && e.vy >= 0 && !(e.dropT > 0)) { e.vx = 0; e.air = false; e.stompY = null; st.shake = Math.max(st.shake, 0.15); ctBurst(st, ex, e.y + e.h, 10, ["#8a6a4a", "#a88a6a"], 120, 500); beep([[70, 0, 0.12]], "square", 0.05); e.mode = "recover"; e.mt = 0.35; }
     } else if (m === "aimTrack") {   // the flamethrower follows the player
       e.vx = 0; e.aim = ctBossAimAt(st, e);
       if (e.mt <= 0) { e.mode = "aimLock"; e.mt = 1.0; beep([[520, 0, 0.08], [390, 0.1, 0.12]], "square", 0.04); }
@@ -6313,7 +6344,7 @@ function ctBossStep(st, e, dt) {
         const tx = pcx + (e.left - 2) * 34 + (Math.random() - 0.5) * 30, ty = p.y + p.h;
         st.shots.push({ x: nx, y: ny, vx: (tx - nx) / tt, vy: (ty - ny - 0.5 * g * tt * tt) / tt, g, life: 4, boss: true, burn: e.phase === 2 ? 2.4 : 1.4, big: true });
         beep([[180, 0, 0.08], [110, 0.05, 0.14]], "sawtooth", 0.06);
-        e.left--; e.mt = e.phase === 2 ? 0.3 : 0.42;
+        e.left--; e.mt = e.phase === 2 ? 0.26 : 0.42;
         if (e.left <= 0) ctBossNext(st, e);
       }
     } else if (m === "stompWind") {
@@ -6356,7 +6387,7 @@ function ctBossStep(st, e, dt) {
       if (Math.random() < 0.5) ctBurst(st, ex - e.dir * 10, e.y + e.h, 1, ["#8a6a4a"], 90, 500);
       if (e.mt <= 0) { e.mode = "dash"; e.mt = 1.8; e.trail = ex; beep([[140, 0, 0.1], [90, 0.1, 0.3]], "sawtooth", 0.07); }
     } else if (m === "dash") {
-      e.vx = e.dir * 330;
+      e.vx = e.dir * (e.phase === 2 ? 365 : 330);
       if (Math.abs(ex - e.trail) > 22) { e.trail = ex; st.fires.push({ x: ex - 14, y: e.y + e.h, w: 28, life: 3.2, max: 3.2 }); }
       if (Math.random() < 0.8) { const lf = 0.3; st.parts.push({ x: ex - e.dir * 20, y: e.y + 20 + Math.random() * 24, vx: -e.dir * 60, vy: -30, life: lf, max: lf, fire: true, big: true, col: "#ff9a20", g: -40 }); }
       if (e.mt <= 0 || e.stopped) { e.vx = 0; e.stopped = false; e.mode = "recover"; e.mt = 0.5; }
@@ -6407,7 +6438,7 @@ function ctBossStep(st, e, dt) {
       if (!(ctSolid(under) || under === "=") || ctLiquid(under) || under === "^" || ctSolid(at)) { e.vx = 0; if (e.mode === "dash") e.stopped = true; }
     }
     e.dropT = Math.max(0, (e.dropT || 0) - dt);
-    const through = e.dropT > 0 || (e.mode === "stompAir" && e.stompY != null && e.y + e.h + Math.max(0, e.vy) * dt < e.stompY - 3);   // stomp: falls through platforms above the player's floor
+    const through = e.dropT > 0 || ((e.mode === "stompAir" || e.mode === "hopAir") && e.stompY != null && e.y + e.h + Math.max(0, e.vy) * dt < e.stompY - 3);   // stomp: falls through platforms above the player's floor
     ctMove(st, e, dt, through);   // dropT: falls through platforms (jumping down from one)
     e.walk = e.ground && e.vx ? e.walk + dt : 0;
     if (e.y > st.H * T + 40) { e.x = e.hx; e.y = e.hy; e.vx = e.vy = 0; if (e.mode === "stompAir") e.mode = "recover"; }   // fell: back to his spot
@@ -6421,7 +6452,7 @@ function ctFireStep(st, dt) {
   const p = st.p, T = CT.T, playing = p.deadT <= 0 && st.phase === "play";
   const bz = st.boss;
   st.tint = ctClamp((st.tint || 0) + (bz && bz.phase === 2 && bz.mode !== "dying" ? dt : -dt) * 0.7, 0, 1);   // phase 2: the arena slowly glows orange
-  for (const e of st.ents) if (e.k === "B" && e.dead) e.bar = Math.max(0, e.bar - dt * 0.8);   // health bar leaves after he dies
+  for (const e of st.ents) if (e.k === "B") { if (e.dead) e.bar = Math.max(0, e.bar - dt * 0.8); if (e.healT > 0) e.healT -= dt; }   // health bar leaves after he dies
   for (const f of st.fires) {
     f.life -= dt;
     if (Math.random() < 0.35) { const lf = 0.35 + Math.random() * 0.25; st.parts.push({ x: f.x + Math.random() * f.w, y: f.y - 2, vx: 0, vy: -30 - Math.random() * 30, life: lf, max: lf, fire: true, col: "#ff9a20", g: -50 }); }
@@ -6533,7 +6564,7 @@ function ctDrawBossBar(c, st, now) {   // HUD: name + health bar at the top
   ctTextOut(c, "🔥 BIG BLAZE" + (e.phase === 2 ? " · BURNING" : ""), CT.VW / 2, y - 3, e.phase === 2 ? "#ffb060" : "#ffd040", "bold 12px monospace");
   c.fillStyle = "#3a1208"; c.fillRect(x, y + 2, W, 8);
   const k = e.hp / e.max;
-  c.fillStyle = e.phase === 2 ? "#ff6a1a" : "#e03a18"; c.fillRect(x, y + 2, Math.round(W * k), 8);
+  c.fillStyle = e.healT > 0 ? "#40d060" : e.phase === 2 ? "#ff6a1a" : "#e03a18"; c.fillRect(x, y + 2, Math.round(W * k), 8);
   c.fillStyle = "rgba(255,255,255,.25)"; c.fillRect(x, y + 2, Math.round(W * k), 2);
   c.fillStyle = "#fff"; c.fillRect(x + W / 2 - 1, y + 1, 2, 10);   // phase 2 mark
 }
