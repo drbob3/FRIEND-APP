@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-b3LKW2+Py2FuKGyhVo7QZtNAyt7H9M89D4KpQOY5/Oc=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MhLh+dsFCo773EKv+wmNfNHk/ZzZIUtOFl1sa7Ukw10=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -1055,8 +1055,67 @@
   .mecount { flex: 1; font-size: 11px; color: #444; }
   .mecount.over { color: var(--err); font-weight: bold; }
   #main.public .statusbar { display: none; }
-  #main.public #mainTabs button:not([data-t="about"]):not(#pubLoginBtn) { display: none !important; }
+  #main.public #mainTabs button:not([data-t="about"]):not([data-t="blog"]):not([data-t="dir"]):not(#pubLoginBtn) { display: none !important; }
   #pubLoginBtn { margin-left: auto; font-weight: bold; }
+  /* ---- Blog (v10.61) ---- */
+  .page.blogpage { background: var(--desktop); }
+  .blog { max-width: 860px; margin: 0 auto; padding: 14px 12px 30px; display: flex; flex-direction: column; gap: 14px; }
+  .bwin { padding: 3px; }
+  .bwin > .titlebar.light { color: #000; }
+  .bwin > .titlebar .ctl { margin-left: auto; }
+  .bwin > .bbody { background: #fff; margin-top: 3px; padding: 10px 12px; overflow-wrap: anywhere; min-width: 0; }
+  .bwin.bmin > .bbody { display: none; }
+  .bhead .bbody { text-align: center; }
+  .blogo { font: bold 42px "Times New Roman", Times, serif; color: #1a237e; letter-spacing: -1px; text-shadow: 2px 2px 0 #c5cae9; }
+  .blogo small { font: italic bold 14px Arial, sans-serif; color: #c62828; letter-spacing: 0; text-shadow: none; vertical-align: top; }
+  .btag { color: #555; font-size: 13px; margin: 2px 0 8px; }
+  .bnewbtn { font-weight: bold; }
+  .btools { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .btitle { font: bold 28px/1.2 Tahoma, Verdana, sans-serif; margin: 12px 0 4px; }
+  .bmeta { color: #555; font-size: 12px; }
+  .bnew { background: #ffff00; color: #c00000; border: 1px solid #c00000; font: bold 10px Tahoma, sans-serif; padding: 0 3px; }
+  .bcard { cursor: pointer; }
+  .bcard:hover > .bbody, .bcard:focus > .bbody { background: #ffffe8; }
+  .bcard .bbody { display: flow-root; }
+  .btitle2 { font: bold 19px Tahoma, Verdana, sans-serif; color: #1a0dab; text-decoration: underline; margin-bottom: 2px; }
+  .bprev { font: 14px/1.45 Georgia, "Times New Roman", serif; margin: 6px 0 8px; color: #222; }
+  .bthumb { float: right; margin: 0 0 6px 10px; }
+  .bthumb img { width: 130px; height: 95px; object-fit: cover; display: block; border: 2px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+  .bdoc { font: 15px/1.55 Georgia, "Times New Roman", serif; }
+  .bdoc h1 { font: bold 24px Tahoma, Verdana, sans-serif; margin: 6px 0; }
+  .bdoc h2 { font: bold 18px Tahoma, Verdana, sans-serif; margin: 10px 0 4px; }
+  .bdoc p { margin: 0 0 10px; }
+  .bdoc ul { margin: 0 0 10px; padding-left: 24px; }
+  .bdoc a { color: #1a0dab; }
+  .bempty { color: #888; font-style: italic; }
+  .bimg { margin: 8px 0; text-align: center; }
+  .bimg img { max-width: 100%; max-height: calc(75vh / var(--z, 1)); cursor: zoom-in; display: inline-block; vertical-align: top; }
+  .bimg img.broken { min-width: 120px; min-height: 40px; border: 1px dashed #999; }
+  .bph { color: #888; font: 12px Tahoma, sans-serif; padding: 20px; border: 1px dashed #aaa; }
+  .bnote { background: var(--face); border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); padding: 10px; text-align: center; }
+  .bfoot { text-align: center; color: #e0ffff; font-size: 12px; }
+  .bfoot a { color: #fff; }
+  .bcmts .bbody { font: 13px Tahoma, Verdana, sans-serif; }
+  .bclist .line .bdelc { padding: 0 4px; min-width: 0; font-size: 10px; line-height: 14px; visibility: hidden; }
+  .bclist .line:hover .bdelc { visibility: visible; }
+  .bclist .empty { color: #666; }
+  .bform { margin-top: 10px; border-top: 1px solid var(--shadow); padding-top: 8px; }
+  .bform textarea { width: 100%; box-sizing: border-box; resize: vertical; font: 13px Tahoma, Verdana, sans-serif; }
+  .brow { display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
+  .bcnt { flex: 1; font-size: 11px; color: #666; }
+  .block { background: #ffffe0; border: 1px solid #b0a000; padding: 6px 8px; }
+  .beditor .bwins { display: flex; flex-direction: column; gap: 8px; }
+  .beditor input[type=text] { width: 100%; box-sizing: border-box; }
+  .beditor .brow { justify-content: flex-start; margin: 0; }
+  .bcolors { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; font-size: 12px; }
+  .bcolors input[type=color] { width: 34px; height: 22px; padding: 0 1px; border: 1px solid var(--shadow); background: #fff; }
+  .bsw { width: 18px; height: 18px; min-width: 0; padding: 0; border: 2px solid; border-color: var(--light) var(--dark) var(--dark) var(--light); }
+  .bsw.on { outline: 2px dotted #000; outline-offset: 1px; }
+  .bstatus { font-size: 11px; color: #000080; }
+  .dir .dirlock { background: #ffffe0; border: 1px solid #b0a000; padding: 10px; text-align: center; font-size: 13px; }
+  .dir > .s { font-size: 13px; margin: -6px 0 18px; }
+  .dir > .s a { color: #1a0dab; cursor: pointer; text-decoration: underline; }
+  @media (max-width: 760px) { .blog { padding: 8px 6px 20px; gap: 10px; } .btitle { font-size: 22px; } .blogo { font-size: 32px; } .bthumb img { width: 90px; height: 70px; } }
 </style>
 </head>
 <body>
@@ -1070,6 +1129,7 @@
   </div>
   <div class="maintabs" id="mainTabs">
     <button type="button" data-t="about">ℹ About</button>
+    <button type="button" data-t="blog" id="blogTabBtn">📝 Blog<span id="blogTabBadge" class="redbadge" hidden></span></button>
     <button type="button" data-t="dir" id="dirTabBtn">🔎 Directory</button>
     <button type="button" data-t="chat" class="on">💬 Chat</button>
     <button type="button" data-t="games">🎮 Games</button>
@@ -1078,6 +1138,7 @@
   </div>
   <div class="tabline"></div>
   <div class="page sunken" id="aboutPage" hidden></div>
+  <div class="page sunken blogpage" id="blogPage" hidden></div>
   <div class="page sunken" id="dirPage" hidden></div>
   <div class="page sunken graypage" id="gamesPage" hidden></div>
   <div class="page sunken graypage" id="adminPage" hidden>
@@ -1270,7 +1331,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.60";
+const APP_VERSION = "10.61";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -1939,12 +2000,11 @@ function startPublic() {
   $("main").hidden = false;
   $("main").classList.add("public");
   $("pubLoginBtn").hidden = false;
-  S.tab = "about";
-  document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === "about"));
-  for (const id of ["chatSplit", "dirPage", "gamesPage", "adminPage"]) $(id).hidden = true;
-  $("aboutPage").hidden = false;
   document.title = "Hangout Chat";
-  renderAbout();
+  startBlogSubs();
+  const h0 = parseHash();
+  if (h0.blog !== undefined) B.open = h0.blog || null;
+  setPubTab(h0.blog !== undefined ? "blog" : ["about", "blog", "dir"].includes(S.tab) ? S.tab : "about");
   if (!pubUnsub) pubUnsub = D.onValue(R("site/about"), (s) => { S.about = s.val(); if (!started) renderAbout(); }, (err) => logError("Read site/about: " + err.message));
   if (!pubSetUnsub) pubSetUnsub = D.onValue(R("settings"), (s) => { if (!started) { S.settings = s.val() || {}; applyLoginAvail(); } }, () => {});
   const h = parseHash();
@@ -2138,7 +2198,9 @@ function openSupportThread(uid) {
 }
 function startApp() {
   renderMe();
-  $("dirTabBtn").hidden = S.me.guest;
+  $("dirTabBtn").hidden = false;   // v10.61: guests and visitors can use the Directory too
+  startBlogSubs();
+  blogBadge();
   sub(R("site/about"), (s) => { S.about = s.val(); if (S.tab === "about") renderAbout(); });
   sub(R(".info/connected"), async (s) => {
     S.connected = !!s.val();
@@ -2168,6 +2230,7 @@ function startApp() {
     const was = S.isAdmin;
     S.isAdmin = S.admins[S.me.uid] === true;
     $("adminTabBtn").hidden = !S.isAdmin;
+    if (S.isAdmin !== was && S.tab === "blog") renderBlog();
     if (!S.isAdmin && S.tab === "admin") setTab("chat");
     if (S.isAdmin && !was) startAdmin();
     renderMe(); renderToolbar(); renderSide(); render();
@@ -2242,19 +2305,22 @@ async function boot() {
   const h = parseHash();
   if (h.room) await openRoom(h.room, h.code);
   else await goDefault();
-  if (!h.room) setTab(h.game ? "games" : (store("chat-tab") || "chat"));
+  if (h.blog !== undefined) { B.open = h.blog || null; setTab("blog"); }
+  else if (!h.room) setTab(h.game ? "games" : (store("chat-tab") || "chat"));
   if (h.game) { openGame(h.game); history.replaceState(null, "", location.pathname + (S.room ? "#room=" + S.room : "")); }
 }
 function parseHash() {
   const room = (location.hash.match(/room=(dm-[A-Za-z0-9]+-[A-Za-z0-9]+|[a-z0-9-]{3,40})/i) || [])[1];
   const code = (location.hash.match(/code=([a-z0-9]{16,40})/i) || [])[1];
   const game = (location.hash.match(/game=([-A-Za-z0-9_]{12,40})/) || [])[1];
+  if (/^#blog\b/.test(location.hash)) return { room: null, code: null, game: null, blog: (location.hash.match(/^#blog=([-A-Za-z0-9_]{1,40})/) || [])[1] || "" };
   if (game) return { room: null, code: null, game };
   return { room: room ? (room.startsWith("dm-") ? room : room.toLowerCase()) : null, code: code || null, game: null };
 }
 window.addEventListener("hashchange", () => {
-  if (!started) { const h = parseHash(); if (h.room || h.game) showLogin(); return; }
+  if (!started) { const h = parseHash(); if (h.blog !== undefined) { if ((h.blog || null) !== B.open || S.tab !== "blog") { B.open = h.blog || null; setPubTab("blog"); } } else if (h.room || h.game) showLogin(); return; }
   const h = parseHash();
+  if (h.blog !== undefined) { if ((h.blog || null) !== B.open || S.tab !== "blog") { B.open = h.blog || null; setTab("blog"); } return; }
   if (h.game) { openGame(h.game); history.replaceState(null, "", location.pathname + (S.room ? "#room=" + S.room : "")); return; }
   if (h.room && h.room !== S.room) openRoom(h.room, h.code);
 });
@@ -2898,7 +2964,7 @@ function openSettings() {
   const delBtn = el("button", "danger", "Delete my account...");
   delBtn.onclick = () => deleteMyAccount(close);
   fsX.append(el("div", "hint", "Your account is deleted forever. Your messages stay, shown as \"(deleted account)\"."), delBtn);
-  content.append(fsI, fsB, fsC, zoomBox(), soundBox(), btns, fsP, fsX);
+  content.append(fsI, fsB, fsC, zoomBox(), soundBox(), ...(S.isAdmin ? [blogNotifBox()] : []), btns, fsP, fsX);
   refresh();
 }
 function zoomBox() {
@@ -3964,27 +4030,30 @@ const DEFAULT_ABOUT = [
   "- Use a long password (at least 10 characters).",
 ].join("\n");
 function setTab(t) {
-  if (t === "dir" && (!S.me || S.me.guest)) t = "chat";
+  if (!started) return setPubTab(t);
   if (t === "admin" && !S.isAdmin) t = "chat";
-  if (!["about", "dir", "chat", "games", "admin"].includes(t)) t = "chat";
+  if (!["about", "blog", "dir", "chat", "games", "admin"].includes(t)) t = "chat";
   S.tab = t;
   store("chat-tab", t);
   document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
   $("chatSplit").hidden = t !== "chat";
   $("aboutPage").hidden = t !== "about";
+  $("blogPage").hidden = t !== "blog";
   $("dirPage").hidden = t !== "dir";
   $("gamesPage").hidden = t !== "games";
   $("adminPage").hidden = t !== "admin";
   closeMenu();
   closeSide();
   if (t === "about") renderAbout();
+  if (t === "blog") renderBlog();
+  blogSyncHash();
   if (t === "dir") renderDirectory();
   if (t === "games") { startGamesTabSubs(); renderGamesPage(); }
   updateTitleCount();
   if (t === "chat") { renderSide(); render(); markRead(); }
   if (t === "admin") { renderSupportAdmin(); renderReports(); renderAdminLists(); renderDebug(); loadAdminChats(); }
 }
-document.querySelectorAll("#mainTabs button[data-t]").forEach((b) => b.addEventListener("click", () => { if (started) setTab(b.dataset.t); }));
+document.querySelectorAll("#mainTabs button[data-t]").forEach((b) => b.addEventListener("click", () => { if (started) setTab(b.dataset.t); else setPubTab(b.dataset.t); }));
 function formatDoc(doc, text) {
   let ul = null, p = null;
   for (const raw of String(text).split("\n")) {
@@ -4337,20 +4406,31 @@ function renderDirectory() {
   const d = el("div", "dir");
   const logo = el("div", "logo", "Hangout");
   logo.append(el("small", null, " directory"));
-  d.append(logo, el("div", "tag", "Find a public chat to hang out in"));
+  d.append(logo, el("div", "tag", S.me ? "Find a blog post or a public chat to hang out in" : "Find a blog post (log in to see the chats)"));
   const form = el("form");
-  const inp = el("input"); inp.type = "text"; inp.className = "sunken"; inp.value = dirQuery; inp.placeholder = "Search chats, descriptions, sub-chats...";
+  const inp = el("input"); inp.type = "text"; inp.className = "sunken"; inp.value = dirQuery; inp.placeholder = S.me ? "Search blog posts, chats, descriptions..." : "Search blog posts...";
   const go = el("button", null, "Search"); go.type = "submit";
   const rnd = el("button", null, "Random chat"); rnd.type = "button";
-  form.append(inp, go, rnd);
+  form.append(inp, go);
+  if (S.me) form.append(rnd);
   form.onsubmit = (e) => { e.preventDefault(); dirQuery = inp.value.trim(); renderDirectory(); };
   rnd.onclick = () => { const l = listPublic(); if (l.length) openRoom(l[Math.floor(Math.random() * l.length)][0]); };
   d.append(form);
+  dirBlogPart(d, dirQuery.toLowerCase());
+  if (!S.me) {
+    const cnt0 = el("div", "count"); cnt0.append(el("span", null, "💬 Chats"), el("span", null, "🔒"));
+    const lk = el("div", "dirlock", "🔒 The chats are only visible when you are logged in (with an account or as a guest). ");
+    const lb = el("button", null, "🔑 Log in / Join as guest"); lb.type = "button"; lb.onclick = showLogin;
+    lk.append(lb);
+    d.append(cnt0, lk, el("div", "foot", "Hangout Chat Directory"));
+    page.append(d);
+    return;
+  }
   const all = listPublic();
   const q = dirQuery.toLowerCase();
   const res = all.filter(([id, c]) => !q || c.name.toLowerCase().includes(q) || (c.desc || "").toLowerCase().includes(q) || subsOf(id).some(([, s]) => s.name.toLowerCase().includes(q) || (s.desc || "").toLowerCase().includes(q)));
   const cnt = el("div", "count");
-  cnt.append(el("span", null, q ? "Results for \"" + dirQuery + "\"" : "All public chats"), el("span", null, res.length + " of " + all.length + " chats"));
+  cnt.append(el("span", null, "💬 " + (q ? "Chats for \"" + dirQuery + "\"" : "All public chats")), el("span", null, res.length + " of " + all.length + " chats"));
   d.append(cnt);
   if (!res.length) d.append(el("div", "d", "No chat matches your search. Try another word, or create one with \"+ New chat...\"."));
   for (const [id, c] of res) {
@@ -4377,6 +4457,523 @@ function renderDirectory() {
   d.append(el("div", "foot", "Hangout Chat Directory · " + all.length + " public chat" + (all.length === 1 ? "" : "s")));
   page.append(d);
   if (Date.now() - dirCountsAt > 30000) loadDirCounts();
+}
+/* ========================= BLOG (v10.61) =========================
+   blog/{pid}            = { title, body (JSON {w:[{t,c,x}]} = the post's windows), by, name, ts, edited?, noCmt? }   anyone reads, admins write
+   blogImg/{iid}         = { meta: {mime, n, by, ts}, chunks: {0..7} }   one picture = read one at a time by anyone, admins write
+   blogComments/{pid}/{cid} = { uid, name, color, icon?, text, ts }       anyone reads, accounts write (rate/cmt = 5 s)
+   blogViews/{pid}       = number, +1 once per browser (not the author)  */
+const BLOG_BODY_MAX = 30000, BLOG_TITLE_MAX = 100, BLOG_CMT_MAX = 500, BLOG_IMG_MAX = 4 * 1000 * 1000, BLOG_WIN_MAX = 12;
+const BLOG_COLORS = ["#000080", "#1084d0", "#008080", "#008000", "#8c4bd1", "#b03060", "#800000", "#c04000", "#806000", "#404040", "#000000", "#e0c000"];
+const BIMG_RE = /^\[img:([-A-Za-z0-9_]{1,30})\]$/;
+const B = { posts: {}, cmts: {}, views: {}, loaded: false, cmtsLoaded: false, lastVisit: null, open: null, draft: null, unsub: [] };
+const blogImgUrls = new Map(), blogImgLoading = new Map();
+function startBlogSubs() {
+  if (B.unsub.length) return;
+  const on = (path, cb) => B.unsub.push(D.onValue(R(path), cb, (e) => logError("Read " + path + ": " + e.message)));
+  on("blog", (s) => { B.posts = s.val() || {}; B.loaded = true; blogChanged(); });
+  on("blogComments", (s) => { const before = B.cmts; B.cmts = s.val() || {}; blogCmtNotify(before); blogChanged(); });
+  on("blogViews", (s) => { B.views = s.val() || {}; blogChanged(); });
+}
+function blogChanged() {
+  if (S.tab === "blog" && !$("blogPage").hidden) renderBlog();
+  if (S.tab === "dir" && !$("dirPage").hidden && !$("dirPage").contains(document.activeElement)) renderDirectory();
+  blogBadge();
+}
+function blogParse(p) {
+  let w = null;
+  try { const o = JSON.parse(p?.body || ""); if (o && Array.isArray(o.w)) w = o.w; } catch {}
+  if (!w) w = [{ t: "", c: "#000080", x: String(p?.body || "") }];
+  return w.slice(0, BLOG_WIN_MAX).map((x) => ({ t: String(x?.t || "").slice(0, 60), c: meColor(x?.c, "#000080"), x: String(x?.x || "") }));
+}
+function blogList() { return Object.entries(B.posts).filter(([, p]) => p && p.title).sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0)); }
+function blogPlain(p) { return blogParse(p).map((w) => w.x).join("\n").replace(/\[img:[-A-Za-z0-9_]+\]/g, " ").replace(/^(#+|[-*]) /gm, "").replace(/\s+/g, " ").trim(); }
+function blogImgIds(p) { const out = []; for (const w of blogParse(p)) for (const l of w.x.split("\n")) { const m = l.trim().match(BIMG_RE); if (m && !out.includes(m[1])) out.push(m[1]); } return out; }
+function blogCmtList(pid) { return Object.entries(B.cmts[pid] || {}).filter(([, c]) => c && c.text).map(([k, c]) => ({ key: k, ...c })).sort((a, b) => (a.ts || 0) - (b.ts || 0)); }
+function blogCounts(pid) { const v = +B.views[pid] || 0, c = Object.keys(B.cmts[pid] || {}).length; return "👁 " + v + " view" + (v === 1 ? "" : "s") + " · 💬 " + c + " comment" + (c === 1 ? "" : "s"); }
+function blogIsNew(p) { return !!B.lastVisit && (p.ts || 0) > B.lastVisit && !(S.me && p.by === S.me.uid); }
+function blogLight(hex) { const n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150; }
+/* ----- pictures ----- */
+function loadBlogImg(iid) {
+  if (blogImgUrls.has(iid)) return Promise.resolve(blogImgUrls.get(iid));
+  if (!blogImgLoading.has(iid)) {
+    const p = (async () => {
+      const v = (await D.get(R("blogImg/" + iid))).val();
+      if (!v || !v.meta || !v.chunks) throw new Error("picture not found");
+      const c = v.chunks;
+      const arr = Array.isArray(c) ? c : Object.keys(c).sort((a, b) => a - b).map((k) => c[k]);
+      if (arr.length < v.meta.n) throw new Error("picture incomplete");
+      const url = URL.createObjectURL(new Blob(arr.slice(0, v.meta.n).map(b64ToBytes), { type: safeBlobType("image", v.meta.mime) }));
+      blogImgUrls.set(iid, url);
+      return url;
+    })();
+    p.catch(() => blogImgLoading.delete(iid));
+    blogImgLoading.set(iid, p);
+  }
+  return blogImgLoading.get(iid);
+}
+function blogImgEl(iid) {
+  const box = el("div", "bimg");
+  const show = (url) => {
+    const i = el("img"); i.src = url; i.alt = "picture"; i.title = "Click to see it big";
+    i.onclick = () => openImageWindow({ src: url, title: "picture", download: "picture" });
+    box.replaceChildren(i);
+  };
+  if (blogImgUrls.has(iid)) { show(blogImgUrls.get(iid)); return box; }   // no flicker in the editor preview
+  const ph = el("div", "bph", "Loading picture...");
+  box.append(ph);
+  loadBlogImg(iid).then(show).catch((e) => { ph.textContent = "(this picture can't be loaded: " + e.message + ")"; });
+  return box;
+}
+async function blogUpload(file) {
+  if (fileKind(file) !== "image") throw new Error(file.name + " is not a picture");
+  const { blob, mime } = await compressImage(file);
+  if (!SAFE_IMG_RE.test(mime)) throw new Error("this picture format is not supported (use PNG, JPG, GIF or WEBP)");
+  if (blob.size > BLOG_IMG_MAX) throw new Error("picture too big (" + fmtSize(blob.size) + ", max " + fmtSize(BLOG_IMG_MAX) + ")");
+  const iid = D.push(R("blogImg")).key;
+  const n = Math.max(1, Math.ceil(blob.size / CHUNK));
+  for (let i = 0; i < n; i++) await D.set(R("blogImg/" + iid + "/chunks/" + i), await blobToB64(blob.slice(i * CHUNK, (i + 1) * CHUNK)));
+  await D.set(R("blogImg/" + iid + "/meta"), { mime, n, by: S.me.uid, ts: now() });
+  blogImgUrls.set(iid, URL.createObjectURL(new Blob([blob], { type: safeBlobType("image", mime) })));
+  return iid;
+}
+/* ----- text of a window: "# title", "## title", "- list", links, [img:ID] lines, picture links alone on a line ----- */
+function blogDoc(doc, text) {
+  let buf = [];
+  const flush = () => { if (buf.length) { formatDoc(doc, buf.join("\n")); buf = []; } };
+  for (const raw of String(text).split("\n")) {
+    const line = raw.trim();
+    const m = line.match(BIMG_RE);
+    const u = !m && /^https:\/\/\S+$/i.test(line) && isImageUrl(line) ? meUrl(line, true) : null;
+    if (m) { flush(); doc.append(blogImgEl(m[1])); }
+    else if (u) {
+      flush();
+      const b = el("div", "bimg"), i = meImg(u);
+      i.title = "Click to see it big";
+      i.onclick = () => openImageWindow({ src: u, title: u.split("/").pop(), external: u });
+      b.append(i); doc.append(b);
+    } else buf.push(raw);
+  }
+  flush();
+}
+/* a retro window drawn inside the page, title bar in the chosen color */
+function blogWin(title, color, icon, cls) {
+  const w = el("div", "window raised bwin" + (cls ? " " + cls : ""));
+  const c = meColor(color, "#000080");
+  w.style.setProperty("--title-a", c);
+  w.style.setProperty("--title-b", meTint(c, 0.45));
+  const bar = el("div", "titlebar" + (blogLight(c) ? " light" : ""));
+  const mn = el("button", "ctl cmin"); mn.type = "button"; mn.title = "Minimize";
+  mn.onclick = (e) => { e.stopPropagation(); w.classList.toggle("bmin"); };
+  bar.append(el("span", null, icon || "📄"), el("span", "t", title || ""), mn);
+  const body = el("div", "bbody sunken");
+  w.append(bar, body);
+  return { w, body, bar };
+}
+/* ----- the Blog page ----- */
+function renderBlog() {
+  const page = $("blogPage");
+  const ta = page.querySelector("textarea.bcmt");
+  const keep = { top: page.scrollTop, text: ta ? ta.value : "", focus: !!ta && document.activeElement === ta, s: ta ? ta.selectionStart : 0, e: ta ? ta.selectionEnd : 0, pid: ta ? ta.dataset.pid : null };
+  page.replaceChildren();
+  const wrap = el("div", "blog");
+  if (B.draft) {
+    wrap.append(el("div", "medraft", "👀 PREVIEW — not saved yet"));
+    blogPostView(wrap, B.draft.pid, B.draft.post, true);
+  } else if (B.open && B.posts[B.open]) {
+    blogPostView(wrap, B.open, B.posts[B.open], false);
+  } else {
+    if (B.open && B.loaded) { B.open = null; blogSyncHash(); wrap.append(el("div", "bnote", "This blog post doesn't exist anymore.")); }
+    blogListView(wrap);
+  }
+  const foot = el("div", "bfoot", "Hangout Chat v" + APP_VERSION + " · Blog");
+  if (!S.me) { foot.append(" · "); const a = el("a", null, "Log in / Sign up"); a.href = "#"; a.onclick = (e) => { e.preventDefault(); showLogin(); }; foot.append(a); }
+  wrap.append(foot);
+  page.append(wrap);
+  page.scrollTop = keep.top;
+  const ta2 = page.querySelector("textarea.bcmt");
+  if (ta2 && keep.pid === ta2.dataset.pid && keep.text) { ta2.value = keep.text; ta2.dispatchEvent(new Event("input")); }
+  if (ta2 && keep.focus && keep.pid === ta2.dataset.pid) { ta2.focus(); try { ta2.setSelectionRange(keep.s, keep.e); } catch {} }
+}
+function blogListView(wrap) {
+  const head = blogWin("Blog", "#000080", "📝", "bhead");
+  const logo = el("div", "blogo", "Hangout");
+  logo.append(el("small", null, " blog"));
+  head.body.append(logo, el("div", "btag", "News, stories and random stuff from the admins."));
+  if (S.isAdmin) { const nb = el("button", "bnewbtn", "✏ New post..."); nb.type = "button"; nb.onclick = () => blogEdit(null); head.body.append(nb); }
+  wrap.append(head.w);
+  const list = blogList();
+  if (B.loaded && B.lastVisit == null) { B.lastVisit = +store("blog-visit") || 0; store("blog-visit", String(Date.now())); }   // NEW = posted since my last visit
+  if (!B.loaded) { wrap.append(el("div", "bnote", "Loading posts...")); return; }
+  if (!list.length) { wrap.append(el("div", "bnote", S.isAdmin ? "No post yet. Click \"✏ New post...\" to write the first one!" : "No post yet. Come back later!")); return; }
+  for (const [pid, p] of list) {
+    const wins = blogParse(p);
+    const card = blogWin(p.title, wins[0].c, "📝", "bcard");
+    card.w.tabIndex = 0;
+    card.w.onclick = () => blogOpen(pid);
+    card.w.onkeydown = (e) => { if (e.key === "Enter") blogOpen(pid); };
+    const meta = el("div", "bmeta", "📅 " + fmtDay(p.ts) + " · ✍ " + (p.name || "?") + " · " + blogCounts(pid));
+    if (blogIsNew(p)) meta.prepend(el("span", "bnew", "NEW"), " ");
+    const img = blogImgIds(p)[0];
+    if (img) { const th = el("div", "bthumb"); (blogImgUrls.has(img) ? Promise.resolve(blogImgUrls.get(img)) : loadBlogImg(img)).then((u) => { const i = el("img"); i.src = u; i.alt = ""; th.append(i); }).catch(() => th.remove()); card.body.append(th); }
+    const txt = blogPlain(p);
+    card.body.append(el("div", "btitle2", p.title), meta, el("div", "bprev", txt.length > 260 ? txt.slice(0, 260) + "..." : txt || "(pictures)"));
+    const more = el("button", "small", "Read more ►"); more.type = "button";
+    card.body.append(more);
+    wrap.append(card.w);
+  }
+}
+function blogPostView(wrap, pid, p, draft) {
+  const wins = blogParse(p);
+  const head = blogWin("Blog - " + p.title, wins[0].c, "📝", "bhead");
+  const tools = el("div", "btools");
+  const back = el("button", null, "◄ All posts"); back.type = "button"; back.disabled = draft;
+  back.onclick = () => blogOpen(null);
+  tools.append(back);
+  if (!draft) {
+    const cp = el("button", null, "🔗 Copy link"); cp.type = "button";
+    cp.onclick = async () => { const url = location.origin + location.pathname + "#blog=" + pid; try { await navigator.clipboard.writeText(url); toast("🔗 Link copied! Anyone can open it, even without an account."); } catch { dialog({ title: "Link to this post", message: url, cancelText: null }); } };
+    tools.append(cp);
+    if (S.isAdmin) {
+      const ed = el("button", null, "✎ Edit..."); ed.type = "button"; ed.onclick = () => blogEdit(pid);
+      const del = el("button", null, "🗑 Delete"); del.type = "button"; del.onclick = () => blogDelete(pid);
+      tools.append(ed, del);
+    }
+  }
+  head.body.append(tools, el("h1", "btitle", p.title));
+  const meta = el("div", "bmeta", "📅 " + fmtDay(p.ts) + (p.edited ? " (edited " + fmtDay(p.edited) + ")" : "") + " · ✍ " + (p.name || "?") + (draft ? "" : " · " + blogCounts(pid)));
+  head.body.append(meta);
+  wrap.append(head.w);
+  wins.forEach((w, i) => {
+    const bw = blogWin(w.t || (i ? p.title + " (" + (i + 1) + ")" : p.title), w.c, "📄", "bpost");
+    const doc = el("div", "bdoc");
+    blogDoc(doc, w.x);
+    if (!w.x.trim()) doc.append(el("p", "bempty", "(empty window)"));
+    bw.body.append(doc);
+    wrap.append(bw.w);
+  });
+  if (draft) return;
+  wrap.append(blogCmtWin(pid, p));
+  blogCountView(pid, p);
+  if (S.me && p.by === S.me.uid && !document.hidden) blogMarkSeen(pid);
+}
+function blogCmtWin(pid, p) {
+  const list = blogCmtList(pid);
+  const cw = blogWin("Comments (" + list.length + ")", "#000080", "💬", "bcmts");
+  const box = el("div", "bclist");
+  if (!list.length) box.append(el("div", "empty", "*** No comment yet." + (S.me && !S.me.guest && !p.noCmt ? " Be the first!" : "")));
+  let prev = null;
+  for (const c of list) {
+    if (prev !== null && prev !== c.uid) box.append(el("div", "sep", SEP));
+    prev = c.uid;
+    const u = S.users[c.uid];
+    const line = el("div", "line");
+    const who = el("span", "who", (u && !u.deleted && u.name) || c.name || "?");
+    who.style.color = (u && !u.deleted && u.color) || c.color || "#000";
+    if (S.me && u) who.onclick = () => openProfile(c.uid);
+    line.append(el("span", "time", "[" + fmtTime(c.ts) + "] "), iconNode(c.uid, { icon: c.icon }), who);
+    if (u && u.deleted) line.append(el("span", "tag", " (deleted account)"));
+    if (isAdminUid(c.uid)) line.append(el("span", null, " ⭐"));
+    line.append(el("span", "who", ": "));
+    const t = el("span"); appendRichText(t, c.text || "", null); line.append(t);
+    if (S.me && (c.uid === S.me.uid || S.isAdmin)) {
+      const x = el("button", "small bdelc", "✕"); x.type = "button"; x.title = "Delete this comment";
+      x.onclick = () => blogDelCmt(pid, c);
+      line.append(" ", x);
+    }
+    box.append(line);
+  }
+  cw.body.append(box);
+  const form = el("div", "bform");
+  const lock = (msg, btn) => { const d = el("div", "block", msg); if (btn) d.append(" ", btn); form.append(d); };
+  if (p.noCmt) lock("💬 Comments are turned off for this post.");
+  else if (!S.me) { const b = el("button", null, "🔑 Log in / Sign up"); b.type = "button"; b.onclick = showLogin; lock("🔒 You need an account to leave a comment.", b); }
+  else if (S.me.guest) lock("👤 Guests can't comment. Log out and create an account to leave a comment!");
+  else if (S.banned) lock("⛔ You are banned: you can't comment.");
+  else if (S.settings.lockdown && !S.isAdmin) lock("🔒 Lockdown: only admins can write for now.");
+  else {
+    const ta = el("textarea", "sunken bcmt"); ta.maxLength = BLOG_CMT_MAX; ta.rows = 2; ta.placeholder = "Write a comment... (Enter = send, Shift+Enter = new line)"; ta.dataset.pid = pid;
+    const cnt = el("span", "bcnt", "0 / " + BLOG_CMT_MAX);
+    const send = el("button", null, "Send"); send.type = "button";
+    ta.oninput = () => { cnt.textContent = ta.value.length + " / " + BLOG_CMT_MAX; };
+    ta.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); blogSendCmt(pid, ta, send); } };
+    send.onclick = () => blogSendCmt(pid, ta, send);
+    const row = el("div", "brow"); row.append(cnt, send);
+    form.append(ta, row);
+  }
+  cw.body.append(form);
+  return cw.w;
+}
+function blogOpen(pid) {
+  B.open = pid || null;
+  blogSyncHash();
+  renderBlog();
+  $("blogPage").scrollTop = 0;
+}
+function blogSyncHash() {
+  const want = S.tab === "blog" ? (B.open ? "#blog=" + B.open : "#blog") : (/^#blog/.test(location.hash) ? (S.room ? "#room=" + S.room : "") : null);
+  if (want !== null && location.hash !== want) history.replaceState(null, "", location.pathname + want);
+}
+function blogCountView(pid, p) {
+  if (S.me && p.by === S.me.uid) return;
+  let seen = [];
+  try { seen = JSON.parse(store("blog-viewed") || "[]"); if (!Array.isArray(seen)) seen = []; } catch {}
+  if (seen.includes(pid)) return;
+  seen.push(pid);
+  store("blog-viewed", JSON.stringify(seen.slice(-500)));
+  D.runTransaction(R("blogViews/" + pid), (v) => (typeof v === "number" ? v : 0) + 1).catch((e) => logError("Blog view: " + e.message));
+}
+async function blogSendCmt(pid, ta, btn) {
+  const text = ta.value.trim().slice(0, BLOG_CMT_MAX);
+  if (!text || !S.me || S.me.guest) return;
+  btn.disabled = true;
+  try {
+    const u = S.users[S.me.uid] || S.me;
+    const c = { uid: S.me.uid, name: u.name, color: String(u.color || "#000000").slice(0, 16), text, ts: now() };
+    if (u.icon) c.icon = String(u.icon).slice(0, 16);
+    const id = D.push(R("blogComments/" + pid)).key;
+    await D.update(R("/"), { ["blogComments/" + pid + "/" + id]: c, ["rate/" + S.me.uid + "/cmt"]: now() });
+    ta.value = ""; ta.dispatchEvent(new Event("input"));
+    const box = $("blogPage").querySelector(".bclist");
+    if (box) box.lastElementChild?.scrollIntoView({ block: "nearest" });
+  } catch (e) {
+    showBanner("Can't send the comment: " + authError(e) + " (wait 5 seconds between two comments)");
+  } finally { btn.disabled = false; }
+}
+async function blogDelCmt(pid, c) {
+  const ok = await dialog({ title: "Delete comment", message: "Delete this comment from " + (c.name || "?") + "?\n\n\"" + (c.text || "").slice(0, 120) + "\"", okText: "Delete" });
+  if (!ok) return;
+  try { await D.set(R("blogComments/" + pid + "/" + c.key), null); toast("🗑 Comment deleted."); }
+  catch (e) { showBanner("Can't delete: " + authError(e)); }
+}
+async function blogDelete(pid) {
+  const p = B.posts[pid];
+  if (!p || !S.isAdmin) return;
+  const ok = await dialog({ title: "🗑 Delete blog post", message: "Delete the post \"" + p.title + "\"?\nIts pictures, comments and views are deleted too. This can't be undone.", okText: "Delete forever" });
+  if (!ok) return;
+  const upd = { ["blog/" + pid]: null, ["blogComments/" + pid]: null, ["blogViews/" + pid]: null };
+  for (const iid of blogImgIds(p)) upd["blogImg/" + iid] = null;
+  try { await D.update(R("/"), upd); B.open = null; blogSyncHash(); renderBlog(); toast("🗑 Post deleted."); }
+  catch (e) { showBanner("Can't delete: " + authError(e) + " (did you publish the new rules?)"); }
+}
+/* ----- editor (admins) ----- */
+function blogEdit(pid) {
+  if (!S.isAdmin) return;
+  const old = pid ? B.posts[pid] : null;
+  if (pid && !old) return;
+  const d = { title: old?.title || "", w: old ? blogParse(old) : [{ t: "", c: "#000080", x: "" }], noCmt: !!old?.noCmt };
+  const id = pid || D.push(R("blog")).key;
+  const oldImgs = old ? blogImgIds(old) : [];
+  const uploaded = [];
+  let saved = false, busy = 0, pvT = 0;
+  const win = openWindow(old ? "Edit blog post" : "New blog post", "✏", { key: "editblog" });
+  win.w.classList.add("meeditor", "beditor");
+  if (innerWidth >= 1150) { win.w.style.left = "8px"; win.w.style.top = "8px"; }
+  const { content, close } = win;
+  const bodyText = () => JSON.stringify({ w: d.w.map((w) => ({ t: w.t.trim().slice(0, 60), c: w.c, x: w.x.replace(/\s+$/, "") })) });
+  const preview = (now_) => {
+    clearTimeout(pvT);
+    const go = () => { B.draft = { pid: id, post: { title: d.title.trim() || "(no title)", body: bodyText(), by: old?.by || S.me.uid, name: old?.name || S.me.name, ts: old?.ts || Date.now(), noCmt: d.noCmt } }; if (S.tab === "blog") renderBlog(); update(); };
+    if (now_) go(); else pvT = setTimeout(go, 250);
+  };
+  win.onClosed = () => {
+    clearTimeout(pvT);
+    B.draft = null;
+    const keep = saved ? blogImgIds({ body: bodyText() }) : oldImgs;
+    const trash = [...uploaded, ...(saved ? oldImgs : [])].filter((iid) => !keep.includes(iid));
+    if (trash.length) D.update(R("/"), Object.fromEntries(trash.map((iid) => ["blogImg/" + iid, null]))).catch((e) => logError("Blog pictures cleanup: " + e.message));
+    if (S.tab === "blog") renderBlog();
+  };
+  if (S.tab !== "blog") setTab("blog");
+  content.append(el("div", "hint", "Everything you change shows up in the page behind (preview). A post is made of windows: pick a title and a color for each one. Click Publish when you're happy."));
+  const tl = el("label", "f"); tl.append("Post title");
+  const ti = el("input", "sunken"); ti.type = "text"; ti.maxLength = BLOG_TITLE_MAX; ti.value = d.title; ti.placeholder = "My first post!";
+  ti.oninput = () => { d.title = ti.value; preview(); };
+  tl.append(ti);
+  content.append(tl);
+  const winsBox = el("div", "bwins");
+  content.append(winsBox);
+  const addW = el("button", null, "+ Add a window"); addW.type = "button";
+  addW.onclick = () => { if (d.w.length >= BLOG_WIN_MAX) { toast("Max " + BLOG_WIN_MAX + " windows."); return; } d.w.push({ t: "", c: d.w[d.w.length - 1]?.c || "#000080", x: "" }); build(); preview(true); };
+  content.append(addW);
+  const nc = el("label", "check"); const ncb = el("input"); ncb.type = "checkbox"; ncb.checked = !d.noCmt;
+  ncb.onchange = () => { d.noCmt = !ncb.checked; preview(true); };
+  nc.append(ncb, " Allow comments (people with an account)");
+  content.append(nc, el("div", "hint", "Text tricks: \"# \" = big title, \"## \" = small title, \"- \" = list, links become clickable. Pictures: 🖼 button, or paste a picture (Ctrl+V), or a picture link alone on a line."));
+  const btns = el("div", "wbuttons mebtns");
+  const count = el("span", "mecount");
+  const status = el("span", "bstatus");
+  const cancel = el("button", null, "Cancel"); cancel.type = "button"; cancel.onclick = close;
+  const save = el("button", null, old ? "💾 Save" : "📢 Publish"); save.type = "button";
+  save.onclick = async () => {
+    if (busy) { toast("Wait, a picture is still uploading..."); return; }
+    const title = d.title.trim().slice(0, BLOG_TITLE_MAX);
+    if (!title) { dialog({ title: "No title", message: "Give your post a title first.", cancelText: null }); return; }
+    const body = bodyText();
+    if (body.length > BLOG_BODY_MAX) return;
+    const post = { title, body, by: old?.by || S.me.uid, name: String(old?.name || S.me.name).slice(0, 24), ts: old ? old.ts : now() };
+    if (old) post.edited = now();
+    if (d.noCmt) post.noCmt = true;
+    save.disabled = true;
+    try {
+      await D.set(R("blog/" + id), post);
+      saved = true;
+      toast(old ? "💾 Post saved!" : "📢 Post published! Everyone can see it, even without an account.");
+      close();
+      blogOpen(id);
+    } catch (e) { logError("Save blog: " + e.message); dialog({ title: "Can't save", message: "Can't save: " + authError(e) + "\n(did you publish the new database rules?)", cancelText: null }); save.disabled = false; }
+  };
+  btns.append(count, status, cancel, save);
+  content.append(btns);
+  function update() {
+    const n = bodyText().length;
+    count.textContent = n + " / " + BLOG_BODY_MAX + " letters";
+    count.classList.toggle("over", n > BLOG_BODY_MAX);
+    save.disabled = n > BLOG_BODY_MAX || !!busy;
+    status.textContent = busy ? "⏳ uploading " + busy + " picture" + (busy > 1 ? "s" : "") + "..." : "";
+  }
+  async function addPictures(files, w, ta) {
+    for (const f of files) {
+      busy++; update();
+      try {
+        const iid = await blogUpload(f);
+        uploaded.push(iid);
+        const s = ta.selectionStart ?? ta.value.length, e = ta.selectionEnd ?? s;
+        const before = ta.value.slice(0, s);
+        ta.setRangeText((before && !before.endsWith("\n") ? "\n" : "") + "[img:" + iid + "]\n", s, e, "end");
+        w.x = ta.value;
+      } catch (err) { dialog({ title: "Picture not added", message: (f.name || "picture") + ": " + authError(err), cancelText: null }); }
+      busy--; update(); preview(true);
+    }
+  }
+  function build() {
+    winsBox.replaceChildren();
+    d.w.forEach((w, i) => {
+      const fs = el("fieldset");
+      fs.append(el("legend", null, "Window " + (i + 1)));
+      const tIn = el("input", "sunken"); tIn.type = "text"; tIn.maxLength = 60; tIn.value = w.t; tIn.placeholder = i ? "Window title (like notes.txt)" : "Window title (empty = post title)";
+      tIn.oninput = () => { w.t = tIn.value; preview(); };
+      const crow = el("div", "bcolors");
+      const ci = el("input"); ci.type = "color"; ci.value = w.c; ci.title = "Any color";
+      const setC = (c) => { w.c = c; ci.value = c; crow.querySelectorAll(".bsw").forEach((b) => b.classList.toggle("on", b.dataset.c === c)); preview(true); };
+      ci.oninput = () => setC(ci.value.toLowerCase());
+      crow.append("Color: ", ci);
+      for (const c of BLOG_COLORS) { const b = el("button", "bsw" + (c === w.c ? " on" : "")); b.type = "button"; b.dataset.c = c; b.title = c; b.style.background = c; b.onclick = () => setC(c); crow.append(b); }
+      const ta = el("textarea", "sunken"); ta.rows = 8; ta.value = w.x; ta.placeholder = "Write here...";
+      ta.oninput = () => { w.x = ta.value; preview(); };
+      ta.addEventListener("paste", (e) => { const fl = [...(e.clipboardData?.files || [])].filter((f) => fileKind(f) === "image"); if (fl.length) { e.preventDefault(); addPictures(fl, w, ta); } });
+      const row = el("div", "brow");
+      const fi = el("input"); fi.type = "file"; fi.accept = "image/*"; fi.multiple = true; fi.hidden = true;
+      fi.onchange = () => { const fl = [...fi.files]; fi.value = ""; addPictures(fl, w, ta); };
+      const pic = el("button", null, "🖼 Add picture..."); pic.type = "button"; pic.onclick = () => fi.click();
+      const up = el("button", "small", "▲"); up.type = "button"; up.title = "Move up"; up.disabled = i === 0;
+      up.onclick = () => { [d.w[i - 1], d.w[i]] = [d.w[i], d.w[i - 1]]; build(); preview(true); };
+      const dn = el("button", "small", "▼"); dn.type = "button"; dn.title = "Move down"; dn.disabled = i === d.w.length - 1;
+      dn.onclick = () => { [d.w[i + 1], d.w[i]] = [d.w[i], d.w[i + 1]]; build(); preview(true); };
+      const rm = el("button", "small", "🗑"); rm.type = "button"; rm.title = "Remove this window"; rm.disabled = d.w.length === 1;
+      rm.onclick = async () => { if (w.x.trim() && !(await dialog({ title: "Remove window", message: "Remove window " + (i + 1) + " and its text?", okText: "Remove" }))) return; d.w.splice(i, 1); build(); preview(true); };
+      row.append(pic, fi, up, dn, rm);
+      fs.append(tIn, crow, ta, row);
+      winsBox.append(fs);
+    });
+  }
+  build();
+  preview(true);
+  setTimeout(() => ti.focus(), 0);
+}
+/* ----- comment notifications (only for the author of the post) ----- */
+function blogNotifOn() { return store("blog-notif") !== "0"; }
+function blogSeenMap() { try { const o = JSON.parse(store("blog-seen-" + S.me.uid) || "{}"); return o && typeof o === "object" ? o : {}; } catch { return {}; } }
+function blogSince() { const k = "blog-since-" + S.me.uid; let v = +store(k); if (!v) { v = Date.now(); store(k, String(v)); } return v; }
+function blogUnread() {
+  if (!S.me || S.me.guest || !blogNotifOn()) return 0;
+  const seen = blogSeenMap(), since = blogSince();
+  let n = 0;
+  for (const [pid, p] of Object.entries(B.posts)) {
+    if (!p || p.by !== S.me.uid) continue;
+    const t0 = seen[pid] || since;
+    for (const c of Object.values(B.cmts[pid] || {})) if (c && c.uid !== S.me.uid && (c.ts || 0) > t0) n++;
+  }
+  return n;
+}
+function blogMarkSeen(pid) {
+  if (!S.me || !B.posts[pid] || B.posts[pid].by !== S.me.uid) return;
+  const seen = blogSeenMap();
+  const max = Math.max(0, ...Object.values(B.cmts[pid] || {}).map((c) => c?.ts || 0));
+  if ((seen[pid] || 0) >= max) return;
+  seen[pid] = max;
+  store("blog-seen-" + S.me.uid, JSON.stringify(seen));
+  blogBadge();
+}
+function blogBadge() {
+  const b = $("blogTabBadge");
+  if (!b) return;
+  const n = blogUnread();
+  b.hidden = !n; b.textContent = n > 99 ? "99+" : String(n);
+  if (started) updateTitleCount();
+}
+function blogCmtNotify(before) {
+  if (!B.cmtsLoaded) { B.cmtsLoaded = true; return; }
+  if (!S.me || S.me.guest || !blogNotifOn()) return;
+  for (const [pid, cs] of Object.entries(B.cmts)) {
+    const p = B.posts[pid];
+    if (!p || p.by !== S.me.uid) continue;
+    if (S.tab === "blog" && B.open === pid && !document.hidden) continue;
+    for (const [k, c] of Object.entries(cs || {})) {
+      if (before[pid]?.[k] || !c || c.uid === S.me.uid) continue;
+      toast("💬 " + (c.name || "Someone") + " commented on your post \"" + p.title + "\" (Blog tab)");
+      pingSound();
+    }
+  }
+}
+function blogNotifBox() {
+  const fs = el("fieldset"); fs.append(el("legend", null, "📝 Blog"));
+  const l = el("label", "check"); const c = el("input"); c.type = "checkbox"; c.checked = blogNotifOn();
+  c.onchange = () => { store("blog-notif", c.checked ? "1" : "0"); if (c.checked && S.me) { const seen = blogSeenMap(); for (const pid of Object.keys(B.posts)) seen[pid] = Math.max(seen[pid] || 0, Date.now()); store("blog-seen-" + S.me.uid, JSON.stringify(seen)); } blogBadge(); };
+  l.append(c, " Tell me when someone comments on my blog posts (red badge on the Blog tab + sound)");
+  fs.append(l, el("div", "hint", "Saved on this device only."));
+  return fs;
+}
+/* Not logged in: About, Blog and Directory work without an account */
+function setPubTab(t) {
+  if (!["about", "blog", "dir"].includes(t)) { showLogin(); return; }
+  S.tab = t;
+  document.querySelectorAll("#mainTabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
+  for (const id of ["chatSplit", "gamesPage", "adminPage"]) $(id).hidden = true;
+  $("aboutPage").hidden = t !== "about";
+  $("blogPage").hidden = t !== "blog";
+  $("dirPage").hidden = t !== "dir";
+  if (t === "about") renderAbout();
+  if (t === "blog") renderBlog();
+  if (t === "dir") renderDirectory();
+  blogSyncHash();
+}
+/* Directory: the Blog part (everyone) */
+function dirBlogPart(d, q) {
+  const all = blogList();
+  const res = all.filter(([, p]) => !q || p.title.toLowerCase().includes(q) || blogPlain(p).toLowerCase().includes(q));
+  const cnt = el("div", "count");
+  cnt.append(el("span", null, "📝 " + (q ? "Blog posts for \"" + dirQuery + "\"" : "Blog posts")), el("span", null, res.length + " of " + all.length + " posts"));
+  d.append(cnt);
+  if (!B.loaded) d.append(el("div", "d", "Loading..."));
+  else if (!res.length) d.append(el("div", "d", q ? "No blog post matches your search." : "No blog post yet."));
+  const shown = q ? res : res.slice(0, 8);
+  for (const [pid, p] of shown) {
+    const r = el("div", "res");
+    const t = el("a", "t", p.title);
+    t.href = "#blog=" + pid;
+    t.addEventListener("click", (e) => { e.preventDefault(); B.open = pid; (started ? setTab : setPubTab)("blog"); blogOpen(pid); });
+    r.append(t, el("div", "u", "hangout-chat / blog / " + fmtDate(p.ts) + " - " + blogCounts(pid)));
+    const txt = blogPlain(p);
+    r.append(el("div", "d", txt.length > 180 ? txt.slice(0, 180) + "..." : txt || "(pictures)"));
+    r.append(el("div", "s", "Posted by " + (p.name || "?") + " on " + fmtDate(p.ts)));
+    d.append(r);
+  }
+  if (shown.length < res.length) {
+    const s = el("div", "s"); const a = el("a", null, "See all " + res.length + " posts in the 📝 Blog tab ►");
+    a.onclick = () => { B.open = null; (started ? setTab : setPubTab)("blog"); };
+    s.append(a); d.append(s);
+  }
 }
 /* ========================= BANNED ========================= */
 function showBanned() {
@@ -4547,7 +5144,7 @@ function totalPings() {
   return n;
 }
 function updateTitleCount() {
-  const n = totalPings();
+  const n = totalPings() + blogUnread();
   const base = "Hangout Chat";
   const want = (n ? "(" + (n > 99 ? "99+" : n) + ") " : "") + base;
   if (document.title !== want) document.title = want;
