@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-X5rXkm1KwITU6NlLgfxAgsnmGluu8NGmKpr7b/5bo0o=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-ko+TyvH2gC4fzaJx13H7d85VUtVlovN2l4bMn5TjEhM=' https://www.gstatic.com https://*.firebaseio.com https://www.google.com https://www.recaptcha.net; connect-src 'self' blob: https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://www.google.com https://noembed.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.dailymotion.com https://www.google.com https://www.recaptcha.net https://friend-app-cc816.firebaseapp.com; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'; worker-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hangout Chat</title>
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -1116,6 +1116,72 @@
   .dir > .s { font-size: 13px; margin: -6px 0 18px; }
   .dir > .s a { color: #1a0dab; cursor: pointer; text-decoration: underline; }
   @media (max-width: 760px) { .blog { padding: 8px 6px 20px; gap: 10px; } .btitle { font-size: 22px; } .blogo { font-size: 32px; } .bthumb img { width: 90px; height: 70px; } }
+  /* ===== v10.63: Battle Chess ===== */
+  :root { --chs: 48px; }
+  .float.chwin { width: auto; min-width: 300px; max-width: calc(calc(100vw / var(--z, 1)) - 16px); }
+  .chwin .content { gap: 6px; }
+  .chwrap { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .chleft { display: flex; flex-direction: column; gap: 4px; }
+  .chpl { display: flex; align-items: center; gap: 6px; min-height: 26px; padding: 2px 4px; font-size: 12px; border: 1px solid transparent; }
+  .chpl.turn { background: #fff4b8; border-color: #806000; }
+  .chname { display: flex; align-items: center; gap: 3px; font-weight: bold; white-space: nowrap; overflow: hidden; max-width: 210px; }
+  .chname .av { width: 16px; height: 16px; font-size: 11px; flex-shrink: 0; }
+  .chdot { width: 11px; height: 11px; border: 1px solid #000; flex-shrink: 0; }
+  .chdot.w { background: #fff; } .chdot.b { background: #000; }
+  .chcap { flex: 1; display: flex; flex-wrap: wrap; align-items: center; min-width: 0; }
+  .chcappc { width: 16px; height: 16px; image-rendering: pixelated; margin-right: -4px; }
+  .chlead { margin-left: 7px; font-size: 11px; color: #404040; }
+  .chclock { font-size: 18px; min-width: 64px; margin-left: auto; color: #606060; }
+  .chclock.run { color: #ff2020; }
+  .chclock.low.run { background: #400000; }
+  .chboard { display: grid; grid-template-columns: repeat(8, var(--chs)); grid-template-rows: repeat(8, var(--chs)); position: relative; padding: 0; touch-action: none; user-select: none; -webkit-user-select: none; border-width: 3px; }
+  .chsq { position: relative; display: flex; align-items: center; justify-content: center; }
+  .chsq.lt { background: #d4d0c8; }
+  .chsq.dk { background: #5f8f8f; }
+  .chsq.last.lt { background: #e8e08c; } .chsq.last.dk { background: #a3a35a; }
+  .chsq.hint { box-shadow: inset 0 0 0 4px #ffd800; }
+  .chsq.sel { box-shadow: inset 0 0 0 3px #000080; }
+  .chsq.chk { background: radial-gradient(circle, #ff4040 0%, #ff4040 35%, transparent 75%) !important; }
+  .chsq.mine { cursor: pointer; }
+  .chsq.tgt { cursor: pointer; }
+  .chsq.tgt::after { content: ""; width: 26%; height: 26%; background: rgba(0, 0, 128, .45); border-radius: 50%; position: absolute; }
+  .chsq.cap { cursor: pointer; }
+  .chsq.cap::after { content: ""; position: absolute; inset: 2px; border: 3px solid rgba(0, 0, 128, .55); border-radius: 50%; }
+  .chpc { width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; position: relative; z-index: 1; }
+  .chsq.lift .chpc { opacity: .25; }
+  .chghost { position: fixed; z-index: 99999; image-rendering: pixelated; pointer-events: none; filter: drop-shadow(2px 3px 0 rgba(0,0,0,.35)); }
+  .chco { position: absolute; font: bold 10px/1 Tahoma, sans-serif; pointer-events: none; opacity: .75; z-index: 2; }
+  .chco.rk { left: 2px; top: 2px; } .chco.fl { right: 2px; bottom: 1px; }
+  .chsq.lt .chco { color: #3f6f6f; } .chsq.dk .chco { color: #e8e4dc; }
+  .chpromo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 5; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--face); }
+  .chpromot { font-weight: bold; font-size: 12px; }
+  .chpromorow { display: flex; gap: 4px; }
+  .chpromorow button { width: calc(var(--chs) + 6px); height: calc(var(--chs) + 6px); min-width: 0; padding: 2px; display: flex; align-items: center; justify-content: center; }
+  .chpromorow button img { width: 100%; height: 100%; image-rendering: pixelated; }
+  .chpromox { min-width: 0; padding: 0 8px; }
+  .chside { display: flex; flex-direction: column; gap: 6px; width: 220px; max-width: 100%; }
+  .chstatus { font-size: 12px; padding: 4px 6px; white-space: pre-line; background: #fff; border: 1px solid; border-color: var(--shadow) var(--light) var(--light) var(--shadow); min-height: 34px; }
+  .chstatus.big { font-size: 14px; font-weight: bold; background: #ffe0e0; border: 2px solid #800000; }
+  .chstatus.big.good { background: #fff4b8; border-color: #806000; }
+  .chstatus.big.draw { background: #e0e8ff; border-color: #000080; }
+  .chbanner { padding: 5px; background: #fff4b8; border: 2px solid #806000; font-weight: bold; font-size: 12px; display: flex; flex-direction: column; gap: 4px; }
+  .chbanner[hidden] { display: none; }
+  .chmoves { height: 200px; overflow-y: auto; background: #fff; font: 12px "Courier New", monospace; padding: 2px; }
+  .chmv { display: grid; grid-template-columns: 30px 1fr 1fr; padding: 1px 2px; }
+  .chmv:nth-child(even) { background: #f0f0f0; }
+  .chmv .n { color: #808080; }
+  .chmv .cur { background: #000080; color: #fff; padding: 0 2px; }
+  .chmvempty { color: #808080; padding: 4px; }
+  .chbtns { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chbtns button { min-width: 0; padding: 2px 8px; }
+  .chsep { flex-basis: 100%; height: 0; }
+  .chsetup { display: flex; flex-direction: column; gap: 6px; max-width: 460px; }
+  .chsetup .chlvl { display: block; margin: 3px 0; }
+  .chsetup .hint { white-space: pre-line; }
+  .chpvptop { width: 100%; display: flex; flex-direction: column; gap: 3px; }
+  .chgicon { display: flex; } .chgimg { width: 36px; height: 36px; image-rendering: pixelated; }
+  .chpvpbody { display: flex; flex-direction: column; align-items: center; gap: 6px; max-width: 100%; }
+  @media (max-width: 760px) { .chside { width: calc(var(--chs) * 8 + 6px); } .chmoves { height: 90px; } }
 </style>
 </head>
 <body>
@@ -1331,7 +1397,7 @@ const savedEmail = (name) => { try { return localStorage.getItem("own-mail-" + S
 function rememberEmail(name, mail) { try { if (mail) localStorage.setItem("own-mail-" + String(name).toLowerCase(), mail); else localStorage.removeItem("own-mail-" + String(name).toLowerCase()); } catch {} }
 const nameFromEmail = (e) => String(e || "user").split("@")[0].replace(new RegExp("^" + RESET_BOX + "\\+"), "");
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
-const APP_VERSION = "10.62";
+const APP_VERSION = "10.63";
 /* ----- screen size (UI zoom) ----- */
 let UIZ = 1;
 const ZOOM_CHOICES = ["auto", "0.75", "0.85", "1", "1.15", "1.3", "1.5", "1.75", "2"];
@@ -2838,9 +2904,9 @@ async function openProfile(uid) {
   ];
   if (S.friends[uid]) rows.push(["Friends since", fmtDate(S.friends[uid].since)]);
   if (S.isAdmin && S.bans[uid]) rows.push(["Status", "⛔ Banned"]);
-  if (!u.guest && !u.deleted) rows.push(["Minesweeper PvP", "...", "pvp"], ["Tower & Attack PvP", "...", "pvp2"]);
+  if (!u.guest && !u.deleted) rows.push(["Minesweeper PvP", "...", "pvp"], ["Tower & Attack PvP", "...", "pvp2"], ["Battle Chess PvP", "...", "pvp3"]);
   const { tbl, refs } = infoTable(rows);
-  if (refs.pvp) D.get(R("stats/" + uid)).then((s) => { const v = s.val() || {}; const w = v.minesW || 0, l = v.minesL || 0; refs.pvp.textContent = w + " win" + (w === 1 ? "" : "s") + " / " + l + " loss" + (l === 1 ? "" : "es"); const w2 = v.tdW || 0, l2 = v.tdL || 0; refs.pvp2.textContent = w2 + " win" + (w2 === 1 ? "" : "s") + " / " + l2 + " loss" + (l2 === 1 ? "" : "es"); }).catch(() => { refs.pvp.textContent = "?"; });
+  if (refs.pvp) D.get(R("stats/" + uid)).then((s) => { const v = s.val() || {}; const w = v.minesW || 0, l = v.minesL || 0; refs.pvp.textContent = w + " win" + (w === 1 ? "" : "s") + " / " + l + " loss" + (l === 1 ? "" : "es"); const w2 = v.tdW || 0, l2 = v.tdL || 0; refs.pvp2.textContent = w2 + " win" + (w2 === 1 ? "" : "s") + " / " + l2 + " loss" + (l2 === 1 ? "" : "es"); if (refs.pvp3) { const w3 = v.chessW || 0, l3 = v.chessL || 0, d3 = v.chessD || 0; refs.pvp3.textContent = w3 + " win" + (w3 === 1 ? "" : "s") + " / " + l3 + " loss" + (l3 === 1 ? "" : "es") + " / " + d3 + " draw" + (d3 === 1 ? "" : "s"); } }).catch(() => { refs.pvp.textContent = "?"; });
   const bioBox = el("fieldset"); bioBox.append(el("legend", null, "Bio"));
   const bio = el("div", "bio sunken", u.bio || (u.guest ? "(guests have no bio)" : "(no bio yet)"));
   if (!u.bio) bio.style.color = "#808080";
@@ -8723,7 +8789,7 @@ async function openCtEditor(start) {
 
 /* ----- lists: games tab + right panel ----- */
 function visibleGames() {
-  return Object.entries(S.games || {}).filter(([, g]) => g && (g.kind === "mines" || g.kind === "td") && g.cfg)
+  return Object.entries(S.games || {}).filter(([, g]) => g && (g.kind === "mines" || g.kind === "td" || g.kind === "chess") && g.cfg)
     .filter(([, g]) => !g.room || g.by === S.me.uid || g.opp === S.me.uid || S.isAdmin || (isDM(g.room) ? !!S.myDMs[g.room] : !!S.myChats[S.chats[g.room]?.parent || g.room] || S.chats[g.room]?.type === "public"))
     .sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
 }
@@ -8734,6 +8800,7 @@ function gameRow(gid, g, { showWhere = true } = {}) {
   const whereTxt = showWhere ? (g.room ? (isDM(g.room) ? " · DM" : " · " + chatLabel(g.room)) : " · link") : "";
   if (st === "open") txt.append(el("b", null, "⚔ " + uname(g.by)), el("span", "dim", " " + gameDesc(g) + whereTxt));
   else if (st === "playing") txt.append(el("b", null, "▶ " + uname(g.by) + " vs " + uname(g.opp)), el("span", "dim", " playing" + whereTxt));
+  else if (g.winner === "draw") txt.append(el("b", null, "🤝 " + uname(g.by) + " = " + uname(g.opp)), el("span", "dim", " draw · " + fmtAgo(g.endAt || g.createdAt)));
   else txt.append(el("b", null, "🏆 " + uname(g.winner)), el("span", "dim", " beat " + uname(g.winner === g.by ? g.opp : g.by) + " · " + fmtAgo(g.endAt || g.createdAt)));
   it.append(txt);
   const btn = (t, fn) => { const b = el("button", "small", t); b.type = "button"; b.onclick = (e) => { e.stopPropagation(); fn(); }; it.append(b); };
@@ -8768,7 +8835,13 @@ function renderGamesPanel(pane) {
   const r3 = el("div", "row-btns"); r3.append(k3, k1);
   if (S.isAdmin) { const k2 = el("button", "small", "🛠 Editor"); k2.type = "button"; k2.onclick = () => openCtEditor(null); r3.append(k2); }
   card3.append(r3);
-  pane.append(card, card2, card3, el("div", "gsoon", "❓ More games soon..."));
+  const card4 = el("div", "gcard");
+  card4.append(el("div", "gname", "♞ Battle Chess"));
+  const q1 = el("button", "small", "🤖 vs Computer"); q1.type = "button"; q1.onclick = openChessSolo;
+  const q2 = el("button", "small", "⚔ Challenge"); q2.type = "button"; q2.onclick = () => createChessChallenge(S.room);
+  q2.disabled = !!S.me.guest; if (S.me.guest) q2.title = "Accounts only";
+  const r4 = el("div", "row-btns"); r4.append(q1, q2); card4.append(r4);
+  pane.append(card, card2, card3, card4, el("div", "gsoon", "❓ More games soon..."));
   const here = visibleGames().filter(([, g]) => g.room && S.room && (g.room === S.room));
   const live = here.filter(([, g]) => ["open", "playing"].includes(gameState(g)));
   const done = here.filter(([, g]) => gameState(g) === "done").slice(0, 5);
@@ -8824,7 +8897,17 @@ function renderGamesPage() {
   rK.append(k3, k1);
   if (S.isAdmin) { const k2 = el("button", null, "🛠 Level editor"); k2.type = "button"; k2.onclick = () => openCtEditor(null); rK.append(k2); }
   cK.append(rK);
-  cards.append(c1, cT, cK, c2); fsG.append(cards);
+  const cC = el("div", "gcard big raised");
+  const ci = el("div", "gicon chgicon"); ci.append(chPieceEl(2, "chgimg"), chPieceEl(-2, "chgimg"));
+  cC.append(ci, el("div", "gname", "Battle Chess"),
+    el("div", "hint", "Protect your king! Normal chess rules.\n🤖 Solo: play the computer (4 levels).\nPvP: challenge a friend, with or without a clock."));
+  const rC = el("div", "row-btns");
+  const h1 = el("button", null, "🤖 vs Computer"); h1.type = "button"; h1.onclick = openChessSolo;
+  const h2 = el("button", null, "⚔ PvP challenge..."); h2.type = "button"; h2.onclick = () => createChessChallenge(S.room);
+  h2.disabled = !!S.me.guest;
+  rC.append(h1, h2); cC.append(rC);
+  if (S.me.guest) cC.append(el("div", "hint", "Guests: solo only. Create an account for PvP!"));
+  cards.append(c1, cT, cK, cC, c2); fsG.append(cards);
   const fsC = el("fieldset"); fsC.append(el("legend", null, "⚔ Open challenges"));
   const listC = el("div", "list sunken tall");
   const all = visibleGames();
@@ -8846,10 +8929,10 @@ function gameChip(gid, big) {
     const st = gameState(g);
     const b = el("button", null, "💣 Minesweeper");
     b.type = "button";
-    if (!g) b.textContent = S.gamesLoaded ? "⚔ Minesweeper challenge (open)" : "⚔ Minesweeper challenge";
+    if (!g) b.textContent = S.gamesLoaded ? "⚔ Challenge (over)" : "⚔ Challenge";
     else if (st === "open") b.textContent = g.by === S.me.uid ? "⚔ Your challenge: waiting for someone to join..." : "⚔ Join the fight vs " + uname(g.by) + "! (" + gameDesc(g) + ")";
     else if (st === "playing") b.textContent = (g.by === S.me.uid || g.opp === S.me.uid ? "▶ Back to your game vs " + uname(g.by === S.me.uid ? g.opp : g.by) : "👀 Watch " + uname(g.by) + " vs " + uname(g.opp) + " (live)");
-    else if (st === "done") b.textContent = "🏆 " + uname(g.winner) + " won " + uname(g.by) + " vs " + uname(g.opp) + " · See";
+    else if (st === "done") b.textContent = (g.winner === "draw" ? "🤝 Draw: " : "🏆 " + uname(g.winner) + " won ") + uname(g.by) + " vs " + uname(g.opp) + " · See";
     else b.textContent = "⌛ Challenge expired";
     b.onclick = (e) => { e.stopPropagation(); if (st === "open" && g.by !== S.me.uid) acceptChallenge(gid); else openGame(gid); };
     box.append(b);
@@ -8862,7 +8945,7 @@ function gameChip(gid, big) {
     if (g.by === S.me.uid) { box.append(el("span", "dim", "waiting... ")); btn("Open", () => openGame(gid)); }
     else btn("⚔ Accept", () => acceptChallenge(gid));
   } else if (st === "playing") { box.append(el("span", "dim", uname(g.opp) + " accepted · ")); btn(g.by === S.me.uid || g.opp === S.me.uid ? "▶ Play" : "👀 Watch", () => openGame(gid)); }
-  else if (st === "done") { box.append(el("span", "dim", "🏆 " + uname(g.winner) + " won · ")); btn("See", () => openGame(gid)); }
+  else if (st === "done") { box.append(el("span", "dim", gameWinText(g) + (g.winner === "draw" ? " · " : " won · "))); btn("See", () => openGame(gid)); }
   else box.append(el("span", "dim", "(expired)"));
   return box;
 }
@@ -8880,7 +8963,7 @@ function startGamesSub() {
       const b = before[gid];
       if (g.by === S.me.uid && g.status === "playing" && b && b.status === "open") {
         pingSound();
-        toast("⚔ " + uname(g.opp) + " accepted your " + (g.kind === "td" ? "Tower & Attack" : "Minesweeper") + " challenge!");
+        toast("⚔ " + uname(g.opp) + " accepted your " + gameKindName(g.kind) + " challenge!");
         openGame(gid);
       }
     }
@@ -8895,7 +8978,7 @@ function cleanOldGames() {
   for (const [gid, g] of Object.entries(S.games)) {
     if (g.by !== S.me.uid) continue;
     const old = (g.status === "open" && t - g.createdAt > OPEN_TTL) || (g.status === "done" && t - (g.endAt || g.createdAt) > 3 * 86400000) || (g.status === "playing" && t - g.createdAt > PLAY_TTL + OPEN_TTL);
-    if (old) { D.set(R("games/" + gid), null).catch(() => {}); D.set(R("gameP/" + gid), null).catch(() => {}); if (g.kind === "td") { D.set(R("tdState/" + gid), null).catch(() => {}); D.set(R("tdAct/" + gid), null).catch(() => {}); } }
+    if (old) { D.set(R("games/" + gid), null).catch(() => {}); D.set(R("gameP/" + gid), null).catch(() => {}); if (g.kind === "td") { D.set(R("tdState/" + gid), null).catch(() => {}); D.set(R("tdAct/" + gid), null).catch(() => {}); } if (g.kind === "chess") D.set(R("chessState/" + gid), null).catch(() => {}); }
   }
 }
 
@@ -10952,9 +11035,1204 @@ function tdRestore(st, s) {
 async function openGame(gid) {
   let g = S.games?.[gid];
   if (!g) { try { g = (await D.get(R("games/" + gid))).val(); } catch {} }
-  if (g && g.kind === "td") openTd(gid); else openPvp(gid);
+  if (g && g.kind === "td") openTd(gid); else if (g && g.kind === "chess") openChessPvp(gid); else openPvp(gid);
 }
-function gameDesc(g) { return g.kind === "td" ? "Tower & Attack" + (g.cfg?.linked ? " 🔗" : "") : "Minesweeper " + cfgText(g.cfg); }
+function gameDesc(g) { return g.kind === "td" ? "Tower & Attack" + (g.cfg?.linked ? " 🔗" : "") : g.kind === "chess" ? "♞ Battle Chess (" + chessCfgText(g.cfg) + ")" : "Minesweeper " + cfgText(g.cfg); }
+function gameKindName(k) { return k === "td" ? "Tower & Attack" : k === "chess" ? "Battle Chess" : "Minesweeper"; }
+// "🏆 Bob" or "🤝 Draw" (chess games can end in a draw)
+function gameWinText(g) { return g.winner === "draw" ? "🤝 Draw" : "🏆 " + uname(g.winner); }
+
+/* ========================= GAMES: BATTLE CHESS (v10.63) ========================= */
+// Normal chess. Engine on a 0x88 board: square = rank * 16 + file (a1 = 0, h1 = 7, a8 = 112).
+// Pieces: 1 pawn · 2 knight · 3 bishop · 4 rook · 5 queen · 6 king. White > 0, black < 0.
+// Moves are numbers: from | to << 7 | promo << 14 | flags << 17 (flags: 1 capture, 2 en passant, 4 castle, 8 pawn double step).
+// PvP keeps the moves as UCI text ("e2e4 e7e5 e7e8q") in chessState/{gid}.
+const CH_START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const CH_NM = [-33, -31, -18, -14, 14, 18, 31, 33], CH_BD = [-17, -15, 15, 17], CH_RD = [-16, -1, 1, 16], CH_KD = [-17, -16, -15, -1, 1, 15, 16, 17];
+const CH_CR = new Uint8Array(128).fill(15);
+CH_CR[0] = 13; CH_CR[7] = 14; CH_CR[4] = 12; CH_CR[112] = 7; CH_CR[119] = 11; CH_CR[116] = 3;
+const CH_Z = (() => {   // zobrist keys (2 × 32 bits)
+  const r = rng(0xC4E55), n = () => (r() * 4294967296) | 0;
+  const z = { p1: new Int32Array(13 * 128), p2: new Int32Array(13 * 128), c1: new Int32Array(16), c2: new Int32Array(16), e1: new Int32Array(8), e2: new Int32Array(8), s1: n(), s2: n() };
+  for (let i = 0; i < 13 * 128; i++) { z.p1[i] = n(); z.p2[i] = n(); }
+  for (let i = 0; i < 16; i++) { z.c1[i] = n(); z.c2[i] = n(); }
+  for (let i = 0; i < 8; i++) { z.e1[i] = n(); z.e2[i] = n(); }
+  return z;
+})();
+const chSqName = (sq) => "abcdefgh"[sq & 7] + ((sq >> 4) + 1);
+const chSq = (s) => (s.charCodeAt(1) - 49) * 16 + (s.charCodeAt(0) - 97);
+const chFrom = (m) => m & 127, chTo = (m) => (m >> 7) & 127, chPromo = (m) => (m >> 14) & 7, chFlags = (m) => m >> 17;
+const chMove = (f, t, pr, fl) => f | (t << 7) | (pr << 14) | (fl << 17);
+
+class Chess {
+  constructor(fen = CH_START) { this.b = new Int8Array(128); this.kp = [4, 116]; this.load(fen); }
+  load(fen) {
+    const [pl, side, cas = "-", ep = "-", hm = "0", fm = "1"] = fen.trim().split(/\s+/);
+    this.b.fill(0);
+    let r = 7, f = 0;
+    for (const c of pl) {
+      if (c === "/") { r--; f = 0; continue; }
+      if (c >= "1" && c <= "8") { f += +c; continue; }
+      const t = "pnbrqk".indexOf(c.toLowerCase()) + 1, black = c === c.toLowerCase();
+      this.b[r * 16 + f] = black ? -t : t;
+      if (t === 6) this.kp[black ? 1 : 0] = r * 16 + f;
+      f++;
+    }
+    this.side = side === "b" ? -1 : 1;
+    this.cas = (cas.includes("K") ? 1 : 0) | (cas.includes("Q") ? 2 : 0) | (cas.includes("k") ? 4 : 0) | (cas.includes("q") ? 8 : 0);
+    this.ep = ep !== "-" ? chSq(ep) : -1;
+    this.hm = +hm || 0; this.fm = +fm || 1;
+    this.hist = [];
+    this.rehash();
+  }
+  epHashed() {   // en passant only counts for the position if a pawn can really take
+    if (this.ep < 0) return false;
+    const s = this.side, a = this.ep - 16 * s;
+    return (!((a - 1) & 0x88) && this.b[a - 1] === s) || (!((a + 1) & 0x88) && this.b[a + 1] === s);
+  }
+  rehash() {
+    let h1 = 0, h2 = 0;
+    for (let sq = 0; sq < 120; sq++) { if (sq & 0x88) { sq += 7; continue; } const p = this.b[sq]; if (p) { h1 ^= CH_Z.p1[(p + 6) * 128 + sq]; h2 ^= CH_Z.p2[(p + 6) * 128 + sq]; } }
+    h1 ^= CH_Z.c1[this.cas]; h2 ^= CH_Z.c2[this.cas];
+    if (this.epHashed()) { h1 ^= CH_Z.e1[this.ep & 7]; h2 ^= CH_Z.e2[this.ep & 7]; }
+    if (this.side < 0) { h1 ^= CH_Z.s1; h2 ^= CH_Z.s2; }
+    this.h1 = h1; this.h2 = h2;
+  }
+  fen() {
+    let s = "";
+    for (let r = 7; r >= 0; r--) {
+      let e = 0;
+      for (let f = 0; f < 8; f++) {
+        const p = this.b[r * 16 + f];
+        if (!p) { e++; continue; }
+        if (e) { s += e; e = 0; }
+        const c = " pnbrqk"[Math.abs(p)];
+        s += p > 0 ? c.toUpperCase() : c;
+      }
+      if (e) s += e;
+      if (r) s += "/";
+    }
+    const c = (this.cas & 1 ? "K" : "") + (this.cas & 2 ? "Q" : "") + (this.cas & 4 ? "k" : "") + (this.cas & 8 ? "q" : "");
+    return s + " " + (this.side > 0 ? "w" : "b") + " " + (c || "-") + " " + (this.ep >= 0 ? chSqName(this.ep) : "-") + " " + this.hm + " " + this.fm;
+  }
+  attacked(sq, by) {
+    const b = this.b;
+    if (by > 0) { if (!((sq - 15) & 0x88) && b[sq - 15] === 1) return true; if (!((sq - 17) & 0x88) && b[sq - 17] === 1) return true; }
+    else { if (!((sq + 15) & 0x88) && b[sq + 15] === -1) return true; if (!((sq + 17) & 0x88) && b[sq + 17] === -1) return true; }
+    const n = 2 * by, k = 6 * by, bi = 3 * by, ro = 4 * by, q = 5 * by;
+    for (let i = 0; i < 8; i++) { const c = sq + CH_NM[i]; if (!(c & 0x88) && b[c] === n) return true; }
+    for (let i = 0; i < 8; i++) { const c = sq + CH_KD[i]; if (!(c & 0x88) && b[c] === k) return true; }
+    for (let i = 0; i < 4; i++) { const d = CH_BD[i]; let c = sq + d; while (!(c & 0x88)) { const p = b[c]; if (p) { if (p === bi || p === q) return true; break; } c += d; } }
+    for (let i = 0; i < 4; i++) { const d = CH_RD[i]; let c = sq + d; while (!(c & 0x88)) { const p = b[c]; if (p) { if (p === ro || p === q) return true; break; } c += d; } }
+    return false;
+  }
+  inCheck() { return this.attacked(this.kp[this.side > 0 ? 0 : 1], -this.side); }
+  leftInCheck() { return this.attacked(this.kp[this.side > 0 ? 1 : 0], this.side); }   // after make(): is the side that just moved in check?
+  // pseudo-legal moves (caps = only captures + queen promotions, for the AI)
+  gen(caps = false) {
+    const b = this.b, s = this.side, out = [];
+    for (let sq = 0; sq < 120; sq++) {
+      if (sq & 0x88) { sq += 7; continue; }
+      const p = b[sq];
+      if (!p || (p > 0) !== (s > 0)) continue;
+      const t = p * s;
+      if (t === 1) {
+        const fwd = 16 * s, r = sq >> 4, last = s > 0 ? 6 : 1, to = sq + fwd;
+        if (!b[to]) {
+          if (r === last) { out.push(chMove(sq, to, 5, 0)); if (!caps) out.push(chMove(sq, to, 2, 0), chMove(sq, to, 4, 0), chMove(sq, to, 3, 0)); }
+          else if (!caps) { out.push(chMove(sq, to, 0, 0)); if (r === (s > 0 ? 1 : 6) && !b[to + fwd]) out.push(chMove(sq, to + fwd, 0, 8)); }
+        }
+        for (const c of [to - 1, to + 1]) {
+          if (c & 0x88) continue;
+          if (b[c] && (b[c] > 0) !== (s > 0)) {
+            if (r === last) { out.push(chMove(sq, c, 5, 1)); if (!caps) out.push(chMove(sq, c, 2, 1), chMove(sq, c, 4, 1), chMove(sq, c, 3, 1)); }
+            else out.push(chMove(sq, c, 0, 1));
+          } else if (c === this.ep) out.push(chMove(sq, c, 0, 3));
+        }
+      } else if (t === 2 || t === 6) {
+        const D = t === 2 ? CH_NM : CH_KD;
+        for (let i = 0; i < 8; i++) {
+          const c = sq + D[i];
+          if (c & 0x88) continue;
+          const q = b[c];
+          if (!q) { if (!caps) out.push(chMove(sq, c, 0, 0)); }
+          else if ((q > 0) !== (s > 0)) out.push(chMove(sq, c, 0, 1));
+        }
+        if (t === 6 && !caps) {
+          if (s > 0) {
+            if ((this.cas & 1) && !b[5] && !b[6] && b[7] === 4 && !this.attacked(4, -1) && !this.attacked(5, -1) && !this.attacked(6, -1)) out.push(chMove(4, 6, 0, 4));
+            if ((this.cas & 2) && !b[3] && !b[2] && !b[1] && b[0] === 4 && !this.attacked(4, -1) && !this.attacked(3, -1) && !this.attacked(2, -1)) out.push(chMove(4, 2, 0, 4));
+          } else {
+            if ((this.cas & 4) && !b[117] && !b[118] && b[119] === -4 && !this.attacked(116, 1) && !this.attacked(117, 1) && !this.attacked(118, 1)) out.push(chMove(116, 118, 0, 4));
+            if ((this.cas & 8) && !b[115] && !b[114] && !b[113] && b[112] === -4 && !this.attacked(116, 1) && !this.attacked(115, 1) && !this.attacked(114, 1)) out.push(chMove(116, 114, 0, 4));
+          }
+        }
+      } else {
+        const D = t === 3 ? CH_BD : t === 4 ? CH_RD : CH_KD;
+        for (let i = 0; i < D.length; i++) {
+          const d = D[i];
+          let c = sq + d;
+          while (!(c & 0x88)) {
+            const q = b[c];
+            if (!q) { if (!caps) out.push(chMove(sq, c, 0, 0)); }
+            else { if ((q > 0) !== (s > 0)) out.push(chMove(sq, c, 0, 1)); break; }
+            c += d;
+          }
+        }
+      }
+    }
+    return out;
+  }
+  make(m) {
+    const b = this.b, Z = CH_Z, from = m & 127, to = (m >> 7) & 127, pr = (m >> 14) & 7, fl = m >> 17, s = this.side, p = b[from];
+    let capSq = to;
+    if (fl & 2) capSq = to - 16 * s;
+    const cap = b[capSq];
+    this.hist.push({ m, cap, cas: this.cas, ep: this.ep, hm: this.hm, h1: this.h1, h2: this.h2 });
+    let h1 = this.h1, h2 = this.h2;
+    if (this.epHashed()) { h1 ^= Z.e1[this.ep & 7]; h2 ^= Z.e2[this.ep & 7]; }
+    h1 ^= Z.p1[(p + 6) * 128 + from]; h2 ^= Z.p2[(p + 6) * 128 + from];
+    if (cap) { h1 ^= Z.p1[(cap + 6) * 128 + capSq]; h2 ^= Z.p2[(cap + 6) * 128 + capSq]; b[capSq] = 0; }
+    const np = pr ? pr * s : p;
+    b[to] = np; b[from] = 0;
+    h1 ^= Z.p1[(np + 6) * 128 + to]; h2 ^= Z.p2[(np + 6) * 128 + to];
+    if (fl & 4) {
+      const rf = to > from ? from + 3 : from - 4, rt = to > from ? from + 1 : from - 1, rk = 4 * s;
+      b[rt] = rk; b[rf] = 0;
+      h1 ^= Z.p1[(rk + 6) * 128 + rf] ^ Z.p1[(rk + 6) * 128 + rt]; h2 ^= Z.p2[(rk + 6) * 128 + rf] ^ Z.p2[(rk + 6) * 128 + rt];
+    }
+    if (p === 6 * s) this.kp[s > 0 ? 0 : 1] = to;
+    h1 ^= Z.c1[this.cas]; h2 ^= Z.c2[this.cas];
+    this.cas &= CH_CR[from] & CH_CR[to];
+    h1 ^= Z.c1[this.cas]; h2 ^= Z.c2[this.cas];
+    this.ep = (fl & 8) ? from + 16 * s : -1;
+    this.hm = (p === s || cap) ? 0 : this.hm + 1;
+    if (s < 0) this.fm++;
+    this.side = -s;
+    h1 ^= Z.s1; h2 ^= Z.s2;
+    if (this.epHashed()) { h1 ^= Z.e1[this.ep & 7]; h2 ^= Z.e2[this.ep & 7]; }
+    this.h1 = h1; this.h2 = h2;
+  }
+  unmake() {
+    const u = this.hist.pop(), b = this.b, m = u.m, from = m & 127, to = (m >> 7) & 127, pr = (m >> 14) & 7, fl = m >> 17;
+    const s = -this.side;
+    this.side = s;
+    const p = pr ? s : b[to];
+    b[from] = p; b[to] = 0;
+    if (fl & 2) b[to - 16 * s] = u.cap; else b[to] = u.cap;
+    if (fl & 4) {
+      const rf = to > from ? from + 3 : from - 4, rt = to > from ? from + 1 : from - 1;
+      b[rf] = 4 * s; b[rt] = 0;
+    }
+    if (p === 6 * s) this.kp[s > 0 ? 0 : 1] = from;
+    this.cas = u.cas; this.ep = u.ep; this.hm = u.hm; this.h1 = u.h1; this.h2 = u.h2;
+    if (s < 0) this.fm--;
+  }
+  legal() {
+    const out = [];
+    for (const m of this.gen()) { this.make(m); if (!this.leftInCheck()) out.push(m); this.unmake(); }
+    return out;
+  }
+  reps() {   // how many times the current position happened (this one included)
+    let n = 1;
+    const L = this.hist.length;
+    for (let k = L - 2; k >= 0 && k >= L - this.hm; k -= 2) { const h = this.hist[k]; if (h.h1 === this.h1 && h.h2 === this.h2) n++; }
+    return n;
+  }
+  noMatingMaterial() {
+    const minors = [[], []];
+    for (let sq = 0; sq < 120; sq++) {
+      if (sq & 0x88) { sq += 7; continue; }
+      const p = this.b[sq], t = Math.abs(p);
+      if (!p || t === 6) continue;
+      if (t === 1 || t === 4 || t === 5) return false;
+      minors[p > 0 ? 0 : 1].push(t === 3 ? "b" + (((sq >> 4) + (sq & 7)) & 1) : "n");
+    }
+    const all = minors[0].concat(minors[1]);
+    if (all.length <= 1) return true;                                 // K vs K, K+minor vs K
+    return all.every((x) => x[0] === "b") && new Set(all).size === 1; // only bishops, all on the same color
+  }
+  canMate(color) {   // false if this side has only the king, or king + one knight/bishop (used when the other side runs out of time)
+    let n = 0;
+    for (let sq = 0; sq < 120; sq++) {
+      if (sq & 0x88) { sq += 7; continue; }
+      const p = this.b[sq] * color;
+      if (p <= 0 || p === 6) continue;
+      if (p === 1 || p === 4 || p === 5) return true;
+      n++;
+    }
+    return n >= 2;
+  }
+  // { over, win: 1 white / -1 black / 0 draw, why }
+  status() {
+    const moves = this.legal();
+    if (!moves.length) return this.inCheck() ? { over: true, win: -this.side, why: "mate" } : { over: true, win: 0, why: "stalemate" };
+    if (this.noMatingMaterial()) return { over: true, win: 0, why: "material" };
+    if (this.hm >= 100) return { over: true, win: 0, why: "50" };
+    if (this.reps() >= 3) return { over: true, win: 0, why: "rep" };
+    return { over: false, moves };
+  }
+  san(m, legal = this.legal()) {
+    const from = chFrom(m), to = chTo(m), pr = chPromo(m), fl = chFlags(m), t = Math.abs(this.b[from]);
+    let s;
+    if (fl & 4) s = to > from ? "O-O" : "O-O-O";
+    else if (t === 1) s = ((fl & 1) ? "abcdefgh"[from & 7] + "x" : "") + chSqName(to) + (pr ? "=" + " PNBRQK"[pr] : "");
+    else {
+      const twins = legal.filter((x) => x !== m && chTo(x) === to && Math.abs(this.b[chFrom(x)]) === t);
+      let dis = "";
+      if (twins.length) {
+        const sameFile = twins.some((x) => (chFrom(x) & 7) === (from & 7)), sameRank = twins.some((x) => (chFrom(x) >> 4) === (from >> 4));
+        dis = !sameFile ? "abcdefgh"[from & 7] : !sameRank ? String((from >> 4) + 1) : chSqName(from);
+      }
+      s = " PNBRQK"[t] + dis + ((fl & 1) ? "x" : "") + chSqName(to);
+    }
+    this.make(m);
+    if (this.inCheck()) s += this.legal().length ? "+" : "#";
+    this.unmake();
+    return s;
+  }
+  uci(m) { return chSqName(chFrom(m)) + chSqName(chTo(m)) + (chPromo(m) ? " pnbrqk"[chPromo(m)] : ""); }
+  fromUci(u, legal = this.legal()) {
+    if (!/^[a-h][1-8][a-h][1-8][nbrq]?$/.test(u)) return 0;
+    const f = chSq(u.slice(0, 2)), t = chSq(u.slice(2, 4)), pr = u[4] ? " pnbrqk".indexOf(u[4]) : 0;
+    return legal.find((m) => chFrom(m) === f && chTo(m) === t && chPromo(m) === pr) || 0;
+  }
+}
+// replay a game from a list of UCI moves; returns { pos, sans, moves } (stops at the first bad move)
+function chReplay(list) {
+  const pos = new Chess(), sans = [], moves = [];
+  for (const u of list) {
+    const legal = pos.legal(), m = pos.fromUci(u, legal);
+    if (!m) break;
+    sans.push(pos.san(m, legal)); moves.push(m);
+    pos.make(m);
+  }
+  return { pos, sans, moves };
+}
+
+/* ----- AI: alpha-beta search, cut into small slices so the page never freezes ----- */
+// Piece-square tables (white's view, row 0 = rank 8). "Simplified evaluation function" values.
+const CH_VAL = [0, 100, 320, 330, 500, 900, 0];
+const CH_PST = [null,
+  [0,0,0,0,0,0,0,0, 50,50,50,50,50,50,50,50, 10,10,20,30,30,20,10,10, 5,5,10,25,25,10,5,5, 0,0,0,20,20,0,0,0, 5,-5,-10,0,0,-10,-5,5, 5,10,10,-20,-20,10,10,5, 0,0,0,0,0,0,0,0],
+  [-50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40, -30,0,10,15,15,10,0,-30, -30,5,15,20,20,15,5,-30, -30,0,15,20,20,15,0,-30, -30,5,10,15,15,10,5,-30, -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50],
+  [-20,-10,-10,-10,-10,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,10,10,5,0,-10, -10,5,5,10,10,5,5,-10, -10,0,10,10,10,10,0,-10, -10,10,10,10,10,10,10,-10, -10,5,0,0,0,0,5,-10, -20,-10,-10,-10,-10,-10,-10,-20],
+  [0,0,0,0,0,0,0,0, 5,10,10,10,10,10,10,5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, -5,0,0,0,0,0,0,-5, 0,0,0,5,5,0,0,0],
+  [-20,-10,-10,-5,-5,-10,-10,-20, -10,0,0,0,0,0,0,-10, -10,0,5,5,5,5,0,-10, -5,0,5,5,5,5,0,-5, 0,0,5,5,5,5,0,-5, -10,5,5,5,5,5,0,-10, -10,0,5,0,0,0,0,-10, -20,-10,-10,-5,-5,-10,-10,-20],
+  [-30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30, -20,-30,-30,-40,-40,-30,-30,-20, -10,-20,-20,-20,-20,-20,-20,-10, 20,20,0,0,0,0,20,20, 20,30,10,0,0,10,30,20],
+];
+const CH_KEND = [-50,-40,-30,-20,-20,-30,-40,-50, -30,-20,-10,0,0,-10,-20,-30, -30,-10,20,30,30,20,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,30,40,40,30,-10,-30, -30,-10,20,30,30,20,-10,-30, -30,-30,0,0,0,0,-30,-30, -50,-30,-30,-30,-30,-30,-30,-50];
+const CH_PASSED = [0, 5, 10, 20, 35, 60, 100, 0];
+const CH_PHASE = [0, 0, 1, 1, 2, 4, 0];
+const CH_MATE = 30000;
+// score for white (centipawns)
+function chEval(pos) {
+  const b = pos.b;
+  const pf = [new Int8Array(10), new Int8Array(10)];     // pawns per file (index file + 1)
+  const pmin = [new Int8Array(10).fill(9), new Int8Array(10).fill(9)], pmax = [new Int8Array(10).fill(-1), new Int8Array(10).fill(-1)];
+  let mid = 0, phase = 0, mat = [0, 0], bish = [0, 0], kmid = 0, kend = 0;
+  const rooks = [];
+  for (let sq = 0; sq < 120; sq++) {
+    if (sq & 0x88) { sq += 7; continue; }
+    const p = b[sq];
+    if (!p) continue;
+    const t = p > 0 ? p : -p, w = p > 0, r = sq >> 4, f = sq & 7;
+    const idx = w ? (7 - r) * 8 + f : r * 8 + f, sg = w ? 1 : -1, c = w ? 0 : 1;
+    phase += CH_PHASE[t];
+    if (t === 6) { kmid += sg * CH_PST[6][idx]; kend += sg * CH_KEND[idx]; continue; }
+    mat[c] += CH_VAL[t];
+    mid += sg * (CH_VAL[t] + CH_PST[t][idx]);
+    if (t === 1) { pf[c][f + 1]++; if (r < pmin[c][f + 1]) pmin[c][f + 1] = r; if (r > pmax[c][f + 1]) pmax[c][f + 1] = r; }
+    else if (t === 3) bish[c]++;
+    else if (t === 4) rooks.push(sq, c);
+  }
+  if (phase > 24) phase = 24;
+  const endW = (24 - phase) / 24;
+  let s = mid + (kmid * phase + kend * (24 - phase)) / 24;
+  if (bish[0] >= 2) s += 30;
+  if (bish[1] >= 2) s -= 30;
+  for (let c = 0; c < 2; c++) {
+    const sg = c ? -1 : 1, me = pf[c], op = pf[1 - c];
+    for (let f = 1; f <= 8; f++) {
+      const n = me[f];
+      if (!n) continue;
+      if (n > 1) s -= sg * 12 * (n - 1);
+      if (!me[f - 1] && !me[f + 1]) s -= sg * 10 * n;
+      // passed pawn: the front pawn of this file has no enemy pawn ahead on this file or next to it
+      const front = c ? pmin[c][f] : pmax[c][f];
+      let passed = true;
+      for (let g = f - 1; g <= f + 1 && passed; g++) {
+        if (!op[g]) continue;
+        if (c === 0 ? pmax[1][g] > front : pmin[0][g] < front) passed = false;
+      }
+      if (passed) { const adv = c ? 7 - front : front; s += sg * CH_PASSED[adv] * (1 + endW); }
+    }
+  }
+  for (let i = 0; i < rooks.length; i += 2) {
+    const f = (rooks[i] & 7) + 1, c = rooks[i + 1];
+    if (!pf[c][f]) s += (c ? -1 : 1) * (pf[1 - c][f] ? 8 : 16);
+  }
+  // endgame "mop up": the side that is clearly ahead pushes the other king to the edge and walks its own king closer
+  const diff = mat[0] - mat[1];
+  if (phase <= 10 && Math.abs(diff) >= 300) {
+    const win = diff > 0 ? 0 : 1, wk = pos.kp[win], lk = pos.kp[1 - win];
+    const cd = Math.max(3 - (lk & 7), (lk & 7) - 4) + Math.max(3 - (lk >> 4), (lk >> 4) - 4);
+    const kd = Math.abs((wk & 7) - (lk & 7)) + Math.abs((wk >> 4) - (lk >> 4));
+    s += (win ? -1 : 1) * (10 * cd + 4 * (14 - kd)) * (1 - phase / 12);
+  }
+  return Math.round(s);
+}
+// transposition table (shared): 2^18 entries
+const CH_TT = { n: 1 << 18, k: new Int32Array(1 << 18), mv: new Int32Array(1 << 18), sc: new Int16Array(1 << 18), d: new Int8Array(1 << 18).fill(-1), fl: new Uint8Array(1 << 18) };
+const CH_LEVELS = {
+  easy: { label: "🐣 Easy", time: 250, depth: 2, margin: 160, blunder: 0.15, hint: "Makes silly mistakes. Good to learn." },
+  normal: { label: "🙂 Normal", time: 600, depth: 3, margin: 40, blunder: 0.03, hint: "Plays OK, but you can trick it." },
+  hard: { label: "😈 Hard", time: 1500, depth: 7, margin: 0, blunder: 0, hint: "Thinks about 1.5 s. Strong club player." },
+  expert: { label: "💀 Expert", time: 3500, depth: 30, margin: 0, blunder: 0, hint: "Thinks up to 3.5 s. Good luck!" },
+};
+// think about the position; calls done(move) later. Returns a function that cancels the thinking.
+function chThink(pos0, lvl, done, opts = {}) {
+  const L = CH_LEVELS[lvl] || CH_LEVELS.normal;
+  const pos = new Chess(pos0.fen());
+  pos.hist = pos0.hist.map((h) => ({ ...h }));   // keep the history so repetitions are seen
+  const T = CH_TT, MASK = T.n - 1;
+  const killers = [], hist = new Int32Array(2 * 128 * 128);
+  let nodes = 0, stop = false, deadline = 0, cancelled = false;
+  const rnd = Math.random;
+  const root = pos.legal();
+  if (!root.length) { setTimeout(() => !cancelled && done(0), 0); return () => { cancelled = true; }; }
+  const opening = pos.hist.length < 8 && !opts.exact;
+  const margin = opts.exact ? 0 : Math.max(L.margin, opening ? 18 : 0);
+  const wide = margin > 0;   // need real scores for every root move (to pick among good ones)
+  const order = (moves, ttm, ply) => {
+    const k = killers[ply] || [0, 0], sd = pos.side > 0 ? 0 : 1, sc = new Int32Array(moves.length);
+    for (let i = 0; i < moves.length; i++) {
+      const m = moves[i], fl = m >> 17;
+      if (m === ttm) sc[i] = 1e9;
+      else if (fl & 1) { const v = Math.abs(pos.b[(m >> 7) & 127]) || 1; sc[i] = 1e8 + v * 16 - Math.abs(pos.b[m & 127]); }
+      else if ((m >> 14) & 7) sc[i] = 9e7;
+      else if (m === k[0]) sc[i] = 8e7;
+      else if (m === k[1]) sc[i] = 7e7;
+      else sc[i] = hist[sd * 16384 + ((m & 127) << 7) + ((m >> 7) & 127)];
+    }
+    const ix = moves.map((_, i) => i).sort((a, b) => sc[b] - sc[a]);
+    return ix.map((i) => moves[i]);
+  };
+  const tick = () => { if ((++nodes & 1023) === 0 && performance.now() > deadline) stop = true; };
+  function quies(alpha, beta, ply) {
+    tick();
+    if (stop) return 0;
+    const stand = chEval(pos) * pos.side;
+    if (stand >= beta) return stand;
+    if (stand > alpha) alpha = stand;
+    if (ply > 40) return stand;
+    const moves = order(pos.gen(true), 0, 63);
+    for (const m of moves) {
+      if (((m >> 17) & 1) && !((m >> 14) & 7) && stand + CH_VAL[Math.abs(pos.b[(m >> 7) & 127]) || 1] + 200 < alpha) continue;   // delta pruning
+      pos.make(m);
+      if (pos.leftInCheck()) { pos.unmake(); continue; }
+      const s = -quies(-beta, -alpha, ply + 1);
+      pos.unmake();
+      if (stop) return 0;
+      if (s >= beta) return s;
+      if (s > alpha) alpha = s;
+    }
+    return alpha;
+  }
+  function search(depth, alpha, beta, ply) {
+    tick();
+    if (stop) return 0;
+    if (pos.hm >= 100 || pos.reps() >= 2) return 0;
+    const check = pos.inCheck();
+    if (check) depth++;
+    if (depth <= 0) return quies(alpha, beta, ply);
+    const i = pos.h1 & MASK, a0 = alpha;
+    let ttm = 0;
+    if (T.k[i] === pos.h2 && T.d[i] >= 0) {
+      ttm = T.mv[i];
+      if (T.d[i] >= depth) {
+        let v = T.sc[i];
+        if (v > CH_MATE - 500) v -= ply; else if (v < -CH_MATE + 500) v += ply;
+        if (T.fl[i] === 0) return v;
+        if (T.fl[i] === 1 && v >= beta) return v;
+        if (T.fl[i] === 2 && v <= alpha) return v;
+      }
+    }
+    // null move: give the other side a free move; if we are still fine, skip this branch
+    if (!check && depth >= 3 && ply > 0 && beta < CH_MATE - 500 && chEval(pos) * pos.side >= beta && hasPieces(pos)) {
+      const ep = pos.ep, h1 = pos.h1, h2 = pos.h2, hm = pos.hm;
+      if (pos.epHashed()) { pos.h1 ^= CH_Z.e1[ep & 7]; pos.h2 ^= CH_Z.e2[ep & 7]; }
+      pos.side = -pos.side; pos.ep = -1; pos.hm = 0; pos.h1 ^= CH_Z.s1; pos.h2 ^= CH_Z.s2;
+      const s = -search(depth - 3, -beta, -beta + 1, ply + 1);
+      pos.side = -pos.side; pos.ep = ep; pos.hm = hm; pos.h1 = h1; pos.h2 = h2;
+      if (stop) return 0;
+      if (s >= beta) return beta;
+    }
+    const moves = order(pos.gen(), ttm, ply);
+    let best = -CH_MATE - 1, bm = 0, legal = 0;
+    for (const m of moves) {
+      pos.make(m);
+      if (pos.leftInCheck()) { pos.unmake(); continue; }
+      legal++;
+      let s;
+      const quiet = !((m >> 17) & 1) && !((m >> 14) & 7);
+      if (legal > 4 && depth >= 3 && quiet && !check && !pos.inCheck()) {   // late moves: look less deep first
+        s = -search(depth - 2, -alpha - 1, -alpha, ply + 1);
+        if (s > alpha && !stop) s = -search(depth - 1, -beta, -alpha, ply + 1);
+      } else s = -search(depth - 1, -beta, -alpha, ply + 1);
+      pos.unmake();
+      if (stop) return 0;
+      if (s > best) { best = s; bm = m; }
+      if (s > alpha) alpha = s;
+      if (alpha >= beta) {
+        if (quiet) {
+          const k = killers[ply] || (killers[ply] = [0, 0]);
+          if (k[0] !== m) { k[1] = k[0]; k[0] = m; }
+          hist[(pos.side > 0 ? 0 : 1) * 16384 + ((m & 127) << 7) + ((m >> 7) & 127)] += depth * depth;
+        }
+        break;
+      }
+    }
+    if (!legal) return check ? -CH_MATE + ply : 0;
+    let v = best;
+    if (v > CH_MATE - 500) v += ply; else if (v < -CH_MATE + 500) v -= ply;
+    T.k[i] = pos.h2; T.mv[i] = bm; T.sc[i] = v; T.d[i] = depth; T.fl[i] = best <= a0 ? 2 : best >= beta ? 1 : 0;
+    return best;
+  }
+  function hasPieces(p) {   // null move is unsafe with only king + pawns (zugzwang)
+    for (let sq = 0; sq < 120; sq++) { if (sq & 0x88) { sq += 7; continue; } const t = p.b[sq] * p.side; if (t > 1 && t < 6) return true; }
+    return false;
+  }
+  // root, one move per slice
+  const t0 = performance.now(), budget = opts.time || L.time;
+  deadline = t0 + budget;
+  let list = order(root, 0, 0).map((m) => ({ m, s: 0 })), depth = 1, idx = 0, alpha = -CH_MATE - 1, done_ = [], best = list[0];
+  function slice() {
+    if (cancelled) return;
+    const end = performance.now() + 14;
+    while (!stop && performance.now() < end) {
+      const e = list[idx];
+      pos.make(e.m);
+      const s = -search(depth - 1, -CH_MATE - 1, wide ? CH_MATE + 1 : -alpha, 1);
+      pos.unmake();
+      if (stop) break;
+      e.s = s;
+      if (s > alpha) alpha = s;
+      idx++;
+      if (idx >= list.length) {   // this depth is finished
+        list.sort((a, b) => b.s - a.s);
+        done_ = list.map((x) => ({ ...x }));
+        best = list[0];
+        if (Math.abs(best.s) > CH_MATE - 500 || depth >= (opts.depth || L.depth) || list.length === 1) { stop = true; break; }
+        depth++; idx = 0; alpha = -CH_MATE - 1;
+      }
+    }
+    if (performance.now() > deadline && done_.length) stop = true;
+    if (!stop) { setTimeout(slice, 0); return; }
+    if (!done_.length) done_ = [best];
+    finish();
+  }
+  function finish() {
+    let pick = done_[0].m;
+    if (!opts.exact) {
+      if (L.blunder && rnd() < L.blunder && done_.length > 2) pick = done_[1 + Math.floor(rnd() * (done_.length - 1))].m;
+      else if (margin) {
+        const ok = done_.filter((x) => x.s >= done_[0].s - margin && !(done_[0].s > CH_MATE - 500 && x.s < done_[0].s));
+        pick = ok[Math.floor(rnd() * ok.length)].m;
+      }
+    }
+    if (!cancelled) done(pick, { depth: depth, score: done_[0].s, nodes, ms: Math.round(performance.now() - t0) });
+  }
+  setTimeout(slice, 0);
+  return () => { cancelled = true; stop = true; };
+}
+
+/* ----- pieces: 24×24 pixel art, drawn once into pictures (outline + 3D shading added automatically) ----- */
+// "#" body · "+" detail (eye, slit, jewel)
+const CH_ART = {
+  1: ["........................", "........................", "........................", "........................", "..........####..........", ".........######.........", ".........######.........", ".........######.........", "..........####..........", "........########........", "..........####..........", "..........####..........", ".........######.........", ".........######.........", "........########........", ".......##########.......", "......############......", ".....##############.....", "....################....", "....################....", "........................", "........................", "........................", "........................"],
+  2: ["........................", "........................", "..........##..##........", ".........#######........", "........#########.......", ".......###+#######......", "......#############.....", ".....##############.....", "....###############.....", "...######..########.....", "...#####....########....", "....###.....########....", "...........#########....", "..........##########....", ".........###########....", "........############....", ".......#############....", "......##############....", "....################....", "...##################...", "...##################...", "........................", "........................", "........................"],
+  3: ["........................", "...........##...........", "..........####..........", ".........######.........", "........#####+##........", ".......#####+####.......", ".......####+#####.......", ".......##########.......", "........########........", ".........######.........", ".......##########.......", ".........######.........", ".........######.........", "........########........", "........########........", ".......##########.......", "......############......", "....################....", "...##################...", "...##################...", "........................", "........................", "........................", "........................"],
+  4: ["........................", "........................", "........................", "....###...####...###....", "....###...####...###....", "....################....", ".....##############.....", "......############......", ".......##########.......", ".......##########.......", ".......##########.......", ".......##########.......", ".......##########.......", ".......##########.......", "......############......", ".....##############.....", "....################....", "...##################...", "...##################...", "........................", "........................", "........................", "........................", "........................"],
+  5: ["........................", "........................", ".##...##...##...##...##.", ".##...##...##...##...##.", "..#....#...##...#....#..", "..##..###.####.###..##..", "...##################...", "....################....", ".....######++######.....", "......############......", ".......##########.......", ".......##########.......", "......############......", ".......##########.......", "......############......", ".....##############.....", "....################....", "...##################...", "..####################..", "..####################..", "........................", "........................", "........................", "........................"],
+  6: ["........................", "...........##...........", ".........######.........", ".........######.........", "...........##...........", "........########........", "......############......", "....################....", "...##################...", "...##################...", "....################....", ".....##############.....", "......############......", ".....##############.....", "......############......", ".....##############.....", "....################....", "...##################...", "..####################..", "..####################..", "........................", "........................", "........................", "........................"],
+};
+const CH_IMG = {};
+function chPieceImg(p) {
+  if (CH_IMG[p]) return CH_IMG[p];
+  const art = CH_ART[Math.abs(p)], white = p > 0;
+  const cv = document.createElement("canvas"); cv.width = cv.height = 24;
+  const c = cv.getContext("2d");
+  const on = (x, y) => y >= 0 && y < 24 && x >= 0 && x < 24 && art[y][x] !== ".";
+  const col = white ? { body: "#ffffff", hi: "#ffffff", sh: "#9a9a9a", det: "#000000" } : { body: "#383838", hi: "#7a7a7a", sh: "#141414", det: "#d8d8d8" };
+  for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) {
+    let f = null;
+    if (on(x, y)) {
+      f = art[y][x] === "+" ? col.det : (!on(x + 1, y) || !on(x, y + 1)) ? col.sh : (!on(x - 1, y) || !on(x, y - 1)) ? col.hi : col.body;
+    } else if (on(x - 1, y) || on(x + 1, y) || on(x, y - 1) || on(x, y + 1)) f = "#000000";
+    if (f) { c.fillStyle = f; c.fillRect(x, y, 1, 1); }
+  }
+  return (CH_IMG[p] = cv.toDataURL());
+}
+function chPieceEl(p, cls = "chpc") { const i = el("img", cls); i.src = chPieceImg(p); i.alt = (p > 0 ? "white " : "black ") + ["", "pawn", "knight", "bishop", "rook", "queen", "king"][Math.abs(p)]; i.draggable = false; return i; }
+function chBeep(kind) {
+  if (kind === "move") beep([[523, 0, 0.04]], "square", 0.04);
+  else if (kind === "cap") beep([[330, 0, 0.06], [220, 0.05, 0.08]], "square", 0.05);
+  else if (kind === "check") beep([[880, 0, 0.08], [660, 0.09, 0.1]], "square", 0.05);
+  else if (kind === "win") beep([[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3, 0.3]]);
+  else if (kind === "lose") beep([[392, 0, 0.2], [330, 0.2, 0.2], [262, 0.4, 0.4]]);
+  else if (kind === "draw") beep([[440, 0, 0.15], [440, 0.2, 0.15]]);
+}
+function chMoveSound(pos, m) { chBeep(pos.inCheck() ? "check" : (chFlags(m) & 1) ? "cap" : "move"); }
+
+/* ----- the board (click or drag the pieces) ----- */
+function chBoardView({ flip = false, canMove, onMove }) {
+  const box = el("div", "chboard sunken");
+  const sqEl = new Array(128), imgKey = new Array(128).fill("");
+  for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
+    const sq = r * 16 + f, d = el("div", "chsq " + ((r + f) & 1 ? "lt" : "dk"));
+    d.dataset.sq = sq;
+    sqEl[sq] = d; box.append(d);
+  }
+  let pos = null, last = 0, legal = [], sel = -1, drag = null, hintM = 0, hintT = null, promo = null;
+  const layout = () => {
+    for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
+      const d = sqEl[r * 16 + f], row = flip ? r + 1 : 8 - r, colm = flip ? 8 - f : f + 1;
+      d.style.gridRow = row; d.style.gridColumn = colm;
+      d.querySelectorAll(".chco").forEach((x) => x.remove());
+      if (colm === 1) d.append(el("span", "chco rk", String(r + 1)));
+      if (row === 8) d.append(el("span", "chco fl", "abcdefgh"[f]));
+    }
+  };
+  layout();
+  const targets = (from) => legal.filter((m) => chFrom(m) === from);
+  function render() {
+    if (!pos) return;
+    const who = canMove();
+    legal = who && who === pos.side ? pos.legal() : [];
+    if (sel >= 0 && !targets(sel).length) sel = -1;
+    const tg = new Set(sel >= 0 ? targets(sel).map(chTo) : []);
+    const chk = pos.inCheck() ? pos.kp[pos.side > 0 ? 0 : 1] : -1;
+    for (let sq = 0; sq < 120; sq++) {
+      if (sq & 0x88) { sq += 7; continue; }
+      const d = sqEl[sq], p = pos.b[sq];
+      d.classList.toggle("last", !!last && (chFrom(last) === sq || chTo(last) === sq));
+      d.classList.toggle("sel", sq === sel);
+      d.classList.toggle("chk", sq === chk);
+      d.classList.toggle("tgt", tg.has(sq) && !p);
+      d.classList.toggle("cap", tg.has(sq) && !!p);
+      d.classList.toggle("hint", !!hintM && (chFrom(hintM) === sq || chTo(hintM) === sq));
+      d.classList.toggle("mine", !!p && legal.some((m) => chFrom(m) === sq));
+      const k = p ? String(p) : "";
+      if (imgKey[sq] !== k) {
+        imgKey[sq] = k;
+        d.querySelector(".chpc")?.remove();
+        if (p) d.prepend(chPieceEl(p));
+      }
+    }
+  }
+  function tryMove(from, to) {
+    const ms = targets(from).filter((m) => chTo(m) === to);
+    sel = -1;
+    if (!ms.length) { render(); return; }
+    if (ms.length > 1) { askPromo(ms); return; }
+    onMove(ms[0]);
+  }
+  function askPromo(ms) {
+    promo?.remove();
+    promo = el("div", "chpromo raised");
+    promo.append(el("div", "chpromot", "Promote to:"));
+    const row = el("div", "chpromorow");
+    for (const t of [5, 4, 3, 2]) {
+      const m = ms.find((x) => chPromo(x) === t);
+      const b = el("button"); b.type = "button"; b.title = ["", "", "Knight", "Bishop", "Rook", "Queen"][t];
+      b.append(chPieceEl(t * pos.side));
+      b.onclick = (e) => { e.stopPropagation(); promo.remove(); promo = null; onMove(m); };
+      row.append(b);
+    }
+    const x = el("button", "chpromox", "✖"); x.type = "button"; x.onclick = (e) => { e.stopPropagation(); promo.remove(); promo = null; render(); };
+    promo.append(row, x);
+    box.append(promo);
+  }
+  const sqAt = (e) => { const t = document.elementFromPoint(e.clientX, e.clientY)?.closest(".chsq"); return t && box.contains(t) ? +t.dataset.sq : -1; };
+  box.addEventListener("pointerdown", (e) => {
+    if (e.button > 0 || promo) return;
+    const d = e.target.closest(".chsq");
+    if (!d || !pos) return;
+    const sq = +d.dataset.sq;
+    if (sel >= 0 && sel !== sq && targets(sel).some((m) => chTo(m) === sq)) { tryMove(sel, sq); return; }
+    if (targets(sq).length) {
+      const wasSel = sel === sq;
+      sel = sq; render();
+      drag = { sq, x0: e.clientX, y0: e.clientY, ghost: null, wasSel, id: e.pointerId };
+      try { box.setPointerCapture(e.pointerId); } catch {}
+      e.preventDefault();
+    } else { sel = -1; render(); }
+  });
+  box.addEventListener("pointermove", (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.ghost) {
+      if (Math.abs(e.clientX - drag.x0) + Math.abs(e.clientY - drag.y0) < 6) return;
+      drag.ghost = chPieceEl(pos.b[drag.sq], "chghost");
+      drag.ghost.style.width = drag.ghost.style.height = sqEl[0].offsetWidth + "px";
+      document.body.append(drag.ghost);
+      sqEl[drag.sq].classList.add("lift");
+    }
+    const s = sqEl[0].offsetWidth;
+    drag.ghost.style.left = (e.clientX / UIZ - s / 2) + "px";
+    drag.ghost.style.top = (e.clientY / UIZ - s / 2) + "px";
+  });
+  const endDrag = (e, cancel) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dr = drag; drag = null;
+    sqEl[dr.sq].classList.remove("lift");
+    if (dr.ghost) {
+      dr.ghost.remove();
+      const to = cancel ? -1 : sqAt(e);
+      if (to >= 0 && to !== dr.sq) { tryMove(dr.sq, to); return; }
+      render(); return;
+    }
+    if (dr.wasSel) { sel = -1; render(); }
+  };
+  box.addEventListener("pointerup", (e) => endDrag(e, false));
+  box.addEventListener("pointercancel", (e) => endDrag(e, true));
+  box.addEventListener("contextmenu", (e) => e.preventDefault());
+  return {
+    node: box,
+    set(p, lastMove) { if (p !== pos || (lastMove || 0) !== last) { sel = -1; promo?.remove(); promo = null; } pos = p; last = lastMove || 0; render(); },
+    render,
+    get flip() { return flip; },
+    setFlip(v) { flip = v; layout(); render(); },
+    hint(m) { hintM = m; render(); clearTimeout(hintT); hintT = setTimeout(() => { hintM = 0; render(); }, 3000); },
+  };
+}
+// board size buttons
+function chZoomBtns() {
+  const out = [];
+  let cs = +(store("chess-zoom") || 0);
+  const auto = () => Math.max(30, Math.min(56, Math.floor((vwZ() - 40) / 8)));
+  const apply = () => { document.documentElement.style.setProperty("--chs", (cs || auto()) + "px"); if (cs) store("chess-zoom", String(cs)); };
+  const zm = el("button", null, "−"); zm.type = "button"; zm.title = "Smaller board"; zm.onclick = () => { cs = Math.max(28, (cs || auto()) - 4); apply(); };
+  const zp = el("button", null, "+"); zp.type = "button"; zp.title = "Bigger board"; zp.onclick = () => { cs = Math.min(96, (cs || auto()) + 4); apply(); };
+  apply();
+  out.push(zm, zp);
+  return out;
+}
+// captured pieces + material lead, for one side (color = the side that captured them)
+function chCaptured(pos, color) {
+  const left = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let mat = 0;
+  for (let sq = 0; sq < 120; sq++) { if (sq & 0x88) { sq += 7; continue; } const p = pos.b[sq]; if (p) { left[p + 6]++; mat += Math.sign(p) * CH_VAL[Math.abs(p)]; } }
+  const start = [0, 8, 2, 2, 2, 1];
+  const span = el("span", "chcap");
+  for (const t of [5, 4, 3, 2, 1]) { const n = Math.max(0, start[t] - left[-color * t + 6]); for (let i = 0; i < n; i++) span.append(chPieceEl(-color * t, "chcappc")); }
+  const lead = Math.round(mat * color / 100);
+  if (lead > 0) span.append(el("span", "chlead", "+" + lead));
+  return span;
+}
+const CH_WHY = { mate: "checkmate", stalemate: "stalemate", material: "not enough pieces to checkmate", "50": "50 moves without a capture or pawn move", rep: "same position 3 times", resign: "resigned", time: "out of time", agreed: "agreed by both players", gone: "left the game" };
+// the window layout shared by solo and PvP
+function chShell() {
+  const wrap = el("div", "chwrap");
+  const left = el("div", "chleft"), side = el("div", "chside");
+  const top = el("div", "chpl"), bot = el("div", "chpl");
+  const boardSlot = el("div", "chboardslot");
+  left.append(top, boardSlot, bot);
+  const status = el("div", "chstatus");
+  const banner = el("div", "chbanner"); banner.hidden = true;
+  const moves = el("div", "chmoves sunken");
+  const btns = el("div", "chbtns");
+  side.append(status, banner, moves, btns);
+  wrap.append(left, side);
+  const lcds = {};
+  function player(slot, { icon, name, color, clock, extra }) {
+    slot.replaceChildren();
+    const nm = el("span", "chname");
+    nm.append(el("span", "chdot " + (color > 0 ? "w" : "b")));
+    if (icon) nm.append(icon);
+    nm.append(" " + name);
+    slot.append(nm);
+    if (extra) slot.append(extra);
+    if (clock != null) { const l = el("span", "lcd chclock"); slot.append(l); lcds[color] = l; }
+    else delete lcds[color];
+  }
+  return {
+    node: wrap, boardSlot, status, banner, btns,
+    players(topP, botP) { player(top, topP); player(bot, botP); },
+    caps(pos, topColor) {
+      for (const [slot, c] of [[top, topColor], [bot, -topColor]]) { slot.querySelector(".chcap")?.remove(); const nm = slot.querySelector(".chname"); nm.after(chCaptured(pos, c)); }
+    },
+    turn(color) { for (const [slot] of [[top], [bot]]) slot.classList.remove("turn"); if (!color) return; const t = [top, bot].find((s) => s.querySelector(".chdot." + (color > 0 ? "w" : "b"))); t?.classList.add("turn"); },
+    clock(color, ms, running) {
+      const l = lcds[color]; if (!l) return;
+      const s = Math.max(0, ms) / 1000;
+      l.textContent = s < 20 ? s.toFixed(1) : Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+      l.classList.toggle("low", s < 20); l.classList.toggle("run", !!running);
+    },
+    moves(sans) {
+      moves.replaceChildren();
+      if (!sans.length) { moves.append(el("div", "chmvempty", "No moves yet.")); return; }
+      for (let i = 0; i < sans.length; i += 2) {
+        const r = el("div", "chmv");
+        r.append(el("span", "n", (i / 2 + 1) + "."), el("span", "w" + (i === sans.length - 1 ? " cur" : ""), sans[i]), el("span", "b" + (i + 1 === sans.length - 1 ? " cur" : ""), sans[i + 1] || ""));
+        moves.append(r);
+      }
+      moves.scrollTop = moves.scrollHeight;
+    },
+    buttons(list) {
+      btns.replaceChildren();
+      for (const it of list) {
+        if (it === "|") { btns.append(el("div", "chsep")); continue; }
+        if (it instanceof Node) { btns.append(it); continue; }
+        const [t, fn, opt = {}] = it;
+        const b = el("button", null, t); b.type = "button"; b.onclick = fn;
+        if (opt.disabled) b.disabled = true;
+        if (opt.title) b.title = opt.title;
+        btns.append(b);
+      }
+    },
+  };
+}
+function chResultText(win, why, myColor, names) {
+  // names: { 1: white name, -1: black name }
+  if (win === 0) return "🤝 Draw: " + (CH_WHY[why] || why) + ".";
+  if (myColor) {
+    const good = win === myColor;
+    if (why === "resign") return good ? "🏆 " + names[-win] + " resigned. You win!" : "🏳 You resigned.";
+    if (why === "time") return good ? "🏆 " + names[-win] + " ran out of time. You win!" : "⏱ You ran out of time...";
+    if (why === "gone") return good ? "🏆 You win: " + names[-win] + " left the game." : "📴 You lost: you left the game.";
+    return good ? "🏆 Checkmate! You win!" : "💀 Checkmate... " + names[win] + " wins.";
+  }
+  return "🏆 " + names[win] + " wins (" + (CH_WHY[why] || why) + ").";
+}
+
+/* ----- SOLO vs the computer ----- */
+function chRecord() { try { return JSON.parse(store("chess-record") || "{}"); } catch { return {}; } }
+function openChessSolo() {
+  const key = "chess-solo";
+  if (openWins.has(key) && document.body.contains(openWins.get(key).w)) { focusWindow(openWins.get(key).w); return; }
+  const win = openWindow("Battle Chess", "♞", { key });
+  win.w.classList.add("chwin");
+  let cancelAI = null;
+  win.onClosed = () => { if (cancelAI) cancelAI(); };
+  function setup() {
+    if (cancelAI) { cancelAI(); cancelAI = null; }
+    win.setTitle("Battle Chess - New game");
+    const saved = (() => { try { return JSON.parse(store("chess-cfg") || "{}"); } catch { return {}; } })();
+    const st = { lvl: CH_LEVELS[saved.lvl] ? saved.lvl : "normal", col: ["w", "b", "r"].includes(saved.col) ? saved.col : "w" };
+    const box = el("div", "chsetup");
+    const rec = chRecord();
+    const fsL = el("fieldset"); fsL.append(el("legend", null, "🤖 Computer level"));
+    for (const [k, L] of Object.entries(CH_LEVELS)) {
+      const l = el("label", "check chlvl");
+      const r = el("input"); r.type = "radio"; r.name = "chlvl"; r.value = k; r.checked = st.lvl === k;
+      r.onchange = () => { st.lvl = k; };
+      const R_ = rec[k] || {};
+      l.append(r, " ", el("b", null, L.label), el("span", "hint", " " + L.hint + ((R_.w || R_.l || R_.d) ? "  (you: " + (R_.w || 0) + "W " + (R_.l || 0) + "L " + (R_.d || 0) + "D)" : "")));
+      fsL.append(l);
+    }
+    const fsC = el("fieldset"); fsC.append(el("legend", null, "Play as"));
+    const crow = el("div", "row-btns");
+    for (const [k, t] of [["w", "⚪ White (moves first)"], ["b", "⚫ Black"], ["r", "🎲 Random"]]) {
+      const l = el("label", "check");
+      const r = el("input"); r.type = "radio"; r.name = "chcol"; r.value = k; r.checked = st.col === k;
+      r.onchange = () => { st.col = k; };
+      l.append(r, " " + t); crow.append(l);
+    }
+    fsC.append(crow);
+    const go = el("button", "msgo", "▶ Start!"); go.type = "button";
+    go.onclick = () => {
+      store("chess-cfg", JSON.stringify(st));
+      play({ lvl: st.lvl, col: st.col === "r" ? (Math.random() < 0.5 ? "w" : "b") : st.col, mv: [] });
+    };
+    const btns = el("div", "wbuttons"); btns.append(go);
+    box.append(fsL, fsC, el("div", "hint", "Click a piece then a square, or drag it. Your game is saved: close the window and come back later!"), btns);
+    win.content.replaceChildren(box);
+  }
+  function play(cfg) {
+    if (cancelAI) { cancelAI(); cancelAI = null; }
+    const L = CH_LEVELS[cfg.lvl] || CH_LEVELS.normal, my = cfg.col === "b" ? -1 : 1;
+    win.setTitle("Battle Chess - vs Computer (" + L.label.replace(/^\S+\s/, "") + ")");
+    const g = chReplay(cfg.mv || []);
+    const pos = g.pos, sans = g.sans, ucis = g.moves.map((m) => pos.uci(m));
+    let lastM = g.moves[g.moves.length - 1] || 0;
+    let over = cfg.over || null, busy = false;
+    const sh = chShell();
+    const view = chBoardView({ flip: my < 0, canMove: () => (busy || over ? 0 : my), onMove: (m) => { doMove(m); think(); } });
+    sh.boardSlot.append(view.node);
+    const meName = S.me ? displayName(S.users[S.me.uid] || { name: "You" }) : "You";
+    sh.players({ name: "🤖 Computer · " + L.label, color: -my }, { icon: S.me ? iconNode(S.me.uid) : null, name: meName + " (you)", color: my });
+    win.content.replaceChildren(sh.node);
+    function save() { store("chess-solo", JSON.stringify({ lvl: cfg.lvl, col: my > 0 ? "w" : "b", mv: ucis, over })); }
+    function doMove(m) {
+      sans.push(pos.san(m)); ucis.push(pos.uci(m));
+      pos.make(m); lastM = m;
+      chMoveSound(pos, m);
+      const st = pos.status();
+      if (st.over) endGame(st.win, st.why);
+      save(); refresh();
+    }
+    function endGame(w, why) {
+      over = { win: w, why };
+      const rec = chRecord(), r = rec[cfg.lvl] || (rec[cfg.lvl] = {});
+      const k = w === 0 ? "d" : w === my ? "w" : "l";
+      r[k] = (r[k] || 0) + 1;
+      store("chess-record", JSON.stringify(rec));
+      setTimeout(() => chBeep(w === 0 ? "draw" : w === my ? "win" : "lose"), 250);
+    }
+    function think() {
+      if (over || pos.side === my) return;
+      busy = true; refresh();
+      const t0 = performance.now();
+      cancelAI = chThink(pos, cfg.lvl, (m) => {
+        const wait = Math.max(0, 350 - (performance.now() - t0));
+        setTimeout(() => { if (!win.w.isConnected || !busy) return; busy = false; cancelAI = null; if (m) doMove(m); }, wait);
+      });
+    }
+    function undo() {
+      if (cancelAI) { cancelAI(); cancelAI = null; }
+      busy = false;
+      if (!pos.hist.length) return;
+      if (over) { over = null; }
+      do { pos.unmake(); sans.pop(); ucis.pop(); } while (pos.hist.length && pos.side !== my);
+      lastM = pos.hist.length ? pos.hist[pos.hist.length - 1].m : 0;
+      save(); refresh();
+      think();
+    }
+    function refresh() {
+      view.set(pos, lastM);
+      sh.caps(pos, -my);
+      sh.turn(over ? 0 : pos.side);
+      sh.moves(sans);
+      const names = { [my]: "You", [-my]: "The computer" };
+      if (over) {
+        sh.status.className = "chstatus big" + (over.win === my ? " good" : over.win === 0 ? " draw" : "");
+        sh.status.textContent = over.why === "resign" ? "🏳 You resigned. The computer wins." : chResultText(over.win, over.why, my, names);
+      } else {
+        sh.status.className = "chstatus";
+        sh.status.textContent = busy ? "🤔 The computer is thinking..." : (pos.inCheck() ? "⚠ Check! " : "") + "Your move (" + (my > 0 ? "white" : "black") + ").";
+      }
+      sh.buttons([
+        ["↶ Undo", undo, { disabled: !pos.hist.length || (pos.hist.length === 1 && my < 0 && !over), title: "Take back your last move" }],
+        ["💡 Hint", hint, { disabled: !!over || busy || pos.side !== my, title: "Show a good move" }],
+        ["↻ Flip", () => view.setFlip(!view.flip), { title: "Turn the board around" }],
+        ["🏳 Resign", resign, { disabled: !!over }],
+        "|",
+        ...chZoomBtns(),
+        ["⚙ New game...", setup],
+      ]);
+    }
+    let hintBusy = false;
+    function hint() {
+      if (hintBusy || over || busy) return;
+      hintBusy = true;
+      sh.status.textContent = "💡 Looking for a good move...";
+      chThink(pos, "hard", (m) => { hintBusy = false; if (!win.w.isConnected) return; refresh(); if (m) { view.hint(m); sh.status.textContent = "💡 Try " + pos.san(m) + " (shown in yellow)"; } }, { exact: true, time: 900 });
+    }
+    async function resign() {
+      const ok = await dialog({ title: "Resign?", message: "Give up this game? The computer wins.", okText: "Resign" });
+      if (!ok || over) return;
+      if (cancelAI) { cancelAI(); cancelAI = null; }
+      busy = false;
+      endGame(-my, "resign"); save(); refresh();
+    }
+    refresh();
+    think();
+  }
+  const saved = (() => { try { return JSON.parse(store("chess-solo") || "null"); } catch { return null; } })();
+  if (saved && !saved.over && CH_LEVELS[saved.lvl] && Array.isArray(saved.mv)) play(saved);
+  else setup();
+}
+
+/* ----- PvP: create a challenge ----- */
+const CH_CLOCKS = [[0, "No clock"], [1, "1 min"], [3, "3 min"], [5, "5 min"], [10, "10 min"], [15, "15 min"], [30, "30 min"], [60, "60 min"]];
+function chessCfgText(c, by) {
+  const clock = c.min ? c.min + " min" + (c.inc ? " + " + c.inc + " s" : "") : "no clock";
+  return (by ? uname(by) + " plays " + (c.color === "w" ? "⚪ white" : "⚫ black") + ", " : "") + "⏱ " + clock;
+}
+function createChessChallenge(room = S.room) {
+  if (S.me.guest) { toast("Guests can only play solo. Create an account to play PvP!"); return; }
+  if (!canPostIn(room)) room = null;
+  const win = openWindow("New chess challenge", "⚔", { key: "chess-new" });
+  win.w.classList.add("mswin");
+  const saved = (() => { try { return JSON.parse(store("chess-cfg-pvp") || "{}"); } catch { return {}; } })();
+  const st = { col: ["w", "b", "r"].includes(saved.col) ? saved.col : "r", min: CH_CLOCKS.some(([m]) => m === saved.min) ? saved.min : 10, inc: [0, 2, 5, 10].includes(saved.inc) ? saved.inc : 0 };
+  const box = el("div", "chsetup");
+  const fsC = el("fieldset"); fsC.append(el("legend", null, "You play"));
+  const crow = el("div", "row-btns");
+  for (const [k, t] of [["w", "⚪ White"], ["b", "⚫ Black"], ["r", "🎲 Random"]]) {
+    const l = el("label", "check");
+    const r = el("input"); r.type = "radio"; r.name = "chpcol"; r.value = k; r.checked = st.col === k;
+    r.onchange = () => { st.col = k; };
+    l.append(r, " " + t); crow.append(l);
+  }
+  fsC.append(crow);
+  const fsT = el("fieldset"); fsT.append(el("legend", null, "⏱ Clock"));
+  const sel = el("select", "sunken");
+  for (const [m, t] of CH_CLOCKS) { const o = el("option", null, t + (m ? " each" : "")); o.value = m; o.selected = st.min === m; sel.append(o); }
+  const inc = el("select", "sunken");
+  for (const s of [0, 2, 5, 10]) { const o = el("option", null, s ? "+ " + s + " s per move" : "no bonus"); o.value = s; o.selected = st.inc === s; inc.append(o); }
+  const syncInc = () => { inc.disabled = !st.min; };
+  sel.onchange = () => { st.min = +sel.value; syncInc(); };
+  inc.onchange = () => { st.inc = +inc.value; };
+  syncInc();
+  const trow = el("div", "row-btns"); trow.append(sel, inc);
+  fsT.append(trow, el("div", "hint", "The clocks start after both players made their first move.\nYour clock runs only on your turn. 0:00 = you lose."));
+  const fsP = el("fieldset"); fsP.append(el("legend", null, "Challenge"));
+  let postBox = null;
+  if (room) {
+    postBox = el("input"); postBox.type = "checkbox"; postBox.checked = true;
+    const pl = el("label", "check"); pl.append(postBox, " Post the challenge in " + (isDM(room) ? "this DM (@" + uname(dmOther(room)) + ")" : chatLabel(room)));
+    fsP.append(pl);
+  } else fsP.append(el("div", "hint", "Open a chat first if you want to post the challenge there. You can also just share the link."));
+  const go = el("button", "msgo", "⚔ Create challenge"); go.type = "button";
+  go.onclick = async () => {
+    store("chess-cfg-pvp", JSON.stringify(st));
+    const seed = randSeed();
+    const cfg = { seed, color: st.col === "r" ? (seed & 1 ? "w" : "b") : st.col, min: st.min, inc: st.min ? st.inc : 0 };
+    const gid = D.push(R("games")).key;
+    const post = postBox ? postBox.checked : false;
+    const g = { kind: "chess", by: S.me.uid, status: "open", createdAt: now(), cfg };
+    if (post && room) g.room = room;
+    go.disabled = true;
+    try { await D.update(R("/"), { ["games/" + gid]: g, ["rate/" + S.me.uid + "/game"]: now() }); }
+    catch (e) { go.disabled = false; showBanner("Can't create the challenge: " + (/permission/i.test(e.message) ? "wait a few seconds between challenges." : authError(e))); return; }
+    win.close();
+    if (post && room) {
+      try { await sendMessage("⚔ challenges you to ♞ Battle Chess! (" + chessCfgText(cfg, S.me.uid) + ")", null, room, { game: gid }); }
+      catch (e) { toast("Challenge created, but it couldn't be posted in the chat. Share the link!"); logError("Post challenge: " + e.message); }
+    }
+    openChessPvp(gid);
+  };
+  const btns = el("div", "wbuttons"); btns.append(go);
+  box.append(fsC, fsT, fsP, btns);
+  win.content.append(box);
+}
+
+/* ----- PvP window (players + spectators) ----- */
+// chessState/{gid} = { mv: "e2e4 e7e5 ...", n: number of moves, by: who made the last move, ts: when, wt / bt: clock left (ms) after that move }
+function openChessPvp(gid) {
+  const key = "game-" + gid;
+  if (openWins.has(key) && document.body.contains(openWins.get(key).w)) { focusWindow(openWins.get(key).w); return; }
+  const win = openWindow("Battle Chess PvP", "♞", { key });
+  win.w.classList.add("chwin");
+  const me = S.me.uid;
+  let G = null, CS = null, csLoaded = false, P = {}, sh = null, view = null, pos = null, sans = [], lastM = 0, mvKey = null, pending = null;
+  let ended = false, statsDone = false, flagSent = false, endSent = false, declined = -1, autoEndT = null;
+  const unsubs_ = [];
+  const top = el("div", "chpvptop");
+  const body = el("div", "chpvpbody");
+  win.content.append(top, body);
+  const tickI = setInterval(tick, 200);
+  const hbI = setInterval(() => { if (isPlayer() && !ended && G?.status === "playing") beat(); }, 20000);
+  win.onClosed = () => { unsubs_.forEach((u) => u()); clearInterval(tickI); clearInterval(hbI); clearTimeout(autoEndT); };
+  const isPlayer = () => !!G && (G.by === me || G.opp === me);
+  const whiteUid = () => (G.cfg.color === "w" ? G.by : G.opp);
+  const blackUid = () => (G.cfg.color === "w" ? G.opp : G.by);
+  const myColor = () => (!G || !G.opp ? 0 : me === whiteUid() ? 1 : me === blackUid() ? -1 : 0);
+  const uidOf = (c) => (c > 0 ? whiteUid() : blackUid());
+  const base = () => (G.cfg.min || 0) * 60000;
+  const nMoves = () => (CS?.n || 0);
+  unsubs_.push(D.onValue(R("games/" + gid), (s) => { G = s.val(); update(); }, (e) => { body.replaceChildren(el("div", "msmsg", "Can't load this game: " + e.message)); }));
+  unsubs_.push(D.onValue(R("chessState/" + gid), (s) => { CS = s.val(); csLoaded = true; if (pending && CS && CS.mv === pending) pending = null; update(); }, (e) => { csLoaded = true; logError("Chess state: " + e.message); }));
+  unsubs_.push(D.onValue(R("gameP/" + gid), (s) => { P = s.val() || {}; update(); }, () => {}));
+  function beat(extra = {}) { return D.update(R("gameP/" + gid + "/" + me), { ready: true, last: now(), ...extra }).catch((e) => logError("Chess presence: " + e.message)); }
+  // time left for a color right now
+  function timeLeft(c) {
+    if (!G.cfg.min) return Infinity;
+    let t = CS ? (c > 0 ? CS.wt : CS.bt) : base();
+    if (CS && CS.n >= 2 && pos && pos.side === c && !ended && !G.winner) t -= srvNow() - CS.ts;
+    return t;
+  }
+  function update() {
+    if (!csLoaded && G) return;
+    const st = gameState(G);
+    if (st === "gone") {
+      win.setTitle("Battle Chess PvP");
+      top.replaceChildren(el("div", "msmsg", "❌ This challenge doesn't exist anymore (cancelled or expired)."));
+      body.replaceChildren();
+      return;
+    }
+    win.setTitle((G.opp ? uname(whiteUid()) + " vs " + uname(blackUid()) : uname(G.by) + "'s challenge") + " - Battle Chess");
+    top.replaceChildren(el("div", "pvptitle", "♞ " + chessCfgText(G.cfg) + (G.room ? "  ·  in " + (isDM(G.room) ? "a DM" : chatLabel(G.room)) : "")));
+    if (st === "open" || st === "expired") return showOpen(st);
+    if (!isPlayer()) top.append(el("div", "pvpwait small", "👀 You are watching " + uname(whiteUid()) + " vs " + uname(blackUid()) + (G.winner ? "." : " live!")));
+    // replay the moves (my move that is still being saved counts too)
+    const mvs = pending || CS?.mv || "";
+    if (mvs !== mvKey || !pos) {
+      const before = pos ? pos.hist.length : -1;
+      mvKey = mvs;
+      const g = chReplay(mvs ? mvs.split(" ") : []);
+      pos = g.pos; sans = g.sans; lastM = g.moves[g.moves.length - 1] || 0;
+      if (before >= 0 && pos.hist.length === before + 1 && lastM && !pending) chMoveSound(pos, lastM);
+    }
+    if (!sh) build();
+    if (isPlayer() && !P[me]?.ready && !G.winner) beat();
+    const pst = pos.status();
+    if (G.winner && !ended) end();
+    // the game is over on the board but nobody wrote the result yet: the player who made the last move writes it; the other one after 4 s
+    if (!G.winner && pst.over && isPlayer() && !endSent && !autoEndT) {
+      const wait = CS?.by === me || pending ? 0 : 4000;
+      autoEndT = setTimeout(() => { autoEndT = null; if (!G.winner) setWinner(pst.win === 0 ? "draw" : uidOf(pst.win), pst.why); }, wait);
+    }
+    if (st === "abandoned" && !G.winner && !ended) { ended = true; }
+    paint(pst);
+  }
+  function showOpen(st) {
+    sh = null; view = null;
+    const box = el("div", "pvpwait");
+    const foot = el("div", "wbuttons");
+    const fb = (list) => { foot.replaceChildren(); for (const [t, fn] of list) { const b = el("button", null, t); b.type = "button"; b.onclick = fn; foot.append(b); } const cl = el("button", null, "Close"); cl.type = "button"; cl.onclick = () => win.close(); foot.append(cl); };
+    if (st === "expired") { box.textContent = "⌛ This challenge expired."; fb([]); body.replaceChildren(box, foot); return; }
+    if (G.by === me) {
+      box.append(el("div", null, "⏳ Waiting for an opponent..."), el("div", "hint", "You play " + (G.cfg.color === "w" ? "⚪ white" : "⚫ black") + ". Anyone with the link (or in the chat) can accept."));
+      const link = el("input", "sunken"); link.readOnly = true; link.value = gameLink(gid); link.onclick = () => link.select();
+      box.append(link);
+      const btns = [["📋 Copy link", () => copyText(gameLink(gid))]];
+      if (!G.room && canPostIn(S.room)) btns.push(["💬 Post in " + (isDM(S.room) ? "this DM" : chatLabel(S.room)), async () => {
+        try { await sendMessage("⚔ challenges you to ♞ Battle Chess! (" + chessCfgText(G.cfg, G.by) + ")", null, S.room, { game: gid }); toast("Posted!"); }
+        catch (e) { showBanner("Can't post: " + authError(e)); }
+      }]);
+      btns.push(["✖ Cancel challenge", async () => { if (await cancelChallenge(gid)) win.close(); }]);
+      fb(btns);
+    } else {
+      box.append(el("div", "pvpbig", "⚔ " + uname(G.by) + " challenges you to chess!"), el("div", null, chessCfgText(G.cfg, G.by)),
+        el("div", "hint", "You would play " + (G.cfg.color === "w" ? "⚫ black" : "⚪ white") + "."));
+      if (S.me.guest) { box.append(el("div", "hint", "Guests can only play solo. Create an account to play PvP!")); fb([]); }
+      else fb([["⚔ Accept!", () => acceptChallenge(gid)]]);
+    }
+    body.replaceChildren(box, foot);
+  }
+  function build() {
+    sh = chShell();
+    const mc = myColor();
+    view = chBoardView({ flip: mc < 0, canMove: () => (ended || G.winner || pending || !isPlayer() ? 0 : mc), onMove: sendMove });
+    sh.boardSlot.append(view.node);
+    const bottomC = mc || 1;
+    const pl = (c) => {
+      const uid = uidOf(c);
+      return { icon: iconNode(uid), name: uname(uid) + (uid === me ? " (you)" : ""), color: c, clock: G.cfg.min ? 1 : null };
+    };
+    sh.players(pl(-bottomC), pl(bottomC));
+    body.replaceChildren(sh.node);
+  }
+  function paint(pst) {
+    const mc = myColor();
+    view.set(pos, lastM);
+    sh.caps(pos, -(mc || 1));
+    sh.turn(G.winner || ended || pst.over ? 0 : pos.side);
+    sh.moves(sans);
+    const names = { 1: uname(whiteUid()), [-1]: uname(blackUid()) };
+    let txt, cls = "chstatus";
+    if (G.winner) {
+      const w = G.winner === "draw" ? 0 : G.winner === whiteUid() ? 1 : -1;
+      txt = chResultText(w, G.why || (pst.over ? pst.why : w === 0 ? "agreed" : "resign"), mc, names);
+      cls += " big" + (w === 0 ? " draw" : w === mc ? " good" : "");
+    } else if (ended) txt = "⌛ This game was abandoned.";
+    else if (pst.over) txt = chResultText(pst.win, pst.why, mc, names) + "  (saving...)";
+    else {
+      const turnName = uname(uidOf(pos.side));
+      txt = (pos.inCheck() ? "⚠ Check! " : "") + (mc === pos.side ? "Your move!" : mc ? "⏳ " + turnName + " is thinking..." : turnName + " to move (" + (pos.side > 0 ? "white" : "black") + ").");
+      if (pending) txt = "Sending your move...";
+      if (G.cfg.min && nMoves() < 2) txt += "\n(The clocks start after both first moves.)";
+    }
+    sh.status.className = cls; sh.status.textContent = txt;
+    // draw offer from the other player
+    const op = mc ? uidOf(-mc) : null, n = nMoves();
+    const offer = op && !G.winner && P[op]?.dr === n && declined !== n;
+    sh.banner.hidden = !offer;
+    if (offer) {
+      sh.banner.replaceChildren(el("div", null, "🤝 " + uname(op) + " offers a draw."));
+      const a = el("button", null, "Accept"); a.type = "button"; a.onclick = () => setWinner("draw", "agreed");
+      const d = el("button", null, "No thanks"); d.type = "button"; d.onclick = () => { declined = n; update(); };
+      const r = el("div", "row-btns"); r.append(a, d); sh.banner.append(r);
+    }
+    const live = isPlayer() && !G.winner && !ended;
+    const list = [];
+    if (live) {
+      const offered = P[me]?.dr === n;
+      list.push(["🤝 " + (offered ? "Draw offered" : "Offer draw"), () => beat({ dr: n }).then(() => toast("Draw offered. It stays open until the next move.")), { disabled: offered || n < 1 }]);
+      list.push(["🏳 Resign", resign]);
+      const gone = op && P[op]?.last && srvNow() - P[op].last > GONE_AFTER;
+      if (gone) list.push(["📴 Claim win", () => setWinner(me, "gone"), { title: uname(op) + " closed the game a while ago" }]);
+    }
+    list.push(["↻ Flip", () => view.setFlip(!view.flip)]);
+    if (G.winner || ended) list.push(["⚔ Rematch...", () => createChessChallenge(G.room && canPostIn(G.room) ? G.room : S.room)]);
+    list.push("|", ...chZoomBtns());
+    sh.buttons(list);
+    tick();
+  }
+  function tick() {
+    if (!sh || !pos || !G) return;
+    for (const c of [1, -1]) sh.clock(c, timeLeft(c), !G.winner && !ended && CS && CS.n >= 2 && pos.side === c);
+    // flag: the player to move ran out of time
+    if (G.cfg.min && isPlayer() && !G.winner && !ended && !flagSent && !pending && CS && CS.n >= 2 && timeLeft(pos.side) <= 0) {
+      flagSent = true;
+      const winC = -pos.side, write = () => { if (!G.winner) setWinner(pos.canMate(winC) ? uidOf(winC) : "draw", "time"); };
+      if (myColor() === winC) write(); else setTimeout(write, 3000);   // the player who still has time writes it (the other one only if needed)
+    }
+  }
+  async function sendMove(m) {
+    const mc = myColor();
+    if (!mc || pos.side !== mc || G.winner || pending) return;
+    if (G.cfg.min && CS && CS.n >= 2 && timeLeft(mc) <= 0) { toast("⏱ Your time is over!"); return; }
+    const u = pos.uci(m);
+    const mv = (CS?.mv ? CS.mv + " " : "") + u;
+    let wt = CS ? CS.wt : base(), bt = CS ? CS.bt : base();
+    if (G.cfg.min && CS && CS.n >= 2) {
+      const used = srvNow() - CS.ts, add = (G.cfg.inc || 0) * 1000;
+      if (mc > 0) wt = Math.max(0, wt - used) + add; else bt = Math.max(0, bt - used) + add;
+    }
+    pending = mv; update();
+    chMoveSound(pos, lastM);
+    try {
+      await D.set(R("chessState/" + gid), { mv, n: nMoves() + 1, by: me, ts: now(), wt: Math.round(wt), bt: Math.round(bt) });
+      beat();
+    } catch (e) {
+      pending = null; mvKey = null; update();
+      showBanner("Can't play this move: " + authError(e));
+    }
+  }
+  async function resign() {
+    const ok = await dialog({ title: "Resign?", message: "Give up this game? " + uname(uidOf(-myColor())) + " wins.", okText: "Resign" });
+    if (ok) setWinner(uidOf(-myColor()), "resign");
+  }
+  async function setWinner(w, why) {
+    if (endSent) return;
+    endSent = true;
+    try {
+      const cur = (await D.get(R("games/" + gid + "/winner"))).val();
+      if (cur) return;
+      await D.update(R("games/" + gid), { winner: w, why, status: "done", endAt: now() });
+    } catch (e) { endSent = false; logError("Chess end: " + e.message); return; }
+    if (!G.room) return;
+    const o = uname(uidOf(-myColor()));
+    const moves = Math.ceil(nMoves() / 2);
+    const text = w === "draw" ? "🤝 draw with " + o + " at ♞ Battle Chess (" + (why === "time" ? "time out, but no pieces left to checkmate" : CH_WHY[why] || why) + ")."
+      : why === "mate" ? (w === me ? "🏆 checkmated " + o + " at ♞ Battle Chess in " + moves + " moves!" : "💀 got checkmated by " + o + " at ♞ Battle Chess.")
+      : why === "resign" ? "🏳 resigned at ♞ Battle Chess. " + o + " wins!"
+      : why === "time" ? (w === me ? "🏆 wins at ♞ Battle Chess: " + o + " ran out of time!" : "⏱ ran out of time at ♞ Battle Chess. " + o + " wins!")
+      : "🏆 wins at ♞ Battle Chess: " + o + " left the game.";
+    try { await sendMessage(text, null, G.room, { game: gid }); } catch (e) { logError("Post result: " + e.message); }
+  }
+  function end() {
+    ended = true;
+    if (isPlayer()) {
+      chBeep(G.winner === "draw" ? "draw" : G.winner === me ? "win" : "lose");
+      countStats();
+    }
+  }
+  async function countStats() {
+    if (statsDone || S.me.guest) return;
+    statsDone = true;
+    const k = "chess-stat-" + gid;
+    if (store(k)) return;
+    store(k, "1");
+    const f = G.winner === "draw" ? "chessD" : G.winner === me ? "chessW" : "chessL";
+    try { const v = (await D.get(R("stats/" + me + "/" + f))).val() || 0; await D.set(R("stats/" + me + "/" + f), v + 1); }
+    catch (e) { logError("Stats: " + e.message); }
+  }
+}
 
 /* ========================= NEW VERSION POPUP ========================= */
 // Every few minutes, look at the index.html on the server. If its version is newer than the one
